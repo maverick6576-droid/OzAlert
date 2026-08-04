@@ -1,6 +1,6 @@
 # Configuración del Departamento de Home Affairs y Países Work & Holiday (417 / 462)
 
-DHA_STATUS_URL_462 = "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462/status-of-country-caps"
+DHA_STATUS_URL_462 = "https://immi.homeaffairs.gov.au/what-we-do/whm-program/status-of-country-caps"
 DHA_STATUS_URL_417 = "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-417"
 
 # Cabeceras HTTP optimizadas para evitar bloqueos del servidor y minimizar consumo
