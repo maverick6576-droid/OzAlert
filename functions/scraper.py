@@ -46,8 +46,8 @@ def scrape_country_status(country_code: str, mock_html: str = None) -> str:
             country_en = "united kingdom"
 
         # Buscar tablas y párrafos que incluyan al país y si aparece 'paused', 'closed' o 'open'
-        for row or_tag in soup.find_all(["tr", "p", "li"]):
-            tag_text = or_tag.get_text(separator=" ").lower()
+        for row_or_tag in soup.find_all(["tr", "p", "li"]):
+            tag_text = row_or_tag.get_text(separator=" ").lower()
             if country_en in tag_text:
                 if any(w in tag_text for w in ["open", "available", "lodgements open"]):
                     if not any(w in tag_text for w in ["closed", "paused", "filled"]):
