@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "58600120257",
+    "project_id": "ozvisa-alert-prod",
+    "storage_bucket": "ozvisa-alert-prod.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:58600120257:android:1dababefbda7ff921fd940",
+        "android_client_info": {
+          "package_name": "com.ozvisa.alert"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDyIAikheNo2kppTdJdW0un1ywicnlWA8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
