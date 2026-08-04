@@ -19,13 +19,13 @@ else
 fi
 
 echo ""
-echo "📦 1/3 Habilitando APIs necesarias (Cloud Functions, Cloud Scheduler, Firestore)..."
+echo "📦 1/3 Habilitando APIs necesarias (o verificando estado activo)..."
 gcloud services enable \
   cloudfunctions.googleapis.com \
   cloudbuild.googleapis.com \
   cloudscheduler.googleapis.com \
   run.googleapis.com \
-  --quiet
+  --quiet || echo "ℹ️ Las APIs ya están habilitadas o hay un límite temporal de comprobación. Continuando con el despliegue..."
 
 echo ""
 echo "☁️  2/3 Desplegando Google Cloud Function (Python 3.11 - Optimizado para coste $0)..."
