@@ -1,7 +1,7 @@
 import '../../domain/models/country_config.dart';
 
 class AppConstants {
-  // Lista oficial de pasaportes seleccionables para Working Holiday Visa 417 y 462
+  // Lista oficial de pasaportes seleccionables para Work and Holiday Visa Subclase 462 (Con cuota anual - status-of-country-caps)
   static const List<CountryConfig> supportedCountries = [
     CountryConfig(
       code: 'ES',
@@ -39,32 +39,60 @@ class AppConstants {
       defaultStatus: 'CLOSED',
     ),
     CountryConfig(
-      code: 'IT',
-      name: 'Italia',
-      flagEmoji: '🇮🇹',
-      visaSubclass: '417',
-      defaultStatus: 'OPEN',
+      code: 'EC',
+      name: 'Ecuador',
+      flagEmoji: '🇪🇨',
+      visaSubclass: '462',
+      defaultStatus: 'CLOSED',
     ),
     CountryConfig(
-      code: 'FR',
-      name: 'Francia',
-      flagEmoji: '🇫🇷',
-      visaSubclass: '417',
-      defaultStatus: 'OPEN',
+      code: 'BR',
+      name: 'Brasil',
+      flagEmoji: '🇧🇷',
+      visaSubclass: '462',
+      defaultStatus: 'CLOSED',
     ),
     CountryConfig(
-      code: 'GB',
-      name: 'Reino Unido',
-      flagEmoji: '🇬🇧',
-      visaSubclass: '417',
-      defaultStatus: 'OPEN',
+      code: 'PT',
+      name: 'Portugal',
+      flagEmoji: '🇵🇹',
+      visaSubclass: '462',
+      defaultStatus: 'CLOSED',
     ),
     CountryConfig(
-      code: 'DE',
-      name: 'Alemania',
-      flagEmoji: '🇩🇪',
-      visaSubclass: '417',
-      defaultStatus: 'OPEN',
+      code: 'AT',
+      name: 'Austria',
+      flagEmoji: '🇦🇹',
+      visaSubclass: '462',
+      defaultStatus: 'CLOSED',
+    ),
+    CountryConfig(
+      code: 'CH',
+      name: 'Suiza',
+      flagEmoji: '🇨🇭',
+      visaSubclass: '462',
+      defaultStatus: 'CLOSED',
+    ),
+    CountryConfig(
+      code: 'GR',
+      name: 'Grecia',
+      flagEmoji: '🇬🇷',
+      visaSubclass: '462',
+      defaultStatus: 'CLOSED',
+    ),
+    CountryConfig(
+      code: 'PL',
+      name: 'Polonia',
+      flagEmoji: '🇵🇱',
+      visaSubclass: '462',
+      defaultStatus: 'CLOSED',
+    ),
+    CountryConfig(
+      code: 'US',
+      name: 'Estados Unidos',
+      flagEmoji: '🇺🇸',
+      visaSubclass: '462',
+      defaultStatus: 'CLOSED',
     ),
   ];
 

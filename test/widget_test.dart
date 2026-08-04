@@ -1,30 +1,17 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:ozvisa_alert/main.dart';
+import 'package:ozvisa_alert/core/constants/app_constants.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  test('supportedCountries contiene exclusivamente países Subclase 462 con cuota anual de la web oficial', () {
+    expect(AppConstants.supportedCountries.isNotEmpty, true);
+    for (final country in AppConstants.supportedCountries) {
+      expect(country.visaSubclass, '462', reason: '${country.name} debe ser Subclase 462');
+    }
+    // Verificar que países de la Subclase 417 (como Francia, Italia, Reino Unido o Alemania) no estén en la lista
+    final names = AppConstants.supportedCountries.map((c) => c.name).toList();
+    expect(names.contains('Francia'), false);
+    expect(names.contains('Italia'), false);
+    expect(names.contains('Reino Unido'), false);
+    expect(names.contains('Alemania'), false);
   });
 }

@@ -33,17 +33,7 @@ def scrape_country_status(country_code: str, mock_html: str = None) -> str:
         text_lower = soup.get_text(separator=" ").lower()
 
         # Estrategia de detección del estado en base al nombre del país en inglés y palabras clave
-        country_en = config["name"].lower()
-        if country_code == "ES":
-            country_en = "spain"
-        elif country_code == "DE":
-            country_en = "germany"
-        elif country_code == "IT":
-            country_en = "italy"
-        elif country_code == "FR":
-            country_en = "france"
-        elif country_code == "GB":
-            country_en = "united kingdom"
+        country_en = config.get("en_name", config["name"].lower())
 
         # Buscar tablas y párrafos que incluyan al país y si aparece 'paused', 'closed' o 'open'
         for row_or_tag in soup.find_all(["tr", "p", "li", "td", "div", "section"]):
@@ -54,10 +44,6 @@ def scrape_country_status(country_code: str, mock_html: str = None) -> str:
                         return "OPEN"
                 if any(w in tag_text for w in ["closed", "paused", "reached", "filled"]):
                     return "CLOSED"
-
-        # En Subclase 417 los países europeos suelen estar permanentemente abiertos (sin cuota anual)
-        if config["subclass"] == "417":
-            return "OPEN"
 
         return "CLOSED"
     except Exception as e:
