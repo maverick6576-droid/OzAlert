@@ -12,7 +12,20 @@
           "package_name": "com.ozvisa.alert"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "58600120257-lg2v6me3k10lncij5lpgt8lrmtpejgcg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ozvisa.alert",
+            "certificate_hash": "71745cb1b8dd2106782530eacf271ee941ab2c7b"
+          }
+        },
+        {
+          "client_id": "58600120257-fsa6ult2gatdiuoldrvg0278fmtdvvj0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBDyIAikheNo2kppTdJdW0un1ywicnlWA8"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "58600120257-fsa6ult2gatdiuoldrvg0278fmtdvvj0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "58600120257-5c0gs924tc5ecfehop8o38jpo75fevmt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ozvisa.alert"
+              }
+            }
+          ]
         }
       }
     }
