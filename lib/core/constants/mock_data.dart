@@ -5,31 +5,59 @@ class MockData {
   // Lista inicial de verificación de requisitos Work and Holiday (Subclase 417 y 462)
   static const List<ChecklistItem> initialChecklist = [
     ChecklistItem(
-      id: 'passport_validity',
-      title: 'Pasaporte con más de 6 meses de validez',
+      id: 'identity_documents',
+      title: 'Documentos de identidad',
       description:
-          'Tu pasaporte biométrico debe tener vigencia superior a 6 meses desde tu fecha prevista de entrada a Australia.',
-      isChecked: true,
-    ),
-    ChecklistItem(
-      id: 'english_test',
-      title: 'Examen de inglés aprobado (IELTS / PTE)',
-      description:
-          'Certificado con nota media mínima de 4.5 en IELTS General o 30 en PTE Academic, con máximo 12 meses de antigüedad.',
-      isChecked: true,
-    ),
-    ChecklistItem(
-      id: 'proof_of_funds',
-      title: 'Fondos bancarios acreditados (\$5.000 AUD)',
-      description:
-          'Extracto bancario reciente en euros o dólares equivalente a 5.000 AUD más billete de salida (aprox. 3.200€ total).',
+          'Páginas de tu pasaporte (foto, datos, fechas). Certificado de nacimiento con nombres de padres. Prueba de cambio de nombre (si aplica).',
       isChecked: false,
     ),
     ChecklistItem(
-      id: 'university_degree',
-      title: 'Título universitario / Certificado de estudios',
+      id: 'education',
+      title: 'Educación',
       description:
-          'Para Subclase 462: mínimo 2 años completos de estudios universitarios o título superior finalizado.',
+          'Evidencia de tus calificaciones educativas (título universitario, años cursados o equivalente, dependiendo de las exigencias para tu país).',
+      isChecked: false,
+    ),
+    ChecklistItem(
+      id: 'english_language',
+      title: 'Nivel de inglés',
+      description:
+          'Evidencia de estudios en inglés, o examen aprobado en los últimos 12 meses (IELTS 4.5, PTE 30, Cambridge C1 147, o TOEFL iBT 32).',
+      isChecked: false,
+    ),
+    ChecklistItem(
+      id: 'government_support',
+      title: 'Apoyo del Gobierno',
+      description:
+          'Carta de apoyo de tu gobierno (solo para ciertos países como Perú, Ecuador, etc. No requerida para España, Argentina, Chile, etc.).',
+      isChecked: false,
+    ),
+    ChecklistItem(
+      id: 'enough_money',
+      title: 'Fondos suficientes para tu estancia y salida',
+      description:
+          'Evidencia de dinero para tu estancia (normalmente \$5.000 AUD) y dinero para un billete de salida de Australia (o el billete ya comprado).',
+      isChecked: false,
+    ),
+    ChecklistItem(
+      id: 'character_documents',
+      title: 'Documentos de carácter (Antecedentes)',
+      description:
+          'Certificados de policía de cada país donde hayas pasado 12+ meses en los últimos 10 años (desde los 16 años), y registro militar si aplica.',
+      isChecked: false,
+    ),
+    ChecklistItem(
+      id: 'getting_help',
+      title: 'Notificar si recibes ayuda (Agentes)',
+      description:
+          'Formulario 956A o 956 si usas un agente migratorio o autorizas a alguien para recibir tus documentos.',
+      isChecked: false,
+    ),
+    ChecklistItem(
+      id: 'prepare_documents',
+      title: 'Preparar tus documentos',
+      description:
+          'Traducir al inglés todos los documentos por un traductor cualificado y escanear/fotografiar todos los originales y traducciones a color.',
       isChecked: false,
     ),
   ];
