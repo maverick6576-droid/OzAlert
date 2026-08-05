@@ -1,0 +1,162 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../providers/auth_provider.dart';
+import 'dart:io' show Platform;
+
+class LoginScreen extends ConsumerWidget {
+  const LoginScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authControllerProvider);
+
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Spacer(),
+              
+              // Logo o Icono Principal
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primaryGlow,
+                      blurRadius: 30,
+                      spreadRadius: 10,
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  CupertinoIcons.compass,
+                  size: 80,
+                  color: AppColors.primary,
+                ),
+              ).animate().scale(duration: 600.ms, curve: Curves.easeOutBack),
+              
+              const SizedBox(height: 32),
+              
+              // Título
+              const Text(
+                'OzAlert',
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.w900,
+                  color: AppColors.textPrimary,
+                  letterSpacing: -1,
+                ),
+              ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.5, end: 0),
+              
+              const SizedBox(height: 12),
+              
+              // Subtítulo / Propuesta de Valor
+              const Text(
+                'El radar definitivo para tu Work & Holiday Visa de Australia.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: AppColors.textSecondary,
+                  height: 1.5,
+                ),
+              ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.5, end: 0),
+
+              const Spacer(),
+
+              // Botones de Autenticación
+              if (authState.isLoading)
+                const CircularProgressIndicator(color: AppColors.primary)
+              else ...[
+                _SocialAuthButton(
+                  text: 'Continuar con Google',
+                  icon: CupertinoIcons.g_circle_fill,
+                  backgroundColor: Colors.white,
+                  textColor: Colors.black87,
+                  onPressed: () {
+                    ref.read(authControllerProvider.notifier).signInWithGoogle();
+                  },
+                ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.5, end: 0),
+                
+                const SizedBox(height: 16),
+                
+                if (Platform.isIOS)
+                  _SocialAuthButton(
+                    text: 'Continuar con Apple',
+                    icon: CupertinoIcons.applelogo,
+                    backgroundColor: Colors.black,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      ref.read(authControllerProvider.notifier).signInWithApple();
+                    },
+                  ).animate().fadeIn(delay: 700.ms).slideY(begin: 0.5, end: 0),
+              ],
+              
+              const SizedBox(height: 48),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SocialAuthButton extends StatelessWidget {
+  final String text;
+  final IconData icon;
+  final Color backgroundColor;
+  final Color textColor;
+  final VoidCallback onPressed;
+
+  const _SocialAuthButton({
+    required this.text,
+    required this.icon,
+    required this.backgroundColor,
+    required this.textColor,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor,
+          foregroundColor: textColor,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: backgroundColor == Colors.white 
+                ? BorderSide(color: Colors.grey.shade300) 
+                : BorderSide.none,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 24),
+            const SizedBox(width: 12),
+            Text(
+              text,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
