@@ -15,93 +15,190 @@ class NewsScreen extends ConsumerStatefulWidget {
 }
 
 class _NewsScreenState extends ConsumerState<NewsScreen> {
-  Future<void> _handleRefresh() async {
+  Future<void> _handleRefreshOfficial() async {
     ref.invalidate(newsListProvider);
     await ref.read(newsListProvider.future);
   }
 
+  Future<void> _handleRefreshAlerts() async {
+    ref.invalidate(alertNewsListProvider);
+    await ref.read(alertNewsListProvider.future);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final newsAsync = ref.watch(newsListProvider);
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        title: const Text(
-          'Radar de Noticias',
-          style: TextStyle(
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.w900,
-            fontSize: 22,
-            letterSpacing: 1.0,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.background,
+          elevation: 0,
+          title: const Text(
+            'Radar de Noticias',
+            style: TextStyle(
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w900,
+              fontSize: 22,
+              letterSpacing: 1.0,
+            ),
           ),
-        ),
-      ),
-      body: RefreshIndicator(
-        color: AppColors.secondary,
-        backgroundColor: AppColors.surface,
-        onRefresh: _handleRefresh,
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(
-            parent: BouncingScrollPhysics(),
-          ),
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              // 1. Banner Afiliado (15% dto Chapka / IATI)
-              const PartnerBanner().animate().fadeIn(duration: 400.ms),
-
-              // 2. Feed de noticias en tiempo real
-              newsAsync.when(
-                loading: () => const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 40),
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.secondary,
-                    ),
-                  ),
-                ),
-                error: (err, _) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 40),
-                  child: Column(
-                    children: [
-                      const Icon(
-                        CupertinoIcons.exclamationmark_circle,
-                        color: AppColors.statusClosed,
-                        size: 48,
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        'Interferencia en el Radar.\nNo se pudieron cargar los feeds en tiempo real.\n$err',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                data: (allNews) {
-                  if (allNews.isEmpty) {
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 30),
-                      child: Text(
-                        'Radar en silencio. No hay noticias nuevas.',
-                        style: TextStyle(color: AppColors.textMuted),
-                      ),
-                    );
-                  }
-
-                  return Column(
-                    children: allNews.map((item) => NewsCard(item: item)).toList(),
-                  );
-                },
-              ),
-              const SizedBox(height: 20),
+          bottom: const TabBar(
+            indicatorColor: AppColors.primary,
+            labelColor: AppColors.primary,
+            unselectedLabelColor: AppColors.textMuted,
+            indicatorWeight: 3,
+            tabs: [
+              Tab(text: 'Fuentes Oficiales'),
+              Tab(text: 'Google Alerts'),
             ],
           ),
         ),
+        body: TabBarView(
+          children: [
+            // Pestaña 1: Oficiales (Scraper de Inmigración)
+            RefreshIndicator(
+              color: AppColors.secondary,
+              backgroundColor: AppColors.surface,
+              onRefresh: _handleRefreshOfficial,
+              child: _buildOfficialFeed(context, ref),
+            ),
+            
+            // Pestaña 2: Google Alerts (Firestore)
+            RefreshIndicator(
+              color: AppColors.secondary,
+              backgroundColor: AppColors.surface,
+              onRefresh: _handleRefreshAlerts,
+              child: _buildAlertsFeed(context, ref),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOfficialFeed(BuildContext context, WidgetRef ref) {
+    final newsAsync = ref.watch(newsListProvider);
+    
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          const PartnerBanner().animate().fadeIn(duration: 400.ms),
+          newsAsync.when(
+            loading: () => const Padding(
+              padding: EdgeInsets.symmetric(vertical: 40),
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.secondary,
+                ),
+              ),
+            ),
+            error: (err, _) => _buildErrorState(err.toString()),
+            data: (allNews) {
+              if (allNews.isEmpty) {
+                return _buildEmptyState('Radar oficial en silencio. No hay noticias.');
+              }
+              return Column(
+                children: allNews.map((item) => NewsCard(item: item)).toList(),
+              );
+            },
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAlertsFeed(BuildContext context, WidgetRef ref) {
+    final alertsAsync = ref.watch(alertNewsListProvider);
+    
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            margin: const EdgeInsets.only(bottom: 16),
+            decoration: BoxDecoration(
+              color: AppColors.warning.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.warning.withOpacity(0.3)),
+            ),
+            child: Row(
+              children: [
+                Icon(CupertinoIcons.bell_fill, color: AppColors.warning, size: 20),
+                const SizedBox(width: 8),
+                const Expanded(
+                  child: Text(
+                    'Alertas globales monitorizadas cada 30 minutos.',
+                    style: TextStyle(color: AppColors.textPrimary, fontSize: 13),
+                  ),
+                ),
+              ],
+            ),
+          ).animate().fadeIn(),
+          alertsAsync.when(
+            loading: () => const Padding(
+              padding: EdgeInsets.symmetric(vertical: 40),
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primary,
+                ),
+              ),
+            ),
+            error: (err, _) => _buildErrorState(err.toString()),
+            data: (allNews) {
+              if (allNews.isEmpty) {
+                return _buildEmptyState('Aún no se han capturado alertas de Google. El servidor está escaneando.');
+              }
+              return Column(
+                children: allNews.map((item) => NewsCard(item: item)).toList(),
+              );
+            },
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState(String errorText) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 40),
+      child: Column(
+        children: [
+          const Icon(
+            CupertinoIcons.exclamationmark_circle,
+            color: AppColors.statusClosed,
+            size: 48,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Interferencia en el Radar.\nNo se pudieron cargar las noticias.\n$errorText',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(String msg) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 30),
+      child: Text(
+        msg,
+        textAlign: TextAlign.center,
+        style: const TextStyle(color: AppColors.textMuted),
       ),
     );
   }

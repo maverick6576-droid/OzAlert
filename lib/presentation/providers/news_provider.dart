@@ -6,3 +6,8 @@ final newsListProvider = FutureProvider<List<NewsItem>>((ref) async {
   final repo = ref.watch(newsRepositoryProvider);
   return repo.fetchAllNews();
 });
+
+final alertNewsListProvider = FutureProvider<List<NewsItem>>((ref) async {
+  final repo = ref.watch(newsRepositoryProvider);
+  return repo.fetchAlertNews();
+});

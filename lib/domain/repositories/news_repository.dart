@@ -6,4 +6,7 @@ abstract class NewsRepository {
 
   /// Abre un artículo o el banner afiliado en el navegador integrado del sistema
   Future<void> openArticleUrl(String url);
+
+  /// Devuelve las alertas guardadas en Firestore desde Google Alerts
+  Future<List<NewsItem>> fetchAlertNews();
 }
