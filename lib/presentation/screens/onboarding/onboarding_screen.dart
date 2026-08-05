@@ -52,6 +52,24 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<AsyncValue<void>>(
+      onboardingControllerProvider,
+      (_, state) {
+        if (!state.isLoading && state.hasError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error al guardar: ${state.error}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else if (!state.isLoading && !state.hasError && state.hasValue) {
+          // Si el estado tiene valor (null pero completado exitosamente sin error)
+          // Quitamos las pantallas apiladas para volver al root (que ahora será PaywallScreen)
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        }
+      },
+    );
+
     final isLoading = ref.watch(onboardingControllerProvider).isLoading;
 
     return Scaffold(
