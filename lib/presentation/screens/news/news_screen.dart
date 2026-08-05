@@ -33,14 +33,30 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
         appBar: AppBar(
           backgroundColor: AppColors.background,
           elevation: 0,
-          title: const Text(
-            'Radar de Noticias',
-            style: TextStyle(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w900,
-              fontSize: 22,
-              letterSpacing: 1.0,
-            ),
+          title: Row(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/app_icon.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                'Radar de Noticias',
+                style: TextStyle(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 22,
+                  letterSpacing: 1.0,
+                ),
+              ),
+            ],
           ),
           bottom: const TabBar(
             indicatorColor: AppColors.primary,

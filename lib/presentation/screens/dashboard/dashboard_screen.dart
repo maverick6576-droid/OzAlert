@@ -35,15 +35,14 @@ class DashboardScreen extends ConsumerWidget {
         title: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
+              width: 36,
+              height: 36,
               decoration: BoxDecoration(
-                color: AppColors.secondary.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(
-                CupertinoIcons.compass,
-                color: AppColors.secondary,
-                size: 24,
+                borderRadius: BorderRadius.circular(10),
+                image: const DecorationImage(
+                  image: AssetImage('assets/images/app_icon.jpg'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(width: 10),

@@ -25,22 +25,25 @@ class LoginScreen extends ConsumerWidget {
               
               // Logo o Icono Principal
               Container(
-                padding: const EdgeInsets.all(24),
+                width: 140,
+                height: 140,
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: Colors.transparent,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primaryGlow,
-                      blurRadius: 30,
-                      spreadRadius: 10,
+                      color: AppColors.primaryGlow.withOpacity(0.5),
+                      blurRadius: 40,
+                      spreadRadius: 15,
                     ),
                   ],
                 ),
-                child: const Icon(
-                  CupertinoIcons.compass,
-                  size: 80,
-                  color: AppColors.primary,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Image.asset(
+                    'assets/images/app_icon.jpg',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ).animate().scale(duration: 600.ms, curve: Curves.easeOutBack),
               
