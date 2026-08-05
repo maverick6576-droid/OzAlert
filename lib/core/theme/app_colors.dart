@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Fondos y superficies Dark Explorer (Estética Outback & Coast)
-  static const Color background = Color(0xFF121B28); // Azul Noche Profundo
-  static const Color surface = Color(0xFF1C2738);
-  static const Color surfaceElevated = Color(0xFF26344A);
-  static const Color cardBorder = Color(0xFF384B66);
+  // Fondos y superficies Light Explorer (Estética Outback & Coast - Modo Claro)
+  static const Color background = Color(0xFFFBF8F3); // Blanco Crema / Arena Suave
+  static const Color surface = Color(0xFFFFFFFF); // Blanco Puro para las tarjetas
+  static const Color surfaceElevated = Color(0xFFF4F1EA); // Arena ligeramente más oscura
+  static const Color cardBorder = Color(0xFFE2DCD0); // Borde suave arena
 
   // Colores de estado de Visa e Indicadores
   static const Color statusOpen = Color(0xFF00A896); // Azul Turquesa Océano (¡ABIERTA!)
@@ -17,14 +17,14 @@ class AppColors {
   static const Color primaryGlow = Color(0x40D96B43);
   static const Color secondary = Color(0xFF00A896); // Azul Turquesa Océano
 
-  // Tipografía
-  static const Color textPrimary = Color(0xFFFBF8F3); // Blanco Crema / Arena Suave
-  static const Color textSecondary = Color(0xFFB0B9C6);
-  static const Color textMuted = Color(0xFF7A899E);
+  // Tipografía (Invertida para Modo Claro)
+  static const Color textPrimary = Color(0xFF1E293B); // Gris Pizarra Oscuro / Casi Negro
+  static const Color textSecondary = Color(0xFF475569); // Gris Medio
+  static const Color textMuted = Color(0xFF94A3B8); // Gris Claro
 
   // Degradados de Tarjetas
   static const LinearGradient openCardGradient = LinearGradient(
-    colors: [Color(0xFF00A896), Color(0xFF007A6D)],
+    colors: [Color(0xFF00A896), Color(0xFF008F7F)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -34,7 +34,7 @@ class AppColors {
     end: Alignment.bottomRight,
     colors: [
       Color(0xFFD96B43),
-      Color(0xFFA64A2B),
+      Color(0xFFC25B36),
     ],
   );
 
@@ -43,7 +43,7 @@ class AppColors {
     end: Alignment.bottomRight,
     colors: [
       Color(0xFFF4A261),
-      Color(0xFFCC854B),
+      Color(0xFFE09153),
     ],
   );
 

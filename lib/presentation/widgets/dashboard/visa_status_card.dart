@@ -152,7 +152,7 @@ class VisaStatusCard extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 42,
                   fontWeight: FontWeight.w900,
-                  color: AppColors.textPrimary,
+                  color: Colors.white,
                   letterSpacing: -0.5,
                   shadows: [
                     Shadow(
@@ -170,7 +170,7 @@ class VisaStatusCard extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: isOpen ? AppColors.statusOpen : AppColors.textPrimary.withOpacity(0.9),
+                  color: isOpen ? Colors.white : Colors.white.withOpacity(0.9),
                   height: 1.3,
                 ),
               ),
@@ -178,7 +178,7 @@ class VisaStatusCard extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: AppColors.background.withOpacity(0.3),
+                  color: Colors.black.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -187,7 +187,7 @@ class VisaStatusCard extends ConsumerWidget {
                     Text(
                       '${selectedCountry.flagEmoji} Ruta: ${selectedCountry.name} (Subclase ${selectedCountry.visaSubclass})',
                       style: const TextStyle(
-                        color: AppColors.textPrimary,
+                        color: Colors.white,
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                       ),

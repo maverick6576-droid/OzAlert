@@ -11,9 +11,9 @@ class OzVisaAlertApp extends StatelessWidget {
     return MaterialApp(
       title: 'OzVisa Alert (3 Pantallas)',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.dark,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.lightTheme, // Forzar light theme para todo
+      themeMode: ThemeMode.light,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
