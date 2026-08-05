@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/theme/app_theme.dart';
 import 'presentation/navigation/main_navigation_screen.dart';
 import 'presentation/screens/auth/login_screen.dart';
+import 'presentation/screens/onboarding/welcome_screen.dart';
 import 'presentation/screens/onboarding/onboarding_screen.dart';
 import 'presentation/screens/paywall/paywall_screen.dart';
 import 'presentation/providers/auth_provider.dart';
@@ -43,8 +44,8 @@ class OzVisaAlertApp extends ConsumerWidget {
           return userProfileState.when(
             data: (profile) {
               if (profile == null || !profile.onboardingCompleted) {
-                // No tiene perfil o no completó el onboarding -> Onboarding
-                return const OnboardingScreen();
+                // No tiene perfil o no completó el onboarding -> Welcome Intro
+                return const WelcomeScreen();
               } else if (!profile.isPremium) {
                 // Perfil completo, pero NO ha pagado -> Paywall
                 return const PaywallScreen();
