@@ -62,8 +62,8 @@ def check_visa_status(request=None):
                 }, merge=True)
                 logger.info(f"  └─ 📝 Firestore actualizado /visas/{country_code} -> {current_status}")
 
-            # 5. Si cambió de CLOSED -> OPEN: DISPARAR ALERTA INMEDIATA PUSH & EMAIL
-            if previous_status == "CLOSED" and current_status == "OPEN":
+            # 5. Si cambió a OPEN desde cualquier otro estado (CLOSED o PAUSED): DISPARAR ALERTA INMEDIATA PUSH & EMAIL
+            if previous_status != "OPEN" and current_status == "OPEN":
                 logger.info(f"  └─ 🔔 ¡APERTURA EN {country_name}! Disparando alertas Push (FCM) y Email...")
                 send_fcm_alert(country_code, country_name)
 
