@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/country_config.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/services/notification_service.dart';
 import 'repository_providers.dart';
 
 class SelectedPassportNotifier extends StateNotifier<CountryConfig> {
@@ -19,6 +20,7 @@ class SelectedPassportNotifier extends StateNotifier<CountryConfig> {
       orElse: () => AppConstants.supportedCountries.first,
     );
     state = match;
+    await NotificationService().subscribeToCountryTopic(match.code);
   }
 
   Future<void> selectPassport(String countryCode) async {
@@ -33,6 +35,7 @@ class SelectedPassportNotifier extends StateNotifier<CountryConfig> {
       uid: 'demo_user_id',
       countryCode: countryCode,
     );
+    await NotificationService().subscribeToCountryTopic(countryCode);
   }
 }
 
