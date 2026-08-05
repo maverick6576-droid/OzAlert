@@ -1,16 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../navigation/main_navigation_screen.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../providers/paywall_provider.dart';
 
 class PaywallScreen extends ConsumerWidget {
   const PaywallScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // ESTA PANTALLA ES UN PLACEHOLDER PARA EL PASO 3 (RevenueCat)
+    // Escuchamos el estado del paywall por si se actualiza (ej: comprando)
+    ref.watch(paywallProvider);
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -46,18 +48,14 @@ class PaywallScreen extends ConsumerWidget {
               ).animate().fadeIn(delay: 400.ms),
               const Spacer(),
               
-              // Botón Mock de Suscripción
+              // Botón Suscripción Mensual
               SizedBox(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Por ahora, simulamos el pago saltando al Dashboard Principal
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (_) => const MainNavigationScreen(),
-                      ),
-                    );
+                  onPressed: () async {
+                    await ref.read(paywallProvider.notifier).subscribeMonthly();
+                    // app.dart nos enrutará automáticamente al Dashboard si es exitoso
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
@@ -67,25 +65,36 @@ class PaywallScreen extends ConsumerWidget {
                     ),
                   ),
                   child: const Text(
-                    'Suscribirse (Mock)',
+                    'Suscribirse 1,99€ / mes',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
               ).animate().slideY(begin: 1.0, end: 0, delay: 600.ms),
               const SizedBox(height: 16),
               
-              // Botón Mock Restaurar Compras
+              // Botón Restaurar Compras
               TextButton(
-                onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (_) => const MainNavigationScreen(),
-                      ),
-                    );
+                onPressed: () async {
+                  await ref.read(paywallProvider.notifier).restorePurchases();
                 },
                 child: const Text(
-                  'Saltar al Dashboard (Debug)',
-                  style: TextStyle(color: AppColors.textMuted),
+                  'Restaurar Compras',
+                  style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.bold),
+                ),
+              ),
+
+              const Divider(height: 32),
+
+              // Botón Mock de Debug (Bypass)
+              TextButton.icon(
+                onPressed: () async {
+                  // Bypass para entrar sin pagar mientras se desarrolla
+                  await ref.read(paywallProvider.notifier).setDemoSubscribed(true);
+                },
+                icon: const Icon(CupertinoIcons.hammer_fill, size: 16, color: AppColors.statusClosed),
+                label: const Text(
+                  'Bypass al Dashboard (Debug)',
+                  style: TextStyle(color: AppColors.statusClosed),
                 ),
               ),
               const SizedBox(height: 24),
