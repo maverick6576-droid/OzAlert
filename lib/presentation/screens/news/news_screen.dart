@@ -29,16 +29,17 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
         backgroundColor: AppColors.background,
         elevation: 0,
         title: const Text(
-          'Actualidad y Noticias',
+          'Radar de Noticias',
           style: TextStyle(
             color: AppColors.textPrimary,
             fontWeight: FontWeight.w900,
             fontSize: 22,
+            letterSpacing: 1.0,
           ),
         ),
       ),
       body: RefreshIndicator(
-        color: AppColors.statusOpen,
+        color: AppColors.secondary,
         backgroundColor: AppColors.surface,
         onRefresh: _handleRefresh,
         child: SingleChildScrollView(
@@ -57,7 +58,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                   padding: EdgeInsets.symmetric(vertical: 40),
                   child: Center(
                     child: CircularProgressIndicator(
-                      color: AppColors.statusOpen,
+                      color: AppColors.secondary,
                     ),
                   ),
                 ),
@@ -72,7 +73,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        'No se pudieron cargar los feeds en tiempo real.\n$err',
+                        'Interferencia en el Radar.\nNo se pudieron cargar los feeds en tiempo real.\n$err',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: AppColors.textSecondary,
@@ -86,7 +87,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                     return const Padding(
                       padding: EdgeInsets.symmetric(vertical: 30),
                       child: Text(
-                        'No hay noticias disponibles actualmente.',
+                        'Radar en silencio. No hay noticias nuevas.',
                         style: TextStyle(color: AppColors.textMuted),
                       ),
                     );

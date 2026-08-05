@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Fondos y superficies Dark Sapphire (Estética espacial / radar premium)
-  static const Color background = Color(0xFF0A0F1D);
-  static const Color surface = Color(0xFF131B2E);
-  static const Color surfaceElevated = Color(0xFF1C2742);
-  static const Color cardBorder = Color(0xFF2E3D5E);
+  // Fondos y superficies Dark Explorer (Estética Outback & Coast)
+  static const Color background = Color(0xFF121B28); // Azul Noche Profundo
+  static const Color surface = Color(0xFF1C2738);
+  static const Color surfaceElevated = Color(0xFF26344A);
+  static const Color cardBorder = Color(0xFF384B66);
 
   // Colores de estado de Visa e Indicadores
-  static const Color statusOpen = Color(0xFF00F59B); // Neón Esmeralda (¡ABIERTA!)
-  static const Color statusPaused = Color(0xFF3366FF); // Azul (PAUSADA)
-  static const Color statusClosed = Color(0xFFFF3366); // Rubí Intenso (CERRADA)
-  static const Color warning = Color(0xFFFFB800); // Ámbar
-  static const Color primary = Color(0xFF3B82F6); // Azul zafiro activo
-  static const Color primaryGlow = Color(0x403B82F6);
+  static const Color statusOpen = Color(0xFF00A896); // Azul Turquesa Océano (¡ABIERTA!)
+  static const Color statusPaused = Color(0xFFF4A261); // Amarillo Señalización Australiana (PAUSADA)
+  static const Color statusClosed = Color(0xFFD96B43); // Naranja Terracota (CERRADA)
+  static const Color warning = Color(0xFFF4A261); // Ámbar
+  
+  static const Color primary = Color(0xFFD96B43); // Naranja Terracota
+  static const Color primaryGlow = Color(0x40D96B43);
+  static const Color secondary = Color(0xFF00A896); // Azul Turquesa Océano
 
   // Tipografía
-  static const Color textPrimary = Color(0xFFF8FAFC);
-  static const Color textSecondary = Color(0xFF94A3B8);
-  static const Color textMuted = Color(0xFF64748B);
+  static const Color textPrimary = Color(0xFFFBF8F3); // Blanco Crema / Arena Suave
+  static const Color textSecondary = Color(0xFFB0B9C6);
+  static const Color textMuted = Color(0xFF7A899E);
 
   // Degradados de Tarjetas
   static const LinearGradient openCardGradient = LinearGradient(
-    colors: [Color(0xFF063D2B), Color(0xFF001F15)],
+    colors: [Color(0xFF00A896), Color(0xFF007A6D)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -31,8 +33,8 @@ class AppColors {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xFF2A1B1F),
-      Color(0xFF1F1518),
+      Color(0xFFD96B43),
+      Color(0xFFA64A2B),
     ],
   );
 
@@ -40,13 +42,13 @@ class AppColors {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xFF1B2433),
-      Color(0xFF151A24),
+      Color(0xFFF4A261),
+      Color(0xFFCC854B),
     ],
   );
 
   static const LinearGradient vipGradient = LinearGradient(
-    colors: [Color(0xFF3B82F6), Color(0xFF8B5CF6)],
+    colors: [Color(0xFFD96B43), Color(0xFF00A896)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );

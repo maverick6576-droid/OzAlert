@@ -37,22 +37,23 @@ class DashboardScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: AppColors.statusOpen.withOpacity(0.15),
+                color: AppColors.secondary.withOpacity(0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Icon(
-                CupertinoIcons.dot_radiowaves_left_right,
-                color: AppColors.statusOpen,
-                size: 20,
+                CupertinoIcons.compass,
+                color: AppColors.secondary,
+                size: 24,
               ),
             ),
             const SizedBox(width: 10),
             const Text(
-              'OzVisa Alert',
+              'OzAlert',
               style: TextStyle(
                 color: AppColors.textPrimary,
                 fontWeight: FontWeight.w900,
-                fontSize: 20,
+                fontSize: 22,
+                letterSpacing: 1.2,
               ),
             ),
           ],
@@ -76,7 +77,8 @@ class DashboardScreen extends ConsumerWidget {
                             AppColors.warning.withOpacity(0.5),
                           ],
                         ),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.warning.withOpacity(0.4)),
               ),
               child: Row(
                 children: [
@@ -102,78 +104,107 @@ class DashboardScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 1. Live Radar (Punto verde parpadeante + contador dinámico 60s)
-            const LiveRadarBanner(),
-            const SizedBox(height: 20),
-
-            // 2. Tarjeta de Estado (CERRADA / ABIERTA) del pasaporte seleccionado
-            const VisaStatusCard(),
-            const SizedBox(height: 22),
-
-            // 3. Botón "Probar Alerta" - Clave para generar confianza
-            const TestAlertButton(),
-            const SizedBox(height: 24),
-
-            // 4. Panel de información de seguridad
-            Container(
-              padding: const EdgeInsets.all(18),
+      body: Stack(
+        children: [
+          // Fondo temático abstracto
+          Positioned(
+            top: -100,
+            right: -50,
+            child: Container(
+              width: 300,
+              height: 300,
               decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(color: AppColors.cardBorder),
+                shape: BoxShape.circle,
+                color: AppColors.primary.withOpacity(0.05),
               ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.15),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      CupertinoIcons.checkmark_shield_fill,
-                      color: AppColors.primary,
-                      size: 22,
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Monitoreo activo para ${selectedCountry.name}',
-                          style: const TextStyle(
-                            color: AppColors.textPrimary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'El servidor enviará una notificación sonora al instante en que el Departamento de Home Affairs habilite plazas de visa.',
-                          style: TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 12,
-                            height: 1.3,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+            ),
+          ),
+          Positioned(
+            bottom: -50,
+            left: -100,
+            child: Container(
+              width: 250,
+              height: 250,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.secondary.withOpacity(0.05),
               ),
-            ).animate().fadeIn(delay: 300.ms),
+            ),
+          ),
+          SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 1. Live Radar Explorer
+                const LiveRadarBanner(),
+                const SizedBox(height: 20),
 
-            const SizedBox(height: 16),
-          ],
-        ),
+                // 2. Tarjeta de Estado (CERRADA / ABIERTA) del pasaporte seleccionado
+                const VisaStatusCard(),
+                const SizedBox(height: 22),
+
+                // 3. Botón "Probar Alerta" - Clave para generar confianza
+                const TestAlertButton(),
+                const SizedBox(height: 24),
+
+                // 4. Panel de información de seguridad
+                Container(
+                  padding: const EdgeInsets.all(18),
+                  decoration: BoxDecoration(
+                    color: AppColors.surface.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: AppColors.cardBorder),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(0.15),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          CupertinoIcons.map_pin_ellipse,
+                          color: AppColors.primary,
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Expedición ${selectedCountry.name}',
+                              style: const TextStyle(
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Text(
+                              'El horizonte está despejado. Te avisaremos con un destello de bengala (notificación) en cuanto el Departamento habilite plazas.',
+                              style: TextStyle(
+                                color: AppColors.textSecondary,
+                                fontSize: 13,
+                                height: 1.4,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ).animate().fadeIn(delay: 300.ms),
+
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -11,49 +11,71 @@ class AppTheme {
       primaryColor: AppColors.primary,
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
-        secondary: AppColors.statusOpen,
+        secondary: AppColors.secondary,
         surface: AppColors.surface,
         error: AppColors.statusClosed,
       ),
       textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme).copyWith(
         displayLarge: GoogleFonts.outfit(
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
+          fontSize: 32,
+          fontWeight: FontWeight.w900,
           color: AppColors.textPrimary,
+          letterSpacing: 1.2,
         ),
         displayMedium: GoogleFonts.outfit(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
+          fontSize: 26,
+          fontWeight: FontWeight.w800,
           color: AppColors.textPrimary,
+          letterSpacing: 1.0,
         ),
         titleLarge: GoogleFonts.outfit(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
           color: AppColors.textPrimary,
+          letterSpacing: 0.5,
         ),
         bodyLarge: GoogleFonts.inter(
           fontSize: 16,
           color: AppColors.textPrimary,
+          height: 1.5,
         ),
         bodyMedium: GoogleFonts.inter(
           fontSize: 14,
           color: AppColors.textSecondary,
+          height: 1.5,
         ),
       ),
       cardTheme: CardThemeData(
-        color: AppColors.surface,
-        elevation: 0,
+        color: AppColors.surface.withOpacity(0.9), // Glassmorphism sutil
+        elevation: 6,
+        shadowColor: Colors.black45,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: const BorderSide(color: AppColors.cardBorder, width: 1),
         ),
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.textPrimary,
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          textStyle: GoogleFonts.outfit(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.0,
+          ),
+        ),
+      ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.surface,
-        selectedItemColor: AppColors.statusOpen,
+        selectedItemColor: AppColors.secondary,
         unselectedItemColor: AppColors.textMuted,
         type: BottomNavigationBarType.fixed,
-        elevation: 10,
+        elevation: 20,
       ),
     );
   }

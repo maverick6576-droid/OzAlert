@@ -29,7 +29,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
       body: IndexedStack(index: _currentIndex, children: _screens),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
-          color: AppColors.surface,
+          color: AppColors.background,
           border: Border(top: BorderSide(color: AppColors.cardBorder, width: 1)),
           boxShadow: [
             BoxShadow(
@@ -41,27 +41,27 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 _buildNavItem(
                   index: 0,
-                  icon: CupertinoIcons.dot_radiowaves_left_right,
-                  activeIcon: CupertinoIcons.dot_radiowaves_left_right,
-                  label: 'Live Radar',
+                  icon: CupertinoIcons.compass,
+                  activeIcon: CupertinoIcons.compass_fill,
+                  label: 'Radar',
                 ),
                 _buildNavItem(
                   index: 1,
-                  icon: CupertinoIcons.checkmark_seal,
-                  activeIcon: CupertinoIcons.checkmark_seal_fill,
-                  label: 'Requisitos',
+                  icon: CupertinoIcons.bag,
+                  activeIcon: CupertinoIcons.bag_fill,
+                  label: 'Equipo',
                 ),
                 _buildNavItem(
                   index: 2,
-                  icon: CupertinoIcons.news,
-                  activeIcon: CupertinoIcons.news_solid,
-                  label: 'Noticias',
+                  icon: CupertinoIcons.map,
+                  activeIcon: CupertinoIcons.map_fill,
+                  label: 'Bitácora',
                 ),
               ],
             ),
@@ -78,7 +78,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     required String label,
   }) {
     final isSelected = _currentIndex == index;
-    final color = isSelected ? AppColors.statusOpen : AppColors.textMuted;
+    final color = isSelected ? AppColors.secondary : AppColors.textMuted;
 
     return GestureDetector(
       onTap: () => setState(() => _currentIndex = index),
@@ -89,12 +89,12 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color:
-              isSelected ? AppColors.statusOpen.withOpacity(0.12) : Colors.transparent,
+              isSelected ? AppColors.secondary.withOpacity(0.12) : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border:
               isSelected
                   ? Border.all(
-                    color: AppColors.statusOpen.withOpacity(0.4),
+                    color: AppColors.secondary.withOpacity(0.4),
                     width: 1,
                   )
                   : null,

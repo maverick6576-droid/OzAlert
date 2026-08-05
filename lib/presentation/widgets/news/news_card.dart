@@ -13,7 +13,7 @@ class NewsCard extends ConsumerWidget {
   Color _getCategoryColor() {
     switch (item.category) {
       case 'oficial':
-        return AppColors.statusOpen;
+        return AppColors.secondary;
       case 'guia':
         return AppColors.primary;
       case 'comunidad':
@@ -25,9 +25,9 @@ class NewsCard extends ConsumerWidget {
   String _getCategoryLabel() {
     switch (item.category) {
       case 'oficial':
-        return 'AVISO OFICIAL';
+        return 'FUENTE OFICIAL';
       case 'guia':
-        return 'GUÍA PRÁCTICA';
+        return 'GUÍA EXPLORADOR';
       case 'comunidad':
       default:
         return 'MERCADO / DIVISAS';
@@ -45,6 +45,13 @@ class NewsCard extends ConsumerWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.cardBorder, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.background.withOpacity(0.5),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,12 +116,12 @@ class NewsCard extends ConsumerWidget {
                   ref.read(newsRepositoryProvider).openArticleUrl(item.link);
                 },
                 icon: const Icon(
-                  CupertinoIcons.arrow_up_right_square_fill,
+                  CupertinoIcons.compass_fill,
                   size: 16,
                   color: AppColors.primary,
                 ),
                 label: const Text(
-                  'Leer Más',
+                  'Explorar',
                   style: TextStyle(
                     color: AppColors.primary,
                     fontWeight: FontWeight.bold,

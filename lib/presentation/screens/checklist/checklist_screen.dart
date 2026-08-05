@@ -20,11 +20,12 @@ class ChecklistScreen extends ConsumerWidget {
         backgroundColor: AppColors.background,
         elevation: 0,
         title: const Text(
-          'Requisitos Work & Holiday',
+          'Kit de Expedición',
           style: TextStyle(
             color: AppColors.textPrimary,
             fontWeight: FontWeight.w900,
             fontSize: 22,
+            letterSpacing: 1.0,
           ),
         ),
       ),
@@ -38,16 +39,23 @@ class ChecklistScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
+                gradient: LinearGradient(
                   colors: [
                     AppColors.surfaceElevated,
-                    Color(0xFF0F1E3A),
+                    AppColors.surface,
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(22),
                 border: Border.all(color: AppColors.cardBorder),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.background.withOpacity(0.5),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,11 +64,12 @@ class ChecklistScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        'Tu Nivel de Preparación',
+                        'Progreso del Equipo',
                         style: TextStyle(
                           color: AppColors.textSecondary,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
+                          letterSpacing: 0.5,
                         ),
                       ),
                       Container(
@@ -71,14 +80,14 @@ class ChecklistScreen extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color:
                               percentageInt == 100
-                                  ? AppColors.statusOpen
+                                  ? AppColors.secondary
                                   : AppColors.primary,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           '$percentageInt% LISTO',
                           style: const TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontWeight: FontWeight.w900,
                             fontSize: 12,
                           ),
@@ -91,11 +100,11 @@ class ChecklistScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(10),
                     child: LinearProgressIndicator(
                       value: progress,
-                      minHeight: 10,
+                      minHeight: 12,
                       backgroundColor: AppColors.background,
                       valueColor: AlwaysStoppedAnimation<Color>(
                         percentageInt == 100
-                            ? AppColors.statusOpen
+                            ? AppColors.secondary
                             : AppColors.primary,
                       ),
                     ),
@@ -103,12 +112,12 @@ class ChecklistScreen extends ConsumerWidget {
                   const SizedBox(height: 14),
                   Text(
                     percentageInt == 100
-                        ? '🚀 ¡Impresionante! Tienes toda la documentación lista para aplicar tan pronto como el Radar avise la apertura.'
-                        : 'Prepara con antelación tus certificados y ahorros para no quedarte fuera cuando se abran las plazas.',
+                        ? '🚀 ¡Impresionante explorador! Tienes todo tu equipo listo para aplicar tan pronto como el Radar detecte movimiento.'
+                        : 'Prepara tu mochila (certificados y ahorros) con antelación para no quedarte atrás cuando empiece la aventura.',
                     style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 13,
-                      height: 1.35,
+                      height: 1.4,
                     ),
                   ),
                 ],
@@ -116,17 +125,23 @@ class ChecklistScreen extends ConsumerWidget {
             ).animate().fadeIn(duration: 400.ms),
 
             const SizedBox(height: 24),
-            const Text(
-              'Documentos e Imprescindibles:',
-              style: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-              ),
+            Row(
+              children: [
+                Icon(CupertinoIcons.doc_text_fill, color: AppColors.secondary, size: 20),
+                const SizedBox(width: 8),
+                const Text(
+                  'Documentos Clave:',
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 4),
             const Text(
-              'Marca cada casilla conforme tengas el documento verificado en mano:',
+              'Asegura cada ítem en tu inventario conforme lo consigas:',
               style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
             ),
             const SizedBox(height: 16),
@@ -152,18 +167,18 @@ class ChecklistScreen extends ConsumerWidget {
               child: const Row(
                 children: [
                   Icon(
-                    CupertinoIcons.exclamationmark_triangle_fill,
+                    CupertinoIcons.compass_fill,
                     color: AppColors.warning,
                     size: 24,
                   ),
                   SizedBox(width: 14),
                   Expanded(
                     child: Text(
-                      'Consejo Pro: Los cupos para pasaportes Subclase 462 suelen agotarse en minutos tras abrir. Tener tus PDFs escaneados y listos te da la ventaja definitiva.',
+                      'Consejo Explorador: Los cupos suelen desaparecer como espejismos en el desierto. Tener tus PDFs organizados es vital para sobrevivir al proceso.',
                       style: TextStyle(
                         color: AppColors.textPrimary,
-                        fontSize: 12,
-                        height: 1.35,
+                        fontSize: 13,
+                        height: 1.4,
                       ),
                     ),
                   ),
