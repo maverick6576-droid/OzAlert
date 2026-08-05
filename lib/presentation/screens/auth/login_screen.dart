@@ -11,6 +11,21 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Escuchar errores para mostrarlos en un SnackBar
+    ref.listen<AsyncValue<void>>(
+      authControllerProvider,
+      (_, state) {
+        if (!state.isLoading && state.hasError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error al iniciar sesión: ${state.error}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+    );
+
     final authState = ref.watch(authControllerProvider);
 
     return Scaffold(
