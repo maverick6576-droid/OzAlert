@@ -1,4 +1,4 @@
-package com.ozvisa.alert.ozvisa_alert
+package com.ozvisa.alert
 
 import io.flutter.embedding.android.FlutterActivity
 
