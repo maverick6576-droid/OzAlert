@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "58600120257-lg2v6me3k10lncij5lpgt8lrmtpejgcg.apps.googleusercontent.com",
+          "client_id": "58600120257-c3fhq8rulctoepgit6d4aifbjms3t51v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.ozvisa.alert",
-            "certificate_hash": "71745cb1b8dd2106782530eacf271ee941ab2c7b"
+            "certificate_hash": "240e028fa1e23205ec428ab03cf4cac5ccba0e34"
           }
         },
         {
