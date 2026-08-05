@@ -35,10 +35,12 @@ def scrape_country_status(country_code: str, mock_html: str = None) -> str:
         # Estrategia de detección del estado en base al nombre del país en inglés y palabras clave
         country_en = config.get("en_name", config["name"].lower())
 
-        # Buscar tablas y párrafos que incluyan al país y si aparece 'paused', 'closed' o 'open'
-        for row_or_tag in soup.find_all(["tr", "p", "li", "td", "div", "section"]):
+        # Buscar tablas y párrafos específicos que incluyan al país (tr, li, p)
+        # Omitimos div o section porque agrupan múltiples países y causan falsos negativos
+        for row_or_tag in soup.find_all(["tr", "li", "p"]):
             tag_text = row_or_tag.get_text(separator=" ").lower()
-            if country_en in tag_text:
+            # Asegurarnos de que el texto es corto (una fila individual) y contiene el país
+            if len(tag_text) < 300 and country_en in tag_text:
                 if any(w in tag_text for w in ["open", "available", "lodgements open"]):
                     if not any(w in tag_text for w in ["closed", "paused", "filled"]):
                         return "OPEN"
