@@ -23,10 +23,9 @@ class NewsRepositoryImpl implements NewsRepository {
   Future<void> openArticleUrl(String urlString) async {
     try {
       final Uri url = Uri.parse(urlString);
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url, mode: LaunchMode.externalApplication);
-      } else {
-        debugPrint('No se pudo abrir la URL: $urlString');
+      final success = await launchUrl(url, mode: LaunchMode.externalApplication);
+      if (!success) {
+        debugPrint('No se pudo abrir la URL (launchUrl devolvió false): $urlString');
       }
     } catch (e) {
       debugPrint('Error en openArticleUrl: $e');
