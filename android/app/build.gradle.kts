@@ -32,11 +32,21 @@ android {
         multiDexEnabled = true
     }
 
+    signingConfigs {
+        create("fixed") {
+            storeFile = file("ozalert.keystore")
+            storePassword = "ozalertpassword"
+            keyAlias = "ozalert"
+            keyPassword = "ozalertpassword"
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("fixed")
+        }
+        debug {
+            signingConfig = signingConfigs.getByName("fixed")
         }
     }
 }
