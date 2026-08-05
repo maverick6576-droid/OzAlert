@@ -9,6 +9,7 @@ class AppColors {
 
   // Colores de estado de Visa e Indicadores
   static const Color statusOpen = Color(0xFF00F59B); // Neón Esmeralda (¡ABIERTA!)
+  static const Color statusPaused = Color(0xFF3366FF); // Azul (PAUSADA)
   static const Color statusClosed = Color(0xFFFF3366); // Rubí Intenso (CERRADA)
   static const Color warning = Color(0xFFFFB800); // Ámbar
   static const Color primary = Color(0xFF3B82F6); // Azul zafiro activo
@@ -27,9 +28,21 @@ class AppColors {
   );
 
   static const LinearGradient closedCardGradient = LinearGradient(
-    colors: [Color(0xFF4A1024), Color(0xFF220710)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
+    colors: [
+      Color(0xFF2A1B1F),
+      Color(0xFF1F1518),
+    ],
+  );
+
+  static const LinearGradient pausedCardGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xFF1B2433),
+      Color(0xFF151A24),
+    ],
   );
 
   static const LinearGradient vipGradient = LinearGradient(

@@ -44,7 +44,9 @@ def scrape_country_status(country_code: str, mock_html: str = None) -> str:
                 if any(w in tag_text for w in ["open", "available", "lodgements open"]):
                     if not any(w in tag_text for w in ["closed", "paused", "filled"]):
                         return "OPEN"
-                if any(w in tag_text for w in ["closed", "paused", "reached", "filled"]):
+                if any(w in tag_text for w in ["paused"]):
+                    return "PAUSED"
+                if any(w in tag_text for w in ["closed", "reached", "filled"]):
                     return "CLOSED"
 
         return "CLOSED"

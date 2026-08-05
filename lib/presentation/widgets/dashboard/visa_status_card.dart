@@ -21,29 +21,52 @@ class VisaStatusCard extends ConsumerWidget {
     );
 
     final isOpen = status == 'OPEN';
+    final isPaused = status == 'PAUSED';
+
+    // Helper functions for dynamic styling based on the 3 states
+    LinearGradient getGradient() {
+      if (isOpen) return AppColors.openCardGradient;
+      if (isPaused) return AppColors.pausedCardGradient;
+      return AppColors.closedCardGradient;
+    }
+
+    Color getStatusColor() {
+      if (isOpen) return AppColors.statusOpen;
+      if (isPaused) return AppColors.statusPaused;
+      return AppColors.statusClosed;
+    }
+
+    String getTitle() {
+      if (isOpen) return '¡ABIERTA!';
+      if (isPaused) return 'PAUSADA';
+      return 'CERRADA';
+    }
+
+    String getSubtitle() {
+      if (isOpen) return '¡ATENCIÓN! Visas disponibles - Aplicar ahora';
+      if (isPaused) return 'Procesamiento temporalmente detenido';
+      return '0 plazas disponibles actualmente';
+    }
+
+    IconData getIconData() {
+      if (isOpen) return CupertinoIcons.check_mark_circled_solid;
+      if (isPaused) return CupertinoIcons.pause_circle_fill;
+      return CupertinoIcons.clear_circled_solid;
+    }
 
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        gradient:
-            isOpen
-                ? AppColors.openCardGradient
-                : AppColors.closedCardGradient,
+        gradient: getGradient(),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color:
-              isOpen
-                  ? AppColors.statusOpen.withOpacity(0.8)
-                  : AppColors.statusClosed.withOpacity(0.8),
+          color: getStatusColor().withValues(alpha: 0.8),
           width: 2,
         ),
         boxShadow: [
           BoxShadow(
-            color:
-                isOpen
-                    ? AppColors.statusOpen.withOpacity(0.2)
-                    : AppColors.statusClosed.withOpacity(0.2),
+            color: getStatusColor().withValues(alpha: 0.2),
             blurRadius: 25,
             spreadRadius: 2,
             offset: const Offset(0, 8),
@@ -62,31 +85,22 @@ class VisaStatusCard extends ConsumerWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color:
-                      isOpen
-                          ? AppColors.statusOpen.withOpacity(0.2)
-                          : AppColors.statusClosed.withOpacity(0.2),
+                  color: getStatusColor().withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      isOpen
-                          ? CupertinoIcons.check_mark_circled_solid
-                          : CupertinoIcons.clear_circled_solid,
-                      color:
-                          isOpen ? AppColors.statusOpen : AppColors.statusClosed,
+                      getIconData(),
+                      color: getStatusColor(),
                       size: 16,
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      isOpen ? 'ESTADO: ABIERTA' : 'ESTADO: CERRADA',
+                      'ESTADO: ${getTitle()}',
                       style: TextStyle(
-                        color:
-                            isOpen
-                                ? AppColors.statusOpen
-                                : AppColors.statusClosed,
+                        color: getStatusColor(),
                         fontWeight: FontWeight.w800,
                         fontSize: 12,
                         letterSpacing: 0.8,
@@ -98,17 +112,16 @@ class VisaStatusCard extends ConsumerWidget {
               // Botón rápido Modo Simulador para que el usuario pueda alternar y probar ambos estados visuales
               IconButton(
                 tooltip:
-                    'Simular cambio de estado (Abierta/Cerrada) en entorno de desarrollo',
+                    'Simular cambio de estado (Abierta/Cerrada/Pausada) en entorno de desarrollo',
                 onPressed: () {
-                  final newStatus = !isOpen;
+                  final newStatus = isOpen ? false : true;
                   ref
                       .read(visaRepositoryProvider)
                       .toggleDemoStatus(selectedCountry.code, newStatus);
                 },
                 icon: Icon(
                   CupertinoIcons.arrow_2_circlepath,
-                  color:
-                      isOpen ? AppColors.statusOpen : AppColors.statusClosed,
+                  color: getStatusColor(),
                   size: 22,
                 ),
               ),
@@ -116,7 +129,7 @@ class VisaStatusCard extends ConsumerWidget {
           ),
           const SizedBox(height: 18),
           Text(
-            isOpen ? '¡ABIERTA!' : 'CERRADA',
+            getTitle(),
             style: TextStyle(
               fontSize: 38,
               fontWeight: FontWeight.w900,
@@ -124,10 +137,7 @@ class VisaStatusCard extends ConsumerWidget {
               letterSpacing: -0.5,
               shadows: [
                 Shadow(
-                  color:
-                      isOpen
-                          ? AppColors.statusOpen.withOpacity(0.5)
-                          : AppColors.statusClosed.withOpacity(0.5),
+                  color: getStatusColor().withValues(alpha: 0.5),
                   blurRadius: 12,
                 ),
               ],
@@ -137,14 +147,11 @@ class VisaStatusCard extends ConsumerWidget {
               .shimmer(duration: 1200.ms, color: AppColors.statusOpen),
           const SizedBox(height: 8),
           Text(
-            isOpen
-                ? '¡ATENCIÓN! Visas disponibles - Aplicar ahora'
-                : '0 plazas disponibles actualmente',
+            getSubtitle(),
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
-              color:
-                  isOpen ? AppColors.statusOpen : AppColors.textPrimary,
+              color: isOpen ? AppColors.statusOpen : AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 14),

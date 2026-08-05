@@ -26,7 +26,7 @@ class VisaRepositoryImpl implements VisaRepository {
               final data = snapshot.data()!;
               final status = data['status'] as String?;
               if (status != null &&
-                  (status == 'OPEN' || status == 'CLOSED')) {
+                  (status == 'OPEN' || status == 'CLOSED' || status == 'PAUSED')) {
                 return status;
               }
             }
