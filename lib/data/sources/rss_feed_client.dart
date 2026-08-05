@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:webfeed_plus/webfeed_plus.dart';
+import 'package:html/parser.dart' as html_parser;
 import 'package:flutter/foundation.dart';
 import '../../domain/models/news_item.dart';
-import '../../core/constants/app_constants.dart';
-import '../../core/constants/mock_data.dart';
 
 class RssFeedClient {
   final http.Client _client;
@@ -13,80 +11,70 @@ class RssFeedClient {
 
   Future<List<NewsItem>> fetchMigrationNews() async {
     final List<NewsItem> parsedItems = [];
+    const url = 'https://immi.homeaffairs.gov.au/what-we-do/whm-program/latest-news';
 
-    // 1. Intentar obtener el RSS de la web oficial o feeds australianos
     try {
       final response = await _client
           .get(
-            Uri.parse(AppConstants.sbsMigrationRssUrl),
-            headers: {'User-Agent': 'OzVisaAlert/1.0 FlutterClient'},
+            Uri.parse(url),
+            headers: {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'},
           )
-          .timeout(const Duration(seconds: 5));
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
-        final bodyString = utf8.decode(response.bodyBytes);
-        final feed = RssFeed.parse(bodyString);
-
-        if (feed.items != null) {
-          for (final item in feed.items!.take(6)) {
-            parsedItems.add(
-              NewsItem(
-                title: item.title ?? 'Actualización de Inmigración Australia',
-                link: item.link ?? 'https://immi.homeaffairs.gov.au',
-                pubDate: _formatRssDate(item.pubDate),
-                description: _cleanHtml(item.description ?? ''),
-                imageUrl: item.enclosure?.url,
-                category: 'oficial',
-              ),
-            );
+        final document = html_parser.parse(response.body);
+        
+        final container = document.getElementById('ctl00_PlaceHolderMain_ctl06__ControlWrapper_RichHtmlField');
+        if (container != null) {
+          String currentTitle = '';
+          String currentDesc = '';
+          
+          for (final node in container.children) {
+            if (node.localName == 'h3') {
+              if (currentTitle.isNotEmpty) {
+                parsedItems.add(NewsItem(
+                  title: currentTitle,
+                  link: url,
+                  pubDate: 'ACTUALIZADO',
+                  description: currentDesc.trim(),
+                  category: 'oficial',
+                ));
+              }
+              currentTitle = node.text.trim();
+              currentDesc = '';
+            } else if (node.localName == 'p' && currentTitle.isNotEmpty) {
+              final pText = node.text.trim();
+              if (pText.isNotEmpty) {
+                currentDesc += '$pText\n\n';
+              }
+            }
+          }
+          
+          if (currentTitle.isNotEmpty) {
+            parsedItems.add(NewsItem(
+              title: currentTitle,
+              link: url,
+              pubDate: 'ACTUALIZADO',
+              description: currentDesc.trim(),
+              category: 'oficial',
+            ));
           }
         }
       }
     } catch (e) {
-      debugPrint('RSS feed client fallback al contenido offline predeterminado: $e');
+      debugPrint('Error procesando el HTML: $e');
     }
 
-    // 2. Si falló o estamos offline, o para asegurar cobertura completa de Guías y Comunidad en Español,
-    // fusionamos con nuestras noticias y guías predeterminadas:
     if (parsedItems.isEmpty) {
-      return MockData.defaultNews;
+      parsedItems.add(NewsItem(
+        title: 'Error de conexión',
+        link: url,
+        pubDate: 'AHORA',
+        description: 'No pudimos obtener la información en vivo. Toca aquí para abrir la página oficial en el navegador.',
+        category: 'oficial',
+      ));
     }
 
-    // Añadir guías de interés y alertas de comunidad al listado final
-    final guidesAndCommunity = MockData.defaultNews.where(
-      (n) => n.category == 'guia' || n.category == 'comunidad',
-    );
-    return [...parsedItems, ...guidesAndCommunity];
-  }
-
-  String _formatRssDate(DateTime? pubDate) {
-    if (pubDate == null) return 'HOY';
-    final months = [
-      'ENE',
-      'FEB',
-      'MAR',
-      'ABR',
-      'MAY',
-      'JUN',
-      'JUL',
-      'AGO',
-      'SEP',
-      'OCT',
-      'NOV',
-      'DIC',
-    ];
-    final day = pubDate.day.toString().padLeft(2, '0');
-    final month = months[pubDate.month - 1];
-    final year = pubDate.year;
-    return '$day $month $year';
-  }
-
-  String _cleanHtml(String htmlString) {
-    final RegExp exp = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: true);
-    final text = htmlString.replaceAll(exp, '').trim();
-    if (text.length > 180) {
-      return '${text.substring(0, 177)}...';
-    }
-    return text;
+    return parsedItems;
   }
 }

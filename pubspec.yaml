@@ -38,6 +38,7 @@ dependencies:
   flutter_animate: ^4.5.0
   intl: ^0.20.0
   cupertino_icons: ^1.0.8
+  html: ^0.15.6
 
 dev_dependencies:
   flutter_test:
