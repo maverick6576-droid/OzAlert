@@ -44,8 +44,8 @@ def check_visa_status(request=None):
             current_status = scrape_country_status(country_code)
             logger.info(f"[{country_code} - {country_name}] Estado anterior: {previous_status} | Estado actual: {current_status}")
 
-            # 3. Optimización de cuota gratuita $0: SI NO HAY CAMBIOS -> 0 ESCRITURAS
-            if current_status == previous_status:
+            # 3. Optimización de cuota gratuita $0: SI NO HAY CAMBIOS Y EL DOCUMENTO YA EXISTE -> 0 ESCRITURAS
+            if current_status == previous_status and doc is not None and doc.exists:
                 logger.info(f"  └─ Sin cambios en {country_code}. Terminando (0 operaciones de escritura).")
                 results[country_code] = {"status": current_status, "changed": False, "writes": 0}
                 continue
