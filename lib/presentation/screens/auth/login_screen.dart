@@ -81,7 +81,7 @@ class LoginScreen extends ConsumerWidget {
               else ...[
                 _SocialAuthButton(
                   text: 'Continuar con Google',
-                  icon: CupertinoIcons.g_circle_fill,
+                  icon: Icons.g_mobiledata,
                   backgroundColor: Colors.white,
                   textColor: Colors.black87,
                   onPressed: () {
@@ -94,7 +94,7 @@ class LoginScreen extends ConsumerWidget {
                 if (Platform.isIOS)
                   _SocialAuthButton(
                     text: 'Continuar con Apple',
-                    icon: CupertinoIcons.applelogo,
+                    icon: Icons.apple,
                     backgroundColor: Colors.black,
                     textColor: Colors.white,
                     onPressed: () {
