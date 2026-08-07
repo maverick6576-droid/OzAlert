@@ -46,6 +46,9 @@ class NotificationService {
         sound: true,
         provisional: false,
       );
+      // Suscribirse a las noticias globales de Google Alerts
+      await messaging.subscribeToTopic('all_users');
+      debugPrint('Suscrito a tópico FCM: all_users');
     } catch (e) {
       debugPrint('FCM no disponible en entorno local o escritorio: $e');
     }

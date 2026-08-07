@@ -22,27 +22,22 @@ class NewsRepositoryImpl implements NewsRepository {
 
   @override
   Future<List<NewsItem>> fetchAlertNews() async {
-    try {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('noticias')
-          .orderBy('fecha_creacion', descending: true)
-          .limit(20)
-          .get();
+    final snapshot = await FirebaseFirestore.instance
+        .collection('noticias')
+        .orderBy('fecha_creacion', descending: true)
+        .limit(20)
+        .get();
 
-      return snapshot.docs.map((doc) {
-        final data = doc.data();
-        return NewsItem(
-          title: data['title'] ?? 'Sin título',
-          link: data['link'] ?? '',
-          pubDate: data['published_date'] ?? 'Reciente',
-          description: data['summary'] ?? '',
-          category: 'comunidad', // Mapeamos como comunidad para el estilo de Google Alerts
-        );
-      }).toList();
-    } catch (e) {
-      debugPrint('Error en NewsRepositoryImpl fetchAlertNews: $e');
-      return [];
-    }
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      return NewsItem(
+        title: data['title'] ?? 'Sin título',
+        link: data['link'] ?? '',
+        pubDate: data['published_date'] ?? 'Reciente',
+        description: data['summary'] ?? '',
+        category: 'comunidad', // Mapeamos como comunidad para el estilo de Google Alerts
+      );
+    }).toList();
   }
 
   @override
