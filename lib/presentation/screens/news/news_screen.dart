@@ -102,7 +102,8 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          const PartnerBanner().animate().fadeIn(duration: 400.ms),
+          // TODO(Fase 2): Habilitar banner de socio afiliado
+          // const PartnerBanner().animate().fadeIn(duration: 400.ms),
           newsAsync.when(
             loading: () => const Padding(
               padding: EdgeInsets.symmetric(vertical: 40),
