@@ -81,8 +81,21 @@ class VisaStatusCard extends ConsumerWidget {
         ],
 
         // Main Card
-        Container(
-          width: double.infinity,
+        GestureDetector(
+          onTap: () async {
+            if (isOpen) {
+              final url = Uri.parse('https://online.immi.gov.au/lusc/login');
+              if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('No se pudo abrir el enlace de InmiAccount.')),
+                  );
+                }
+              }
+            }
+          },
+          child: Container(
+            width: double.infinity,
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             gradient: getGradient(),
@@ -199,6 +212,8 @@ class VisaStatusCard extends ConsumerWidget {
                   ],
                 ),
               ),
+            ],
+          ),
             ],
           ),
         ),

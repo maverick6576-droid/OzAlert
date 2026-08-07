@@ -70,47 +70,6 @@ class DashboardScreen extends ConsumerWidget {
         actions: [
           // Se eliminó el PassportSelector para mostrar todos en el feed
           const SizedBox(width: 8),
-          // Botón VIP o Estado VIP
-          GestureDetector(
-            onTap: () => _showPaywallModal(context),
-            child: Container(
-              margin: const EdgeInsets.only(right: 16),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                gradient:
-                    isSubscribed
-                        ? AppColors.vipGradient
-                        : LinearGradient(
-                          colors: [
-                            AppColors.warning.withOpacity(0.8),
-                            AppColors.warning.withOpacity(0.5),
-                          ],
-                        ),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.warning.withOpacity(0.4)),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    isSubscribed
-                        ? CupertinoIcons.star_circle_fill
-                        : CupertinoIcons.lock_shield_fill,
-                    color: Colors.white,
-                    size: 14,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    isSubscribed ? 'VIP ACTIVO' : 'ACTIVAR VIP',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 11,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
       body: Stack(
