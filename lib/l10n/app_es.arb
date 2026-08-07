@@ -45,5 +45,66 @@
     "visaSourceButton": "Ver fuente oficial",
     "settingsLegal": "Legal",
     "settingsPrivacyPolicy": "Política de Privacidad",
-    "settingsTerms": "Términos y Condiciones"
+    "settingsTerms": "Términos y Condiciones",
+    "checklistTitle": "Kit de Expedición",
+    "checklistProgress": "Progreso del Equipo",
+    "checklistDescription": "Prepara tu mochila (certificados y ahorros) con antelación para no quedarte atrás cuando empiece la aventura.",
+    "checklistKeyDocs": "Documentos Clave:",
+    "checklistInstructions": "Asegura cada ítem en tu inventario conforme lo consigas:",
+    "checklistTip": "Consejo Explorador: Los cupos suelen desaparecer como espejismos en el desierto. Tener tus PDFs organizados es vital para sobrevivir al proceso.",
+    "dashboardSafeExpedition": "Expedición Segura",
+    "dashboardSafeExpeditionDesc": "El horizonte está despejado. Te avisaremos con un destello de bengala (notificación) en cuanto el Departamento habilite plazas para tus pasaportes.",
+    "newsTitle": "Radar de Noticias",
+    "newsTabOfficial": "Fuentes Oficiales",
+    "newsTabAlerts": "Google Alerts",
+    "newsEmptyState": "Radar oficial en silencio. No hay noticias.",
+    "newsGlobalAlerts": "Alertas globales monitorizadas.",
+    "newsError": "Interferencia en el Radar.\nNo se pudieron cargar las noticias.\n{errorText}",
+    "@newsError": {
+        "placeholders": {
+            "errorText": {
+                "type": "String"
+            }
+        }
+    },
+    "radarScanning": "Servidores rastreando la web oficial de Inmigración de Australia",
+    "passportSelectorTitle": "Selecciona tu Pasaporte (WHV 417 & 462)",
+    "passportSubclass": "Subclase {subclass} • Australia WHV",
+    "@passportSubclass": {
+        "placeholders": {
+            "subclass": {
+                "type": "String"
+            }
+        }
+    },
+    "paywallModalTitle": "Desbloquea el Radar 24/7 de Visas Australia",
+    "paywallModalDesc": "Recibe una Alerta Push y un Email inmediato en el segundo exacto en que el Departamento de Home Affairs abra plazas para tu país.",
+    "paywallPlanAnnualTitle": "Pase de Temporada (Anual)",
+    "paywallPlanAnnualDesc": "Mejor valor • Ahorras 37%",
+    "paywallPlanMonthlyTitle": "Plan Mensual Flex",
+    "paywallPlanMonthlyDesc": "Cancela en cualquier momento con 1 clic",
+    "paywallActivateAnnual": "Activar Pase de Temporada ($14.99)",
+    "paywallActivateMonthly": "Activar Plan Mensual ($1.99)",
+    "paywallDisclaimer": "Sin periodo de prueba para garantizar servidores dedicados sin saturación. Pago procesado de forma segura a través de RevenueCat / App Store / Google Play. Puedes cancelar tu suscripción en cualquier momento desde los ajustes de tu cuenta.",
+    "visaStatusOpenDesc": "Visas disponibles. ¡Inicia la expedición!",
+    "visaStatusPausedDesc": "A la espera. Procesamiento temporalmente detenido.",
+    "visaStatusClosedDesc": "Campamento cerrado. 0 plazas actualmente.",
+    "errorOpeningLink": "No se pudo abrir el enlace.",
+    "tooltipScanRadar": "Escanear radar en vivo",
+    "newsSourceOfficial": "FUENTE OFICIAL",
+    "newsSourceMarket": "MERCADO / DIVISAS",
+    "partnerAffiliate": "SOCIO AFILIADO • 15% DTO",
+    "partnerDescription": "Imprescindible para activar tu visa al pasar aduana en Sídney o Melbourne. Cobertura completa COVID, deportes y trabajo.",
+    "partnerActivate": "Activar Promoción de Seguro (15% Dto)",
+    "testAlertSending": "⚡ Enviando alerta de prueba para {countryNames}... Llegará en 2 segundos.",
+    "@testAlertSending": {
+        "placeholders": {
+            "countryNames": {
+                "type": "String"
+            }
+        }
+    },
+    "checklistCompletedDescription": "¡Todo listo! Mochila preparada al 100%.",
+    "partnerTitle": "¿Necesitas seguro médico para Australia? Obtén 15% de descuento con Chapka / IATI Seguros",
+    "paywallSuccessMessage": "✅ ¡Acceso VIP Activado! Alertas inmediatas 24/7 habilitadas o compras restauradas exitosamente."
 }

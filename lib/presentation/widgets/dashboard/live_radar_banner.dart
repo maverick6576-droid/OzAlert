@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class LiveRadarBanner extends StatefulWidget {
   const LiveRadarBanner({super.key});
@@ -78,10 +79,10 @@ class _LiveRadarBannerState extends State<LiveRadarBanner> {
                   .scaleXY(begin: 0.8, end: 1.3, duration: 800.ms)
                   .fadeIn(duration: 400.ms),
               const SizedBox(width: 10),
-              const Expanded(
-                child: Text(
-                  'Servidores rastreando la web oficial de Inmigración de Australia',
-                  style: TextStyle(
+                Expanded(
+                  child: Text(
+                    AppLocalizations.of(context)!.radarScanning,
+                    style: const TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 13,
                     fontWeight: FontWeight.w600,

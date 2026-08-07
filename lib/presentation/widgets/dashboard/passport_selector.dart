@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 import '../../providers/passport_provider.dart';
 
 class PassportSelector extends ConsumerWidget {
@@ -31,9 +32,9 @@ class PassportSelector extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Selecciona tu Pasaporte (WHV 417 & 462)',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.passportSelectorTitle,
+                  style: const TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -65,7 +66,7 @@ class PassportSelector extends ConsumerWidget {
                           ),
                         ),
                         subtitle: Text(
-                          'Subclase ${country.visaSubclass} • Australia WHV',
+                          AppLocalizations.of(context)!.passportSubclass(country.visaSubclass),
                           style: const TextStyle(
                             color: AppColors.textSecondary,
                             fontSize: 12,

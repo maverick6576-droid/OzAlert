@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../providers/repository_providers.dart';
 
@@ -47,9 +48,9 @@ class PartnerBanner extends ConsumerWidget {
                   color: AppColors.primary,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Text(
-                  'SOCIO AFILIADO • 15% DTO',
-                  style: TextStyle(
+                child: Text(
+                  AppLocalizations.of(context)!.partnerAffiliate,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w900,
                     fontSize: 10,
@@ -65,9 +66,9 @@ class PartnerBanner extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 12),
-          const Text(
-            '¿Necesitas seguro médico para Australia? Obtén 15% de descuento con Chapka / IATI Seguros',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.partnerTitle,
+            style: const TextStyle(
               color: AppColors.textPrimary,
               fontWeight: FontWeight.w800,
               fontSize: 15,
@@ -75,9 +76,9 @@ class PartnerBanner extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Imprescindible para activar tu visa al pasar aduana en Sídney o Melbourne. Cobertura completa COVID, deportes y trabajo.',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.partnerDescription,
+            style: const TextStyle(
               color: AppColors.textSecondary,
               fontSize: 12,
               height: 1.35,
@@ -97,9 +98,9 @@ class PartnerBanner extends ConsumerWidget {
                 size: 16,
                 color: AppColors.statusOpen,
               ),
-              label: const Text(
-                'Activar Promoción de Seguro (15% Dto)',
-                style: TextStyle(
+              label: Text(
+                AppLocalizations.of(context)!.partnerActivate,
+                style: const TextStyle(
                   color: AppColors.statusOpen,
                   fontWeight: FontWeight.bold,
                 ),

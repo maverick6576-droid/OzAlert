@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../domain/models/news_item.dart';
+import '../../../../domain/entities/news_item.dart';
 import '../../providers/repository_providers.dart';
 
 class NewsCard extends ConsumerWidget {
@@ -22,16 +23,14 @@ class NewsCard extends ConsumerWidget {
     }
   }
 
-  String _getCategoryLabel() {
-    switch (item.category) {
-      case 'oficial':
-        return 'FUENTE OFICIAL';
-      case 'guia':
-        return 'GUÍA EXPLORADOR';
-      case 'comunidad':
-      default:
-        return 'MERCADO / DIVISAS';
+  String getSourceText(BuildContext context) {
+    if (item.sourceType == NewsSourceType.official) {
+      return AppLocalizations.of(context)!.newsSourceOfficial;
     }
+    if (item.sourceType == NewsSourceType.market) {
+      return AppLocalizations.of(context)!.newsSourceMarket;
+    }
+    return item.sourceName.toUpperCase();
   }
 
   @override
@@ -69,7 +68,7 @@ class NewsCard extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  _getCategoryLabel(),
+                  getSourceText(context),
                   style: TextStyle(
                     color: catColor,
                     fontWeight: FontWeight.w800,

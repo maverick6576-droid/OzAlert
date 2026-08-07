@@ -160,19 +160,19 @@ class DashboardScreen extends ConsumerWidget {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
-                              'Expedición Segura',
-                              style: TextStyle(
+                              AppLocalizations.of(context)!.dashboardSafeExpedition,
+                              style: const TextStyle(
                                 color: AppColors.textPrimary,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
                             ),
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
                             Text(
-                              'El horizonte está despejado. Te avisaremos con un destello de bengala (notificación) en cuanto el Departamento habilite plazas para tus pasaportes.',
-                              style: TextStyle(
+                              AppLocalizations.of(context)!.dashboardSafeExpeditionDesc,
+                              style: const TextStyle(
                                 color: AppColors.textSecondary,
                                 fontSize: 13,
                                 height: 1.4,

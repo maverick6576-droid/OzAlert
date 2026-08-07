@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/news_provider.dart';
 import '../../widgets/news/news_card.dart';
@@ -47,9 +48,9 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                 ),
               ),
               const SizedBox(width: 12),
-              const Text(
-                'Radar de Noticias',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.newsTitle,
+                style: const TextStyle(
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.w900,
                   fontSize: 22,
@@ -58,14 +59,14 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
               ),
             ],
           ),
-          bottom: const TabBar(
+          bottom: TabBar(
             indicatorColor: AppColors.primary,
             labelColor: AppColors.primary,
             unselectedLabelColor: AppColors.textMuted,
             indicatorWeight: 3,
             tabs: [
-              Tab(text: 'Fuentes Oficiales'),
-              Tab(text: 'Google Alerts'),
+              Tab(text: AppLocalizations.of(context)!.newsTabOfficial),
+              Tab(text: AppLocalizations.of(context)!.newsTabAlerts),
             ],
           ),
         ),
@@ -116,7 +117,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
             error: (err, _) => _buildErrorState(err.toString()),
             data: (allNews) {
               if (allNews.isEmpty) {
-                return _buildEmptyState('Radar oficial en silencio. No hay noticias.');
+                return _buildEmptyState(AppLocalizations.of(context)!.newsEmptyState);
               }
               return Column(
                 children: allNews.map((item) => NewsCard(item: item)).toList(),
@@ -156,9 +157,9 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
                   child: Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      const Text(
-                        'Alertas globales monitorizadas.',
-                        style: TextStyle(color: AppColors.textPrimary, fontSize: 13),
+                      Text(
+                        AppLocalizations.of(context)!.newsGlobalAlerts,
+                        style: const TextStyle(color: AppColors.textPrimary, fontSize: 13),
                       ),
                       const SizedBox(width: 8),
                       Container(
@@ -212,7 +213,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
           ),
           const SizedBox(height: 12),
           Text(
-            'Interferencia en el Radar.\nNo se pudieron cargar las noticias.\n$errorText',
+            AppLocalizations.of(context)!.newsError(errorText),
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: AppColors.textSecondary,

@@ -328,6 +328,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Terms and Conditions'**
   String get settingsTerms;
+
+  /// No description provided for @checklistTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Expedition Kit'**
+  String get checklistTitle;
+
+  /// No description provided for @checklistProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Equipment Progress'**
+  String get checklistProgress;
+
+  /// No description provided for @checklistDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Prepare your backpack (certificates and savings) in advance so you are not left behind when the adventure begins.'**
+  String get checklistDescription;
+
+  /// No description provided for @checklistKeyDocs.
+  ///
+  /// In en, this message translates to:
+  /// **'Key Documents:'**
+  String get checklistKeyDocs;
+
+  /// No description provided for @checklistInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Secure each item in your inventory as you get it:'**
+  String get checklistInstructions;
+
+  /// No description provided for @checklistTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Explorer Tip: Quotas tend to disappear like mirages in the desert. Having your PDFs organized is vital to survive the process.'**
+  String get checklistTip;
+
+  /// No description provided for @dashboardSafeExpedition.
+  ///
+  /// In en, this message translates to:
+  /// **'Safe Expedition'**
+  String get dashboardSafeExpedition;
+
+  /// No description provided for @dashboardSafeExpeditionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The horizon is clear. We will notify you with a flare (notification) as soon as the Department enables places for your passports.'**
+  String get dashboardSafeExpeditionDesc;
+
+  /// No description provided for @newsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'News Radar'**
+  String get newsTitle;
+
+  /// No description provided for @newsTabOfficial.
+  ///
+  /// In en, this message translates to:
+  /// **'Official Sources'**
+  String get newsTabOfficial;
+
+  /// No description provided for @newsTabAlerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Alerts'**
+  String get newsTabAlerts;
+
+  /// No description provided for @newsEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'Official radar silent. No news.'**
+  String get newsEmptyState;
+
+  /// No description provided for @newsGlobalAlerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Global alerts monitored.'**
+  String get newsGlobalAlerts;
+
+  /// No description provided for @newsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Radar interference.\nCould not load news.\n{errorText}'**
+  String newsError(String errorText);
+
+  /// No description provided for @radarScanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Servers tracking the official Australian Immigration website'**
+  String get radarScanning;
+
+  /// No description provided for @passportSelectorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your Passport (WHV 417 & 462)'**
+  String get passportSelectorTitle;
+
+  /// No description provided for @passportSubclass.
+  ///
+  /// In en, this message translates to:
+  /// **'Subclass {subclass} • Australia WHV'**
+  String passportSubclass(String subclass);
+
+  /// No description provided for @paywallModalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock the 24/7 Visa Radar'**
+  String get paywallModalTitle;
+
+  /// No description provided for @paywallModalDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive an immediate Push Alert and Email the exact second the Department of Home Affairs opens spots for your country.'**
+  String get paywallModalDesc;
+
+  /// No description provided for @paywallPlanAnnualTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Season Pass (Annual)'**
+  String get paywallPlanAnnualTitle;
+
+  /// No description provided for @paywallPlanAnnualDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Best value • Save 37%'**
+  String get paywallPlanAnnualDesc;
+
+  /// No description provided for @paywallPlanMonthlyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Flex Monthly Plan'**
+  String get paywallPlanMonthlyTitle;
+
+  /// No description provided for @paywallPlanMonthlyDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel anytime with 1 click'**
+  String get paywallPlanMonthlyDesc;
+
+  /// No description provided for @paywallActivateAnnual.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate Season Pass (\$14.99)'**
+  String get paywallActivateAnnual;
+
+  /// No description provided for @paywallActivateMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate Monthly Plan (\$1.99)'**
+  String get paywallActivateMonthly;
+
+  /// No description provided for @paywallDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'No trial period to ensure dedicated servers without saturation. Payment processed securely via RevenueCat / App Store / Google Play. You can cancel your subscription anytime in your account settings.'**
+  String get paywallDisclaimer;
+
+  /// No description provided for @visaStatusOpenDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Visas available. Start the expedition!'**
+  String get visaStatusOpenDesc;
+
+  /// No description provided for @visaStatusPausedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'On hold. Processing temporarily paused.'**
+  String get visaStatusPausedDesc;
+
+  /// No description provided for @visaStatusClosedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Camp closed. 0 places currently.'**
+  String get visaStatusClosedDesc;
+
+  /// No description provided for @errorOpeningLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the link.'**
+  String get errorOpeningLink;
+
+  /// No description provided for @tooltipScanRadar.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan live radar'**
+  String get tooltipScanRadar;
+
+  /// No description provided for @newsSourceOfficial.
+  ///
+  /// In en, this message translates to:
+  /// **'OFFICIAL SOURCE'**
+  String get newsSourceOfficial;
+
+  /// No description provided for @newsSourceMarket.
+  ///
+  /// In en, this message translates to:
+  /// **'MARKET / CURRENCY'**
+  String get newsSourceMarket;
+
+  /// No description provided for @partnerAffiliate.
+  ///
+  /// In en, this message translates to:
+  /// **'AFFILIATE PARTNER • 15% OFF'**
+  String get partnerAffiliate;
+
+  /// No description provided for @partnerDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Essential to activate your visa when passing customs in Sydney or Melbourne. Full COVID, sports and work coverage.'**
+  String get partnerDescription;
+
+  /// No description provided for @partnerActivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate Insurance Promo (15% Off)'**
+  String get partnerActivate;
+
+  /// No description provided for @testAlertSending.
+  ///
+  /// In en, this message translates to:
+  /// **'⚡ Sending test alert for {countryNames}... Will arrive in 2 seconds.'**
+  String testAlertSending(String countryNames);
+
+  /// No description provided for @checklistCompletedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'All set! Backpack 100% prepared.'**
+  String get checklistCompletedDescription;
+
+  /// No description provided for @partnerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Need health insurance for Australia? Get 15% off with Chapka / IATI Seguros'**
+  String get partnerTitle;
+
+  /// No description provided for @paywallSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ VIP Access Activated! 24/7 immediate alerts enabled or purchases successfully restored.'**
+  String get paywallSuccessMessage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

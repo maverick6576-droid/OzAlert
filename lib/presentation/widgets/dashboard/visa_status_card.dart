@@ -7,6 +7,7 @@ import '../../providers/passport_provider.dart';
 import '../../../../domain/models/country_config.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class VisaStatusCard extends ConsumerStatefulWidget {
   final CountryConfig country;
@@ -61,10 +62,10 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
       return AppLocalizations.of(context)!.visaStatusClosed;
     }
 
-    String getSubtitle() {
-      if (isOpen) return 'Visas disponibles. ¡Inicia la expedición!';
-      if (isPaused) return 'A la espera. Procesamiento temporalmente detenido.';
-      return 'Campamento cerrado. 0 plazas actualmente.';
+    String getStatusSubtitle(BuildContext context) {
+      if (isOpen) return AppLocalizations.of(context)!.visaStatusOpenDesc;
+      if (isPaused) return AppLocalizations.of(context)!.visaStatusPausedDesc;
+      return AppLocalizations.of(context)!.visaStatusClosedDesc;
     }
 
     IconData getIconData() {
@@ -101,11 +102,11 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
         GestureDetector(
           onTap: () async {
             if (isOpen) {
-              final url = Uri.parse('https://online.immi.gov.au/lusc/login');
-              if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+              final uri = Uri.parse('https://online.immi.gov.au/lusc/login');
+              if (!await launchUrl(uri)) {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('No se pudo abrir el enlace de InmiAccount.')),
+                    SnackBar(content: Text(AppLocalizations.of(context)!.errorOpeningLink)),
                   );
                 }
               }
@@ -139,16 +140,16 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                   children: [
                     ElevatedButton.icon(
                       onPressed: () async {
-                        final url = Uri.parse('https://immi.homeaffairs.gov.au/what-we-do/whm-program/status-of-country-caps?utm_source=chatgpt.com');
-                        if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                        final uri = Uri.parse('https://immi.homeaffairs.gov.au/what-we-do/whm-program/status-of-country-caps?utm_source=chatgpt.com');
+                        if (!await launchUrl(uri)) {
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('No se pudo abrir el enlace.')),
+                              SnackBar(content: Text(AppLocalizations.of(context)!.errorOpeningLink)),
                             );
                           }
                         }
                       },
-                      icon: const Icon(CupertinoIcons.link, size: 14),
+                      icon: const Icon(CupertinoIcons.barcode_viewfinder, size: 20),
                       label: Text(
                         AppLocalizations.of(context)!.visaSourceButton,
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),

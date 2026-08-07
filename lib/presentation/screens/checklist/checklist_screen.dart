@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/checklist_provider.dart';
 import '../../widgets/checklist/checklist_tile.dart';
@@ -33,9 +34,9 @@ class ChecklistScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 12),
-            const Text(
-              'Kit de Expedición',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.checklistTitle,
+              style: const TextStyle(
                 color: AppColors.textPrimary,
                 fontWeight: FontWeight.w900,
                 fontSize: 22,
@@ -79,9 +80,9 @@ class ChecklistScreen extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Progreso del Equipo',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!.checklistProgress,
+                        style: const TextStyle(
                           color: AppColors.textSecondary,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -127,9 +128,9 @@ class ChecklistScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 14),
                   Text(
-                    percentageInt == 100
-                        ? '🚀 ¡Impresionante explorador! Tienes todo tu equipo listo para aplicar tan pronto como el Radar detecte movimiento.'
-                        : 'Prepara tu mochila (certificados y ahorros) con antelación para no quedarte atrás cuando empiece la aventura.',
+                    isCompleted
+                        ? AppLocalizations.of(context)!.checklistCompletedDescription
+                        : AppLocalizations.of(context)!.checklistDescription,
                     style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 13,
@@ -145,9 +146,9 @@ class ChecklistScreen extends ConsumerWidget {
               children: [
                 Icon(CupertinoIcons.doc_text_fill, color: AppColors.secondary, size: 20),
                 const SizedBox(width: 8),
-                const Text(
-                  'Documentos Clave:',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.checklistKeyDocs,
+                  style: const TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
@@ -156,9 +157,9 @@ class ChecklistScreen extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 4),
-            const Text(
-              'Asegura cada ítem en tu inventario conforme lo consigas:',
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
+            Text(
+              AppLocalizations.of(context)!.checklistInstructions,
+              style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
             ),
             const SizedBox(height: 16),
 
@@ -180,18 +181,18 @@ class ChecklistScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.warning.withOpacity(0.3)),
               ),
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     CupertinoIcons.compass_fill,
                     color: AppColors.warning,
                     size: 24,
                   ),
-                  SizedBox(width: 14),
+                  const SizedBox(width: 14),
                   Expanded(
                     child: Text(
-                      'Consejo Explorador: Los cupos suelen desaparecer como espejismos en el desierto. Tener tus PDFs organizados es vital para sobrevivir al proceso.',
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.checklistTip,
+                      style: const TextStyle(
                         color: AppColors.textPrimary,
                         fontSize: 13,
                         height: 1.4,

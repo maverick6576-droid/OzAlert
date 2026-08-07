@@ -45,7 +45,7 @@ class _TestAlertButtonState extends ConsumerState<TestAlertButton> {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                '⚡ Enviando alerta de prueba para $selectedCountryNames... Llegará en 2 segundos.',
+                AppLocalizations.of(context)!.testAlertSending(selectedCountryNames),
                 style: const TextStyle(
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.w600,

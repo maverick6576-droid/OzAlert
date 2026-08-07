@@ -126,4 +126,130 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsTerms => 'Terms and Conditions';
+
+  @override
+  String get checklistTitle => 'Expedition Kit';
+
+  @override
+  String get checklistProgress => 'Equipment Progress';
+
+  @override
+  String get checklistDescription => 'Prepare your backpack (certificates and savings) in advance so you are not left behind when the adventure begins.';
+
+  @override
+  String get checklistKeyDocs => 'Key Documents:';
+
+  @override
+  String get checklistInstructions => 'Secure each item in your inventory as you get it:';
+
+  @override
+  String get checklistTip => 'Explorer Tip: Quotas tend to disappear like mirages in the desert. Having your PDFs organized is vital to survive the process.';
+
+  @override
+  String get dashboardSafeExpedition => 'Safe Expedition';
+
+  @override
+  String get dashboardSafeExpeditionDesc => 'The horizon is clear. We will notify you with a flare (notification) as soon as the Department enables places for your passports.';
+
+  @override
+  String get newsTitle => 'News Radar';
+
+  @override
+  String get newsTabOfficial => 'Official Sources';
+
+  @override
+  String get newsTabAlerts => 'Google Alerts';
+
+  @override
+  String get newsEmptyState => 'Official radar silent. No news.';
+
+  @override
+  String get newsGlobalAlerts => 'Global alerts monitored.';
+
+  @override
+  String newsError(String errorText) {
+    return 'Radar interference.\nCould not load news.\n$errorText';
+  }
+
+  @override
+  String get radarScanning => 'Servers tracking the official Australian Immigration website';
+
+  @override
+  String get passportSelectorTitle => 'Select your Passport (WHV 417 & 462)';
+
+  @override
+  String passportSubclass(String subclass) {
+    return 'Subclass $subclass • Australia WHV';
+  }
+
+  @override
+  String get paywallModalTitle => 'Unlock the 24/7 Visa Radar';
+
+  @override
+  String get paywallModalDesc => 'Receive an immediate Push Alert and Email the exact second the Department of Home Affairs opens spots for your country.';
+
+  @override
+  String get paywallPlanAnnualTitle => 'Season Pass (Annual)';
+
+  @override
+  String get paywallPlanAnnualDesc => 'Best value • Save 37%';
+
+  @override
+  String get paywallPlanMonthlyTitle => 'Flex Monthly Plan';
+
+  @override
+  String get paywallPlanMonthlyDesc => 'Cancel anytime with 1 click';
+
+  @override
+  String get paywallActivateAnnual => 'Activate Season Pass (\$14.99)';
+
+  @override
+  String get paywallActivateMonthly => 'Activate Monthly Plan (\$1.99)';
+
+  @override
+  String get paywallDisclaimer => 'No trial period to ensure dedicated servers without saturation. Payment processed securely via RevenueCat / App Store / Google Play. You can cancel your subscription anytime in your account settings.';
+
+  @override
+  String get visaStatusOpenDesc => 'Visas available. Start the expedition!';
+
+  @override
+  String get visaStatusPausedDesc => 'On hold. Processing temporarily paused.';
+
+  @override
+  String get visaStatusClosedDesc => 'Camp closed. 0 places currently.';
+
+  @override
+  String get errorOpeningLink => 'Could not open the link.';
+
+  @override
+  String get tooltipScanRadar => 'Scan live radar';
+
+  @override
+  String get newsSourceOfficial => 'OFFICIAL SOURCE';
+
+  @override
+  String get newsSourceMarket => 'MARKET / CURRENCY';
+
+  @override
+  String get partnerAffiliate => 'AFFILIATE PARTNER • 15% OFF';
+
+  @override
+  String get partnerDescription => 'Essential to activate your visa when passing customs in Sydney or Melbourne. Full COVID, sports and work coverage.';
+
+  @override
+  String get partnerActivate => 'Activate Insurance Promo (15% Off)';
+
+  @override
+  String testAlertSending(String countryNames) {
+    return '⚡ Sending test alert for $countryNames... Will arrive in 2 seconds.';
+  }
+
+  @override
+  String get checklistCompletedDescription => 'All set! Backpack 100% prepared.';
+
+  @override
+  String get partnerTitle => 'Need health insurance for Australia? Get 15% off with Chapka / IATI Seguros';
+
+  @override
+  String get paywallSuccessMessage => '✅ VIP Access Activated! 24/7 immediate alerts enabled or purchases successfully restored.';
 }

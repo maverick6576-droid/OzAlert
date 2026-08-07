@@ -45,5 +45,66 @@
     "visaSourceButton": "View official source",
     "settingsLegal": "Legal",
     "settingsPrivacyPolicy": "Privacy Policy",
-    "settingsTerms": "Terms and Conditions"
+    "settingsTerms": "Terms and Conditions",
+    "checklistTitle": "Expedition Kit",
+    "checklistProgress": "Equipment Progress",
+    "checklistDescription": "Prepare your backpack (certificates and savings) in advance so you are not left behind when the adventure begins.",
+    "checklistKeyDocs": "Key Documents:",
+    "checklistInstructions": "Secure each item in your inventory as you get it:",
+    "checklistTip": "Explorer Tip: Quotas tend to disappear like mirages in the desert. Having your PDFs organized is vital to survive the process.",
+    "dashboardSafeExpedition": "Safe Expedition",
+    "dashboardSafeExpeditionDesc": "The horizon is clear. We will notify you with a flare (notification) as soon as the Department enables places for your passports.",
+    "newsTitle": "News Radar",
+    "newsTabOfficial": "Official Sources",
+    "newsTabAlerts": "Google Alerts",
+    "newsEmptyState": "Official radar silent. No news.",
+    "newsGlobalAlerts": "Global alerts monitored.",
+    "newsError": "Radar interference.\nCould not load news.\n{errorText}",
+    "@newsError": {
+        "placeholders": {
+            "errorText": {
+                "type": "String"
+            }
+        }
+    },
+    "radarScanning": "Servers tracking the official Australian Immigration website",
+    "passportSelectorTitle": "Select your Passport (WHV 417 & 462)",
+    "passportSubclass": "Subclass {subclass} • Australia WHV",
+    "@passportSubclass": {
+        "placeholders": {
+            "subclass": {
+                "type": "String"
+            }
+        }
+    },
+    "paywallModalTitle": "Unlock the 24/7 Visa Radar",
+    "paywallModalDesc": "Receive an immediate Push Alert and Email the exact second the Department of Home Affairs opens spots for your country.",
+    "paywallPlanAnnualTitle": "Season Pass (Annual)",
+    "paywallPlanAnnualDesc": "Best value • Save 37%",
+    "paywallPlanMonthlyTitle": "Flex Monthly Plan",
+    "paywallPlanMonthlyDesc": "Cancel anytime with 1 click",
+    "paywallActivateAnnual": "Activate Season Pass ($14.99)",
+    "paywallActivateMonthly": "Activate Monthly Plan ($1.99)",
+    "paywallDisclaimer": "No trial period to ensure dedicated servers without saturation. Payment processed securely via RevenueCat / App Store / Google Play. You can cancel your subscription anytime in your account settings.",
+    "visaStatusOpenDesc": "Visas available. Start the expedition!",
+    "visaStatusPausedDesc": "On hold. Processing temporarily paused.",
+    "visaStatusClosedDesc": "Camp closed. 0 places currently.",
+    "errorOpeningLink": "Could not open the link.",
+    "tooltipScanRadar": "Scan live radar",
+    "newsSourceOfficial": "OFFICIAL SOURCE",
+    "newsSourceMarket": "MARKET / CURRENCY",
+    "partnerAffiliate": "AFFILIATE PARTNER • 15% OFF",
+    "partnerDescription": "Essential to activate your visa when passing customs in Sydney or Melbourne. Full COVID, sports and work coverage.",
+    "partnerActivate": "Activate Insurance Promo (15% Off)",
+    "testAlertSending": "⚡ Sending test alert for {countryNames}... Will arrive in 2 seconds.",
+    "@testAlertSending": {
+        "placeholders": {
+            "countryNames": {
+                "type": "String"
+            }
+        }
+    },
+    "checklistCompletedDescription": "All set! Backpack 100% prepared.",
+    "partnerTitle": "Need health insurance for Australia? Get 15% off with Chapka / IATI Seguros",
+    "paywallSuccessMessage": "✅ VIP Access Activated! 24/7 immediate alerts enabled or purchases successfully restored."
 }

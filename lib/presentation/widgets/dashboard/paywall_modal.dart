@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/paywall_provider.dart';
+
+enum _SubscriptionPlan { annual, monthly }
 
 class PaywallModal extends ConsumerStatefulWidget {
   const PaywallModal({super.key});
@@ -12,52 +16,29 @@ class PaywallModal extends ConsumerStatefulWidget {
 }
 
 class _PaywallModalState extends ConsumerState<PaywallModal> {
-  bool _isAnnualSelected = true;
+  _SubscriptionPlan _selectedPlan = _SubscriptionPlan.annual;
   bool _isLoading = false;
 
   Future<void> _handleSubscribe() async {
     setState(() => _isLoading = true);
     final notifier = ref.read(paywallProvider.notifier);
 
-    final success =
-        _isAnnualSelected
-            ? await notifier.subscribeAnnual()
-            : await notifier.subscribeMonthly();
+    final success = _selectedPlan == _SubscriptionPlan.annual
+        ? await notifier.subscribeAnnual()
+        : await notifier.subscribeMonthly();
 
     setState(() => _isLoading = false);
 
     if (success && mounted) {
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            '✅ ¡Acceso VIP Activado! Alertas inmediatas 24/7 habilitadas.',
+            AppLocalizations.of(context)!.paywallSuccessMessage,
           ),
           backgroundColor: AppColors.statusOpen,
         ),
       );
-    }
-  }
-
-  Future<void> _handleRestore() async {
-    setState(() => _isLoading = true);
-    final notifier = ref.read(paywallProvider.notifier);
-    final success = await notifier.restorePurchases();
-    setState(() => _isLoading = false);
-
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            success
-                ? '✅ Compras restauradas exitosamente.'
-                : 'ℹ️ No se encontraron compras previas activas.',
-          ),
-          backgroundColor:
-              success ? AppColors.statusOpen : AppColors.surfaceElevated,
-        ),
-      );
-      if (success) Navigator.of(context).pop();
     }
   }
 
@@ -77,10 +58,10 @@ class _PaywallModalState extends ConsumerState<PaywallModal> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
-                  onPressed: _handleRestore,
-                  child: const Text(
-                    'Restaurar Compras',
-                    style: TextStyle(color: AppColors.textSecondary),
+                  onPressed: () => ref.read(paywallProvider.notifier).restorePurchases(),
+                  child: Text(
+                    AppLocalizations.of(context)!.paywallRestore,
+                    style: const TextStyle(color: AppColors.textSecondary),
                   ),
                 ),
                 IconButton(
@@ -99,43 +80,41 @@ class _PaywallModalState extends ConsumerState<PaywallModal> {
               color: AppColors.statusOpen,
             ),
             const SizedBox(height: 14),
-            const Text(
-              'Desbloquea el Radar 24/7 de Visas Australia',
+            Text(
+              AppLocalizations.of(context)!.paywallModalTitle,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 22,
                 fontWeight: FontWeight.w900,
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Recibe una Alerta Push y un Email inmediato en el segundo exacto en que el Departamento de Home Affairs abra plazas para tu país.',
+            Text(
+              AppLocalizations.of(context)!.paywallModalDesc,
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+              style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
             ),
             const SizedBox(height: 24),
 
-            // Opciones de plan
             _buildPlanTile(
-              title: 'Pase de Temporada (Anual)',
+              title: AppLocalizations.of(context)!.paywallPlanAnnualTitle,
               price: '\$14.99 / año',
-              subtitle: 'Mejor valor • Ahorras 37%',
-              isSelected: _isAnnualSelected,
-              onTap: () => setState(() => _isAnnualSelected = true),
+              subtitle: AppLocalizations.of(context)!.paywallPlanAnnualDesc,
+              isSelected: _selectedPlan == _SubscriptionPlan.annual,
+              onTap: () => setState(() => _selectedPlan = _SubscriptionPlan.annual),
             ),
             const SizedBox(height: 12),
             _buildPlanTile(
-              title: 'Plan Mensual Flex',
+              title: AppLocalizations.of(context)!.paywallPlanMonthlyTitle,
               price: '\$1.99 / mes',
-              subtitle: 'Cancela en cualquier momento con 1 clic',
-              isSelected: !_isAnnualSelected,
-              onTap: () => setState(() => _isAnnualSelected = false),
+              subtitle: AppLocalizations.of(context)!.paywallPlanMonthlyDesc,
+              isSelected: _selectedPlan == _SubscriptionPlan.monthly,
+              onTap: () => setState(() => _selectedPlan = _SubscriptionPlan.monthly),
             ),
 
             const SizedBox(height: 24),
 
-            // Botón principal CTA
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -148,33 +127,30 @@ class _PaywallModalState extends ConsumerState<PaywallModal> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                child:
-                    _isLoading
-                        ? const SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.black,
-                          ),
-                        )
-                        : Text(
-                          _isAnnualSelected
-                              ? 'Activar Pase de Temporada (\$14.99)'
-                              : 'Activar Plan Mensual (\$1.99)',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w900,
-                          ),
+                child: _isLoading
+                    ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.black,
                         ),
+                      )
+                    : Text(
+                        _selectedPlan == _SubscriptionPlan.annual
+                            ? AppLocalizations.of(context)!.paywallActivateAnnual
+                            : AppLocalizations.of(context)!.paywallActivateMonthly,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
               ),
             ),
 
             const SizedBox(height: 14),
-            const Text(
-              'Sin periodo de prueba para garantizar servidores dedicados sin saturación. '
-              'Pago procesado de forma segura a través de RevenueCat / App Store / Google Play. '
-              'Puedes cancelar tu suscripción en cualquier momento desde los ajustes de tu cuenta.',
+            Text(
+              AppLocalizations.of(context)!.paywallDisclaimer,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: AppColors.textMuted,
