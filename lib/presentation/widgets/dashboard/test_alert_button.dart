@@ -26,10 +26,11 @@ class _TestAlertButtonState extends ConsumerState<TestAlertButton> {
     final userProfile = userProfileState.value;
     final passports = userProfile?.passports ?? [];
     
-    // Convertir el primer pasaporte a CountryConfig
-    final selectedCountryName = passports.isNotEmpty ? passports.first : 'España';
+    final selectedCountryNames = passports.isNotEmpty ? passports.join(' y ') : 'España';
+    final firstCountryName = passports.isNotEmpty ? passports.first : 'España';
+    
     final selectedCountry = AppConstants.supportedCountries.firstWhere(
-      (c) => c.name == selectedCountryName,
+      (c) => c.name == firstCountryName,
       orElse: () => AppConstants.supportedCountries.first,
     );
 
@@ -43,7 +44,7 @@ class _TestAlertButtonState extends ConsumerState<TestAlertButton> {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                '⚡ Enviando alerta de prueba para ${selectedCountry.name}... Llegará en 2 segundos.',
+                '⚡ Enviando alerta de prueba para $selectedCountryNames... Llegará en 2 segundos.',
                 style: const TextStyle(
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.w600,
@@ -60,7 +61,7 @@ class _TestAlertButtonState extends ConsumerState<TestAlertButton> {
     );
 
     await notificationService.sendTestAlert(
-      countryName: selectedCountry.name,
+      countryName: selectedCountryNames,
       countryCode: selectedCountry.code,
     );
 
