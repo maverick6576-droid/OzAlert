@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../providers/user_provider.dart';
+import '../../providers/locale_provider.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -15,7 +16,6 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 }
 
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
-  String _selectedLanguage = 'es';
   final List<String> _selectedPassports = [];
 
   // Lista oficial de pasaportes soportados
@@ -39,8 +39,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       return;
     }
     
+    final currentLang = ref.read(localeProvider)?.languageCode ?? Localizations.localeOf(context).languageCode;
     ref.read(onboardingControllerProvider.notifier).completeOnboarding(
-      _selectedLanguage,
+      currentLang,
       _selectedPassports,
     );
   }
@@ -66,6 +67,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     );
 
     final isLoading = ref.watch(onboardingControllerProvider).isLoading;
+    final currentLocale = ref.watch(localeProvider)?.languageCode ?? Localizations.localeOf(context).languageCode;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -124,16 +126,20 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                               Expanded(
                                 child: _LanguageOption(
                                   title: 'Español',
-                                  isSelected: _selectedLanguage == 'es',
-                                  onTap: () => setState(() => _selectedLanguage = 'es'),
+                                  isSelected: currentLocale == 'es',
+                                  onTap: () {
+                                    ref.read(localeProvider.notifier).setLocale(const Locale('es'));
+                                  },
                                 ),
                               ),
                               const SizedBox(width: 16),
                               Expanded(
                                 child: _LanguageOption(
                                   title: 'English',
-                                  isSelected: _selectedLanguage == 'en',
-                                  onTap: () => setState(() => _selectedLanguage = 'en'),
+                                  isSelected: currentLocale == 'en',
+                                  onTap: () {
+                                    ref.read(localeProvider.notifier).setLocale(const Locale('en'));
+                                  },
                                 ),
                               ),
                             ],
