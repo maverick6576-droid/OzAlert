@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../providers/user_provider.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -16,15 +17,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   String _selectedLanguage = 'es';
   final List<String> _selectedPassports = [];
 
-  // Lista de 30 países comunes para Work & Holiday o turismo en Australia
-  final List<String> _countries = [
-    'España', 'Chile', 'Perú', 'Argentina', 'Uruguay', 'Ecuador',
-    'México', 'Colombia', 'Brasil', 'Portugal', 'Italia', 'Francia',
-    'Alemania', 'Reino Unido', 'Irlanda', 'Estados Unidos', 'Canadá',
-    'Japón', 'Corea del Sur', 'Taiwán', 'Hong Kong', 'Singapur',
-    'Malasia', 'Indonesia', 'Tailandia', 'Vietnam', 'Filipinas',
-    'Nueva Zelanda', 'Sudáfrica', 'Otros'
-  ];
+  // Lista oficial de pasaportes soportados
+  final List<String> _countries = AppConstants.supportedCountries.map((c) => c.name).toList();
 
   void _togglePassport(String country) {
     setState(() {
