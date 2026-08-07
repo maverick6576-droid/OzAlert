@@ -5,7 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/passport_provider.dart';
 import '../../providers/repository_providers.dart';
-import '../../domain/models/country_config.dart';
+import '../../../../domain/models/country_config.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class VisaStatusCard extends ConsumerWidget {
