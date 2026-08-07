@@ -15,6 +15,7 @@ class ChecklistScreen extends ConsumerWidget {
     final checklist = ref.watch(checklistProvider);
     final progress = ref.watch(checklistProgressProvider);
     final percentageInt = (progress * 100).round();
+    final isCompleted = percentageInt == 100;
 
     return Scaffold(
       appBar: AppBar(
