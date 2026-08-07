@@ -49,11 +49,18 @@ class PaywallRepositoryImpl implements PaywallRepository {
         return active;
       }
     } catch (e) {
-      debugPrint('Compra en tienda simulada en modo demo: $e');
+      debugPrint('Error en compra mensual: $e');
+      if (kDebugMode) {
+        _isDemoSubscribed = true;
+        return true;
+      }
+      return false;
     }
-    // Si estamos probando en local o no hay producto en StoreKit, activar modo VIP simulado
-    _isDemoSubscribed = true;
-    return true;
+    if (kDebugMode) {
+      _isDemoSubscribed = true;
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -70,10 +77,18 @@ class PaywallRepositoryImpl implements PaywallRepository {
         return active;
       }
     } catch (e) {
-      debugPrint('Compra anual simulada en modo demo: $e');
+      debugPrint('Error en compra anual: $e');
+      if (kDebugMode) {
+        _isDemoSubscribed = true;
+        return true;
+      }
+      return false;
     }
-    _isDemoSubscribed = true;
-    return true;
+    if (kDebugMode) {
+      _isDemoSubscribed = true;
+      return true;
+    }
+    return false;
   }
 
   @override
