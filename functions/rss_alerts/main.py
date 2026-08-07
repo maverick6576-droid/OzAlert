@@ -39,8 +39,8 @@ def clean_html(text):
     if not text:
         return ""
     soup = BeautifulSoup(text, "html.parser")
-    # Extraer el texto limpio (sin tags <b>, <i>, etc.)
-    return soup.get_text(strip=True)
+    # Extraer el texto limpio (sin tags <b>, <i>, etc.) añadiendo un espacio entre elementos HTML
+    return soup.get_text(separator=" ", strip=True)
 
 def clean_google_url(google_url):
     """

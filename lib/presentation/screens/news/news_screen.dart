@@ -151,10 +151,24 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
               children: [
                 Icon(CupertinoIcons.bell_fill, color: AppColors.warning, size: 20),
                 const SizedBox(width: 8),
-                const Expanded(
-                  child: Text(
-                    'Alertas globales monitorizadas cada 30 minutos.',
-                    style: TextStyle(color: AppColors.textPrimary, fontSize: 13),
+                Expanded(
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      const Text(
+                        'Alertas globales monitorizadas.',
+                        style: TextStyle(color: AppColors.textPrimary, fontSize: 13),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: AppColors.statusOpen,
+                          shape: BoxShape.circle,
+                        ),
+                      ).animate(onPlay: (c) => c.repeat()).fade(duration: 800.ms, end: 0.2).then().fade(duration: 800.ms, end: 1.0),
+                    ],
                   ),
                 ),
               ],
