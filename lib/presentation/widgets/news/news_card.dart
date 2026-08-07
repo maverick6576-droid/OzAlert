@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../domain/entities/news_item.dart';
+import '../../../../domain/models/news_item.dart';
 import '../../providers/repository_providers.dart';
 
 class NewsCard extends ConsumerWidget {
@@ -24,13 +24,13 @@ class NewsCard extends ConsumerWidget {
   }
 
   String getSourceText(BuildContext context) {
-    if (item.sourceType == NewsSourceType.official) {
-      return AppLocalizations.of(context)!.newsSourceOfficial;
+    switch (item.category) {
+      case 'oficial':
+        return AppLocalizations.of(context)!.newsSourceOfficial;
+      case 'comunidad':
+      default:
+        return AppLocalizations.of(context)!.newsSourceMarket;
     }
-    if (item.sourceType == NewsSourceType.market) {
-      return AppLocalizations.of(context)!.newsSourceMarket;
-    }
-    return item.sourceName.toUpperCase();
   }
 
   @override

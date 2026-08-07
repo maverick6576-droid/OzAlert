@@ -208,11 +208,11 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
 
                 // 4. SUBTITLE
                 Text(
-                  getSubtitle(),
-                  style: TextStyle(
+                  getStatusSubtitle(context),
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: isOpen ? Colors.white : Colors.white.withOpacity(0.9),
+                    color: Colors.white,
                     height: 1.3,
                   ),
                 ),
