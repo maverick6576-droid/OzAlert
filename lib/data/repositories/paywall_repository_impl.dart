@@ -95,4 +95,18 @@ class PaywallRepositoryImpl implements PaywallRepository {
   Future<void> setDemoSubscription(bool isSubscribed) async {
     _isDemoSubscribed = isSubscribed;
   }
+
+  @override
+  Future<String?> getMonthlyPriceString() async {
+    try {
+      final offerings = await Purchases.getOfferings();
+      final monthly = offerings.current?.monthly;
+      if (monthly != null) {
+        return monthly.storeProduct.priceString;
+      }
+    } catch (e) {
+      debugPrint('Error obteniendo precio: $e');
+    }
+    return null;
+  }
 }

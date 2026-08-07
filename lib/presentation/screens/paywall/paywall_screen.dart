@@ -52,22 +52,39 @@ class PaywallScreen extends ConsumerWidget {
               SizedBox(
                 width: double.infinity,
                 height: 56,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    await ref.read(paywallProvider.notifier).subscribeMonthly();
-                    // app.dart nos enrutará automáticamente al Dashboard si es exitoso
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: const Text(
-                    'Suscribirse 1,99€ / mes',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
+                child: Consumer(
+                  builder: (context, ref, child) {
+                    final priceAsync = ref.watch(monthlyPriceProvider);
+                    
+                    return ElevatedButton(
+                      onPressed: () async {
+                        await ref.read(paywallProvider.notifier).subscribeMonthly();
+                        // app.dart nos enrutará automáticamente al Dashboard si es exitoso
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: priceAsync.when(
+                        data: (priceStr) => Text(
+                          priceStr != null ? 'Suscribirse $priceStr / mes' : 'Suscribirse',
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        loading: () => const SizedBox(
+                          height: 24,
+                          width: 24,
+                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                        ),
+                        error: (_, __) => const Text(
+                          'Suscribirse',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    );
+                  }
                 ),
               ).animate().slideY(begin: 1.0, end: 0, delay: 600.ms),
               const SizedBox(height: 16),

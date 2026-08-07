@@ -71,3 +71,8 @@ class PaywallNotifier extends StateNotifier<bool> {
 final paywallProvider = StateNotifierProvider<PaywallNotifier, bool>((ref) {
   return PaywallNotifier(ref);
 });
+
+final monthlyPriceProvider = FutureProvider<String?>((ref) async {
+  final repo = ref.watch(paywallRepositoryProvider);
+  return await repo.getMonthlyPriceString();
+});

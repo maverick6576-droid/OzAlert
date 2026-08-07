@@ -32,7 +32,7 @@ void main() async {
   // 3. Inicialización de RevenueCat SDK (con clave de demostración o clave pública real)
   try {
     final paywallRepo = PaywallRepositoryImpl();
-    await paywallRepo.initRevenueCat('test_URIpBLaYemloZQZBVNltMOIIWbq');
+    await paywallRepo.initRevenueCat('goog_AuxdpuYZxTRkEFUaxmhQqVwOeid');
     debugPrint('✅ RevenueCat inicializado.');
   } catch (e) {
     debugPrint('⚠️ RevenueCat en modo desarrollo local: $e');
