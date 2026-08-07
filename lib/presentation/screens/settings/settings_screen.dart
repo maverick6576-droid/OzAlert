@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/locale_provider.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -56,6 +57,35 @@ class SettingsScreen extends ConsumerWidget {
               ref.read(localeProvider.notifier).setLocale(const Locale('en', 'US'));
             },
           ),
+          const SizedBox(height: 32),
+          Text(
+            l10n.settingsLegal,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          ListTile(
+            title: Text(l10n.settingsPrivacyPolicy),
+            trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
+            onTap: () => _launchUrl('https://ozvisa-alert-prod.web.app/privacy.html'),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: AppColors.cardBorder),
+            ),
+          ),
+          const SizedBox(height: 8),
+          ListTile(
+            title: Text(l10n.settingsTerms),
+            trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
+            onTap: () => _launchUrl('https://ozvisa-alert-prod.web.app/terms.html'),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: AppColors.cardBorder),
+            ),
+          ),
           const SizedBox(height: 48),
           ElevatedButton(
             onPressed: () {
@@ -80,6 +110,13 @@ class SettingsScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _launchUrl(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    if (!await launchUrl(url)) {
+      debugPrint('Could not launch $url');
+    }
   }
 }
 

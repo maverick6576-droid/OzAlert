@@ -42,5 +42,8 @@
     "visaStatusOpen": "OPEN",
     "visaStatusClosed": "CLOSED",
     "visaStatusPaused": "PAUSED",
-    "visaSourceButton": "View official source"
+    "visaSourceButton": "View official source",
+    "settingsLegal": "Legal",
+    "settingsPrivacyPolicy": "Privacy Policy",
+    "settingsTerms": "Terms and Conditions"
 }
