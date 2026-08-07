@@ -117,4 +117,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get visaSourceButton => 'View official source';
+
+  @override
+  String get settingsLegal => 'Legal';
+
+  @override
+  String get settingsPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get settingsTerms => 'Terms and Conditions';
 }
