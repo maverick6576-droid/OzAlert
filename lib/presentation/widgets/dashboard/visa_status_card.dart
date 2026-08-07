@@ -132,71 +132,37 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 1. Botón Ver Fuente Oficial (Movido arriba)
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      final url = Uri.parse('https://immi.homeaffairs.gov.au/what-we-do/whm-program/status-of-country-caps?utm_source=chatgpt.com');
-                      if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('No se pudo abrir el enlace.')),
-                          );
-                        }
-                      }
-                    },
-                    icon: const Icon(CupertinoIcons.link, size: 14),
-                    label: const Text(
-                      'Ver fuente oficial',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.15),
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(color: Colors.white.withOpacity(0.3)),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // 2. RADAR: STATUS & Refresh Button
+                // 1. Top Bar: Fuente Oficial & Refresh Button
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: getStatusColor().withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: getStatusColor().withOpacity(0.5)),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        final url = Uri.parse('https://immi.homeaffairs.gov.au/what-we-do/whm-program/status-of-country-caps?utm_source=chatgpt.com');
+                        if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('No se pudo abrir el enlace.')),
+                            );
+                          }
+                        }
+                      },
+                      icon: const Icon(CupertinoIcons.link, size: 14),
+                      label: const Text(
+                        'Ver fuente oficial',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            getIconData(),
-                            color: getStatusColor(),
-                            size: 16,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            _isScanning ? 'ESCANENANDO RADAR...' : 'RADAR: ${getTitle()}',
-                            style: TextStyle(
-                              color: getStatusColor(),
-                              fontWeight: FontWeight.w800,
-                              fontSize: 12,
-                              letterSpacing: 1.2,
-                            ),
-                          ),
-                        ],
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white.withOpacity(0.15),
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          side: BorderSide(color: Colors.white.withOpacity(0.3)),
+                        ),
                       ),
                     ),
                     IconButton(

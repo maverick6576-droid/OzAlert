@@ -115,7 +115,7 @@ class _TestAlertButtonState extends ConsumerState<TestAlertButton> {
                     ),
                 const SizedBox(width: 12),
                 const Text(
-                  'Probar Alerta (Push + Email Test)',
+                  'Probar Alerta',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
