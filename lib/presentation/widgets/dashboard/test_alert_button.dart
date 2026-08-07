@@ -5,6 +5,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/passport_provider.dart';
 import '../../providers/repository_providers.dart';
+import '../../providers/user_provider.dart';
+import '../../../../core/constants/app_constants.dart';
 
 class TestAlertButton extends ConsumerStatefulWidget {
   const TestAlertButton({super.key});
@@ -20,7 +22,17 @@ class _TestAlertButtonState extends ConsumerState<TestAlertButton> {
     if (_isLoading) return;
     setState(() => _isLoading = true);
 
-    final selectedCountry = ref.read(selectedPassportProvider);
+    final userProfileState = ref.read(userProfileProvider);
+    final userProfile = userProfileState.value;
+    final passports = userProfile?.passports ?? [];
+    
+    // Convertir el primer pasaporte a CountryConfig
+    final selectedCountryName = passports.isNotEmpty ? passports.first : 'España';
+    final selectedCountry = AppConstants.supportedCountries.firstWhere(
+      (c) => c.name == selectedCountryName,
+      orElse: () => AppConstants.supportedCountries.first,
+    );
+
     final notificationService = ref.read(notificationServiceProvider);
 
     ScaffoldMessenger.of(context).showSnackBar(

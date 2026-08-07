@@ -5,19 +5,22 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/passport_provider.dart';
 import '../../providers/repository_providers.dart';
+import '../../domain/models/country_config.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VisaStatusCard extends ConsumerWidget {
-  const VisaStatusCard({super.key});
+  final CountryConfig country;
+  
+  const VisaStatusCard({super.key, required this.country});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedCountry = ref.watch(selectedPassportProvider);
-    final statusAsync = ref.watch(visaStatusStreamProvider);
+    final statusAsync = ref.watch(visaStatusStreamProvider(country.code));
 
     final status = statusAsync.when(
       data: (val) => val,
-      loading: () => selectedCountry.defaultStatus,
-      error: (_, __) => selectedCountry.defaultStatus,
+      loading: () => country.defaultStatus,
+      error: (_, __) => country.defaultStatus,
     );
 
     final isOpen = status == 'OPEN';
@@ -54,6 +57,7 @@ class VisaStatusCard extends ConsumerWidget {
     }
 
     return Stack(
+      clipBehavior: Clip.none,
       alignment: Alignment.center,
       children: [
         // Concentric ripples for radar aesthetic (Only active if OPEN or scanning)
@@ -136,7 +140,7 @@ class VisaStatusCard extends ConsumerWidget {
                       final newStatus = isOpen ? false : true;
                       ref
                           .read(visaRepositoryProvider)
-                          .toggleDemoStatus(selectedCountry.code, newStatus);
+                          .toggleDemoStatus(country.code, newStatus);
                     },
                     icon: Icon(
                       CupertinoIcons.arrow_2_circlepath,
@@ -185,7 +189,7 @@ class VisaStatusCard extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      '${selectedCountry.flagEmoji} Ruta: ${selectedCountry.name} (Subclase ${selectedCountry.visaSubclass})',
+                      '${country.flagEmoji} Ruta: ${country.name} (Subclase ${country.visaSubclass})',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 13,
@@ -196,6 +200,38 @@ class VisaStatusCard extends ConsumerWidget {
                 ),
               ),
             ],
+          ),
+        ),
+        
+        // Botón Ver Fuente Oficial
+        Positioned(
+          bottom: -16,
+          child: ElevatedButton.icon(
+            onPressed: () async {
+              final url = Uri.parse('https://immi.homeaffairs.gov.au/what-we-do/whm-program/status-of-country-caps?utm_source=chatgpt.com');
+              if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('No se pudo abrir el enlace.')),
+                  );
+                }
+              }
+            },
+            icon: const Icon(CupertinoIcons.link, size: 16),
+            label: const Text(
+              'Ver fuente oficial',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.black87,
+              elevation: 4,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: BorderSide(color: Colors.grey.shade300),
+              ),
+            ),
           ),
         ),
       ],

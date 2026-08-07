@@ -44,9 +44,8 @@ final selectedPassportProvider =
       return SelectedPassportNotifier(ref);
     });
 
-/// Stream provider en tiempo real que emite "OPEN" o "CLOSED" del pasaporte seleccionado
-final visaStatusStreamProvider = StreamProvider<String>((ref) {
-  final selectedCountry = ref.watch(selectedPassportProvider);
+/// Stream provider en tiempo real que emite "OPEN" o "CLOSED" de un pasaporte específico
+final visaStatusStreamProvider = StreamProvider.family<String, String>((ref, countryCode) {
   final visaRepo = ref.watch(visaRepositoryProvider);
-  return visaRepo.watchVisaStatus(selectedCountry.code);
+  return visaRepo.watchVisaStatus(countryCode);
 });

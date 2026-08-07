@@ -5,10 +5,10 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/passport_provider.dart';
 import '../../providers/paywall_provider.dart';
+import '../../providers/user_provider.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../widgets/dashboard/live_radar_banner.dart';
 import '../../widgets/dashboard/visa_status_card.dart';
-import '../../widgets/dashboard/test_alert_button.dart';
-import '../../widgets/dashboard/passport_selector.dart';
 import '../../widgets/dashboard/paywall_modal.dart';
 
 class DashboardScreen extends ConsumerWidget {
@@ -25,8 +25,18 @@ class DashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedCountry = ref.watch(selectedPassportProvider);
     final isSubscribed = ref.watch(paywallProvider);
+    final userProfileState = ref.watch(userProfileProvider);
+    final userProfile = userProfileState.value;
+    final passports = userProfile?.passports ?? [];
+    
+    // Convertir los nombres de pasaportes a objetos CountryConfig
+    final selectedCountries = passports.map((p) {
+      return AppConstants.supportedCountries.firstWhere(
+        (c) => c.name == p,
+        orElse: () => AppConstants.supportedCountries.first,
+      );
+    }).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -58,7 +68,7 @@ class DashboardScreen extends ConsumerWidget {
           ],
         ),
         actions: [
-          const PassportSelector(),
+          // Se eliminó el PassportSelector para mostrar todos en el feed
           const SizedBox(width: 8),
           // Botón VIP o Estado VIP
           GestureDetector(
@@ -140,9 +150,16 @@ class DashboardScreen extends ConsumerWidget {
                 const LiveRadarBanner(),
                 const SizedBox(height: 20),
 
-                // 2. Tarjeta de Estado (CERRADA / ABIERTA) del pasaporte seleccionado
-                const VisaStatusCard(),
-                const SizedBox(height: 22),
+                // 2. Tarjetas de Estado para cada pasaporte seleccionado
+                if (selectedCountries.isEmpty)
+                  const Center(child: Text('No has seleccionado pasaportes.'))
+                else
+                  ...selectedCountries.map((country) => Padding(
+                    padding: const EdgeInsets.only(bottom: 32.0),
+                    child: VisaStatusCard(country: country),
+                  )),
+
+                const SizedBox(height: 10),
 
                 // 3. Botón "Probar Alerta" - Clave para generar confianza
                 const TestAlertButton(),
@@ -174,18 +191,18 @@ class DashboardScreen extends ConsumerWidget {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: const [
                             Text(
-                              'Expedición ${selectedCountry.name}',
-                              style: const TextStyle(
+                              'Expedición Segura',
+                              style: TextStyle(
                                 color: AppColors.textPrimary,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
                             ),
-                            const SizedBox(height: 4),
-                            const Text(
-                              'El horizonte está despejado. Te avisaremos con un destello de bengala (notificación) en cuanto el Departamento habilite plazas.',
+                            SizedBox(height: 4),
+                            Text(
+                              'El horizonte está despejado. Te avisaremos con un destello de bengala (notificación) en cuanto el Departamento habilite plazas para tus pasaportes.',
                               style: TextStyle(
                                 color: AppColors.textSecondary,
                                 fontSize: 13,
