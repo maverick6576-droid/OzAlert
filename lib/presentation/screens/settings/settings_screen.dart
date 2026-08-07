@@ -12,7 +12,7 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(localeProvider);
+    final currentLocale = ref.watch(localeProvider) ?? Localizations.localeOf(context);
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -44,17 +44,17 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           _LanguageTile(
             title: l10n.settingsLanguageSpanish,
-            isSelected: currentLocale?.languageCode == 'es',
+            isSelected: currentLocale.languageCode == 'es',
             onTap: () {
-              ref.read(localeProvider.notifier).setLocale(const Locale('es', 'ES'));
+              ref.read(localeProvider.notifier).setLocale(const Locale('es'));
             },
           ),
           const SizedBox(height: 8),
           _LanguageTile(
             title: l10n.settingsLanguageEnglish,
-            isSelected: currentLocale?.languageCode == 'en',
+            isSelected: currentLocale.languageCode == 'en',
             onTap: () {
-              ref.read(localeProvider.notifier).setLocale(const Locale('en', 'US'));
+              ref.read(localeProvider.notifier).setLocale(const Locale('en'));
             },
           ),
           const SizedBox(height: 32),

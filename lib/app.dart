@@ -42,7 +42,7 @@ class OzVisaAlertApp extends ConsumerWidget {
           }
         }
         // Fallback a inglés por defecto según requisitos
-        return const Locale('en', 'US');
+        return const Locale('en');
       },
       home: authState.when(
         data: (user) {
