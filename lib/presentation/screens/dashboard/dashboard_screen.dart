@@ -11,6 +11,8 @@ import '../../widgets/dashboard/live_radar_banner.dart';
 import '../../widgets/dashboard/visa_status_card.dart';
 import '../../widgets/dashboard/test_alert_button.dart';
 import '../../widgets/dashboard/paywall_modal.dart';
+import '../settings/settings_screen.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -57,9 +59,9 @@ class DashboardScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 10),
-            const Text(
-              'OzAlert',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.dashboardTitle,
+              style: const TextStyle(
                 color: AppColors.textPrimary,
                 fontWeight: FontWeight.w900,
                 fontSize: 22,
@@ -69,7 +71,14 @@ class DashboardScreen extends ConsumerWidget {
           ],
         ),
         actions: [
-          // Se eliminó el PassportSelector para mostrar todos en el feed
+          IconButton(
+            icon: const Icon(CupertinoIcons.gear, color: AppColors.textPrimary),
+            onPressed: () {
+              Navigator.of(context).push(
+                CupertinoPageRoute(builder: (_) => const SettingsScreen()),
+              );
+            },
+          ),
           const SizedBox(width: 8),
         ],
       ),
@@ -112,7 +121,7 @@ class DashboardScreen extends ConsumerWidget {
 
                 // 2. Tarjetas de Estado para cada pasaporte seleccionado
                 if (selectedCountries.isEmpty)
-                  const Center(child: Text('No has seleccionado pasaportes.'))
+                  Center(child: Text(AppLocalizations.of(context)!.onboardingErrorEmpty))
                 else
                   ...selectedCountries.map((country) => Padding(
                     padding: const EdgeInsets.only(bottom: 32.0),

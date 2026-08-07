@@ -7,6 +7,7 @@ import '../../providers/passport_provider.dart';
 import '../../providers/repository_providers.dart';
 import '../../providers/user_provider.dart';
 import '../../../../core/constants/app_constants.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class TestAlertButton extends ConsumerStatefulWidget {
   const TestAlertButton({super.key});
@@ -115,9 +116,9 @@ class _TestAlertButtonState extends ConsumerState<TestAlertButton> {
                       size: 24,
                     ),
                 const SizedBox(width: 12),
-                const Text(
-                  'Probar Alerta',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.dashboardTestAlert,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

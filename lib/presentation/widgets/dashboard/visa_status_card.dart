@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../providers/passport_provider.dart';
 import '../../../../domain/models/country_config.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class VisaStatusCard extends ConsumerStatefulWidget {
   final CountryConfig country;
@@ -55,9 +56,9 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
     }
 
     String getTitle() {
-      if (isOpen) return '¡ABIERTA!';
-      if (isPaused) return 'PAUSADA';
-      return 'CERRADA';
+      if (isOpen) return AppLocalizations.of(context)!.visaStatusOpen;
+      if (isPaused) return AppLocalizations.of(context)!.visaStatusPaused;
+      return AppLocalizations.of(context)!.visaStatusClosed;
     }
 
     String getSubtitle() {
@@ -148,9 +149,9 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                         }
                       },
                       icon: const Icon(CupertinoIcons.link, size: 14),
-                      label: const Text(
-                        'Ver fuente oficial',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                      label: Text(
+                        AppLocalizations.of(context)!.visaSourceButton,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white.withOpacity(0.15),

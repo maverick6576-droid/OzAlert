@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/auth_provider.dart';
 import 'dart:io' show Platform;
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -18,7 +19,7 @@ class LoginScreen extends ConsumerWidget {
         if (!state.isLoading && state.hasError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Error al iniciar sesión: ${state.error}'),
+              content: Text('${AppLocalizations.of(context)!.loginError} ${state.error}'),
               backgroundColor: Colors.red,
             ),
           );
@@ -65,9 +66,9 @@ class LoginScreen extends ConsumerWidget {
               const SizedBox(height: 32),
               
               // Título
-              const Text(
-                'OzAlert',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.loginTitle,
+                style: const TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.w900,
                   color: AppColors.textPrimary,
@@ -78,10 +79,10 @@ class LoginScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               
               // Subtítulo / Propuesta de Valor
-              const Text(
-                'El radar definitivo para tu Work & Holiday Visa de Australia.',
+              Text(
+                AppLocalizations.of(context)!.loginSubtitle,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   color: AppColors.textSecondary,
                   height: 1.5,
@@ -95,7 +96,7 @@ class LoginScreen extends ConsumerWidget {
                 const CircularProgressIndicator(color: AppColors.primary)
               else ...[
                 _SocialAuthButton(
-                  text: 'Continuar con Google',
+                  text: AppLocalizations.of(context)!.loginGoogle,
                   icon: Icons.g_mobiledata,
                   backgroundColor: Colors.white,
                   textColor: Colors.black87,
@@ -108,7 +109,7 @@ class LoginScreen extends ConsumerWidget {
                 
                 if (Platform.isIOS)
                   _SocialAuthButton(
-                    text: 'Continuar con Apple',
+                    text: AppLocalizations.of(context)!.loginApple,
                     icon: Icons.apple,
                     backgroundColor: Colors.black,
                     textColor: Colors.white,

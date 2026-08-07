@@ -1,0 +1,46 @@
+{
+    "@@locale": "en",
+    "loginTitle": "OzAlert",
+    "loginSubtitle": "The ultimate radar for your Australian Work & Holiday Visa.",
+    "loginError": "Error signing in:",
+    "loginGoogle": "Continue with Google",
+    "loginApple": "Continue with Apple",
+    "welcomeTitle": "Australian visas\nfly away\nin minutes.",
+    "welcomeSubtitle": "Every year, thousands miss out because they don't find out in time when spots open. Our system tracks official sources 24/7 and alerts you instantly so you can be the first to apply.",
+    "welcomeBullet1": "Real instant notifications",
+    "welcomeBullet2": "Gain an advantage over other applicants",
+    "welcomeBullet3": "Official government sources (Immigration)",
+    "welcomeButton": "Set up my Radar now",
+    "onboardingTitle": "Customize your Radar",
+    "onboardingSubtitle": "Set up your profile to receive notifications for visas that match your passport.",
+    "onboardingLanguage": "Preferred Language",
+    "onboardingPassports": "Select your Passports",
+    "onboardingErrorEmpty": "Please select at least one passport",
+    "onboardingErrorSave": "Error saving:",
+    "onboardingNext": "Next step",
+    "paywallTitle": "Turn on the Radar",
+    "paywallSubtitle": "Receive immediate notifications as soon as your visa becomes available. Subscribe to access.",
+    "paywallSubscribeMonthly": "Subscribe {price} / month",
+    "@paywallSubscribeMonthly": {
+        "placeholders": {
+            "price": {
+                "type": "String"
+            }
+        }
+    },
+    "paywallSubscribeOnly": "Subscribe",
+    "paywallRestore": "Restore Purchases",
+    "paywallBypass": "Bypass to Dashboard (Debug)",
+    "dashboardTitle": "OzVisa Radar",
+    "dashboardTestAlert": "Test Alert",
+    "dashboardSettings": "Settings",
+    "settingsTitle": "Settings",
+    "settingsLanguage": "App Language",
+    "settingsLanguageEnglish": "English",
+    "settingsLanguageSpanish": "Spanish",
+    "settingsLogout": "Log out",
+    "visaStatusOpen": "OPEN",
+    "visaStatusClosed": "CLOSED",
+    "visaStatusPaused": "PAUSED",
+    "visaSourceButton": "View official source"
+}

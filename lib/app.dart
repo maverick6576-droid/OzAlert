@@ -9,7 +9,8 @@ import 'presentation/screens/onboarding/onboarding_screen.dart';
 import 'presentation/screens/paywall/paywall_screen.dart';
 import 'presentation/providers/auth_provider.dart';
 import 'presentation/providers/user_provider.dart';
-
+import 'presentation/providers/locale_provider.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 class OzVisaAlertApp extends ConsumerWidget {
   const OzVisaAlertApp({super.key});
 
@@ -25,14 +26,24 @@ class OzVisaAlertApp extends ConsumerWidget {
       darkTheme: AppTheme.lightTheme, // Forzar light theme para todo
       themeMode: ThemeMode.light,
       localizationsDelegates: const [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('es', 'ES'), // Español como idioma primario
-        Locale('en', 'US'),
-      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: ref.watch(localeProvider),
+      localeResolutionCallback: (deviceLocale, supportedLocales) {
+        // Si el usuario forzó un idioma, lo usamos (ya está en 'locale')
+        // Si no, comprobamos si el dispositivo está en la lista soportada
+        for (var locale in supportedLocales) {
+          if (deviceLocale != null && locale.languageCode == deviceLocale.languageCode) {
+            return deviceLocale;
+          }
+        }
+        // Fallback a inglés por defecto según requisitos
+        return const Locale('en', 'US');
+      },
       home: authState.when(
         data: (user) {
           if (user == null) {

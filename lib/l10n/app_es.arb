@@ -1,0 +1,46 @@
+{
+    "@@locale": "es",
+    "loginTitle": "OzAlert",
+    "loginSubtitle": "El radar definitivo para tu Work & Holiday Visa de Australia.",
+    "loginError": "Error al iniciar sesión:",
+    "loginGoogle": "Continuar con Google",
+    "loginApple": "Continuar con Apple",
+    "welcomeTitle": "Las visas de\nAustralia vuelan\nen minutos.",
+    "welcomeSubtitle": "Cada año, miles de personas se quedan fuera por no enterarse a tiempo de la apertura de cupos. Nuestro sistema rastrea las fuentes oficiales 24/7 y te avisa al instante para que seas el primero en aplicar.",
+    "welcomeBullet1": "Notificaciones instantáneas reales",
+    "welcomeBullet2": "Gana ventaja sobre otros aplicantes",
+    "welcomeBullet3": "Fuentes oficiales del gobierno (Inmigración)",
+    "welcomeButton": "Configurar mi Radar ahora",
+    "onboardingTitle": "Personaliza tu Radar",
+    "onboardingSubtitle": "Configura tu perfil para recibir notificaciones de las visas que encajen con tu pasaporte.",
+    "onboardingLanguage": "Idioma Preferido",
+    "onboardingPassports": "Selecciona tus Pasaportes",
+    "onboardingErrorEmpty": "Por favor, selecciona al menos un pasaporte",
+    "onboardingErrorSave": "Error al guardar:",
+    "onboardingNext": "Siguiente paso",
+    "paywallTitle": "Enciende el Radar",
+    "paywallSubtitle": "Recibe notificaciones inmediatas en cuanto tu visa esté disponible. Suscríbete para acceder.",
+    "paywallSubscribeMonthly": "Suscribirse {price} / mes",
+    "@paywallSubscribeMonthly": {
+        "placeholders": {
+            "price": {
+                "type": "String"
+            }
+        }
+    },
+    "paywallSubscribeOnly": "Suscribirse",
+    "paywallRestore": "Restaurar Compras",
+    "paywallBypass": "Bypass al Dashboard (Debug)",
+    "dashboardTitle": "Radar OzVisa",
+    "dashboardTestAlert": "Probar Alerta",
+    "dashboardSettings": "Ajustes",
+    "settingsTitle": "Ajustes",
+    "settingsLanguage": "Idioma de la aplicación",
+    "settingsLanguageEnglish": "Inglés",
+    "settingsLanguageSpanish": "Español",
+    "settingsLogout": "Cerrar sesión",
+    "visaStatusOpen": "ABIERTO",
+    "visaStatusClosed": "CERRADO",
+    "visaStatusPaused": "PAUSADO",
+    "visaSourceButton": "Ver fuente oficial"
+}

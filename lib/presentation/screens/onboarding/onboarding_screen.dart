@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../providers/user_provider.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -33,7 +34,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   void _savePreferences() {
     if (_selectedPassports.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor, selecciona al menos un pasaporte')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.onboardingErrorEmpty)),
       );
       return;
     }
@@ -52,7 +53,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         if (!state.isLoading && state.hasError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Error al guardar: ${state.error}'),
+              content: Text('${AppLocalizations.of(context)!.onboardingErrorSave} ${state.error}'),
               backgroundColor: Colors.red,
             ),
           );
@@ -77,9 +78,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Personaliza tu Radar',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.onboardingTitle,
+                    style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w900,
                       color: AppColors.textPrimary,
@@ -87,9 +88,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     ),
                   ).animate().fadeIn(duration: 400.ms).slideY(begin: -0.2, end: 0),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Configura tu perfil para recibir notificaciones de las visas que encajen con tu pasaporte.',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.onboardingSubtitle,
+                    style: const TextStyle(
                       fontSize: 16,
                       color: AppColors.textSecondary,
                       height: 1.4,
@@ -109,9 +110,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Idioma Preferido',
-                            style: TextStyle(
+                          Text(
+                            AppLocalizations.of(context)!.onboardingLanguage,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: AppColors.textPrimary,
@@ -146,9 +147,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 16.0),
-                      child: const Text(
-                        'Selecciona tus Pasaportes',
-                        style: TextStyle(
+                      child: Text(
+                        AppLocalizations.of(context)!.onboardingPassports,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: AppColors.textPrimary,
@@ -215,9 +216,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   ),
                   child: isLoading
                       ? const CupertinoActivityIndicator(color: Colors.white)
-                      : const Text(
-                          'Siguiente paso',
-                          style: TextStyle(
+                      : Text(
+                          AppLocalizations.of(context)!.onboardingNext,
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),

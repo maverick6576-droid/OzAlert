@@ -6,8 +6,13 @@ import 'firebase_options.dart';
 import 'core/services/notification_service.dart';
 import 'data/repositories/paywall_repository_impl.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+import 'presentation/providers/locale_provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  final sharedPrefs = await SharedPreferences.getInstance();
 
   // 1. Inicialización de Firebase con credenciales reales configuradas para Android e iOS
   try {
@@ -38,5 +43,12 @@ void main() async {
     debugPrint('⚠️ RevenueCat en modo desarrollo local: $e');
   }
 
-  runApp(const ProviderScope(child: OzVisaAlertApp()));
+  runApp(
+    ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(sharedPrefs),
+      ],
+      child: const OzVisaAlertApp(),
+    ),
+  );
 }

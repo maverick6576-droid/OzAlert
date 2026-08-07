@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
 import 'onboarding_screen.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -36,9 +37,9 @@ class WelcomeScreen extends StatelessWidget {
               const SizedBox(height: 32),
               
               // Título con gancho
-              const Text(
-                'Las visas de\nAustralia vuelan\nen minutos.',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.welcomeTitle,
+                style: const TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.w900,
                   color: Colors.white,
@@ -50,9 +51,9 @@ class WelcomeScreen extends StatelessWidget {
               const SizedBox(height: 24),
               
               // Explicación de valor
-              const Text(
-                'Cada año, miles de personas se quedan fuera por no enterarse a tiempo de la apertura de cupos. Nuestro sistema rastrea las fuentes oficiales 24/7 y te avisa al instante para que seas el primero en aplicar.',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.welcomeSubtitle,
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.white70,
                   height: 1.5,
@@ -64,17 +65,17 @@ class WelcomeScreen extends StatelessWidget {
               // Bullet points de urgencia
               _buildBullet(
                 icon: CupertinoIcons.bell_solid,
-                text: 'Notificaciones instantáneas reales',
+                text: AppLocalizations.of(context)!.welcomeBullet1,
                 delay: 600,
               ),
               _buildBullet(
                 icon: CupertinoIcons.time_solid,
-                text: 'Gana ventaja sobre otros aplicantes',
+                text: AppLocalizations.of(context)!.welcomeBullet2,
                 delay: 700,
               ),
               _buildBullet(
                 icon: CupertinoIcons.shield_fill,
-                text: 'Fuentes oficiales del gobierno (Inmigración)',
+                text: AppLocalizations.of(context)!.welcomeBullet3,
                 delay: 800,
               ),
               
@@ -100,9 +101,9 @@ class WelcomeScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: const Text(
-                    'Configurar mi Radar ahora',
-                    style: TextStyle(
+                  child: Text(
+                    AppLocalizations.of(context)!.welcomeButton,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),

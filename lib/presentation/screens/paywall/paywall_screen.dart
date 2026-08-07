@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/paywall_provider.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class PaywallScreen extends ConsumerWidget {
   const PaywallScreen({super.key});
@@ -28,19 +29,19 @@ class PaywallScreen extends ConsumerWidget {
                 color: AppColors.statusClosed,
               ).animate().scale(duration: 500.ms),
               const SizedBox(height: 24),
-              const Text(
-                'Enciende el Radar',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.paywallTitle,
+                style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w900,
                   color: AppColors.textPrimary,
                 ),
               ).animate().fadeIn(delay: 200.ms),
               const SizedBox(height: 12),
-              const Text(
-                'Recibe notificaciones inmediatas en cuanto tu visa esté disponible. Suscríbete para acceder.',
+              Text(
+                AppLocalizations.of(context)!.paywallSubtitle,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   color: AppColors.textSecondary,
                   height: 1.5,
@@ -70,7 +71,9 @@ class PaywallScreen extends ConsumerWidget {
                       ),
                       child: priceAsync.when(
                         data: (priceStr) => Text(
-                          priceStr != null ? 'Suscribirse $priceStr / mes' : 'Suscribirse',
+                          priceStr != null 
+                              ? AppLocalizations.of(context)!.paywallSubscribeMonthly(priceStr) 
+                              : AppLocalizations.of(context)!.paywallSubscribeOnly,
                           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         loading: () => const SizedBox(
@@ -78,9 +81,9 @@ class PaywallScreen extends ConsumerWidget {
                           width: 24,
                           child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                         ),
-                        error: (_, __) => const Text(
-                          'Suscribirse',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        error: (_, __) => Text(
+                          AppLocalizations.of(context)!.paywallSubscribeOnly,
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
                     );
@@ -94,9 +97,9 @@ class PaywallScreen extends ConsumerWidget {
                 onPressed: () async {
                   await ref.read(paywallProvider.notifier).restorePurchases();
                 },
-                child: const Text(
-                  'Restaurar Compras',
-                  style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.bold),
+                child: Text(
+                  AppLocalizations.of(context)!.paywallRestore,
+                  style: const TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.bold),
                 ),
               ),
 
@@ -109,9 +112,9 @@ class PaywallScreen extends ConsumerWidget {
                   await ref.read(paywallProvider.notifier).setDemoSubscribed(true);
                 },
                 icon: const Icon(CupertinoIcons.hammer_fill, size: 16, color: AppColors.statusClosed),
-                label: const Text(
-                  'Bypass al Dashboard (Debug)',
-                  style: TextStyle(color: AppColors.statusClosed),
+                label: Text(
+                  AppLocalizations.of(context)!.paywallBypass,
+                  style: const TextStyle(color: AppColors.statusClosed),
                 ),
               ),
               const SizedBox(height: 24),
