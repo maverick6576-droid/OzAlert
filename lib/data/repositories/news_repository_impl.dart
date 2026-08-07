@@ -30,10 +30,27 @@ class NewsRepositoryImpl implements NewsRepository {
 
     return snapshot.docs.map((doc) {
       final data = doc.data();
+      
+      String formattedDate = 'Reciente';
+      final timestamp = data['fecha_creacion'] as Timestamp?;
+      final pubDateStr = data['published_date'] as String?;
+      
+      if (timestamp != null) {
+        final date = timestamp.toDate().toLocal();
+        formattedDate = '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+      } else if (pubDateStr != null && pubDateStr.isNotEmpty) {
+        try {
+          final date = DateTime.parse(pubDateStr).toLocal();
+          formattedDate = '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+        } catch (_) {
+          formattedDate = pubDateStr;
+        }
+      }
+
       return NewsItem(
         title: data['title'] ?? 'Sin título',
         link: data['link'] ?? '',
-        pubDate: data['published_date'] ?? 'Reciente',
+        pubDate: formattedDate,
         description: data['summary'] ?? '',
         category: 'comunidad', // Mapeamos como comunidad para el estilo de Google Alerts
       );
