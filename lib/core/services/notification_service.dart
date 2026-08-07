@@ -1,6 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import '../constants/app_constants.dart';
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
@@ -110,6 +111,27 @@ class NotificationService {
       debugPrint('Suscrito a tópico FCM: visa_$countryCode');
     } catch (e) {
       debugPrint('FCM subscribeToTopic ignorado en modo offline/mock: $e');
+    }
+  }
+  /// Sincroniza las suscripciones: se suscribe a los códigos activos y se desuscribe del resto
+  Future<void> syncPassportSubscriptions(List<String> activeCountryCodes) async {
+    if (!_isInitialized) await init();
+    try {
+      // Suscribirse a los seleccionados
+      for (var code in activeCountryCodes) {
+        await FirebaseMessaging.instance.subscribeToTopic('visa_$code');
+        debugPrint('Sincronizado: Suscrito a visa_$code');
+      }
+      
+      // Desuscribirse de los no seleccionados
+      for (var country in AppConstants.supportedCountries) {
+        if (!activeCountryCodes.contains(country.code)) {
+          await FirebaseMessaging.instance.unsubscribeFromTopic('visa_${country.code}');
+          debugPrint('Sincronizado: Desuscrito de visa_${country.code}');
+        }
+      }
+    } catch (e) {
+      debugPrint('Error sincronizando tópicos: $e');
     }
   }
 }

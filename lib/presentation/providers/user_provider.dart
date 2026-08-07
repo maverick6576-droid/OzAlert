@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/user_profile.dart';
 import '../../domain/repositories/user_repository.dart';
 import '../../data/repositories/user_repository_impl.dart';
+import '../../core/services/notification_service.dart';
+import '../../core/constants/app_constants.dart';
 import 'auth_provider.dart';
 
 final firestoreProvider = Provider<FirebaseFirestore>((ref) {
@@ -31,7 +33,18 @@ final userProfileProvider = StreamProvider<UserProfile?>((ref) async* {
       .snapshots()
       .map((doc) {
         if (doc.exists && doc.data() != null) {
-          return UserProfile.fromMap(doc.data()!, user.uid);
+          final profile = UserProfile.fromMap(doc.data()!, user.uid);
+          
+          // Sincronizar automáticamente los tópicos FCM de todos los pasaportes seleccionados
+          final countryCodes = profile.passports.map((pName) {
+            return AppConstants.supportedCountries.firstWhere(
+              (c) => c.name == pName,
+              orElse: () => AppConstants.supportedCountries.first,
+            ).code;
+          }).toList();
+          NotificationService().syncPassportSubscriptions(countryCodes);
+
+          return profile;
         }
         return null;
       });
