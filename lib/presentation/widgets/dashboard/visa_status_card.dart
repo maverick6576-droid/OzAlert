@@ -4,23 +4,39 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/passport_provider.dart';
-import '../../providers/repository_providers.dart';
 import '../../../../domain/models/country_config.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class VisaStatusCard extends ConsumerWidget {
+class VisaStatusCard extends ConsumerStatefulWidget {
   final CountryConfig country;
   
   const VisaStatusCard({super.key, required this.country});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final statusAsync = ref.watch(visaStatusStreamProvider(country.code));
+  ConsumerState<VisaStatusCard> createState() => _VisaStatusCardState();
+}
+
+class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
+  bool _isScanning = false;
+
+  void _simulateScan() {
+    if (_isScanning) return;
+    setState(() => _isScanning = true);
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        setState(() => _isScanning = false);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final statusAsync = ref.watch(visaStatusStreamProvider(widget.country.code));
 
     final status = statusAsync.when(
       data: (val) => val,
-      loading: () => country.defaultStatus,
-      error: (_, __) => country.defaultStatus,
+      loading: () => widget.country.defaultStatus,
+      error: (_, __) => widget.country.defaultStatus,
     );
 
     final isOpen = status == 'OPEN';
@@ -61,23 +77,23 @@ class VisaStatusCard extends ConsumerWidget {
       alignment: Alignment.center,
       children: [
         // Concentric ripples for radar aesthetic (Only active if OPEN or scanning)
-        if (isOpen) ...[
+        if (isOpen || _isScanning) ...[
           Container(
             width: double.infinity,
-            height: 220,
+            height: 250,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: AppColors.statusOpen.withOpacity(0.5), width: 2),
+              border: Border.all(color: _isScanning ? Colors.white30 : AppColors.statusOpen.withOpacity(0.5), width: 2),
             ),
-          ).animate(onPlay: (c) => c.repeat()).scaleXY(begin: 0.9, end: 1.15, duration: 2.seconds).fadeOut(duration: 2.seconds),
+          ).animate(onPlay: (c) => c.repeat()).scaleXY(begin: 0.9, end: 1.10, duration: 1500.ms).fadeOut(duration: 1500.ms),
           Container(
             width: double.infinity,
-            height: 220,
+            height: 250,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: AppColors.statusOpen.withOpacity(0.3), width: 1),
+              border: Border.all(color: _isScanning ? Colors.white24 : AppColors.statusOpen.withOpacity(0.3), width: 1),
             ),
-          ).animate(onPlay: (c) => c.repeat()).scaleXY(begin: 1.0, end: 1.25, duration: 2.seconds).fadeOut(duration: 2.seconds),
+          ).animate(onPlay: (c) => c.repeat()).scaleXY(begin: 1.0, end: 1.20, duration: 1500.ms).fadeOut(duration: 1500.ms),
         ],
 
         // Main Card
@@ -96,157 +112,168 @@ class VisaStatusCard extends ConsumerWidget {
           },
           child: Container(
             width: double.infinity,
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            gradient: getGradient(),
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: getStatusColor().withOpacity(0.6),
-              width: 2,
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              gradient: getGradient(),
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: getStatusColor().withOpacity(0.6),
+                width: 2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: getStatusColor().withOpacity(0.3),
+                  blurRadius: 30,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 10),
+                ),
+              ],
             ),
-            boxShadow: [
-              BoxShadow(
-                color: getStatusColor().withOpacity(0.3),
-                blurRadius: 30,
-                spreadRadius: 2,
-                offset: const Offset(0, 10),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: getStatusColor().withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: getStatusColor().withOpacity(0.5)),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          getIconData(),
-                          color: getStatusColor(),
-                          size: 16,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'RADAR: ${getTitle()}',
-                          style: TextStyle(
-                            color: getStatusColor(),
-                            fontWeight: FontWeight.w800,
-                            fontSize: 12,
-                            letterSpacing: 1.2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  IconButton(
-                    tooltip: 'Simular cambio de estado de exploración',
-                    onPressed: () {
-                      final newStatus = isOpen ? false : true;
-                      ref
-                          .read(visaRepositoryProvider)
-                          .toggleDemoStatus(country.code, newStatus);
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 1. Botón Ver Fuente Oficial (Movido arriba)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      final url = Uri.parse('https://immi.homeaffairs.gov.au/what-we-do/whm-program/status-of-country-caps?utm_source=chatgpt.com');
+                      if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('No se pudo abrir el enlace.')),
+                          );
+                        }
+                      }
                     },
-                    icon: Icon(
-                      CupertinoIcons.arrow_2_circlepath,
-                      color: getStatusColor(),
-                      size: 24,
+                    icon: const Icon(CupertinoIcons.link, size: 14),
+                    label: const Text(
+                      'Ver fuente oficial',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              Text(
-                getTitle(),
-                style: TextStyle(
-                  fontSize: 42,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white,
-                  letterSpacing: -0.5,
-                  shadows: [
-                    Shadow(
-                      color: getStatusColor().withOpacity(0.6),
-                      blurRadius: 15,
-                    ),
-                  ],
-                ),
-              )
-                  .animate(target: isOpen ? 1 : 0)
-                  .shimmer(duration: 1500.ms, color: AppColors.statusOpen),
-              const SizedBox(height: 8),
-              Text(
-                getSubtitle(),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: isOpen ? Colors.white : Colors.white.withOpacity(0.9),
-                  height: 1.3,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '${country.flagEmoji} Ruta: ${country.name} (Subclase ${country.visaSubclass})',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white.withOpacity(0.15),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        side: BorderSide(color: Colors.white.withOpacity(0.3)),
                       ),
                     ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // 2. RADAR: STATUS & Refresh Button
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: getStatusColor().withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(color: getStatusColor().withOpacity(0.5)),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            getIconData(),
+                            color: getStatusColor(),
+                            size: 16,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            _isScanning ? 'ESCANENANDO RADAR...' : 'RADAR: ${getTitle()}',
+                            style: TextStyle(
+                              color: getStatusColor(),
+                              fontWeight: FontWeight.w800,
+                              fontSize: 12,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: 'Escanear radar en vivo',
+                      onPressed: _isScanning ? null : _simulateScan,
+                      icon: _isScanning
+                          ? SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(color: getStatusColor(), strokeWidth: 2),
+                            )
+                          : Icon(
+                              CupertinoIcons.arrow_2_circlepath,
+                              color: getStatusColor(),
+                              size: 24,
+                            ),
+                    ),
                   ],
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
-        
-        // Botón Ver Fuente Oficial
-        Positioned(
-          bottom: -16,
-          child: ElevatedButton.icon(
-            onPressed: () async {
-              final url = Uri.parse('https://immi.homeaffairs.gov.au/what-we-do/whm-program/status-of-country-caps?utm_source=chatgpt.com');
-              if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('No se pudo abrir el enlace.')),
-                  );
-                }
-              }
-            },
-            icon: const Icon(CupertinoIcons.link, size: 16),
-            label: const Text(
-              'Ver fuente oficial',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                const SizedBox(height: 24),
+
+                // 3. TITLE (ABIERTA/PAUSADA/CERRADA)
+                Text(
+                  getTitle(),
+                  style: TextStyle(
+                    fontSize: 42,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    letterSpacing: -0.5,
+                    shadows: [
+                      Shadow(
+                        color: getStatusColor().withOpacity(0.6),
+                        blurRadius: 15,
+                      ),
+                    ],
+                  ),
+                )
+                    .animate(target: isOpen ? 1 : 0)
+                    .shimmer(duration: 1500.ms, color: AppColors.statusOpen),
+                const SizedBox(height: 8),
+
+                // 4. SUBTITLE
+                Text(
+                  getSubtitle(),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: isOpen ? Colors.white : Colors.white.withOpacity(0.9),
+                    height: 1.3,
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // 5. RUTA (COUNTRY)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '${widget.country.flagEmoji} Ruta: ${widget.country.name} (Subclase ${widget.country.visaSubclass})',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.black87,
-              elevation: 4,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-                side: BorderSide(color: Colors.grey.shade300),
-              ),
-            ),
-          ),
+          ).animate(target: _isScanning ? 1 : 0).fade(end: 0.7, duration: 400.ms).shimmer(duration: 1500.ms, color: Colors.white30),
         ),
       ],
     );
