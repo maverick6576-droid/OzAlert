@@ -214,9 +214,8 @@ class VisaStatusCard extends ConsumerWidget {
               ),
             ],
           ),
-            ],
-          ),
         ),
+      ),
         
         // Botón Ver Fuente Oficial
         Positioned(
