@@ -80,7 +80,7 @@ class NewsCard extends ConsumerWidget {
               Text(
                 item.pubDate == 'ACTUALIZADO' ? AppLocalizations.of(context)!.newsUpdated : item.pubDate,
                 style: TextStyle(
-                  color: isOfficial ? AppColors.primary : AppColors.textMuted,
+                  color: item.category == 'oficial' ? AppColors.primary : AppColors.textMuted,
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
                 ),

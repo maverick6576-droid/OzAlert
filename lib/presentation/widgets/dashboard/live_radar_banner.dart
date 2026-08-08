@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -79,10 +80,10 @@ class _LiveRadarBannerState extends State<LiveRadarBanner> {
                   .scaleXY(begin: 0.8, end: 1.3, duration: 800.ms)
                   .fadeIn(duration: 400.ms),
               const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    AppLocalizations.of(context)!.radarScanning,
-                    style: const TextStyle(
+              Expanded(
+                child: Text(
+                  AppLocalizations.of(context)!.radarScanning,
+                  style: const TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
@@ -95,7 +96,7 @@ class _LiveRadarBannerState extends State<LiveRadarBanner> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 CupertinoIcons.checkmark_shield_fill,
                 color: AppColors.statusOpen,
                 size: 12,
