@@ -56,13 +56,8 @@ class _PaywallModalState extends ConsumerState<PaywallModal> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextButton(
-                  onPressed: () => ref.read(paywallProvider.notifier).restorePurchases(),
-                  child: Text(
-                    AppLocalizations.of(context)!.paywallRestore,
-                    style: const TextStyle(color: AppColors.textSecondary),
-                  ),
-                ),
+                const SizedBox(width: 48), // Placeholder to keep alignment if needed
+
                 IconButton(
                   onPressed: () => Navigator.of(context).pop(),
                   icon: const Icon(

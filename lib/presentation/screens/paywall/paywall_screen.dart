@@ -91,17 +91,7 @@ class PaywallScreen extends ConsumerWidget {
                 ),
               ).animate().slideY(begin: 1.0, end: 0, delay: 600.ms),
               const SizedBox(height: 16),
-              
-              // Botón Restaurar Compras
-              TextButton(
-                onPressed: () async {
-                  await ref.read(paywallProvider.notifier).restorePurchases();
-                },
-                child: Text(
-                  AppLocalizations.of(context)!.paywallRestore,
-                  style: const TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.bold),
-                ),
-              ),
+
 
               const Divider(height: 32),
 
