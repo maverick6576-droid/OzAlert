@@ -320,4 +320,113 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get newsUpdated => 'ACTUALIZADO';
+
+  @override
+  String get countryAR => 'Argentina';
+
+  @override
+  String get countryAT => 'Austria';
+
+  @override
+  String get countryBR => 'Brasil';
+
+  @override
+  String get countryCL => 'Chile';
+
+  @override
+  String get countryCN => 'China';
+
+  @override
+  String get countryCZ => 'República Checa';
+
+  @override
+  String get countryEC => 'Ecuador';
+
+  @override
+  String get countryGR => 'Grecia';
+
+  @override
+  String get countryHU => 'Hungría';
+
+  @override
+  String get countryIN => 'India';
+
+  @override
+  String get countryID => 'Indonesia';
+
+  @override
+  String get countryIL => 'Israel';
+
+  @override
+  String get countryLU => 'Luxemburgo';
+
+  @override
+  String get countryMY => 'Malasia';
+
+  @override
+  String get countryMN => 'Mongolia';
+
+  @override
+  String get countryPG => 'Papúa Nueva Guinea';
+
+  @override
+  String get countryPE => 'Perú';
+
+  @override
+  String get countryPL => 'Polonia';
+
+  @override
+  String get countryPT => 'Portugal';
+
+  @override
+  String get countrySM => 'San Marino';
+
+  @override
+  String get countrySG => 'Singapur';
+
+  @override
+  String get countrySK => 'Eslovaquia';
+
+  @override
+  String get countrySI => 'Eslovenia';
+
+  @override
+  String get countryES => 'España';
+
+  @override
+  String get countryCH => 'Suiza';
+
+  @override
+  String get countryTH => 'Tailandia';
+
+  @override
+  String get countryTR => 'Turquía';
+
+  @override
+  String get countryUY => 'Uruguay';
+
+  @override
+  String get countryVN => 'Vietnam';
+
+  @override
+  String notificationTestTitle(String countryName) {
+    return '🔔 TEST ALERTA: OzVisa Radar Activo ($countryName)';
+  }
+
+  @override
+  String get notificationTestBody => '✅ Conexión verificada: Servidores monitoreando visas 24/7 en tiempo real.';
+
+  @override
+  String notificationTestLongBody(String countryName) {
+    return '¡El sistema de rastreo de los servidores de OzVisa Alert está operativo para $countryName! Te notificaremos al segundo en que el Departamento de Home Affairs abra plazas.';
+  }
+
+  @override
+  String get notificationChannelName => 'OzVisa Alertas de Apertura';
+
+  @override
+  String get notificationChannelDesc => 'Notificaciones inmediatas de apertura de plazas de visa Work & Holiday';
+
+  @override
+  String get notificationTestTicker => 'OzVisa Alerta Test';
 }

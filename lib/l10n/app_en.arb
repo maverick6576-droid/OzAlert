@@ -164,5 +164,25 @@
     "countryTH": "Thailand",
     "countryTR": "Turkey",
     "countryUY": "Uruguay",
-    "countryVN": "Vietnam"
+    "countryVN": "Vietnam",
+    "notificationTestTitle": "🔔 TEST ALERT: OzVisa Radar Active ({countryName})",
+    "@notificationTestTitle": {
+        "placeholders": {
+            "countryName": {
+                "type": "String"
+            }
+        }
+    },
+    "notificationTestBody": "✅ Connection verified: Servers monitoring visas 24/7 in real time.",
+    "notificationTestLongBody": "OzVisa Alert's tracking system is now active for {countryName}! We will notify you the exact second the Department of Home Affairs opens new spots.",
+    "@notificationTestLongBody": {
+        "placeholders": {
+            "countryName": {
+                "type": "String"
+            }
+        }
+    },
+    "notificationChannelName": "OzVisa Opening Alerts",
+    "notificationChannelDesc": "Immediate notifications for Work & Holiday visa spots openings",
+    "notificationTestTicker": "OzVisa Test Alert"
 }

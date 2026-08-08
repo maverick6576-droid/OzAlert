@@ -60,22 +60,26 @@ class NotificationService {
   /// Botón "Probar Alerta" - Simula una notificación Push en 2 segundos
   /// para que el usuario compruebe con máxima confianza que el sistema funciona.
   Future<void> sendTestAlert({
-    required String countryName,
     required String countryCode,
+    required String title,
+    required String body,
+    required String longBody,
+    required String channelName,
+    required String channelDescription,
+    required String ticker,
   }) async {
     if (!_isInitialized) await init();
 
     final AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
           'ozvisa_radar_channel',
-          'OzVisa Alertas de Apertura',
-          channelDescription:
-              'Notificaciones inmediatas de apertura de plazas de visa Work & Holiday',
+          channelName,
+          channelDescription: channelDescription,
           importance: Importance.max,
           priority: Priority.high,
-          ticker: 'OzVisa Alerta Test',
+          ticker: ticker,
           styleInformation: BigTextStyleInformation(
-            '¡El sistema de rastreo de los servidores de OzVisa Alert está operativo para $countryName! Te notificaremos al segundo en que el Departamento de Home Affairs abra plazas.',
+            longBody,
           ),
         );
 
@@ -95,8 +99,8 @@ class NotificationService {
 
     await _localNotifications.show(
       888,
-      '🔔 TEST ALERTA: OzVisa Radar Activo ($countryName)',
-      '✅ Conexión verificada: Servidores monitoreando visas 24/7 en tiempo real.',
+      title,
+      body,
       platformDetails,
       payload: 'test_alert_$countryCode',
     );

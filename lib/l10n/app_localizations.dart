@@ -700,6 +700,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'UPDATED'**
   String get newsUpdated;
+
+  /// No description provided for @countryAR.
+  ///
+  /// In en, this message translates to:
+  /// **'Argentina'**
+  String get countryAR;
+
+  /// No description provided for @countryAT.
+  ///
+  /// In en, this message translates to:
+  /// **'Austria'**
+  String get countryAT;
+
+  /// No description provided for @countryBR.
+  ///
+  /// In en, this message translates to:
+  /// **'Brazil'**
+  String get countryBR;
+
+  /// No description provided for @countryCL.
+  ///
+  /// In en, this message translates to:
+  /// **'Chile'**
+  String get countryCL;
+
+  /// No description provided for @countryCN.
+  ///
+  /// In en, this message translates to:
+  /// **'China'**
+  String get countryCN;
+
+  /// No description provided for @countryCZ.
+  ///
+  /// In en, this message translates to:
+  /// **'Czech Republic'**
+  String get countryCZ;
+
+  /// No description provided for @countryEC.
+  ///
+  /// In en, this message translates to:
+  /// **'Ecuador'**
+  String get countryEC;
+
+  /// No description provided for @countryGR.
+  ///
+  /// In en, this message translates to:
+  /// **'Greece'**
+  String get countryGR;
+
+  /// No description provided for @countryHU.
+  ///
+  /// In en, this message translates to:
+  /// **'Hungary'**
+  String get countryHU;
+
+  /// No description provided for @countryIN.
+  ///
+  /// In en, this message translates to:
+  /// **'India'**
+  String get countryIN;
+
+  /// No description provided for @countryID.
+  ///
+  /// In en, this message translates to:
+  /// **'Indonesia'**
+  String get countryID;
+
+  /// No description provided for @countryIL.
+  ///
+  /// In en, this message translates to:
+  /// **'Israel'**
+  String get countryIL;
+
+  /// No description provided for @countryLU.
+  ///
+  /// In en, this message translates to:
+  /// **'Luxembourg'**
+  String get countryLU;
+
+  /// No description provided for @countryMY.
+  ///
+  /// In en, this message translates to:
+  /// **'Malaysia'**
+  String get countryMY;
+
+  /// No description provided for @countryMN.
+  ///
+  /// In en, this message translates to:
+  /// **'Mongolia'**
+  String get countryMN;
+
+  /// No description provided for @countryPG.
+  ///
+  /// In en, this message translates to:
+  /// **'Papua New Guinea'**
+  String get countryPG;
+
+  /// No description provided for @countryPE.
+  ///
+  /// In en, this message translates to:
+  /// **'Peru'**
+  String get countryPE;
+
+  /// No description provided for @countryPL.
+  ///
+  /// In en, this message translates to:
+  /// **'Poland'**
+  String get countryPL;
+
+  /// No description provided for @countryPT.
+  ///
+  /// In en, this message translates to:
+  /// **'Portugal'**
+  String get countryPT;
+
+  /// No description provided for @countrySM.
+  ///
+  /// In en, this message translates to:
+  /// **'San Marino'**
+  String get countrySM;
+
+  /// No description provided for @countrySG.
+  ///
+  /// In en, this message translates to:
+  /// **'Singapore'**
+  String get countrySG;
+
+  /// No description provided for @countrySK.
+  ///
+  /// In en, this message translates to:
+  /// **'Slovakia'**
+  String get countrySK;
+
+  /// No description provided for @countrySI.
+  ///
+  /// In en, this message translates to:
+  /// **'Slovenia'**
+  String get countrySI;
+
+  /// No description provided for @countryES.
+  ///
+  /// In en, this message translates to:
+  /// **'Spain'**
+  String get countryES;
+
+  /// No description provided for @countryCH.
+  ///
+  /// In en, this message translates to:
+  /// **'Switzerland'**
+  String get countryCH;
+
+  /// No description provided for @countryTH.
+  ///
+  /// In en, this message translates to:
+  /// **'Thailand'**
+  String get countryTH;
+
+  /// No description provided for @countryTR.
+  ///
+  /// In en, this message translates to:
+  /// **'Turkey'**
+  String get countryTR;
+
+  /// No description provided for @countryUY.
+  ///
+  /// In en, this message translates to:
+  /// **'Uruguay'**
+  String get countryUY;
+
+  /// No description provided for @countryVN.
+  ///
+  /// In en, this message translates to:
+  /// **'Vietnam'**
+  String get countryVN;
+
+  /// No description provided for @notificationTestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'🔔 TEST ALERT: OzVisa Radar Active ({countryName})'**
+  String notificationTestTitle(String countryName);
+
+  /// No description provided for @notificationTestBody.
+  ///
+  /// In en, this message translates to:
+  /// **'✅ Connection verified: Servers monitoring visas 24/7 in real time.'**
+  String get notificationTestBody;
+
+  /// No description provided for @notificationTestLongBody.
+  ///
+  /// In en, this message translates to:
+  /// **'OzVisa Alert\'s tracking system is now active for {countryName}! We will notify you the exact second the Department of Home Affairs opens new spots.'**
+  String notificationTestLongBody(String countryName);
+
+  /// No description provided for @notificationChannelName.
+  ///
+  /// In en, this message translates to:
+  /// **'OzVisa Opening Alerts'**
+  String get notificationChannelName;
+
+  /// No description provided for @notificationChannelDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Immediate notifications for Work & Holiday visa spots openings'**
+  String get notificationChannelDesc;
+
+  /// No description provided for @notificationTestTicker.
+  ///
+  /// In en, this message translates to:
+  /// **'OzVisa Test Alert'**
+  String get notificationTestTicker;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

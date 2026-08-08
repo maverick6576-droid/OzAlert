@@ -67,9 +67,15 @@ class _TestAlertButtonState extends ConsumerState<TestAlertButton> {
       ),
     );
 
+    final l10n = AppLocalizations.of(context)!;
     await notificationService.sendTestAlert(
-      countryName: selectedCountryNames,
       countryCode: selectedCountry.code,
+      title: l10n.notificationTestTitle(selectedCountryNames),
+      body: l10n.notificationTestBody,
+      longBody: l10n.notificationTestLongBody(selectedCountryNames),
+      channelName: l10n.notificationChannelName,
+      channelDescription: l10n.notificationChannelDesc,
+      ticker: l10n.notificationTestTicker,
     );
 
     if (mounted) {

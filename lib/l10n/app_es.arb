@@ -164,5 +164,25 @@
     "countryTH": "Tailandia",
     "countryTR": "Turquía",
     "countryUY": "Uruguay",
-    "countryVN": "Vietnam"
+    "countryVN": "Vietnam",
+    "notificationTestTitle": "🔔 TEST ALERTA: OzVisa Radar Activo ({countryName})",
+    "@notificationTestTitle": {
+        "placeholders": {
+            "countryName": {
+                "type": "String"
+            }
+        }
+    },
+    "notificationTestBody": "✅ Conexión verificada: Servidores monitoreando visas 24/7 en tiempo real.",
+    "notificationTestLongBody": "¡El sistema de rastreo de los servidores de OzVisa Alert está operativo para {countryName}! Te notificaremos al segundo en que el Departamento de Home Affairs abra plazas.",
+    "@notificationTestLongBody": {
+        "placeholders": {
+            "countryName": {
+                "type": "String"
+            }
+        }
+    },
+    "notificationChannelName": "OzVisa Alertas de Apertura",
+    "notificationChannelDesc": "Notificaciones inmediatas de apertura de plazas de visa Work & Holiday",
+    "notificationTestTicker": "OzVisa Alerta Test"
 }
