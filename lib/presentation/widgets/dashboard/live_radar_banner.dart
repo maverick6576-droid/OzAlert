@@ -102,12 +102,14 @@ class _LiveRadarBannerState extends State<LiveRadarBanner> {
                 size: 12,
               ),
               const SizedBox(width: 4),
-              Text(
-                AppLocalizations.of(context)!.radarLastChecked(_secondsAgo.toString()),
-                style: const TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
+              Flexible(
+                child: Text(
+                  AppLocalizations.of(context)!.radarLastChecked(_secondsAgo.toString()),
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ],
