@@ -309,4 +309,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get checklistPrepareDocumentsDesc => 'Translate all documents into English by a qualified translator and scan/photograph all originals and translations in color.';
+
+  @override
+  String radarLastChecked(String seconds) {
+    return 'Last checked: $seconds seconds ago (Frequency: every 60 sec)';
+  }
+
+  @override
+  String get newsExplore => 'Explore';
+
+  @override
+  String get newsUpdated => 'UPDATED';
 }

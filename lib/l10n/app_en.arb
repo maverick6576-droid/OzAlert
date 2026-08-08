@@ -125,5 +125,15 @@
     "checklistGettingHelpTitle": "Getting help (Agents)",
     "checklistGettingHelpDesc": "Form 956A or 956 if you use a migration agent or authorize someone to receive your documents.",
     "checklistPrepareDocumentsTitle": "Prepare your documents",
-    "checklistPrepareDocumentsDesc": "Translate all documents into English by a qualified translator and scan/photograph all originals and translations in color."
+    "checklistPrepareDocumentsDesc": "Translate all documents into English by a qualified translator and scan/photograph all originals and translations in color.",
+    "radarLastChecked": "Last checked: {seconds} seconds ago (Frequency: every 60 sec)",
+    "@radarLastChecked": {
+        "placeholders": {
+            "seconds": {
+                "type": "String"
+            }
+        }
+    },
+    "newsExplore": "Explore",
+    "newsUpdated": "UPDATED"
 }

@@ -78,11 +78,11 @@ class NewsCard extends ConsumerWidget {
                 ),
               ),
               Text(
-                item.pubDate,
-                style: const TextStyle(
-                  color: AppColors.textMuted,
+                item.pubDate == 'ACTUALIZADO' ? AppLocalizations.of(context)!.newsUpdated : item.pubDate,
+                style: TextStyle(
+                  color: isOfficial ? AppColors.primary : AppColors.textMuted,
                   fontSize: 11,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ],
@@ -119,9 +119,9 @@ class NewsCard extends ConsumerWidget {
                   size: 16,
                   color: AppColors.primary,
                 ),
-                label: const Text(
-                  'Explorar',
-                  style: TextStyle(
+                label: Text(
+                  AppLocalizations.of(context)!.newsExplore,
+                  style: const TextStyle(
                     color: AppColors.primary,
                     fontWeight: FontWeight.bold,
                     fontSize: 13,

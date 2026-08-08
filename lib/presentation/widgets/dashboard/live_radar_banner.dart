@@ -91,16 +91,25 @@ class _LiveRadarBannerState extends State<LiveRadarBanner> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Text(
-              'Última comprobación: hace $_secondsAgo segundos (Frecuencia: cada 60 seg)',
-              style: const TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 12,
+          const SizedBox(height: 6),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                CupertinoIcons.checkmark_shield_fill,
+                color: AppColors.statusOpen,
+                size: 12,
               ),
-            ),
+              const SizedBox(width: 4),
+              Text(
+                AppLocalizations.of(context)!.radarLastChecked(_secondsAgo.toString()),
+                style: const TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
         ],
       ),

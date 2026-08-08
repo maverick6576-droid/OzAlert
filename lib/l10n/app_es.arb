@@ -125,5 +125,15 @@
     "checklistGettingHelpTitle": "Notificar si recibes ayuda (Agentes)",
     "checklistGettingHelpDesc": "Formulario 956A o 956 si usas un agente migratorio o autorizas a alguien para recibir tus documentos.",
     "checklistPrepareDocumentsTitle": "Preparar tus documentos",
-    "checklistPrepareDocumentsDesc": "Traducir al inglés todos los documentos por un traductor cualificado y escanear/fotografiar todos los originales y traducciones a color."
+    "checklistPrepareDocumentsDesc": "Traducir al inglés todos los documentos por un traductor cualificado y escanear/fotografiar todos los originales y traducciones a color.",
+    "radarLastChecked": "Última comprobación: hace {seconds} segundos (Frecuencia: cada 60 seg)",
+    "@radarLastChecked": {
+        "placeholders": {
+            "seconds": {
+                "type": "String"
+            }
+        }
+    },
+    "newsExplore": "Explorar",
+    "newsUpdated": "ACTUALIZADO"
 }

@@ -682,6 +682,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Translate all documents into English by a qualified translator and scan/photograph all originals and translations in color.'**
   String get checklistPrepareDocumentsDesc;
+
+  /// No description provided for @radarLastChecked.
+  ///
+  /// In en, this message translates to:
+  /// **'Last checked: {seconds} seconds ago (Frequency: every 60 sec)'**
+  String radarLastChecked(String seconds);
+
+  /// No description provided for @newsExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get newsExplore;
+
+  /// No description provided for @newsUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'UPDATED'**
+  String get newsUpdated;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
