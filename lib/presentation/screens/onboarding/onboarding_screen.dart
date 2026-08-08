@@ -19,7 +19,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final List<String> _selectedPassports = [];
 
   // Lista oficial de pasaportes soportados
-  final List<String> _countries = AppConstants.supportedCountries.map((c) => c.name).toList();
+  final List<CountryConfig> _countries = AppConstants.supportedCountries;
 
   void _togglePassport(String country) {
     setState(() {
@@ -177,11 +177,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           final country = _countries[index];
-                          final isSelected = _selectedPassports.contains(country);
+                          final isSelected = _selectedPassports.contains(country.name);
                           return _PassportChip(
-                            title: country,
+                            title: country.getLocalizedName(context),
                             isSelected: isSelected,
-                            onTap: () => _togglePassport(country),
+                            onTap: () => _togglePassport(country.name),
                           );
                         },
                         childCount: _countries.length,

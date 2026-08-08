@@ -7,6 +7,7 @@ import '../../providers/passport_provider.dart';
 import '../../providers/repository_providers.dart';
 import '../../providers/user_provider.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../domain/models/country_config.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class TestAlertButton extends ConsumerStatefulWidget {
@@ -27,7 +28,12 @@ class _TestAlertButtonState extends ConsumerState<TestAlertButton> {
     final userProfile = userProfileState.value;
     final passports = userProfile?.passports ?? [];
     
-    final selectedCountryNames = passports.isNotEmpty ? passports.join(' y ') : 'España';
+    final selectedCountryNames = passports.isNotEmpty 
+        ? passports.map((pName) => AppConstants.supportedCountries.firstWhere(
+            (c) => c.name == pName, orElse: () => AppConstants.supportedCountries.first).getLocalizedName(context)
+          ).join(', ')
+        : AppConstants.supportedCountries.firstWhere((c) => c.name == 'España').getLocalizedName(context);
+        
     final firstCountryName = passports.isNotEmpty ? passports.first : 'España';
     
     final selectedCountry = AppConstants.supportedCountries.firstWhere(

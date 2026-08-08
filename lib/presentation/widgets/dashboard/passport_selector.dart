@@ -56,7 +56,7 @@ class PassportSelector extends ConsumerWidget {
                           style: const TextStyle(fontSize: 26),
                         ),
                         title: Text(
-                          country.name,
+                          country.getLocalizedName(context),
                           style: TextStyle(
                             color: AppColors.textPrimary,
                             fontWeight:
@@ -119,7 +119,7 @@ class PassportSelector extends ConsumerWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              selectedCountry.name,
+              selectedCountry.getLocalizedName(context),
               style: const TextStyle(
                 color: AppColors.textPrimary,
                 fontWeight: FontWeight.bold,

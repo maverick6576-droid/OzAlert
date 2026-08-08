@@ -229,7 +229,7 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '${widget.country.flagEmoji} Ruta: ${widget.country.name} (Subclase ${widget.country.visaSubclass})',
+                        '${widget.country.flagEmoji} Ruta: ${widget.country.getLocalizedName(context)} (Subclase ${widget.country.visaSubclass})',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 13,
