@@ -2,12 +2,43 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../domain/models/checklist_item.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class ChecklistTile extends StatelessWidget {
   final ChecklistItem item;
   final VoidCallback onToggle;
 
   const ChecklistTile({super.key, required this.item, required this.onToggle});
+
+  String _getLocalizedTitle(BuildContext context, String id, String fallback) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (id) {
+      case 'identity_documents': return l10n.checklistIdentityDocumentsTitle;
+      case 'education': return l10n.checklistEducationTitle;
+      case 'english_language': return l10n.checklistEnglishLanguageTitle;
+      case 'government_support': return l10n.checklistGovernmentSupportTitle;
+      case 'enough_money': return l10n.checklistEnoughMoneyTitle;
+      case 'character_documents': return l10n.checklistCharacterDocumentsTitle;
+      case 'getting_help': return l10n.checklistGettingHelpTitle;
+      case 'prepare_documents': return l10n.checklistPrepareDocumentsTitle;
+      default: return fallback;
+    }
+  }
+
+  String _getLocalizedDescription(BuildContext context, String id, String fallback) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (id) {
+      case 'identity_documents': return l10n.checklistIdentityDocumentsDesc;
+      case 'education': return l10n.checklistEducationDesc;
+      case 'english_language': return l10n.checklistEnglishLanguageDesc;
+      case 'government_support': return l10n.checklistGovernmentSupportDesc;
+      case 'enough_money': return l10n.checklistEnoughMoneyDesc;
+      case 'character_documents': return l10n.checklistCharacterDocumentsDesc;
+      case 'getting_help': return l10n.checklistGettingHelpDesc;
+      case 'prepare_documents': return l10n.checklistPrepareDocumentsDesc;
+      default: return fallback;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +108,7 @@ class ChecklistTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    item.title,
+                    _getLocalizedTitle(context, item.id, item.title),
                     style: TextStyle(
                       color:
                           item.isChecked
@@ -94,7 +125,7 @@ class ChecklistTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    item.description,
+                    _getLocalizedDescription(context, item.id, item.description),
                     style: TextStyle(
                       color:
                           item.isChecked

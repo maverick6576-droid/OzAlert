@@ -5,6 +5,7 @@ import '../../core/theme/app_colors.dart';
 import '../screens/dashboard/dashboard_screen.dart';
 import '../screens/checklist/checklist_screen.dart';
 import '../screens/news/news_screen.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class MainNavigationScreen extends ConsumerStatefulWidget {
   const MainNavigationScreen({super.key});
@@ -49,19 +50,19 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
                   index: 0,
                   icon: CupertinoIcons.compass,
                   activeIcon: CupertinoIcons.compass_fill,
-                  label: 'Radar',
+                  label: AppLocalizations.of(context)!.navRadar,
                 ),
                 _buildNavItem(
                   index: 1,
                   icon: CupertinoIcons.bag,
                   activeIcon: CupertinoIcons.bag_fill,
-                  label: 'Equipo',
+                  label: AppLocalizations.of(context)!.navEquipment,
                 ),
                 _buildNavItem(
                   index: 2,
                   icon: CupertinoIcons.map,
                   activeIcon: CupertinoIcons.map_fill,
-                  label: 'Bitácora',
+                  label: AppLocalizations.of(context)!.navNews,
                 ),
               ],
             ),

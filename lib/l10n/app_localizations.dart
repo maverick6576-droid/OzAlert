@@ -568,6 +568,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'✅ VIP Access Activated! 24/7 immediate alerts enabled or purchases successfully restored.'**
   String get paywallSuccessMessage;
+
+  /// No description provided for @navRadar.
+  ///
+  /// In en, this message translates to:
+  /// **'Radar'**
+  String get navRadar;
+
+  /// No description provided for @navEquipment.
+  ///
+  /// In en, this message translates to:
+  /// **'Equipment'**
+  String get navEquipment;
+
+  /// No description provided for @navNews.
+  ///
+  /// In en, this message translates to:
+  /// **'Logbook'**
+  String get navNews;
+
+  /// No description provided for @checklistIdentityDocumentsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Identity documents'**
+  String get checklistIdentityDocumentsTitle;
+
+  /// No description provided for @checklistIdentityDocumentsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Pages of your passport (photo, data, dates). Birth certificate with parents\' names. Proof of name change (if applicable).'**
+  String get checklistIdentityDocumentsDesc;
+
+  /// No description provided for @checklistEducationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get checklistEducationTitle;
+
+  /// No description provided for @checklistEducationDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Evidence of your educational qualifications (university degree, years completed or equivalent, depending on your country\'s requirements).'**
+  String get checklistEducationDesc;
+
+  /// No description provided for @checklistEnglishLanguageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'English level'**
+  String get checklistEnglishLanguageTitle;
+
+  /// No description provided for @checklistEnglishLanguageDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Evidence of English studies, or approved exam in the last 12 months (IELTS 4.5, PTE 30, Cambridge C1 147, or TOEFL iBT 32).'**
+  String get checklistEnglishLanguageDesc;
+
+  /// No description provided for @checklistGovernmentSupportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Government support'**
+  String get checklistGovernmentSupportTitle;
+
+  /// No description provided for @checklistGovernmentSupportDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Letter of support from your government (only for certain countries like Peru, Ecuador, etc. Not required for Spain, Argentina, Chile, etc.).'**
+  String get checklistGovernmentSupportDesc;
+
+  /// No description provided for @checklistEnoughMoneyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enough money for your stay and departure'**
+  String get checklistEnoughMoneyTitle;
+
+  /// No description provided for @checklistEnoughMoneyDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Evidence of money for your stay (usually \$5,000 AUD) and money for a departure ticket from Australia (or the ticket already purchased).'**
+  String get checklistEnoughMoneyDesc;
+
+  /// No description provided for @checklistCharacterDocumentsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Character documents (Background checks)'**
+  String get checklistCharacterDocumentsTitle;
+
+  /// No description provided for @checklistCharacterDocumentsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Police certificates from every country where you have spent 12+ months in the last 10 years (since age 16), and military record if applicable.'**
+  String get checklistCharacterDocumentsDesc;
+
+  /// No description provided for @checklistGettingHelpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting help (Agents)'**
+  String get checklistGettingHelpTitle;
+
+  /// No description provided for @checklistGettingHelpDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Form 956A or 956 if you use a migration agent or authorize someone to receive your documents.'**
+  String get checklistGettingHelpDesc;
+
+  /// No description provided for @checklistPrepareDocumentsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prepare your documents'**
+  String get checklistPrepareDocumentsTitle;
+
+  /// No description provided for @checklistPrepareDocumentsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Translate all documents into English by a qualified translator and scan/photograph all originals and translations in color.'**
+  String get checklistPrepareDocumentsDesc;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

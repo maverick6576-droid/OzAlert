@@ -252,4 +252,61 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get paywallSuccessMessage => '✅ ¡Acceso VIP Activado! Alertas inmediatas 24/7 habilitadas o compras restauradas exitosamente.';
+
+  @override
+  String get navRadar => 'Radar';
+
+  @override
+  String get navEquipment => 'Equipo';
+
+  @override
+  String get navNews => 'Bitácora';
+
+  @override
+  String get checklistIdentityDocumentsTitle => 'Documentos de identidad';
+
+  @override
+  String get checklistIdentityDocumentsDesc => 'Páginas de tu pasaporte (foto, datos, fechas). Certificado de nacimiento con nombres de padres. Prueba de cambio de nombre (si aplica).';
+
+  @override
+  String get checklistEducationTitle => 'Educación';
+
+  @override
+  String get checklistEducationDesc => 'Evidencia de tus calificaciones educativas (título universitario, años cursados o equivalente, dependiendo de las exigencias para tu país).';
+
+  @override
+  String get checklistEnglishLanguageTitle => 'Nivel de inglés';
+
+  @override
+  String get checklistEnglishLanguageDesc => 'Evidencia de estudios en inglés, o examen aprobado en los últimos 12 meses (IELTS 4.5, PTE 30, Cambridge C1 147, o TOEFL iBT 32).';
+
+  @override
+  String get checklistGovernmentSupportTitle => 'Apoyo del Gobierno';
+
+  @override
+  String get checklistGovernmentSupportDesc => 'Carta de apoyo de tu gobierno (solo para ciertos países como Perú, Ecuador, etc. No requerida para España, Argentina, Chile, etc.).';
+
+  @override
+  String get checklistEnoughMoneyTitle => 'Fondos suficientes para tu estancia y salida';
+
+  @override
+  String get checklistEnoughMoneyDesc => 'Evidencia de dinero para tu estancia (normalmente \$5.000 AUD) y dinero para un billete de salida de Australia (o el billete ya comprado).';
+
+  @override
+  String get checklistCharacterDocumentsTitle => 'Documentos de carácter (Antecedentes)';
+
+  @override
+  String get checklistCharacterDocumentsDesc => 'Certificados de policía de cada país donde hayas pasado 12+ meses en los últimos 10 años (desde los 16 años), y registro militar si aplica.';
+
+  @override
+  String get checklistGettingHelpTitle => 'Notificar si recibes ayuda (Agentes)';
+
+  @override
+  String get checklistGettingHelpDesc => 'Formulario 956A o 956 si usas un agente migratorio o autorizas a alguien para recibir tus documentos.';
+
+  @override
+  String get checklistPrepareDocumentsTitle => 'Preparar tus documentos';
+
+  @override
+  String get checklistPrepareDocumentsDesc => 'Traducir al inglés todos los documentos por un traductor cualificado y escanear/fotografiar todos los originales y traducciones a color.';
 }
