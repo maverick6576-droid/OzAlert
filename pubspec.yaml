@@ -1,7 +1,7 @@
 name: ozvisa_alert
 description: "OzVisa Alert - Monitor Global en Tiempo Real de Visas de Australia MVP (3 Pantallas)"
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: '>=3.2.0 <4.0.0'
