@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,13 +35,16 @@ void main() async {
     debugPrint('⚠️ Error al inicializar notificaciones: $e');
   }
 
-  // 3. Inicialización de RevenueCat SDK (con clave de demostración o clave pública real)
+  // 3. Inicialización de RevenueCat SDK
   try {
     final paywallRepo = PaywallRepositoryImpl();
-    await paywallRepo.initRevenueCat('goog_AuxdpuYZxTRkEFUaxmhQqVwOeid');
-    debugPrint('✅ RevenueCat inicializado.');
+    final apiKey = Platform.isIOS 
+        ? 'appl_mWMOfbVYrPnaAwAqyAfvZWipwZD'
+        : 'goog_AuxdpuYZxTRkEFUaxmhQqVwOeid';
+    await paywallRepo.initRevenueCat(apiKey);
+    debugPrint('✅ RevenueCat inicializado para ${Platform.isIOS ? 'iOS' : 'Android'}.');
   } catch (e) {
-    debugPrint('⚠️ RevenueCat en modo desarrollo local: $e');
+    debugPrint('⚠️ Error en RevenueCat: $e');
   }
 
   runApp(
