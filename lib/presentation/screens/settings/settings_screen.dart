@@ -94,6 +94,57 @@ class SettingsScreen extends ConsumerWidget {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.surfaceElevated,
+              foregroundColor: AppColors.textPrimary,
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: const BorderSide(color: AppColors.cardBorder),
+              ),
+            ),
+            child: Text(
+              l10n.settingsLogout,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              showCupertinoDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CupertinoAlertDialog(
+                    title: Text(l10n.settingsDeleteAccountConfirmTitle),
+                    content: Text(l10n.settingsDeleteAccountConfirmMessage),
+                    actions: [
+                      CupertinoDialogAction(
+                        child: Text(l10n.settingsDeleteAccountCancelButton),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      CupertinoDialogAction(
+                        isDestructiveAction: true,
+                        onPressed: () async {
+                          Navigator.of(context).pop(); // Cierra el dialog
+                          try {
+                            await ref.read(authControllerProvider.notifier).deleteAccount();
+                            if (context.mounted) {
+                              Navigator.of(context).pop(); // Vuelve al inicio
+                            }
+                          } catch (e) {
+                            debugPrint('Error borrando cuenta: $e');
+                          }
+                        },
+                        child: Text(l10n.settingsDeleteAccountConfirmButton),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.surfaceElevated,
               foregroundColor: Colors.redAccent,
               elevation: 0,
               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -103,7 +154,7 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
             child: Text(
-              l10n.settingsLogout,
+              l10n.settingsDeleteAccount,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),

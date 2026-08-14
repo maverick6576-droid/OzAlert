@@ -18,4 +18,7 @@ abstract class AuthRepository {
 
   /// Cerrar sesión.
   Future<void> signOut();
+
+  /// Eliminar cuenta permanentemente.
+  Future<void> deleteAccount();
 }

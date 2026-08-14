@@ -107,6 +107,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsLogout => 'Cerrar sesión';
 
   @override
+  String get settingsDeleteAccount => 'Eliminar cuenta';
+
+  @override
+  String get settingsDeleteAccountConfirmTitle => '¿Estás seguro?';
+
+  @override
+  String get settingsDeleteAccountConfirmMessage => 'Esta acción es irreversible y eliminará todos tus datos. ¿Quieres continuar?';
+
+  @override
+  String get settingsDeleteAccountConfirmButton => 'Eliminar';
+
+  @override
+  String get settingsDeleteAccountCancelButton => 'Cancelar';
+
+  @override
   String get visaStatusOpen => 'ABIERTO';
 
   @override

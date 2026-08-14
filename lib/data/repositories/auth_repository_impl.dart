@@ -67,4 +67,19 @@ class AuthRepositoryImpl implements AuthRepository {
       _googleSignIn.signOut(),
     ]);
   }
+
+  @override
+  Future<void> deleteAccount() async {
+    final user = _firebaseAuth.currentUser;
+    if (user != null) {
+      try {
+        await user.delete();
+      } catch (e) {
+        // En caso de fallar por requerir login reciente u otro error, forzamos cierre de sesión.
+        await signOut();
+        rethrow;
+      }
+      await signOut();
+    }
+  }
 }

@@ -49,6 +49,11 @@ class AuthController extends AutoDisposeAsyncNotifier<void> {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => ref.read(authRepositoryProvider).signOut());
   }
+
+  Future<void> deleteAccount() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => ref.read(authRepositoryProvider).deleteAccount());
+  }
 }
 
 final authControllerProvider = AutoDisposeAsyncNotifierProvider<AuthController, void>(() {
