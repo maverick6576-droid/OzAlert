@@ -245,12 +245,6 @@ abstract class AppLocalizations {
   /// **'OzVisa Radar'**
   String get dashboardTitle;
 
-  /// No description provided for @dashboardTestAlert.
-  ///
-  /// In en, this message translates to:
-  /// **'Test Alert'**
-  String get dashboardTestAlert;
-
   /// No description provided for @dashboardSettings.
   ///
   /// In en, this message translates to:
@@ -506,14 +500,26 @@ abstract class AppLocalizations {
   /// No description provided for @paywallActivateMonthly.
   ///
   /// In en, this message translates to:
-  /// **'Activate Monthly Plan (\$1.99)'**
+  /// **'Continue with Monthly Plan'**
   String get paywallActivateMonthly;
 
   /// No description provided for @paywallDisclaimer.
   ///
   /// In en, this message translates to:
-  /// **'No trial period to ensure dedicated servers without saturation. Payment processed securely via RevenueCat / App Store / Google Play. You can cancel your subscription anytime in your account settings.'**
+  /// **'Payment will be charged to your Apple or Google account at confirmation of purchase. Subscription automatically renews unless canceled at least 24 hours before the end of the current period. You can manage and cancel your subscription in your account settings after purchase.'**
   String get paywallDisclaimer;
+
+  /// No description provided for @paywallTermsOfUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get paywallTermsOfUse;
+
+  /// No description provided for @paywallPrivacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get paywallPrivacyPolicy;
 
   /// No description provided for @visaStatusOpenDesc.
   ///

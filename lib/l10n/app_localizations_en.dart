@@ -86,9 +86,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dashboardTitle => 'OzVisa Radar';
 
   @override
-  String get dashboardTestAlert => 'Test Alert';
-
-  @override
   String get dashboardSettings => 'Settings';
 
   @override
@@ -219,10 +216,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paywallActivateAnnual => 'Activate Season Pass (\$14.99)';
 
   @override
-  String get paywallActivateMonthly => 'Activate Monthly Plan (\$1.99)';
+  String get paywallActivateMonthly => 'Continue with Monthly Plan';
 
   @override
-  String get paywallDisclaimer => 'No trial period to ensure dedicated servers without saturation. Payment processed securely via RevenueCat / App Store / Google Play. You can cancel your subscription anytime in your account settings.';
+  String get paywallDisclaimer => 'Payment will be charged to your Apple or Google account at confirmation of purchase. Subscription automatically renews unless canceled at least 24 hours before the end of the current period. You can manage and cancel your subscription in your account settings after purchase.';
+
+  @override
+  String get paywallTermsOfUse => 'Terms of Use';
+
+  @override
+  String get paywallPrivacyPolicy => 'Privacy Policy';
 
   @override
   String get visaStatusOpenDesc => 'Visas available. Start the expedition!';

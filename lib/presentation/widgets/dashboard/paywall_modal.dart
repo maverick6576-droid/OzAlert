@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/paywall_provider.dart';
 
@@ -152,6 +153,38 @@ class _PaywallModalState extends ConsumerState<PaywallModal> {
                 height: 1.3,
               ),
             ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () => launchUrl(Uri.parse('https://ozvisa-alert-prod.web.app/terms.html')),
+                  child: Text(
+                    AppLocalizations.of(context)!.paywallTermsOfUse,
+                    style: const TextStyle(
+                      color: AppColors.statusOpen,
+                      fontSize: 12,
+                      decoration: TextDecoration.underline,
+                      decorationColor: AppColors.statusOpen,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 24),
+                GestureDetector(
+                  onTap: () => launchUrl(Uri.parse('https://ozvisa-alert-prod.web.app/privacy.html')),
+                  child: Text(
+                    AppLocalizations.of(context)!.paywallPrivacyPolicy,
+                    style: const TextStyle(
+                      color: AppColors.statusOpen,
+                      fontSize: 12,
+                      decoration: TextDecoration.underline,
+                      decorationColor: AppColors.statusOpen,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
           ],
         ),
       ),

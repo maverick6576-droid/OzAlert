@@ -86,9 +86,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get dashboardTitle => 'Radar OzVisa';
 
   @override
-  String get dashboardTestAlert => 'Probar Alerta';
-
-  @override
   String get dashboardSettings => 'Ajustes';
 
   @override
@@ -219,10 +216,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get paywallActivateAnnual => 'Activar Pase de Temporada (\$14.99)';
 
   @override
-  String get paywallActivateMonthly => 'Activar Plan Mensual (\$1.99)';
+  String get paywallActivateMonthly => 'Continuar con Plan Mensual';
 
   @override
-  String get paywallDisclaimer => 'Sin periodo de prueba para garantizar servidores dedicados sin saturación. Pago procesado de forma segura a través de RevenueCat / App Store / Google Play. Puedes cancelar tu suscripción en cualquier momento desde los ajustes de tu cuenta.';
+  String get paywallDisclaimer => 'El pago se cargará a tu cuenta de Apple o Google al confirmar la compra. La suscripción se renueva automáticamente a menos que se cancele al menos 24 horas antes del final del período actual. Puedes gestionar o cancelar tu suscripción en los ajustes de tu cuenta después de la compra.';
+
+  @override
+  String get paywallTermsOfUse => 'Términos de Uso';
+
+  @override
+  String get paywallPrivacyPolicy => 'Política de Privacidad';
 
   @override
   String get visaStatusOpenDesc => 'Visas disponibles. ¡Inicia la expedición!';
