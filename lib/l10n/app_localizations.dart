@@ -233,12 +233,6 @@ abstract class AppLocalizations {
   /// **'Restore Purchases'**
   String get paywallRestore;
 
-  /// No description provided for @paywallBypass.
-  ///
-  /// In en, this message translates to:
-  /// **'Bypass to Dashboard (Debug)'**
-  String get paywallBypass;
-
   /// No description provided for @dashboardTitle.
   ///
   /// In en, this message translates to:

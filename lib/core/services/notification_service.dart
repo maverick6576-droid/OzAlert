@@ -47,9 +47,23 @@ class NotificationService {
         sound: true,
         provisional: false,
       );
+      
+      final token = await messaging.getToken();
+      debugPrint('🔑 FCM Token: $token');
       // Suscribirse a las noticias globales de Google Alerts
       await messaging.subscribeToTopic('all_users');
       debugPrint('Suscrito a tópico FCM: all_users');
+
+      // Escuchar notificaciones cuando la app está en PRIMER PLANO (Foreground)
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        debugPrint('FCM Foreground: ${message.messageId}');
+        if (message.notification != null) {
+          _showLocalNotification(
+            title: message.notification!.title ?? 'OzAlert',
+            body: message.notification!.body ?? '',
+          );
+        }
+      });
     } catch (e) {
       debugPrint('FCM no disponible en entorno local o escritorio: $e');
     }
@@ -103,6 +117,35 @@ class NotificationService {
       body,
       platformDetails,
       payload: 'test_alert_$countryCode',
+    );
+  }
+
+  /// Muestra una notificación local desde un Push en primer plano
+  Future<void> _showLocalNotification({required String title, required String body}) async {
+    final AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      'ozvisa_radar_channel',
+      'Alertas de Apertura',
+      importance: Importance.max,
+      priority: Priority.high,
+      styleInformation: BigTextStyleInformation(body),
+    );
+
+    const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+
+    final NotificationDetails platformDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
+
+    await _localNotifications.show(
+      DateTime.now().millisecond,
+      title,
+      body,
+      platformDetails,
     );
   }
 

@@ -80,9 +80,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get paywallRestore => 'Restaurar Compras';
 
   @override
-  String get paywallBypass => 'Bypass al Dashboard (Debug)';
-
-  @override
   String get dashboardTitle => 'Radar OzVisa';
 
   @override

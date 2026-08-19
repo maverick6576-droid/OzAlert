@@ -70,7 +70,7 @@ def check_visa_status(request=None):
                 # Buscar emails de usuarios suscritos en Firestore
                 recipients = []
                 if db:
-                    users_query = db.collection("users").where("selectedCountryCode", "==", country_code).stream()
+                    users_query = db.collection("users").where("passports", "array_contains", country_name).stream()
                     for u in users_query:
                         data = u.to_dict()
                         email = data.get("email")

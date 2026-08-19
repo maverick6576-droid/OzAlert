@@ -95,18 +95,7 @@ class PaywallScreen extends ConsumerWidget {
 
               const Divider(height: 32),
 
-              // Botón Mock de Debug (Bypass)
-              TextButton.icon(
-                onPressed: () async {
-                  // Bypass para entrar sin pagar mientras se desarrolla
-                  await ref.read(paywallProvider.notifier).setDemoSubscribed(true);
-                },
-                icon: const Icon(CupertinoIcons.hammer_fill, size: 16, color: AppColors.statusClosed),
-                label: Text(
-                  AppLocalizations.of(context)!.paywallBypass,
-                  style: const TextStyle(color: AppColors.statusClosed),
-                ),
-              ),
+
               const SizedBox(height: 24),
             ],
           ),
