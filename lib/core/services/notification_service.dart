@@ -48,6 +48,17 @@ class NotificationService {
         provisional: false,
       );
       
+      if (defaultTargetPlatform == TargetPlatform.iOS) {
+        String? apnsToken = await messaging.getAPNSToken();
+        debugPrint('APNs Token inicial: $apnsToken');
+        if (apnsToken == null) {
+          debugPrint('Esperando APNs Token...');
+          await Future.delayed(const Duration(seconds: 3));
+          apnsToken = await messaging.getAPNSToken();
+          debugPrint('APNs Token tras espera: $apnsToken');
+        }
+      }
+
       final token = await messaging.getToken();
       debugPrint('🔑 FCM Token: $token');
       // Suscribirse a las noticias globales de Google Alerts
