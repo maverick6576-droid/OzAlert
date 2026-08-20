@@ -30,6 +30,14 @@
           }
         },
         {
+          "client_id": "58600120257-q81k9eanrg0vjtgj0hdsorq860gnu9p5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ozvisa.alert",
+            "certificate_hash": "a3a0755fa74bdacab7ab8e573e271d65ea087ffd"
+          }
+        },
+        {
           "client_id": "58600120257-fsa6ult2gatdiuoldrvg0278fmtdvvj0.apps.googleusercontent.com",
           "client_type": 3
         }
