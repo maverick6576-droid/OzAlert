@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "58600120257-edjl92uapo1rvhtehnnv25du61t65lp1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ozvisa.alert",
+            "certificate_hash": "23621c8d399bf40cce7f910578e09f7ae0666ba2"
+          }
+        },
+        {
           "client_id": "58600120257-pqg812tjf2qno61c23tuitm29mnfr6og.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
