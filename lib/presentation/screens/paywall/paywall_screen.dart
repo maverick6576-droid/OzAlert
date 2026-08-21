@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/paywall_provider.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
@@ -92,9 +93,65 @@ class PaywallScreen extends ConsumerWidget {
               ).animate().slideY(begin: 1.0, end: 0, delay: 600.ms),
               const SizedBox(height: 16),
 
+              // Botón Restaurar Compras
+              TextButton(
+                onPressed: () async {
+                  await ref.read(paywallProvider.notifier).restorePurchases();
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.paywallRestore,
+                  style: const TextStyle(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ).animate().fadeIn(delay: 800.ms),
 
-              const Divider(height: 32),
+              const SizedBox(height: 16),
+              
+              Text(
+                AppLocalizations.of(context)!.paywallDisclaimer,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: AppColors.textSecondary,
+                  height: 1.3,
+                ),
+              ).animate().fadeIn(delay: 1000.ms),
 
+              const SizedBox(height: 12),
+              
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () async {
+                      final url = Uri.parse('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url);
+                      }
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)!.paywallTermsOfUse,
+                      style: const TextStyle(fontSize: 12, color: AppColors.primary),
+                    ),
+                  ),
+                  const Text('•', style: TextStyle(color: AppColors.textSecondary)),
+                  TextButton(
+                    onPressed: () async {
+                      final url = Uri.parse('https://tu-dominio.com/privacy'); // Idealmente actualizar con la real
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url);
+                      }
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)!.paywallPrivacyPolicy,
+                      style: const TextStyle(fontSize: 12, color: AppColors.primary),
+                    ),
+                  ),
+                ],
+              ).animate().fadeIn(delay: 1000.ms),
 
               const SizedBox(height: 24),
             ],
