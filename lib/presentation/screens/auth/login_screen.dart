@@ -32,15 +32,22 @@ class LoginScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(),
-              
-              // Logo o Icono Principal
-              Container(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Spacer(),
+                        
+                        // Logo o Icono Principal
+                        Container(
                 width: 140,
                 height: 140,
                 decoration: BoxDecoration(
@@ -122,6 +129,11 @@ class LoginScreen extends ConsumerWidget {
               const SizedBox(height: 48),
             ],
           ),
+        ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

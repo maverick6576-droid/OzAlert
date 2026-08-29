@@ -18,11 +18,18 @@ class PaywallScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
               const Spacer(),
               const Icon(
                 CupertinoIcons.lock_shield_fill,
@@ -156,6 +163,11 @@ class PaywallScreen extends ConsumerWidget {
               const SizedBox(height: 24),
             ],
           ),
+        ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
