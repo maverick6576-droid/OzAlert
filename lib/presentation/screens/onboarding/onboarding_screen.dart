@@ -192,7 +192,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   ],
                 ),
               ),
-            ),   ),
+            ),
 
             // Footer con el Botón
             Container(
