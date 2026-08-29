@@ -102,13 +102,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 ],
               ),
             ),
-            
-            Expanded(
-              child: CustomScrollView(
-                slivers: [
-                  // Sección Idioma
-                  SliverToBoxAdapter(
-                    child: Padding(
+                        Expanded(
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Seccin Idioma
+                    Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,11 +149,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         ],
                       ).animate().fadeIn(delay: 300.ms),
                     ),
-                  ),
-                  
-                  // Título Pasaportes
-                  SliverToBoxAdapter(
-                    child: Padding(
+                    
+                    // Ttulo Pasaportes
+                    Padding(
                       padding: const EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 16.0),
                       child: Text(
                         AppLocalizations.of(context)!.onboardingPassports,
@@ -163,20 +162,21 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         ),
                       ).animate().fadeIn(delay: 400.ms),
                     ),
-                  ),
 
-                  // Cuadrícula de Pasaportes
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    sliver: SliverGrid(
-                      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 160,
-                        mainAxisSpacing: 12,
-                        crossAxisSpacing: 12,
-                        childAspectRatio: 2.5,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
+                    // Cuadrcula de Pasaportes
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 160,
+                          mainAxisSpacing: 12,
+                          crossAxisSpacing: 12,
+                          childAspectRatio: 2.5,
+                        ),
+                        itemCount: _countries.length,
+                        itemBuilder: (context, index) {
                           final country = _countries[index];
                           final isSelected = _selectedPassports.contains(country.name);
                           return _PassportChip(
@@ -185,15 +185,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             onTap: () => _togglePassport(country.name),
                           );
                         },
-                        childCount: _countries.length,
                       ),
                     ),
-                  ),
-                  
-                  const SliverToBoxAdapter(child: SizedBox(height: 40)),
-                ],
+                    
+                    const SizedBox(height: 40),
+                  ],
+                ),
               ),
-            ),
+            ),   ),
 
             // Footer con el Botón
             Container(
