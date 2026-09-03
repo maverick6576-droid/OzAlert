@@ -196,11 +196,23 @@ def trigger_alerts():
 def update_closed_status():
     """
     Actualiza la base de datos a CLOSED si ImmiAccount lo detecta, 
-    sobrescribiendo de forma segura el estado de apertura.
+    sobrescribiendo de forma segura el estado de apertura,
+    PERO respetando si la web estática ya había dictaminado que estaba PAUSED.
     """
     if not db: return
     try:
         doc_ref = db.collection("visas").document("ES")
+        doc = doc_ref.get()
+        current_db_status = doc.to_dict().get("status", "CLOSED") if doc.exists else "CLOSED"
+
+        if current_db_status == "PAUSED":
+            logger.info("ImmiAccount detectó que no hay plazas, pero la BD está en PAUSED. Respetamos el PAUSED de la web.")
+            doc_ref.set({
+                "updatedAt": firestore.SERVER_TIMESTAMP,
+                "source": "ImmiAccount Deep Scraper"
+            }, merge=True)
+            return
+
         doc_ref.set({
             "status": "CLOSED",
             "updatedAt": firestore.SERVER_TIMESTAMP,
