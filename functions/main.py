@@ -33,16 +33,28 @@ def check_visa_status(request=None):
         try:
             # 1. Obtener estado anterior de Firestore
             previous_status = "CLOSED"
+            source = "Public Web"
             doc_ref = None
             if db:
                 doc_ref = db.collection("visas").document(country_code)
                 doc = doc_ref.get()
                 if doc.exists and doc.to_dict():
-                    previous_status = doc.to_dict().get("status", "CLOSED")
+                    data = doc.to_dict()
+                    previous_status = data.get("status", "CLOSED")
+                    source = data.get("source", "Public Web")
 
             # 2. Hacer scraping ligero al sitio oficial
             current_status = scrape_country_status(country_code)
-            logger.info(f"[{country_code} - {country_name}] Estado anterior: {previous_status} | Estado actual: {current_status}")
+            logger.info(f"[{country_code} - {country_name}] Estado anterior: {previous_status} (Fuente: {source}) | Estado actual web: {current_status}")
+
+            # 2.5 ARBITRAJE DE SISTEMAS HÍBRIDOS:
+            # Si ImmiAccount detectó OPEN, la web pública siempre va tarde.
+            # No permitimos que la web pública lo vuelva a poner en CLOSED. 
+            # El único que puede ponerlo en CLOSED de nuevo es ImmiAccount.
+            if previous_status == "OPEN" and source == "ImmiAccount Deep Scraper" and current_status in ["CLOSED", "PAUSED"]:
+                logger.info(f"  └─ 🛡️ ImmiAccount detectó OPEN. Ignorando el {current_status} de la web estática retrasada.")
+                results[country_code] = {"status": "OPEN (Override)", "changed": False, "writes": 0}
+                continue
 
             # 3. Optimización de cuota gratuita $0: SI NO HAY CAMBIOS Y EL DOCUMENTO YA EXISTE -> 0 ESCRITURAS
             if current_status == previous_status and doc is not None and doc.exists:
@@ -59,6 +71,7 @@ def check_visa_status(request=None):
                     "countryCode": country_code,
                     "countryName": country_name,
                     "subclass": info["subclass"],
+                    "source": "Public Web"
                 }, merge=True)
                 logger.info(f"  └─ 📝 Firestore actualizado /visas/{country_code} -> {current_status}")
 
