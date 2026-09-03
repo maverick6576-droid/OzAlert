@@ -15,18 +15,22 @@ IMMI_USER = os.getenv("IMMI_USER")
 IMMI_PASS = os.getenv("IMMI_PASS")
 FIREBASE_CREDS_PATH = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 
-# Inicializar Firebase si se detectan credenciales
+# Inicializar Firebase (Automático en Cloud Run)
 db = None
-if FIREBASE_CREDS_PATH and os.path.exists(FIREBASE_CREDS_PATH):
-    try:
+try:
+    if FIREBASE_CREDS_PATH and os.path.exists(FIREBASE_CREDS_PATH):
+        # Modo local (con archivo JSON)
         cred = credentials.Certificate(FIREBASE_CREDS_PATH)
         firebase_admin.initialize_app(cred)
-        db = firestore.client()
-        logger.info("Firebase inicializado correctamente.")
-    except Exception as e:
-        logger.error(f"Error inicializando Firebase: {e}")
-else:
-    logger.warning("No se ha configurado GOOGLE_APPLICATION_CREDENTIALS. Firebase desactivado (Modo Dry-Run).")
+    else:
+        # Modo Producción (Cloud Run asume permisos de la Service Account automáticamente)
+        firebase_admin.initialize_app()
+        
+    db = firestore.client()
+    logger.info("Firebase inicializado correctamente.")
+except Exception as e:
+    logger.error(f"Error inicializando Firebase: {e}")
+    logger.warning("Firebase desactivado (Modo Dry-Run).")
 
 def check_immiaccount_spain() -> str:
     """
