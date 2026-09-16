@@ -12,7 +12,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginTitle => 'OzAlert';
 
   @override
-  String get loginSubtitle => 'The ultimate radar for your Australian Work & Holiday Visa.';
+  String get loginSubtitle =>
+      'The ultimate radar for your Australian Work & Holiday Visa.';
 
   @override
   String get loginError => 'Error signing in:';
@@ -27,7 +28,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeTitle => 'Australian visas\nfly away\nin minutes.';
 
   @override
-  String get welcomeSubtitle => 'Every year, thousands miss out because they don\'t find out in time when spots open. Our system tracks official sources 24/7 and alerts you instantly so you can be the first to apply.';
+  String get welcomeSubtitle =>
+      'Every year, thousands miss out because they don\'t find out in time when spots open. Our system tracks official sources 24/7 and alerts you instantly so you can be the first to apply.';
 
   @override
   String get welcomeBullet1 => 'Real instant notifications';
@@ -45,7 +47,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingTitle => 'Customize your Radar';
 
   @override
-  String get onboardingSubtitle => 'Set up your profile to receive notifications for visas that match your passport.';
+  String get onboardingSubtitle =>
+      'Set up your profile to receive notifications for visas that match your passport.';
 
   @override
   String get onboardingLanguage => 'Preferred Language';
@@ -66,7 +69,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paywallTitle => 'Turn on the Radar';
 
   @override
-  String get paywallSubtitle => 'Receive immediate notifications as soon as your visa becomes available. Subscribe to access.';
+  String get paywallSubtitle =>
+      'Receive immediate notifications as soon as your visa becomes available. Subscribe to access.';
 
   @override
   String paywallSubscribeMonthly(String price) {
@@ -107,7 +111,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsDeleteAccountConfirmTitle => 'Are you sure?';
 
   @override
-  String get settingsDeleteAccountConfirmMessage => 'This action is irreversible and will delete all your data. Do you want to continue?';
+  String get settingsDeleteAccountConfirmMessage =>
+      'This action is irreversible and will delete all your data. Do you want to continue?';
 
   @override
   String get settingsDeleteAccountConfirmButton => 'Delete';
@@ -143,22 +148,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get checklistProgress => 'Equipment Progress';
 
   @override
-  String get checklistDescription => 'Prepare your backpack (certificates and savings) in advance so you are not left behind when the adventure begins.';
+  String get checklistDescription =>
+      'Prepare your backpack (certificates and savings) in advance so you are not left behind when the adventure begins.';
 
   @override
   String get checklistKeyDocs => 'Key Documents:';
 
   @override
-  String get checklistInstructions => 'Secure each item in your inventory as you get it:';
+  String get checklistInstructions =>
+      'Secure each item in your inventory as you get it:';
 
   @override
-  String get checklistTip => 'Explorer Tip: Quotas tend to disappear like mirages in the desert. Having your PDFs organized is vital to survive the process.';
+  String get checklistTip =>
+      'Explorer Tip: Quotas tend to disappear like mirages in the desert. Having your PDFs organized is vital to survive the process.';
 
   @override
   String get dashboardSafeExpedition => 'Safe Expedition';
 
   @override
-  String get dashboardSafeExpeditionDesc => 'The horizon is clear. We will notify you with a flare (notification) as soon as the Department enables places for your passports.';
+  String get dashboardSafeExpeditionDesc =>
+      'The horizon is clear. We will notify you with a flare (notification) as soon as the Department enables places for your passports.';
 
   @override
   String get newsTitle => 'News Radar';
@@ -181,7 +190,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get radarScanning => 'Servers tracking the official Australian Immigration website';
+  String get radarScanning =>
+      'Servers tracking the official Australian Immigration website';
 
   @override
   String get passportSelectorTitle => 'Select your Passport (WHV 417 & 462)';
@@ -195,7 +205,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paywallModalTitle => 'Unlock the 24/7 Visa Radar';
 
   @override
-  String get paywallModalDesc => 'Receive an immediate Push Alert and Email the exact second the Department of Home Affairs opens spots for your country.';
+  String get paywallModalDesc =>
+      'Receive an immediate Push Alert and Email the exact second the Department of Home Affairs opens spots for your country.';
 
   @override
   String get paywallPlanAnnualTitle => 'Season Pass (Annual)';
@@ -216,7 +227,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paywallActivateMonthly => 'Continue with Monthly Plan';
 
   @override
-  String get paywallDisclaimer => 'Payment will be charged to your Apple or Google account at confirmation of purchase. Subscription automatically renews unless canceled at least 24 hours before the end of the current period. You can manage and cancel your subscription in your account settings after purchase.';
+  String get paywallDisclaimer =>
+      'Payment will be charged to your Apple or Google account at confirmation of purchase. Subscription automatically renews unless canceled at least 24 hours before the end of the current period. You can manage and cancel your subscription in your account settings after purchase.';
 
   @override
   String get paywallTermsOfUse => 'Terms of Use';
@@ -249,7 +261,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get partnerAffiliate => 'AFFILIATE PARTNER • 15% OFF';
 
   @override
-  String get partnerDescription => 'Essential to activate your visa when passing customs in Sydney or Melbourne. Full COVID, sports and work coverage.';
+  String get partnerDescription =>
+      'Essential to activate your visa when passing customs in Sydney or Melbourne. Full COVID, sports and work coverage.';
 
   @override
   String get partnerActivate => 'Activate Insurance Promo (15% Off)';
@@ -260,13 +273,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get checklistCompletedDescription => 'All set! Backpack 100% prepared.';
+  String get checklistCompletedDescription =>
+      'All set! Backpack 100% prepared.';
 
   @override
-  String get partnerTitle => 'Need health insurance for Australia? Get 15% off with Chapka / IATI Seguros';
+  String get partnerTitle =>
+      'Need health insurance for Australia? Get 15% off with Chapka / IATI Seguros';
 
   @override
-  String get paywallSuccessMessage => '✅ VIP Access Activated! 24/7 immediate alerts enabled or purchases successfully restored.';
+  String get paywallSuccessMessage =>
+      '✅ VIP Access Activated! 24/7 immediate alerts enabled or purchases successfully restored.';
 
   @override
   String get navRadar => 'Radar';
@@ -281,49 +297,59 @@ class AppLocalizationsEn extends AppLocalizations {
   String get checklistIdentityDocumentsTitle => 'Identity documents';
 
   @override
-  String get checklistIdentityDocumentsDesc => 'Pages of your passport (photo, data, dates). Birth certificate with parents\' names. Proof of name change (if applicable).';
+  String get checklistIdentityDocumentsDesc =>
+      'Pages of your passport (photo, data, dates). Birth certificate with parents\' names. Proof of name change (if applicable).';
 
   @override
   String get checklistEducationTitle => 'Education';
 
   @override
-  String get checklistEducationDesc => 'Evidence of your educational qualifications (university degree, years completed or equivalent, depending on your country\'s requirements).';
+  String get checklistEducationDesc =>
+      'Evidence of your educational qualifications (university degree, years completed or equivalent, depending on your country\'s requirements).';
 
   @override
   String get checklistEnglishLanguageTitle => 'English level';
 
   @override
-  String get checklistEnglishLanguageDesc => 'Evidence of English studies, or approved exam in the last 12 months (IELTS 4.5, PTE 30, Cambridge C1 147, or TOEFL iBT 32).';
+  String get checklistEnglishLanguageDesc =>
+      'Evidence of English studies, or approved exam in the last 12 months (IELTS 4.5, PTE 30, Cambridge C1 147, or TOEFL iBT 32).';
 
   @override
   String get checklistGovernmentSupportTitle => 'Government support';
 
   @override
-  String get checklistGovernmentSupportDesc => 'Letter of support from your government (only for certain countries like Peru, Ecuador, etc. Not required for Spain, Argentina, Chile, etc.).';
+  String get checklistGovernmentSupportDesc =>
+      'Letter of support from your government (only for certain countries like Peru, Ecuador, etc. Not required for Spain, Argentina, Chile, etc.).';
 
   @override
-  String get checklistEnoughMoneyTitle => 'Enough money for your stay and departure';
+  String get checklistEnoughMoneyTitle =>
+      'Enough money for your stay and departure';
 
   @override
-  String get checklistEnoughMoneyDesc => 'Evidence of money for your stay (usually \$5,000 AUD) and money for a departure ticket from Australia (or the ticket already purchased).';
+  String get checklistEnoughMoneyDesc =>
+      'Evidence of money for your stay (usually \$5,000 AUD) and money for a departure ticket from Australia (or the ticket already purchased).';
 
   @override
-  String get checklistCharacterDocumentsTitle => 'Character documents (Background checks)';
+  String get checklistCharacterDocumentsTitle =>
+      'Character documents (Background checks)';
 
   @override
-  String get checklistCharacterDocumentsDesc => 'Police certificates from every country where you have spent 12+ months in the last 10 years (since age 16), and military record if applicable.';
+  String get checklistCharacterDocumentsDesc =>
+      'Police certificates from every country where you have spent 12+ months in the last 10 years (since age 16), and military record if applicable.';
 
   @override
   String get checklistGettingHelpTitle => 'Getting help (Agents)';
 
   @override
-  String get checklistGettingHelpDesc => 'Form 956A or 956 if you use a migration agent or authorize someone to receive your documents.';
+  String get checklistGettingHelpDesc =>
+      'Form 956A or 956 if you use a migration agent or authorize someone to receive your documents.';
 
   @override
   String get checklistPrepareDocumentsTitle => 'Prepare your documents';
 
   @override
-  String get checklistPrepareDocumentsDesc => 'Translate all documents into English by a qualified translator and scan/photograph all originals and translations in color.';
+  String get checklistPrepareDocumentsDesc =>
+      'Translate all documents into English by a qualified translator and scan/photograph all originals and translations in color.';
 
   @override
   String radarLastChecked(String seconds) {
@@ -429,7 +455,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get notificationTestBody => '✅ Connection verified: Servers monitoring visas 24/7 in real time.';
+  String get notificationTestBody =>
+      '✅ Connection verified: Servers monitoring visas 24/7 in real time.';
 
   @override
   String notificationTestLongBody(String countryName) {
@@ -440,8 +467,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationChannelName => 'OzVisa Opening Alerts';
 
   @override
-  String get notificationChannelDesc => 'Immediate notifications for Work & Holiday visa spots openings';
+  String get notificationChannelDesc =>
+      'Immediate notifications for Work & Holiday visa spots openings';
 
   @override
   String get notificationTestTicker => 'OzVisa Test Alert';
+
+  @override
+  String get settingsNotifications => 'Notifications';
+
+  @override
+  String get settingsNewsNotifs => 'Receive news and tips';
 }
