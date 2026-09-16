@@ -75,3 +75,21 @@ class OnboardingController extends AutoDisposeAsyncNotifier<void> {
 final onboardingControllerProvider = AutoDisposeAsyncNotifierProvider<OnboardingController, void>(() {
   return OnboardingController();
 });
+
+class ReferralController extends AutoDisposeAsyncNotifier<void> {
+  @override
+  FutureOr<void> build() {}
+
+  Future<void> updateReferralSource(String source) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final user = ref.read(authStateProvider).value;
+      if (user == null) throw Exception('Usuario no autenticado');
+      await ref.read(userRepositoryProvider).updateUserProfileData(user.uid, {'referralSource': source});
+    });
+  }
+}
+
+final referralControllerProvider = AutoDisposeAsyncNotifierProvider<ReferralController, void>(() {
+  return ReferralController();
+});

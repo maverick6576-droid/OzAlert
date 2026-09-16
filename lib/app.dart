@@ -6,6 +6,7 @@ import 'presentation/navigation/main_navigation_screen.dart';
 import 'presentation/screens/auth/login_screen.dart';
 import 'presentation/screens/onboarding/welcome_screen.dart';
 import 'presentation/screens/onboarding/onboarding_screen.dart';
+import 'presentation/screens/onboarding/referral_source_screen.dart';
 import 'presentation/screens/paywall/paywall_screen.dart';
 import 'presentation/providers/auth_provider.dart';
 import 'presentation/providers/user_provider.dart';
@@ -57,6 +58,9 @@ class OzVisaAlertApp extends ConsumerWidget {
               if (profile == null || !profile.onboardingCompleted) {
                 // No tiene perfil o no completó el onboarding -> Welcome Intro
                 return const WelcomeScreen();
+              } else if (profile.referralSource == null) {
+                // Completó onboarding pero no ha dicho de dónde viene -> Referral Screen
+                return ReferralSourceScreen(onCompleted: () {});
               } else if (!profile.isPremium) {
                 // Perfil completo, pero NO ha pagado -> Paywall
                 return const PaywallScreen();

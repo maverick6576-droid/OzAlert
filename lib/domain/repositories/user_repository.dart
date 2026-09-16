@@ -6,4 +6,7 @@ abstract class UserRepository {
 
   /// Actualiza o crea el perfil del usuario
   Future<void> saveUserProfile(UserProfile profile);
+
+  /// Actualiza datos parciales del usuario
+  Future<void> updateUserProfileData(String uid, Map<String, dynamic> data);
 }

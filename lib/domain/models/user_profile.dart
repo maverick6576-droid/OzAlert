@@ -4,6 +4,7 @@ class UserProfile {
   final List<String> passports;
   final bool onboardingCompleted;
   final bool isPremium;
+  final String? referralSource;
 
   UserProfile({
     required this.uid,
@@ -11,6 +12,7 @@ class UserProfile {
     this.passports = const [],
     this.onboardingCompleted = false,
     this.isPremium = false,
+    this.referralSource,
   });
 
   UserProfile copyWith({
@@ -19,6 +21,7 @@ class UserProfile {
     List<String>? passports,
     bool? onboardingCompleted,
     bool? isPremium,
+    String? referralSource,
   }) {
     return UserProfile(
       uid: uid ?? this.uid,
@@ -26,6 +29,7 @@ class UserProfile {
       passports: passports ?? this.passports,
       onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
       isPremium: isPremium ?? this.isPremium,
+      referralSource: referralSource ?? this.referralSource,
     );
   }
 
@@ -36,6 +40,7 @@ class UserProfile {
       'passports': passports,
       'onboardingCompleted': onboardingCompleted,
       'isPremium': isPremium,
+      if (referralSource != null) 'referralSource': referralSource,
     };
   }
 
@@ -46,6 +51,7 @@ class UserProfile {
       passports: List<String>.from(map['passports'] ?? []),
       onboardingCompleted: map['onboardingCompleted'] ?? false,
       isPremium: map['isPremium'] ?? false,
+      referralSource: map['referralSource'],
     );
   }
 }

@@ -31,4 +31,16 @@ class UserRepositoryImpl implements UserRepository {
       throw Exception('Error al guardar el perfil de usuario: $e');
     }
   }
+
+  @override
+  Future<void> updateUserProfileData(String uid, Map<String, dynamic> data) async {
+    try {
+      await _firestore.collection('users').doc(uid).set(
+        data,
+        SetOptions(merge: true),
+      );
+    } catch (e) {
+      throw Exception('Error al actualizar datos parciales: $e');
+    }
+  }
 }
