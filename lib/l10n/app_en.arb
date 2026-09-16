@@ -72,7 +72,7 @@
     },
     "radarScanning": "Servers tracking the official Australian Immigration website",
     "passportSelectorTitle": "Select your Passport (WHV 417 & 462)",
-    "passportSubclass": "Subclass {subclass} • Australia WHV",
+    "passportSubclass": "Subclass {subclass} \u2022 Australia WHV",
     "@passportSubclass": {
         "placeholders": {
             "subclass": {
@@ -83,7 +83,7 @@
     "paywallModalTitle": "Unlock the 24/7 Visa Radar",
     "paywallModalDesc": "Receive an immediate Push Alert and Email the exact second the Department of Home Affairs opens spots for your country.",
     "paywallPlanAnnualTitle": "Season Pass (Annual)",
-    "paywallPlanAnnualDesc": "Best value • Save 37%",
+    "paywallPlanAnnualDesc": "Best value \u2022 Save 37%",
     "paywallPlanMonthlyTitle": "Flex Monthly Plan",
     "paywallPlanMonthlyDesc": "Cancel anytime with 1 click",
     "paywallActivateAnnual": "Activate Season Pass ($14.99)",
@@ -98,10 +98,10 @@
     "tooltipScanRadar": "Scan live radar",
     "newsSourceOfficial": "OFFICIAL SOURCE",
     "newsSourceMarket": "MARKET / CURRENCY",
-    "partnerAffiliate": "AFFILIATE PARTNER • 15% OFF",
+    "partnerAffiliate": "AFFILIATE PARTNER \u2022 15% OFF",
     "partnerDescription": "Essential to activate your visa when passing customs in Sydney or Melbourne. Full COVID, sports and work coverage.",
     "partnerActivate": "Activate Insurance Promo (15% Off)",
-    "testAlertSending": "⚡ Sending test alert for {countryNames}... Will arrive in 2 seconds.",
+    "testAlertSending": "\u26a1 Sending test alert for {countryNames}... Will arrive in 2 seconds.",
     "@testAlertSending": {
         "placeholders": {
             "countryNames": {
@@ -111,7 +111,7 @@
     },
     "checklistCompletedDescription": "All set! Backpack 100% prepared.",
     "partnerTitle": "Need health insurance for Australia? Get 15% off with Chapka / IATI Seguros",
-    "paywallSuccessMessage": "✅ VIP Access Activated! 24/7 immediate alerts enabled or purchases successfully restored.",
+    "paywallSuccessMessage": "\u2705 VIP Access Activated! 24/7 immediate alerts enabled or purchases successfully restored.",
     "navRadar": "Radar",
     "navEquipment": "Equipment",
     "navNews": "Logbook",
@@ -170,7 +170,7 @@
     "countryTR": "Turkey",
     "countryUY": "Uruguay",
     "countryVN": "Vietnam",
-    "notificationTestTitle": "🔔 TEST ALERT: OzVisa Radar Active ({countryName})",
+    "notificationTestTitle": "\ud83d\udd14 TEST ALERT: OzVisa Radar Active ({countryName})",
     "@notificationTestTitle": {
         "placeholders": {
             "countryName": {
@@ -178,7 +178,7 @@
             }
         }
     },
-    "notificationTestBody": "✅ Connection verified: Servers monitoring visas 24/7 in real time.",
+    "notificationTestBody": "\u2705 Connection verified: Servers monitoring visas 24/7 in real time.",
     "notificationTestLongBody": "OzVisa Alert's tracking system is now active for {countryName}! We will notify you the exact second the Department of Home Affairs opens new spots.",
     "@notificationTestLongBody": {
         "placeholders": {
@@ -189,5 +189,7 @@
     },
     "notificationChannelName": "OzVisa Opening Alerts",
     "notificationChannelDesc": "Immediate notifications for Work & Holiday visa spots openings",
-    "notificationTestTicker": "OzVisa Test Alert"
+    "notificationTestTicker": "OzVisa Test Alert",
+    "settingsNotifications": "Notifications",
+    "settingsNewsNotifs": "Receive news and tips"
 }

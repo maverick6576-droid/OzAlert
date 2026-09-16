@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import '../constants/app_constants.dart';
@@ -62,9 +63,13 @@ class NotificationService {
 
       final token = await messaging.getToken();
       debugPrint('🔑 FCM Token: $token');
-      // Suscribirse a las noticias globales de Google Alerts
-      await messaging.subscribeToTopic('all_users');
-      debugPrint('Suscrito a tópico FCM: all_users');
+      // Suscribirse a las noticias globales (si no están desactivadas)
+      final prefs = await SharedPreferences.getInstance();
+      final newsEnabled = prefs.getBool('news_notifications_enabled') ?? true;
+      if (newsEnabled) {
+        await messaging.subscribeToTopic('all_users');
+        debugPrint('Suscrito a tópico FCM: all_users');
+      }
 
       // Escuchar notificaciones cuando la app está en PRIMER PLANO (Foreground)
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {

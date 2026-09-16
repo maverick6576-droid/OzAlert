@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/locale_provider.dart';
+import '../../providers/news_notifications_provider.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -55,6 +56,33 @@ class SettingsScreen extends ConsumerWidget {
             isSelected: currentLocale.languageCode == 'en',
             onTap: () {
               ref.read(localeProvider.notifier).setLocale(const Locale('en'));
+            },
+          ),
+          const SizedBox(height: 32),
+          Text(
+            l10n.settingsNotifications,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Consumer(
+            builder: (context, ref, child) {
+              final newsEnabled = ref.watch(newsNotificationsProvider);
+              return SwitchListTile.adaptive(
+                title: Text(l10n.settingsNewsNotifs),
+                value: newsEnabled,
+                activeColor: AppColors.primary,
+                onChanged: (bool value) {
+                  ref.read(newsNotificationsProvider.notifier).toggle(value);
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: AppColors.cardBorder),
+                ),
+              );
             },
           ),
           const SizedBox(height: 32),
