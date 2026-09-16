@@ -478,4 +478,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsNewsNotifs => 'Receive news and tips';
+
+  @override
+  String get referralTitle => 'Where did you find us?';
+
+  @override
+  String get referralSubtitle => 'It helps us a lot to improve.';
+
+  @override
+  String get referralFriend => 'Friend recommendation';
+
+  @override
+  String get referralGroups => 'WhatsApp groups';
+
+  @override
+  String get referralOthers => 'Other';
 }

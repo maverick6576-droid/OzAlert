@@ -483,4 +483,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get settingsNewsNotifs => 'Recibir noticias y consejos';
+
+  @override
+  String get referralTitle => '¿Dónde nos has encontrado?';
+
+  @override
+  String get referralSubtitle => 'Nos ayuda muchísimo a mejorar.';
+
+  @override
+  String get referralFriend => 'Recomendación de un amigo';
+
+  @override
+  String get referralGroups => 'Grupos de Whatsapp';
+
+  @override
+  String get referralOthers => 'Otros';
 }

@@ -191,5 +191,10 @@
     "notificationChannelDesc": "Notificaciones inmediatas de apertura de plazas de visa Work & Holiday",
     "notificationTestTicker": "OzVisa Alerta Test",
     "settingsNotifications": "Notificaciones",
-    "settingsNewsNotifs": "Recibir noticias y consejos"
+    "settingsNewsNotifs": "Recibir noticias y consejos",
+    "referralTitle": "\u00bfD\u00f3nde nos has encontrado?",
+    "referralSubtitle": "Nos ayuda much\u00edsimo a mejorar.",
+    "referralFriend": "Recomendaci\u00f3n de un amigo",
+    "referralGroups": "Grupos de Whatsapp",
+    "referralOthers": "Otros"
 }

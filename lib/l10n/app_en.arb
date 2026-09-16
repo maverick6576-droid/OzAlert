@@ -191,5 +191,10 @@
     "notificationChannelDesc": "Immediate notifications for Work & Holiday visa spots openings",
     "notificationTestTicker": "OzVisa Test Alert",
     "settingsNotifications": "Notifications",
-    "settingsNewsNotifs": "Receive news and tips"
+    "settingsNewsNotifs": "Receive news and tips",
+    "referralTitle": "Where did you find us?",
+    "referralSubtitle": "It helps us a lot to improve.",
+    "referralFriend": "Friend recommendation",
+    "referralGroups": "WhatsApp groups",
+    "referralOthers": "Other"
 }

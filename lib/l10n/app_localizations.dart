@@ -955,6 +955,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Receive news and tips'**
   String get settingsNewsNotifs;
+
+  /// No description provided for @referralTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where did you find us?'**
+  String get referralTitle;
+
+  /// No description provided for @referralSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'It helps us a lot to improve.'**
+  String get referralSubtitle;
+
+  /// No description provided for @referralFriend.
+  ///
+  /// In en, this message translates to:
+  /// **'Friend recommendation'**
+  String get referralFriend;
+
+  /// No description provided for @referralGroups.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp groups'**
+  String get referralGroups;
+
+  /// No description provided for @referralOthers.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get referralOthers;
 }
 
 class _AppLocalizationsDelegate

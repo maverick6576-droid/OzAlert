@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/user_provider.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class ReferralSourceScreen extends ConsumerStatefulWidget {
   final VoidCallback onCompleted;
@@ -13,16 +14,6 @@ class ReferralSourceScreen extends ConsumerStatefulWidget {
 }
 
 class _ReferralSourceScreenState extends ConsumerState<ReferralSourceScreen> {
-  final List<String> sources = [
-    'TikTok',
-    'Instagram',
-    'Telegram',
-    'Recomendación de un amigo',
-    'Grupos Whatsapp',
-    'Twitter X',
-    'Otros',
-  ];
-  
   bool isSaving = false;
 
   Future<void> _selectSource(String source) async {
@@ -38,6 +29,18 @@ class _ReferralSourceScreenState extends ConsumerState<ReferralSourceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    final List<String> sources = [
+      'TikTok',
+      'Instagram',
+      'Telegram',
+      l10n.referralFriend,
+      l10n.referralGroups,
+      'Twitter X',
+      l10n.referralOthers,
+    ];
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -47,9 +50,9 @@ class _ReferralSourceScreenState extends ConsumerState<ReferralSourceScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 40),
-              const Text(
-                '¿Dónde nos has encontrado?',
-                style: TextStyle(
+              Text(
+                l10n.referralTitle,
+                style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
@@ -57,9 +60,9 @@ class _ReferralSourceScreenState extends ConsumerState<ReferralSourceScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
-              const Text(
-                'Nos ayuda muchísimo a mejorar.',
-                style: TextStyle(
+              Text(
+                l10n.referralSubtitle,
+                style: const TextStyle(
                   fontSize: 16,
                   color: AppColors.textSecondary,
                 ),
