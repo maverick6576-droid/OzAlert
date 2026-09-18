@@ -88,8 +88,7 @@ class NotificationService {
     _isInitialized = true;
   }
 
-  /// Botón "Probar Alerta" - Simula una notificación Push en 2 segundos
-  /// para que el usuario compruebe con máxima confianza que el sistema funciona.
+  /// Botón "Probar Alerta" - Simula una notificación Push
   Future<void> sendTestAlert({
     required String countryCode,
     required String title,
@@ -103,12 +102,14 @@ class NotificationService {
 
     final AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-          'ozvisa_radar_channel',
+          'ozvisa_radar_channel_siren', // NUEVO ID para forzar la actualización del canal con sonido
           channelName,
           channelDescription: channelDescription,
           importance: Importance.max,
           priority: Priority.high,
           ticker: ticker,
+          sound: const RawResourceAndroidNotificationSound('siren'),
+          playSound: true,
           styleInformation: BigTextStyleInformation(
             longBody,
           ),
@@ -118,6 +119,7 @@ class NotificationService {
       presentAlert: true,
       presentBadge: true,
       presentSound: true,
+      sound: 'siren.wav',
     );
 
     final NotificationDetails platformDetails = NotificationDetails(
@@ -139,11 +141,13 @@ class NotificationService {
 
   /// Muestra una notificación local desde un Push en primer plano
   Future<void> _showLocalNotification({required String title, required String body}) async {
-    final AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'ozvisa_radar_channel',
-      'Alertas de Apertura',
+    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      'ozvisa_radar_channel_siren', // NUEVO ID
+      'Alertas de Apertura (Sirena)',
       importance: Importance.max,
       priority: Priority.high,
+      sound: RawResourceAndroidNotificationSound('siren'),
+      playSound: true,
       styleInformation: BigTextStyleInformation(body),
     );
 
@@ -151,6 +155,7 @@ class NotificationService {
       presentAlert: true,
       presentBadge: true,
       presentSound: true,
+      sound: 'siren.wav',
     );
 
     final NotificationDetails platformDetails = NotificationDetails(
