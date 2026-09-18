@@ -88,39 +88,6 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 32),
           Text(
-            'Diagnóstico (Test)',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton.icon(
-            icon: const Icon(CupertinoIcons.speaker_3_fill),
-            label: const Text('Probar Sonido Sirena'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-            onPressed: () {
-              NotificationService().sendTestAlert(
-                countryCode: 'ES',
-                title: 'TEST SIRENA',
-                body: 'Esta es una prueba de sonido de la alarma',
-                longBody: 'Probando el canal de alarma v5',
-                channelName: 'Alertas de Apertura (Sirena)',
-                channelDescription: 'Canal de prueba',
-                ticker: 'PRUEBA',
-              );
-            },
-          ),
-          const SizedBox(height: 32),
-          Text(
             l10n.settingsLegal,
             style: const TextStyle(
               fontSize: 18,
