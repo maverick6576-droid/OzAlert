@@ -71,13 +71,15 @@ class NotificationService {
         debugPrint('Suscrito a tópico FCM: all_users');
       }
 
-      // Escuchar notificaciones cuando la app está en PRIMER PLANO (Foreground)
+      // Escuchar notificaciones cuando la app estǭ en PRIMER PLANO (Foreground)
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         debugPrint('FCM Foreground: ${message.messageId}');
         if (message.notification != null) {
+          final isVisaAlert = message.from != null && message.from!.contains('visa_');
           _showLocalNotification(
             title: message.notification!.title ?? 'OzAlert',
             body: message.notification!.body ?? '',
+            useSiren: isVisaAlert,
           );
         }
       });
@@ -102,7 +104,7 @@ class NotificationService {
 
     final AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-          'ozvisa_radar_channel_siren', // NUEVO ID para forzar la actualización del canal con sonido
+          'ozvisa_radar_channel_siren', 
           channelName,
           channelDescription: channelDescription,
           importance: Importance.max,
@@ -110,9 +112,7 @@ class NotificationService {
           ticker: ticker,
           sound: const RawResourceAndroidNotificationSound('siren'),
           playSound: true,
-          styleInformation: BigTextStyleInformation(
-            longBody,
-          ),
+          styleInformation: BigTextStyleInformation(longBody),
         );
 
     const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
@@ -127,7 +127,6 @@ class NotificationService {
       iOS: iosDetails,
     );
 
-    // Esperar 1.5 segundos para simular llegada en tiempo real desde el servidor
     await Future.delayed(const Duration(milliseconds: 1500));
 
     await _localNotifications.show(
@@ -140,22 +139,35 @@ class NotificationService {
   }
 
   /// Muestra una notificación local desde un Push en primer plano
-  Future<void> _showLocalNotification({required String title, required String body}) async {
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'ozvisa_radar_channel_siren', // NUEVO ID
-      'Alertas de Apertura (Sirena)',
-      importance: Importance.max,
-      priority: Priority.high,
-      sound: RawResourceAndroidNotificationSound('siren'),
-      playSound: true,
-      styleInformation: BigTextStyleInformation(body),
-    );
+  Future<void> _showLocalNotification({
+    required String title, 
+    required String body,
+    bool useSiren = false,
+  }) async {
+    final AndroidNotificationDetails androidDetails = useSiren
+        ? const AndroidNotificationDetails(
+            'ozvisa_radar_channel_siren',
+            'Alertas de Apertura (Sirena)',
+            importance: Importance.max,
+            priority: Priority.high,
+            sound: RawResourceAndroidNotificationSound('siren'),
+            playSound: true,
+            styleInformation: BigTextStyleInformation(''),
+          )
+        : const AndroidNotificationDetails(
+            'ozvisa_news_channel',
+            'Noticias y Actualizaciones',
+            importance: Importance.high,
+            priority: Priority.defaultPriority,
+            playSound: true,
+            styleInformation: BigTextStyleInformation(''),
+          );
 
-    const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
+    final DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
       presentAlert: true,
       presentBadge: true,
       presentSound: true,
-      sound: 'siren.wav',
+      sound: useSiren ? 'siren.wav' : null,
     );
 
     final NotificationDetails platformDetails = NotificationDetails(
