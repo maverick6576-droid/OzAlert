@@ -28,14 +28,15 @@ def send_fcm_alert(country_code: str, country_name: str) -> bool:
             android=messaging.AndroidConfig(
                 priority="high",
                 notification=messaging.AndroidNotification(
-                    channel_id="ozvisa_radar_channel",
+                    channel_id="ozvisa_radar_channel_siren",
                     icon="ic_launcher",
                     color="#00F59B",
+                    sound="siren",
                 ),
             ),
             apns=messaging.APNSConfig(
                 payload=messaging.APNSPayload(
-                    aps=messaging.Aps(sound="default", badge=1)
+                    aps=messaging.Aps(sound="siren.wav", badge=1)
                 )
             ),
         )
