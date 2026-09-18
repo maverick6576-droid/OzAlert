@@ -28,7 +28,7 @@ def send_fcm_alert(country_code: str, country_name: str) -> bool:
             android=messaging.AndroidConfig(
                 priority="high",
                 notification=messaging.AndroidNotification(
-                    channel_id="ozvisa_radar_channel_siren_v3",
+                    channel_id="ozvisa_radar_channel_siren_v4",
                     icon="ic_launcher",
                     color="#00F59B",
                     sound="siren",

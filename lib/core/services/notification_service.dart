@@ -54,7 +54,7 @@ class NotificationService {
         final androidPlugin = _localNotifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
         if (androidPlugin != null) {
           const channel = AndroidNotificationChannel(
-            'ozvisa_radar_channel_siren_v3', // NUEVO ID v3
+            'ozvisa_radar_channel_siren_v4', // NUEVO ID v4
             'Alertas de Apertura (Sirena)',
             description: 'Canal de emergencia para apertura de visas',
             importance: Importance.max,
@@ -62,7 +62,7 @@ class NotificationService {
             sound: RawResourceAndroidNotificationSound('siren'),
           );
           await androidPlugin.createNotificationChannel(channel);
-          debugPrint('Canal de sirena v3 pre-creado en Android');
+          debugPrint('Canal de sirena v4 pre-creado en Android');
         }
       }
       
@@ -88,7 +88,7 @@ class NotificationService {
         debugPrint('Suscrito a tópico FCM: all_users');
       }
 
-      // Escuchar notificaciones cuando la app estǭ en PRIMER PLANO (Foreground)
+      // Escuchar notificaciones cuando la app está en PRIMER PLANO (Foreground)
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         debugPrint('FCM Foreground: ${message.messageId}');
         if (message.notification != null) {
@@ -121,7 +121,7 @@ class NotificationService {
 
     final AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-          'ozvisa_radar_channel_siren_v3', 
+          'ozvisa_radar_channel_siren_v4', 
           channelName,
           channelDescription: channelDescription,
           importance: Importance.max,
@@ -163,7 +163,7 @@ class NotificationService {
   }) async {
     final AndroidNotificationDetails androidDetails = useSiren
         ? const AndroidNotificationDetails(
-            'ozvisa_radar_channel_siren_v3',
+            'ozvisa_radar_channel_siren_v4',
             'Alertas de Apertura (Sirena)',
             importance: Importance.max,
             priority: Priority.high,
