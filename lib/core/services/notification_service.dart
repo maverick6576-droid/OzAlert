@@ -54,7 +54,7 @@ class NotificationService {
         final androidPlugin = _localNotifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
         if (androidPlugin != null) {
           const channel = AndroidNotificationChannel(
-            'ozvisa_radar_channel_siren_v2', // NUEVO ID v2
+            'ozvisa_radar_channel_siren_v3', // NUEVO ID v3
             'Alertas de Apertura (Sirena)',
             description: 'Canal de emergencia para apertura de visas',
             importance: Importance.max,
@@ -62,7 +62,7 @@ class NotificationService {
             sound: RawResourceAndroidNotificationSound('siren'),
           );
           await androidPlugin.createNotificationChannel(channel);
-          debugPrint('Canal de sirena v2 pre-creado en Android');
+          debugPrint('Canal de sirena v3 pre-creado en Android');
         }
       }
       
@@ -121,7 +121,7 @@ class NotificationService {
 
     final AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-          'ozvisa_radar_channel_siren_v2', 
+          'ozvisa_radar_channel_siren_v3', 
           channelName,
           channelDescription: channelDescription,
           importance: Importance.max,
@@ -163,7 +163,7 @@ class NotificationService {
   }) async {
     final AndroidNotificationDetails androidDetails = useSiren
         ? const AndroidNotificationDetails(
-            'ozvisa_radar_channel_siren_v2',
+            'ozvisa_radar_channel_siren_v3',
             'Alertas de Apertura (Sirena)',
             importance: Importance.max,
             priority: Priority.high,
