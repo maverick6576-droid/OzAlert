@@ -54,15 +54,16 @@ class NotificationService {
         final androidPlugin = _localNotifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
         if (androidPlugin != null) {
           const channel = AndroidNotificationChannel(
-            'ozvisa_radar_channel_siren_v4', // NUEVO ID v4
+            'ozvisa_radar_channel_siren_v5',
             'Alertas de Apertura (Sirena)',
             description: 'Canal de emergencia para apertura de visas',
             importance: Importance.max,
             playSound: true,
             sound: RawResourceAndroidNotificationSound('siren'),
+            audioAttributesUsage: AudioAttributesUsage.alarm,
           );
           await androidPlugin.createNotificationChannel(channel);
-          debugPrint('Canal de sirena v4 pre-creado en Android');
+          debugPrint('Canal de sirena v5 pre-creado en Android');
         }
       }
       
@@ -121,7 +122,7 @@ class NotificationService {
 
     final AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-          'ozvisa_radar_channel_siren_v4', 
+          'ozvisa_radar_channel_siren_v5', 
           channelName,
           channelDescription: channelDescription,
           importance: Importance.max,
@@ -129,6 +130,7 @@ class NotificationService {
           ticker: ticker,
           sound: const RawResourceAndroidNotificationSound('siren'),
           playSound: true,
+          audioAttributesUsage: AudioAttributesUsage.alarm,
           styleInformation: BigTextStyleInformation(longBody),
         );
 
@@ -163,12 +165,13 @@ class NotificationService {
   }) async {
     final AndroidNotificationDetails androidDetails = useSiren
         ? const AndroidNotificationDetails(
-            'ozvisa_radar_channel_siren_v4',
+            'ozvisa_radar_channel_siren_v5',
             'Alertas de Apertura (Sirena)',
             importance: Importance.max,
             priority: Priority.high,
             sound: RawResourceAndroidNotificationSound('siren'),
             playSound: true,
+            audioAttributesUsage: AudioAttributesUsage.alarm,
             styleInformation: BigTextStyleInformation(''),
           )
         : const AndroidNotificationDetails(
