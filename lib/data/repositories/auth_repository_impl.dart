@@ -37,6 +37,22 @@ class AuthRepositoryImpl implements AuthRepository {
     return await _firebaseAuth.signInWithCredential(credential);
   }
 
+  Future<UserCredential?> signInWithGoogleSilently() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signInSilently();
+      if (googleUser == null) return null;
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      return await _firebaseAuth.signInWithCredential(credential);
+    } catch (e) {
+      return null;
+    }
+  }
+
   @override
   Future<UserCredential> signInWithApple() async {
     final appleIdCredential = await SignInWithApple.getAppleIDCredential(

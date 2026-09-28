@@ -7,11 +7,28 @@ import '../../providers/auth_provider.dart';
 import 'dart:io' show Platform;
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
-class LoginScreen extends ConsumerWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Intento de silent login automático solo en Android 
+    // para recuperar sesiones de Firebase perdidas
+    if (Platform.isAndroid) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(authControllerProvider.notifier).signInWithGoogleSilently();
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // Escuchar errores para mostrarlos en un SnackBar
     ref.listen<AsyncValue<void>>(
       authControllerProvider,

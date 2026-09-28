@@ -9,6 +9,9 @@ abstract class AuthRepository {
 
   /// Iniciar sesión con Google.
   Future<UserCredential> signInWithGoogle();
+  
+  /// Iniciar sesión silencioso con Google (recuperar sesión)
+  Future<UserCredential?> signInWithGoogleSilently();
 
   /// Iniciar sesión con Apple.
   Future<UserCredential> signInWithApple();
