@@ -56,6 +56,14 @@ def check_visa_status(request=None):
                 results[country_code] = {"status": "OPEN (Override)", "changed": False, "writes": 0}
                 continue
 
+            # 2.6 PROTECCION ANTI-BUCLE (FALSO OPEN):
+            # ImmiAccount comprobo que ya no hay plazas (CLOSED), pero la web publica va con retraso y sigue diciendo OPEN.
+            source_to_save = "Public Web"
+            if previous_status in ["CLOSED", "PAUSED"] and source == "ImmiAccount Deep Scraper" and current_status == "OPEN":
+                logger.info(f"  [PROTECCION ANTI-BUCLE]: ImmiAccount ya cerro las plazas, pero la web publica miente diciendo OPEN. Forzando a PAUSED.")
+                current_status = "PAUSED"
+                source_to_save = "ImmiAccount Deep Scraper"  # Mantenemos autoria para que el candado siga activo
+
             # 3. Optimización de cuota gratuita $0: SI NO HAY CAMBIOS Y EL DOCUMENTO YA EXISTE -> 0 ESCRITURAS
             if current_status == previous_status and doc is not None and doc.exists:
                 logger.info(f"  └─ Sin cambios en {country_code}. Terminando (0 operaciones de escritura).")
@@ -71,7 +79,7 @@ def check_visa_status(request=None):
                     "countryCode": country_code,
                     "countryName": country_name,
                     "subclass": info["subclass"],
-                    "source": "Public Web"
+                    "source": source_to_save
                 }, merge=True)
                 logger.info(f"  └─ 📝 Firestore actualizado /visas/{country_code} -> {current_status}")
 
