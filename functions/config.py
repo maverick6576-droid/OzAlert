@@ -17,7 +17,7 @@ COUNTRIES_CONFIG = {
     "BR": {"name": "Brasil", "en_name": "brazil", "subclass": "462", "url": DHA_STATUS_URL_462},
     "CL": {"name": "Chile", "en_name": "chile", "subclass": "462", "url": DHA_STATUS_URL_462},
     "CN": {"name": "China", "en_name": "china", "subclass": "462", "url": DHA_STATUS_URL_462},
-    "CZ": {"name": "República Checa", "en_name": "czech republic", "subclass": "462", "url": DHA_STATUS_URL_462},
+    "CZ": {"name": "República Checa", "en_name": "czechia", "subclass": "462", "url": DHA_STATUS_URL_462},
     "EC": {"name": "Ecuador", "en_name": "ecuador", "subclass": "462", "url": DHA_STATUS_URL_462},
     "ES": {"name": "España", "en_name": "spain", "subclass": "462", "url": DHA_STATUS_URL_462},
     "GR": {"name": "Grecia", "en_name": "greece", "subclass": "462", "url": DHA_STATUS_URL_462},
