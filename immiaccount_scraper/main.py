@@ -179,16 +179,54 @@ def trigger_alerts():
             "source": "ImmiAccount Deep Scraper"
         }, merge=True)
 
-        # 2. Enviar mensaje FCM a topic 'ES'
+        # 2. Enviar mensaje FCM al topic CORRECTO ('visa_ES')
         message = messaging.Message(
             notification=messaging.Notification(
                 title="🚨 ¡PLAZAS ABIERTAS PARA ESPAÑA! 🚨",
                 body="ImmiAccount acaba de abrir los cupos. ¡Corre a aplicar ahora mismo!"
             ),
-            topic="ES"
+            topic="visa_ES",
+            android=messaging.AndroidConfig(
+                priority="high",
+                notification=messaging.AndroidNotification(
+                    channel_id="ozvisa_radar_channel_siren_v6",
+                    icon="ic_launcher",
+                    color="#00F59B",
+                    sound="siren.wav",
+                ),
+            ),
+            apns=messaging.APNSConfig(
+                payload=messaging.APNSPayload(
+                    aps=messaging.Aps(sound="siren.wav", badge=1)
+                )
+            ),
         )
         response = messaging.send(message)
         logger.info(f"FCM enviado con éxito (Deep Scraper): {response}")
+
+        # 3. Enviar Emails masivos
+        try:
+            import os
+            resend_api_key = os.getenv("RESEND_API_KEY")
+            if resend_api_key:
+                import resend
+                resend.api_key = resend_api_key
+                
+                users_query = db.collection("users").where("passports", "array_contains", "Spain").stream()
+                emails = [u.to_dict().get("email") for u in users_query if u.to_dict().get("email")]
+                
+                html_body = "<div style=\"font-family: Arial; padding: 30px; background-color: #0A0F1D; color: #fff;\"><h1 style=\"color: #00F59B;\">¡Apertura Confirmada para Spain!</h1><p>El sistema de rastreo ImmiAccount de <b>OzVisa Alert</b> acaba de confirmar plazas disponibles.</p><a href=\"https://immi.homeaffairs.gov.au\" style=\"display: inline-block; background-color: #00F59B; color: #000; padding: 14px 28px; border-radius: 8px; font-weight: bold; text-decoration: none;\">Ir a ImmiAccount Ahora</a></div>"
+                
+                for email in emails:
+                    resend.Emails.send({
+                        "from": "OzVisa Radar <alertas@ozvisa-alert.app>",
+                        "to": email,
+                        "subject": "🚨 ¡ALERTA OZVISA: Plazas abiertas para Spain!",
+                        "html": html_body,
+                    })
+                logger.info(f"Emails enviados a {len(emails)} usuarios.")
+        except Exception as e:
+            logger.error(f"Error enviando emails: {e}")
 
     except Exception as e:
         logger.error(f"Error al enviar alertas desde ImmiAccount Scraper: {e}")
