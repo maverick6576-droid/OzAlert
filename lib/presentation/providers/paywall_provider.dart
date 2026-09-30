@@ -11,9 +11,22 @@ class PaywallNotifier extends StateNotifier<bool> {
   }
 
   Future<void> checkSubscriptionStatus() async {
+    final user = ref.read(authStateProvider).value;
+    
+    // 1. VIP Override: Si es el administrador, dejarle pasar siempre gratis.
+    if (user != null && user.email == 'maverick6576+Ozspain@gmail.com') {
+      await _updateFirebasePremiumStatus(true);
+      state = true;
+      return;
+    }
+
+    // 2. Flujo normal para el resto del mundo
     final repo = ref.read(paywallRepositoryProvider);
     final active = await repo.isUserSubscribed();
-    if (active) await _updateFirebasePremiumStatus(true);
+    
+    // 3. ACTUALIZAR FIREBASE EN AMBOS CASOS (Activo o Cancelado)
+    await _updateFirebasePremiumStatus(active);
+    
     state = active;
   }
 
