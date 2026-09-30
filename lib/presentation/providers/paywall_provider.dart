@@ -14,7 +14,8 @@ class PaywallNotifier extends StateNotifier<bool> {
     final user = ref.read(authStateProvider).value;
     
     // 1. VIP Override: Si es el administrador, dejarle pasar siempre gratis.
-    if (user != null && user.email == 'maverick6576+Ozspain@gmail.com') {
+    final vipEmails = ['maverick6576@gmail.com', 'juditmaynou2000@gmail.com'];
+    if (user != null && user.email != null && vipEmails.contains(user.email)) {
       await _updateFirebasePremiumStatus(true);
       state = true;
       return;
