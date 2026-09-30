@@ -6,34 +6,29 @@ from google.cloud import firestore
 from config import COUNTRIES_CONFIG
 from scraper import scrape_country_status
 from notifier import send_fcm_alert, send_email_alert
+from datetime import datetime, timezone
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("ozvisa-main")
 
-# Cliente Firestore con variable de entorno opcional
 db = None
 try:
     db = firestore.Client()
 except Exception as e:
-    logger.warning(f"No se pudo inicializar Firestore en entorno local o de pruebas sin GOOGLE_APPLICATION_CREDENTIALS: {e}")
-
+    logger.warning(f"Error init db: {e}")
 
 @functions_framework.http
 def check_visa_status(request=None):
-    """
-    Función de Google Cloud Function invocada por Cloud Scheduler cada 2 minutos.
-    Retorna un JSON con el resultado de la comprobación para cada país del programa Work & Holiday.
-    """
-    logger.info("🚀 Iniciando rastreo de plazas del Departamento de Home Affairs de Australia...")
+    logger.info("Iniciando rastreo de plazas del Departamento de Home Affairs de Australia...")
     results = {}
     total_writes = 0
 
     for country_code, info in COUNTRIES_CONFIG.items():
         country_name = info["name"]
         try:
-            # 1. Obtener estado anterior de Firestore
             previous_status = "CLOSED"
             source = "Public Web"
+            updated_at = None
             doc_ref = None
             if db:
                 doc_ref = db.collection("visas").document(country_code)
@@ -42,35 +37,48 @@ def check_visa_status(request=None):
                     data = doc.to_dict()
                     previous_status = data.get("status", "CLOSED")
                     source = data.get("source", "Public Web")
+                    updated_at = data.get("updatedAt")
 
-            # 2. Hacer scraping ligero al sitio oficial
             current_status = scrape_country_status(country_code)
             logger.info(f"[{country_code} - {country_name}] Estado anterior: {previous_status} (Fuente: {source}) | Estado actual web: {current_status}")
 
-            # 2.5 ARBITRAJE DE SISTEMAS HÍBRIDOS:
-            # Si ImmiAccount detectó OPEN, la web pública siempre va tarde.
-            # No permitimos que la web pública lo vuelva a poner en CLOSED. 
-            # El único que puede ponerlo en CLOSED de nuevo es ImmiAccount.
+            # 2.5 ARBITRAJE DE SISTEMAS HIBRIDOS:
             if previous_status == "OPEN" and source == "ImmiAccount Deep Scraper" and current_status in ["CLOSED", "PAUSED"]:
-                logger.info(f"  └─ 🛡️ ImmiAccount detectó OPEN. Ignorando el {current_status} de la web estática retrasada.")
+                logger.info(f"  [Ignorado] ImmiAccount detect� OPEN. Ignorando el {current_status} de la web est�tica retrasada.")
                 results[country_code] = {"status": "OPEN (Override)", "changed": False, "writes": 0}
                 continue
 
-            # 2.6 PROTECCION ANTI-BUCLE (FALSO OPEN):
-            # ImmiAccount comprobo que ya no hay plazas (CLOSED), pero la web publica va con retraso y sigue diciendo OPEN.
+            # 2.6 PROTECCION ANTI-BUCLE Y EXPIRACION DE CANDADO:
             source_to_save = "Public Web"
+            
+            lock_age_hours = 0
+            if source == "ImmiAccount Deep Scraper" and updated_at:
+                try:
+                    lock_age_hours = (datetime.now(timezone.utc) - updated_at).total_seconds() / 3600
+                except Exception as e:
+                    pass
+
             if previous_status in ["CLOSED", "PAUSED"] and source == "ImmiAccount Deep Scraper" and current_status == "OPEN":
-                logger.info(f"  [PROTECCION ANTI-BUCLE]: ImmiAccount ya cerro las plazas, pero la web publica miente diciendo OPEN. Forzando a PAUSED.")
-                current_status = "PAUSED"
-                source_to_save = "ImmiAccount Deep Scraper"  # Mantenemos autoria para que el candado siga activo
-
-            # 3. Optimización de cuota gratuita $0: SI NO HAY CAMBIOS Y EL DOCUMENTO YA EXISTE -> 0 ESCRITURAS
+                if lock_age_hours < 8:
+                    logger.info(f"  [PROTECCION ANTI-BUCLE]: ImmiAccount cerro hace poco. La web publica miente. Forzando a PAUSED.")
+                    current_status = "PAUSED"
+                    source_to_save = "ImmiAccount Deep Scraper"
+                else:
+                    logger.info(f"  [APERTURA REAL]: Han pasado varias horas desde el cierre de ImmiAccount. La web publica anuncia nueva apertura.")
+                    source_to_save = "Public Web"
+                    
+            # 3. Optimizacion de cuota gratuita
             if current_status == previous_status and doc is not None and doc.exists:
-                logger.info(f"  └─ Sin cambios en {country_code}. Terminando (0 operaciones de escritura).")
-                results[country_code] = {"status": current_status, "changed": False, "writes": 0}
-                continue
+                if source == "ImmiAccount Deep Scraper" and current_status in ["CLOSED", "PAUSED"]:
+                    logger.info(f"  [DESBLOQUEO]: La web publica por fin marca {current_status}. Soltando candado de ImmiAccount.")
+                    source_to_save = "Public Web"
+                    # No hacemos continue, forzamos la escritura para actualizar el source
+                else:
+                    logger.info(f"  Sin cambios en {country_code}. Terminando (0 operaciones de escritura).")
+                    results[country_code] = {"status": current_status, "changed": False, "writes": 0}
+                    continue
 
-            # 4. Si cambió el estado: actualizar documento en Firestore
+            # 4. Actualizar Firestore
             total_writes += 1
             if db and doc_ref:
                 doc_ref.set({
@@ -81,14 +89,13 @@ def check_visa_status(request=None):
                     "subclass": info["subclass"],
                     "source": source_to_save
                 }, merge=True)
-                logger.info(f"  └─ 📝 Firestore actualizado /visas/{country_code} -> {current_status}")
+                logger.info(f"  Firestore actualizado /visas/{country_code} -> {current_status} (Fuente: {source_to_save})")
 
-            # 5. Si cambió a OPEN desde cualquier otro estado (CLOSED o PAUSED): DISPARAR ALERTA INMEDIATA PUSH & EMAIL
+            # 5. DISPARAR ALERTA INMEDIATA PUSH & EMAIL
             if previous_status != "OPEN" and current_status == "OPEN":
-                logger.info(f"  └─ 🔔 ¡APERTURA EN {country_name}! Disparando alertas Push (FCM) y Email...")
+                logger.info(f"  APERTURA EN {country_name}! Disparando alertas Push (FCM) y Email...")
                 send_fcm_alert(country_code, country_name)
 
-                # Buscar emails de usuarios suscritos en Firestore
                 recipients = []
                 if db:
                     users_query = db.collection("users").where("passports", "array_contains", country_name).stream()
@@ -111,18 +118,8 @@ def check_visa_status(request=None):
         "total_firestore_writes": total_writes,
         "results": results,
     }
-    logger.info(f"🎉 Ciclo de rastreo finalizado: {total_writes} escrituras totales.")
+    logger.info(f"Ciclo finalizado: {total_writes} escrituras totales.")
     return summary, 200, {"Content-Type": "application/json"}
 
-
-# Ejecución de prueba desde terminal o CLI en desarrollo local
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Ejecutar OzVisa Alert Scraper en local")
-    parser.add_argument("--test-country", type=str, default="ES", help="Código de país a comprobar en modo dry-run")
-    parser.add_argument("--simulate-open", action="store_true", help="Simular respuesta OPEN de la web de Australia")
-    args = parser.parse_args()
-
-    print("--- MODO DRY-RUN LOCAL (OzVisa Alert Cloud Function) ---")
-    res, status_code, _ = check_visa_status()
-    print("Resumen de comprobación JSON:")
-    print(res)
+    check_visa_status()
