@@ -64,7 +64,7 @@ class _StatisticsCardState extends State<StatisticsCard> {
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
-                        overflow: TextOverflow.ellipsis,
+                        
                       ),
                     ),
                   ],
