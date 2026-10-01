@@ -10,6 +10,8 @@ import '../../../../core/constants/app_constants.dart';
 import '../../widgets/dashboard/live_radar_banner.dart';
 import '../../widgets/dashboard/visa_status_card.dart';
 import '../../widgets/dashboard/paywall_modal.dart';
+import '../../widgets/dashboard/statistics_card.dart';
+
 import '../settings/settings_screen.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
@@ -128,6 +130,8 @@ class DashboardScreen extends ConsumerWidget {
                   )),
 
                 const SizedBox(height: 10),
+                const StatisticsCard(),
+                const SizedBox(height: 32),
 
                 // 4. Panel de información de seguridad
                 Container(
