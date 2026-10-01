@@ -4,9 +4,17 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/migration_data.dart';
 import '../../../../core/theme/app_colors.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:intl/intl.dart';
 
-class StatisticsCard extends StatelessWidget {
+class StatisticsCard extends StatefulWidget {
   const StatisticsCard({super.key});
+
+  @override
+  State<StatisticsCard> createState() => _StatisticsCardState();
+}
+
+class _StatisticsCardState extends State<StatisticsCard> {
+  String selectedYear = '2024-2025';
 
   Future<void> _launchOfficialUrl() async {
     final Uri url = Uri.parse(MigrationData.sourceUrl);
@@ -17,6 +25,11 @@ class StatisticsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentData = MigrationData.lodgementsByYear[selectedYear] ?? [];
+    
+    // Format numbers like 65,434
+    final numberFormat = NumberFormat('#,##0', 'en_US');
+
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -96,20 +109,71 @@ class StatisticsCard extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           
-          // Titulo de Grafico
-          const Text(
-            'Volumen de Solicitudes (Ultimos 4 Trimestres)',
-            style: TextStyle(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w600,
-              fontSize: 13,
-            ),
+          // Titulo de Grafico y Leyenda Interactiva
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Volumen de Solicitudes',
+                style: TextStyle(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
+              Row(
+                children: MigrationData.lodgementsByYear.keys.map((year) {
+                  final isSelected = selectedYear == year;
+                  final color = year == '2023-2024' ? Colors.orange.shade300 : AppColors.primary;
+                  
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedYear = year;
+                      });
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: isSelected ? color.withOpacity(0.15) : Colors.transparent,
+                        border: Border.all(
+                          color: isSelected ? color : AppColors.cardBorder,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: color,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            year,
+                            style: TextStyle(
+                              color: isSelected ? color : AppColors.textSecondary,
+                              fontSize: 11,
+                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           
           // Chart
           SizedBox(
-            height: 120,
+            height: 140,
             child: BarChart(
               BarChartData(
                 alignment: BarChartAlignment.spaceAround,
@@ -117,11 +181,18 @@ class StatisticsCard extends StatelessWidget {
                 barTouchData: BarTouchData(
                   enabled: true,
                   touchTooltipData: BarTouchTooltipData(
-                    getTooltipColor: (group) => AppColors.primary,
+                    getTooltipColor: (group) => AppColors.textPrimary.withOpacity(0.9),
+                    tooltipPadding: const EdgeInsets.all(8),
+                    tooltipMargin: 8,
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                      final val = rod.toY.toInt();
                       return BarTooltipItem(
-                        '',
-                        const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                        numberFormat.format(val),
+                        const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
                       );
                     },
                   ),
@@ -132,12 +203,16 @@ class StatisticsCard extends StatelessWidget {
                     sideTitles: SideTitles(
                       showTitles: true,
                       getTitlesWidget: (value, meta) {
-                        if (value.toInt() >= 0 && value.toInt() < MigrationData.quarterlyLodgements.length) {
+                        if (value.toInt() >= 0 && value.toInt() < currentData.length) {
                           return Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
+                            padding: const EdgeInsets.only(top: 10.0),
                             child: Text(
-                              MigrationData.quarterlyLodgements[value.toInt()]['quarter'],
-                              style: const TextStyle(color: AppColors.textSecondary, fontSize: 11, fontWeight: FontWeight.bold),
+                              selectedYear.substring(2, 4) + "/" + selectedYear.substring(7, 9) + " " + currentData[value.toInt()]["quarter"],
+                              style: const TextStyle(
+                                color: AppColors.textSecondary, 
+                                fontSize: 10, 
+                                fontWeight: FontWeight.bold
+                              ),
                             ),
                           );
                         }
@@ -151,14 +226,15 @@ class StatisticsCard extends StatelessWidget {
                 ),
                 gridData: const FlGridData(show: false),
                 borderData: FlBorderData(show: false),
-                barGroups: MigrationData.quarterlyLodgements.asMap().entries.map((entry) {
+                barGroups: currentData.asMap().entries.map((entry) {
+                  final barColor = selectedYear == '2023-2024' ? Colors.orange.shade400 : AppColors.primary.withOpacity(0.7);
                   return BarChartGroupData(
                     x: entry.key,
                     barRods: [
                       BarChartRodData(
                         toY: entry.value['lodged'].toDouble(),
-                        color: AppColors.primary.withOpacity(0.7),
-                        width: 20,
+                        color: barColor,
+                        width: 24,
                         borderRadius: BorderRadius.circular(4),
                         backDrawRodData: BackgroundBarChartRodData(
                           show: true,
