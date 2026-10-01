@@ -5,6 +5,7 @@ import '../../../../core/constants/migration_data.dart';
 import '../../../../core/theme/app_colors.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class StatisticsCard extends StatefulWidget {
   const StatisticsCard({super.key});
@@ -26,9 +27,8 @@ class _StatisticsCardState extends State<StatisticsCard> {
   @override
   Widget build(BuildContext context) {
     final currentData = MigrationData.lodgementsByYear[selectedYear] ?? [];
-    
-    // Format numbers like 65,434
     final numberFormat = NumberFormat('#,##0', 'en_US');
+    final loc = AppLocalizations.of(context)!;
 
     return Container(
       padding: const EdgeInsets.all(18),
@@ -51,80 +51,55 @@ class _StatisticsCardState extends State<StatisticsCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Row(
-                children: [
-                  Icon(Icons.analytics_rounded, color: AppColors.primary, size: 20),
-                  SizedBox(width: 8),
-                  Text(
-                    'Datos Oficiales (Work & Holiday)',
-                    style: TextStyle(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
+              Expanded(
+                child: Row(
+                  children: [
+                    const Icon(Icons.analytics_rounded, color: AppColors.primary, size: 20),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        loc.statsOfficialData,
+                        style: const TextStyle(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               IconButton(
                 icon: const Icon(Icons.info_outline_rounded, color: AppColors.textSecondary, size: 20),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
                 onPressed: _launchOfficialUrl,
-                tooltip: 'Ver fuente oficial',
+                tooltip: loc.statsSourceTooltip,
               ),
             ],
-          ),
-          const SizedBox(height: 16),
-          
-          // KPI
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.speed_rounded, color: AppColors.primary, size: 28),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Tiempo de procesamiento',
-                      style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
-                    ),
-                    Text(
-                      MigrationData.currentProcessingTime,
-                      style: const TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
           ),
           const SizedBox(height: 24),
           
           // Titulo de Grafico y Leyenda Interactiva
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Volumen de Solicitudes',
-                style: TextStyle(
+              Text(
+                loc.statsVolume,
+                style: const TextStyle(
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.w600,
                   fontSize: 13,
                 ),
               ),
-              Row(
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
                 children: MigrationData.lodgementsByYear.keys.map((year) {
                   final isSelected = selectedYear == year;
-                  final color = year == '2023-2024' ? Colors.orange.shade300 : AppColors.primary;
+                  final color = year == '2023-2024' ? Colors.orange.shade400 : AppColors.primary;
                   
                   return GestureDetector(
                     onTap: () {
@@ -133,8 +108,7 @@ class _StatisticsCardState extends State<StatisticsCard> {
                       });
                     },
                     child: Container(
-                      margin: const EdgeInsets.only(left: 8),
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
                         color: isSelected ? color.withOpacity(0.15) : Colors.transparent,
                         border: Border.all(
@@ -143,6 +117,7 @@ class _StatisticsCardState extends State<StatisticsCard> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Container(
                             width: 8,
@@ -169,7 +144,7 @@ class _StatisticsCardState extends State<StatisticsCard> {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 28),
           
           // Chart
           SizedBox(
@@ -207,7 +182,7 @@ class _StatisticsCardState extends State<StatisticsCard> {
                           return Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: Text(
-                              selectedYear.substring(2, 4) + "/" + selectedYear.substring(7, 9) + " " + currentData[value.toInt()]["quarter"],
+                              selectedYear.substring(2, 4) + "/" + selectedYear.substring(7, 9) + " " + currentData[value.toInt()]['quarter'],
                               style: const TextStyle(
                                 color: AppColors.textSecondary, 
                                 fontSize: 10, 

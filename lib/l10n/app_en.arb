@@ -1,200 +1,203 @@
 {
-    "@@locale": "en",
-    "loginTitle": "OzAlert",
-    "loginSubtitle": "The ultimate radar for your Australian Work & Holiday Visa.",
-    "loginError": "Error signing in:",
-    "loginGoogle": "Continue with Google",
-    "loginApple": "Continue with Apple",
-    "welcomeTitle": "Australian visas\nfly away\nin minutes.",
-    "welcomeSubtitle": "Every year, thousands miss out because they don't find out in time when spots open. Our system tracks official sources 24/7 and alerts you instantly so you can be the first to apply.",
-    "welcomeBullet1": "Real instant notifications",
-    "welcomeBullet2": "Gain an advantage over other applicants",
-    "welcomeBullet3": "Official government sources (Immigration)",
-    "welcomeButton": "Set up my Radar now",
-    "onboardingTitle": "Customize your Radar",
-    "onboardingSubtitle": "Set up your profile to receive notifications for visas that match your passport.",
-    "onboardingLanguage": "Preferred Language",
-    "onboardingPassports": "Select your Passports",
-    "onboardingErrorEmpty": "Please select at least one passport",
-    "onboardingErrorSave": "Error saving:",
-    "onboardingNext": "Next step",
-    "paywallTitle": "Turn on the Radar",
-    "paywallSubtitle": "Receive immediate notifications as soon as your visa becomes available. Subscribe to access.",
-    "paywallSubscribeMonthly": "Subscribe {price} / month",
-    "@paywallSubscribeMonthly": {
-        "placeholders": {
-            "price": {
-                "type": "String"
-            }
-        }
-    },
-    "paywallSubscribeOnly": "Subscribe",
-    "paywallRestore": "Restore Purchases",
-    "dashboardTitle": "OzVisa Radar",
-    "dashboardSettings": "Settings",
-    "settingsTitle": "Settings",
-    "settingsLanguage": "App Language",
-    "settingsLanguageEnglish": "English",
-    "settingsLanguageSpanish": "Spanish",
-    "settingsLogout": "Log out",
-    "settingsDeleteAccount": "Delete Account",
-    "settingsDeleteAccountConfirmTitle": "Are you sure?",
-    "settingsDeleteAccountConfirmMessage": "This action is irreversible and will delete all your data. Do you want to continue?",
-    "settingsDeleteAccountConfirmButton": "Delete",
-    "settingsDeleteAccountCancelButton": "Cancel",
-    "visaStatusOpen": "OPEN",
-    "visaStatusClosed": "CLOSED",
-    "visaStatusPaused": "PAUSED",
-    "visaSourceButton": "View official source",
-    "settingsLegal": "Legal",
-    "settingsPrivacyPolicy": "Privacy Policy",
-    "settingsTerms": "Terms and Conditions",
-    "checklistTitle": "Expedition Kit",
-    "checklistProgress": "Equipment Progress",
-    "checklistDescription": "Prepare your backpack (certificates and savings) in advance so you are not left behind when the adventure begins.",
-    "checklistKeyDocs": "Key Documents:",
-    "checklistInstructions": "Secure each item in your inventory as you get it:",
-    "checklistTip": "Explorer Tip: Quotas tend to disappear like mirages in the desert. Having your PDFs organized is vital to survive the process.",
-    "dashboardSafeExpedition": "Safe Expedition",
-    "dashboardSafeExpeditionDesc": "The horizon is clear. We will notify you with a flare (notification) as soon as the Department enables places for your passports.",
-    "newsTitle": "News Radar",
-    "newsTabOfficial": "Official Sources",
-    "newsTabAlerts": "Google Alerts",
-    "newsEmptyState": "Official radar silent. No news.",
-    "newsGlobalAlerts": "Global alerts monitored.",
-    "newsError": "Radar interference.\nCould not load news.\n{errorText}",
-    "@newsError": {
-        "placeholders": {
-            "errorText": {
-                "type": "String"
-            }
-        }
-    },
-    "radarScanning": "Servers tracking the official Australian Immigration website",
-    "passportSelectorTitle": "Select your Passport (WHV 417 & 462)",
-    "passportSubclass": "Subclass {subclass} \u2022 Australia WHV",
-    "@passportSubclass": {
-        "placeholders": {
-            "subclass": {
-                "type": "String"
-            }
-        }
-    },
-    "paywallModalTitle": "Unlock the 24/7 Visa Radar",
-    "paywallModalDesc": "Receive an immediate Push Alert and Email the exact second the Department of Home Affairs opens spots for your country.",
-    "paywallPlanAnnualTitle": "Season Pass (Annual)",
-    "paywallPlanAnnualDesc": "Best value \u2022 Save 37%",
-    "paywallPlanMonthlyTitle": "Flex Monthly Plan",
-    "paywallPlanMonthlyDesc": "Cancel anytime with 1 click",
-    "paywallActivateAnnual": "Activate Season Pass ($14.99)",
-    "paywallActivateMonthly": "Continue with Monthly Plan",
-    "paywallDisclaimer": "Payment will be charged to your Apple or Google account at confirmation of purchase. Subscription automatically renews unless canceled at least 24 hours before the end of the current period. You can manage and cancel your subscription in your account settings after purchase.",
-    "paywallTermsOfUse": "Terms of Use",
-    "paywallPrivacyPolicy": "Privacy Policy",
-    "visaStatusOpenDesc": "Visas available. Start the expedition!",
-    "visaStatusPausedDesc": "On hold. Processing temporarily paused.",
-    "visaStatusClosedDesc": "Camp closed. 0 places currently.",
-    "errorOpeningLink": "Could not open the link.",
-    "tooltipScanRadar": "Scan live radar",
-    "newsSourceOfficial": "OFFICIAL SOURCE",
-    "newsSourceMarket": "MARKET / CURRENCY",
-    "partnerAffiliate": "AFFILIATE PARTNER \u2022 15% OFF",
-    "partnerDescription": "Essential to activate your visa when passing customs in Sydney or Melbourne. Full COVID, sports and work coverage.",
-    "partnerActivate": "Activate Insurance Promo (15% Off)",
-    "testAlertSending": "\u26a1 Sending test alert for {countryNames}... Will arrive in 2 seconds.",
-    "@testAlertSending": {
-        "placeholders": {
-            "countryNames": {
-                "type": "String"
-            }
-        }
-    },
-    "checklistCompletedDescription": "All set! Backpack 100% prepared.",
-    "partnerTitle": "Need health insurance for Australia? Get 15% off with Chapka / IATI Seguros",
-    "paywallSuccessMessage": "\u2705 VIP Access Activated! 24/7 immediate alerts enabled or purchases successfully restored.",
-    "navRadar": "Radar",
-    "navEquipment": "Equipment",
-    "navNews": "Logbook",
-    "checklistIdentityDocumentsTitle": "Identity documents",
-    "checklistIdentityDocumentsDesc": "Pages of your passport (photo, data, dates). Birth certificate with parents' names. Proof of name change (if applicable).",
-    "checklistEducationTitle": "Education",
-    "checklistEducationDesc": "Evidence of your educational qualifications (university degree, years completed or equivalent, depending on your country's requirements).",
-    "checklistEnglishLanguageTitle": "English level",
-    "checklistEnglishLanguageDesc": "Evidence of English studies, or approved exam in the last 12 months (IELTS 4.5, PTE 30, Cambridge C1 147, or TOEFL iBT 32).",
-    "checklistGovernmentSupportTitle": "Government support",
-    "checklistGovernmentSupportDesc": "Letter of support from your government (only for certain countries like Peru, Ecuador, etc. Not required for Spain, Argentina, Chile, etc.).",
-    "checklistEnoughMoneyTitle": "Enough money for your stay and departure",
-    "checklistEnoughMoneyDesc": "Evidence of money for your stay (usually $5,000 AUD) and money for a departure ticket from Australia (or the ticket already purchased).",
-    "checklistCharacterDocumentsTitle": "Character documents (Background checks)",
-    "checklistCharacterDocumentsDesc": "Police certificates from every country where you have spent 12+ months in the last 10 years (since age 16), and military record if applicable.",
-    "checklistGettingHelpTitle": "Getting help (Agents)",
-    "checklistGettingHelpDesc": "Form 956A or 956 if you use a migration agent or authorize someone to receive your documents.",
-    "checklistPrepareDocumentsTitle": "Prepare your documents",
-    "checklistPrepareDocumentsDesc": "Translate all documents into English by a qualified translator and scan/photograph all originals and translations in color.",
-    "radarLastChecked": "Last checked: {seconds} seconds ago (Frequency: every 60 sec)",
-    "@radarLastChecked": {
-        "placeholders": {
-            "seconds": {
-                "type": "String"
-            }
-        }
-    },
-    "newsExplore": "Explore",
-    "newsUpdated": "UPDATED",
-    "countryAR": "Argentina",
-    "countryAT": "Austria",
-    "countryBR": "Brazil",
-    "countryCL": "Chile",
-    "countryCN": "China",
-    "countryCZ": "Czech Republic",
-    "countryEC": "Ecuador",
-    "countryGR": "Greece",
-    "countryHU": "Hungary",
-    "countryIN": "India",
-    "countryID": "Indonesia",
-    "countryIL": "Israel",
-    "countryLU": "Luxembourg",
-    "countryMY": "Malaysia",
-    "countryMN": "Mongolia",
-    "countryPG": "Papua New Guinea",
-    "countryPE": "Peru",
-    "countryPL": "Poland",
-    "countryPT": "Portugal",
-    "countrySM": "San Marino",
-    "countrySG": "Singapore",
-    "countrySK": "Slovakia",
-    "countrySI": "Slovenia",
-    "countryES": "Spain",
-    "countryCH": "Switzerland",
-    "countryTH": "Thailand",
-    "countryTR": "Turkey",
-    "countryUY": "Uruguay",
-    "countryVN": "Vietnam",
-    "notificationTestTitle": "\ud83d\udd14 TEST ALERT: OzVisa Radar Active ({countryName})",
-    "@notificationTestTitle": {
-        "placeholders": {
-            "countryName": {
-                "type": "String"
-            }
-        }
-    },
-    "notificationTestBody": "\u2705 Connection verified: Servers monitoring visas 24/7 in real time.",
-    "notificationTestLongBody": "OzVisa Alert's tracking system is now active for {countryName}! We will notify you the exact second the Department of Home Affairs opens new spots.",
-    "@notificationTestLongBody": {
-        "placeholders": {
-            "countryName": {
-                "type": "String"
-            }
-        }
-    },
-    "notificationChannelName": "OzVisa Opening Alerts",
-    "notificationChannelDesc": "Immediate notifications for Work & Holiday visa spots openings",
-    "notificationTestTicker": "OzVisa Test Alert",
-    "settingsNotifications": "Notifications",
-    "settingsNewsNotifs": "Receive news and tips",
-    "referralTitle": "Where did you find us?",
-    "referralSubtitle": "It helps us a lot to improve.",
-    "referralFriend": "Friend recommendation",
-    "referralGroups": "WhatsApp groups",
-    "referralOthers": "Other"
+  "@@locale": "en",
+  "loginTitle": "OzAlert",
+  "loginSubtitle": "The ultimate radar for your Australian Work & Holiday Visa.",
+  "loginError": "Error signing in:",
+  "loginGoogle": "Continue with Google",
+  "loginApple": "Continue with Apple",
+  "welcomeTitle": "Australian visas\nfly away\nin minutes.",
+  "welcomeSubtitle": "Every year, thousands miss out because they don't find out in time when spots open. Our system tracks official sources 24/7 and alerts you instantly so you can be the first to apply.",
+  "welcomeBullet1": "Real instant notifications",
+  "welcomeBullet2": "Gain an advantage over other applicants",
+  "welcomeBullet3": "Official government sources (Immigration)",
+  "welcomeButton": "Set up my Radar now",
+  "onboardingTitle": "Customize your Radar",
+  "onboardingSubtitle": "Set up your profile to receive notifications for visas that match your passport.",
+  "onboardingLanguage": "Preferred Language",
+  "onboardingPassports": "Select your Passports",
+  "onboardingErrorEmpty": "Please select at least one passport",
+  "onboardingErrorSave": "Error saving:",
+  "onboardingNext": "Next step",
+  "paywallTitle": "Turn on the Radar",
+  "paywallSubtitle": "Receive immediate notifications as soon as your visa becomes available. Subscribe to access.",
+  "paywallSubscribeMonthly": "Subscribe {price} / month",
+  "@paywallSubscribeMonthly": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallSubscribeOnly": "Subscribe",
+  "paywallRestore": "Restore Purchases",
+  "dashboardTitle": "OzVisa Radar",
+  "dashboardSettings": "Settings",
+  "settingsTitle": "Settings",
+  "settingsLanguage": "App Language",
+  "settingsLanguageEnglish": "English",
+  "settingsLanguageSpanish": "Spanish",
+  "settingsLogout": "Log out",
+  "settingsDeleteAccount": "Delete Account",
+  "settingsDeleteAccountConfirmTitle": "Are you sure?",
+  "settingsDeleteAccountConfirmMessage": "This action is irreversible and will delete all your data. Do you want to continue?",
+  "settingsDeleteAccountConfirmButton": "Delete",
+  "settingsDeleteAccountCancelButton": "Cancel",
+  "visaStatusOpen": "OPEN",
+  "visaStatusClosed": "CLOSED",
+  "visaStatusPaused": "PAUSED",
+  "visaSourceButton": "View official source",
+  "settingsLegal": "Legal",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsTerms": "Terms and Conditions",
+  "checklistTitle": "Expedition Kit",
+  "checklistProgress": "Equipment Progress",
+  "checklistDescription": "Prepare your backpack (certificates and savings) in advance so you are not left behind when the adventure begins.",
+  "checklistKeyDocs": "Key Documents:",
+  "checklistInstructions": "Secure each item in your inventory as you get it:",
+  "checklistTip": "Explorer Tip: Quotas tend to disappear like mirages in the desert. Having your PDFs organized is vital to survive the process.",
+  "dashboardSafeExpedition": "Safe Expedition",
+  "dashboardSafeExpeditionDesc": "The horizon is clear. We will notify you with a flare (notification) as soon as the Department enables places for your passports.",
+  "newsTitle": "News Radar",
+  "newsTabOfficial": "Official Sources",
+  "newsTabAlerts": "Google Alerts",
+  "newsEmptyState": "Official radar silent. No news.",
+  "newsGlobalAlerts": "Global alerts monitored.",
+  "newsError": "Radar interference.\nCould not load news.\n{errorText}",
+  "@newsError": {
+    "placeholders": {
+      "errorText": {
+        "type": "String"
+      }
+    }
+  },
+  "radarScanning": "Servers tracking the official Australian Immigration website",
+  "passportSelectorTitle": "Select your Passport (WHV 417 & 462)",
+  "passportSubclass": "Subclass {subclass} • Australia WHV",
+  "@passportSubclass": {
+    "placeholders": {
+      "subclass": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallModalTitle": "Unlock the 24/7 Visa Radar",
+  "paywallModalDesc": "Receive an immediate Push Alert and Email the exact second the Department of Home Affairs opens spots for your country.",
+  "paywallPlanAnnualTitle": "Season Pass (Annual)",
+  "paywallPlanAnnualDesc": "Best value • Save 37%",
+  "paywallPlanMonthlyTitle": "Flex Monthly Plan",
+  "paywallPlanMonthlyDesc": "Cancel anytime with 1 click",
+  "paywallActivateAnnual": "Activate Season Pass ($14.99)",
+  "paywallActivateMonthly": "Continue with Monthly Plan",
+  "paywallDisclaimer": "Payment will be charged to your Apple or Google account at confirmation of purchase. Subscription automatically renews unless canceled at least 24 hours before the end of the current period. You can manage and cancel your subscription in your account settings after purchase.",
+  "paywallTermsOfUse": "Terms of Use",
+  "paywallPrivacyPolicy": "Privacy Policy",
+  "visaStatusOpenDesc": "Visas available. Start the expedition!",
+  "visaStatusPausedDesc": "On hold. Processing temporarily paused.",
+  "visaStatusClosedDesc": "Camp closed. 0 places currently.",
+  "errorOpeningLink": "Could not open the link.",
+  "tooltipScanRadar": "Scan live radar",
+  "newsSourceOfficial": "OFFICIAL SOURCE",
+  "newsSourceMarket": "MARKET / CURRENCY",
+  "partnerAffiliate": "AFFILIATE PARTNER • 15% OFF",
+  "partnerDescription": "Essential to activate your visa when passing customs in Sydney or Melbourne. Full COVID, sports and work coverage.",
+  "partnerActivate": "Activate Insurance Promo (15% Off)",
+  "testAlertSending": "⚡ Sending test alert for {countryNames}... Will arrive in 2 seconds.",
+  "@testAlertSending": {
+    "placeholders": {
+      "countryNames": {
+        "type": "String"
+      }
+    }
+  },
+  "checklistCompletedDescription": "All set! Backpack 100% prepared.",
+  "partnerTitle": "Need health insurance for Australia? Get 15% off with Chapka / IATI Seguros",
+  "paywallSuccessMessage": "✅ VIP Access Activated! 24/7 immediate alerts enabled or purchases successfully restored.",
+  "navRadar": "Radar",
+  "navEquipment": "Equipment",
+  "navNews": "Logbook",
+  "checklistIdentityDocumentsTitle": "Identity documents",
+  "checklistIdentityDocumentsDesc": "Pages of your passport (photo, data, dates). Birth certificate with parents' names. Proof of name change (if applicable).",
+  "checklistEducationTitle": "Education",
+  "checklistEducationDesc": "Evidence of your educational qualifications (university degree, years completed or equivalent, depending on your country's requirements).",
+  "checklistEnglishLanguageTitle": "English level",
+  "checklistEnglishLanguageDesc": "Evidence of English studies, or approved exam in the last 12 months (IELTS 4.5, PTE 30, Cambridge C1 147, or TOEFL iBT 32).",
+  "checklistGovernmentSupportTitle": "Government support",
+  "checklistGovernmentSupportDesc": "Letter of support from your government (only for certain countries like Peru, Ecuador, etc. Not required for Spain, Argentina, Chile, etc.).",
+  "checklistEnoughMoneyTitle": "Enough money for your stay and departure",
+  "checklistEnoughMoneyDesc": "Evidence of money for your stay (usually $5,000 AUD) and money for a departure ticket from Australia (or the ticket already purchased).",
+  "checklistCharacterDocumentsTitle": "Character documents (Background checks)",
+  "checklistCharacterDocumentsDesc": "Police certificates from every country where you have spent 12+ months in the last 10 years (since age 16), and military record if applicable.",
+  "checklistGettingHelpTitle": "Getting help (Agents)",
+  "checklistGettingHelpDesc": "Form 956A or 956 if you use a migration agent or authorize someone to receive your documents.",
+  "checklistPrepareDocumentsTitle": "Prepare your documents",
+  "checklistPrepareDocumentsDesc": "Translate all documents into English by a qualified translator and scan/photograph all originals and translations in color.",
+  "radarLastChecked": "Last checked: {seconds} seconds ago (Frequency: every 60 sec)",
+  "@radarLastChecked": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "newsExplore": "Explore",
+  "newsUpdated": "UPDATED",
+  "countryAR": "Argentina",
+  "countryAT": "Austria",
+  "countryBR": "Brazil",
+  "countryCL": "Chile",
+  "countryCN": "China",
+  "countryCZ": "Czech Republic",
+  "countryEC": "Ecuador",
+  "countryGR": "Greece",
+  "countryHU": "Hungary",
+  "countryIN": "India",
+  "countryID": "Indonesia",
+  "countryIL": "Israel",
+  "countryLU": "Luxembourg",
+  "countryMY": "Malaysia",
+  "countryMN": "Mongolia",
+  "countryPG": "Papua New Guinea",
+  "countryPE": "Peru",
+  "countryPL": "Poland",
+  "countryPT": "Portugal",
+  "countrySM": "San Marino",
+  "countrySG": "Singapore",
+  "countrySK": "Slovakia",
+  "countrySI": "Slovenia",
+  "countryES": "Spain",
+  "countryCH": "Switzerland",
+  "countryTH": "Thailand",
+  "countryTR": "Turkey",
+  "countryUY": "Uruguay",
+  "countryVN": "Vietnam",
+  "notificationTestTitle": "🔔 TEST ALERT: OzVisa Radar Active ({countryName})",
+  "@notificationTestTitle": {
+    "placeholders": {
+      "countryName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationTestBody": "✅ Connection verified: Servers monitoring visas 24/7 in real time.",
+  "notificationTestLongBody": "OzVisa Alert's tracking system is now active for {countryName}! We will notify you the exact second the Department of Home Affairs opens new spots.",
+  "@notificationTestLongBody": {
+    "placeholders": {
+      "countryName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationChannelName": "OzVisa Opening Alerts",
+  "notificationChannelDesc": "Immediate notifications for Work & Holiday visa spots openings",
+  "notificationTestTicker": "OzVisa Test Alert",
+  "settingsNotifications": "Notifications",
+  "settingsNewsNotifs": "Receive news and tips",
+  "referralTitle": "Where did you find us?",
+  "referralSubtitle": "It helps us a lot to improve.",
+  "referralFriend": "Friend recommendation",
+  "referralGroups": "WhatsApp groups",
+  "referralOthers": "Other",
+  "statsOfficialData": "Official Data (Work & Holiday)",
+  "statsVolume": "Application Volume",
+  "statsSourceTooltip": "View official source"
 }

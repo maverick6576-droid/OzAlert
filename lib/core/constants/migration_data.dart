@@ -1,14 +1,6 @@
 class MigrationData {
-  // Official data from Department of Home Affairs
-  // Extracted from: Migration and Temporary visa program quarterly report
-  
   static const String sourceUrl = 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-processing-times/quarterly-report';
   
-  // No accents to avoid encoding bugs
-  static const String currentProcessingTime = '< 1 dia';
-  static const String approvalRate = '96.5%';
-  
-  // Data structured by year
   static const Map<String, List<Map<String, dynamic>>> lodgementsByYear = {
     '2023-2024': [
       {'quarter': 'Q1', 'lodged': 65147},
