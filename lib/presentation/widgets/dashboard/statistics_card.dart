@@ -11,7 +11,7 @@ class StatisticsCard extends StatelessWidget {
   Future<void> _launchOfficialUrl() async {
     final Uri url = Uri.parse(MigrationData.sourceUrl);
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      debugPrint('No se pudo abrir \');
+      debugPrint('No se pudo abrir ');
     }
   }
 
@@ -98,7 +98,7 @@ class StatisticsCard extends StatelessWidget {
           
           // Titulo de Grafico
           const Text(
-            'Volumen de Solicitudes (Últimos 4 Trimestres)',
+            'Volumen de Solicitudes (Ultimos 4 Trimestres)',
             style: TextStyle(
               color: AppColors.textPrimary,
               fontWeight: FontWeight.w600,
@@ -120,7 +120,7 @@ class StatisticsCard extends StatelessWidget {
                     getTooltipColor: (group) => AppColors.primary,
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
                       return BarTooltipItem(
-                        '\',
+                        '',
                         const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                       );
                     },
