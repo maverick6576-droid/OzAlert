@@ -27,7 +27,72 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
+
+  void _showDndDialog(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            const Icon(Icons.volume_up_rounded, color: AppColors.primary),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                loc.dndDialogTitle,
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+            ),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                loc.dndDialogIntro,
+                style: const TextStyle(fontSize: 14, color: AppColors.textSecondary, height: 1.4),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                loc.dndDialogIosTitle,
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                loc.dndDialogIosSteps,
+                style: const TextStyle(fontSize: 14, height: 1.4),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                loc.dndDialogAndroidTitle,
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                loc.dndDialogAndroidSteps,
+                style: const TextStyle(fontSize: 14, height: 1.4),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              loc.dndDialogClose,
+              style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
+
   Widget build(BuildContext context, WidgetRef ref) {
     final isSubscribed = ref.watch(paywallProvider);
     final userProfileState = ref.watch(userProfileProvider);

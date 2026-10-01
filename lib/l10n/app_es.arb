@@ -199,5 +199,13 @@
   "referralOthers": "Otros",
   "statsOfficialData": "Datos Oficiales (Work & Holiday)",
   "statsVolume": "Volumen de Solicitudes",
-  "statsSourceTooltip": "Ver fuente oficial"
+  "statsSourceTooltip": "Ver fuente oficial",
+  "dndNoticeTitle": "¿Cómo enterarte de la alarma?",
+  "dndDialogTitle": "Configuración de Sonido",
+  "dndDialogIntro": "Para que OzAlert te avise a tiempo, debes configurar tu móvil. Si tu teléfono está en silencio o en 'No Molestar' y bloquea el aviso, podrías perder tu plaza.",
+  "dndDialogIosTitle": "🍏 Usuarios de iPhone",
+  "dndDialogIosSteps": "1. Ve a Ajustes > OzAlert > Notificaciones.\n2. Asegúrate de tener activado 'Permitir Notificaciones' y 'Sonidos'.\n3. Si usas el modo 'No Molestar' o 'Descanso', entra en su configuración y añade a OzAlert en la lista de Apps Permitidas.",
+  "dndDialogAndroidTitle": "🤖 Usuarios de Android",
+  "dndDialogAndroidSteps": "1. Ve a Ajustes > Aplicaciones > OzAlert > Notificaciones.\n2. Entra en las categorías de notificación y asegúrate de elegir un tono de llamada fuerte.\n3. Si usas el modo 'No Molestar', ve a sus ajustes y añade a OzAlert como una app con permiso para interrumpir.",
+  "dndDialogClose": "Entendido"
 }
