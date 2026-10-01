@@ -183,6 +183,30 @@ class DashboardScreen extends ConsumerWidget {
               children: [
                 // 1. Live Radar Explorer
                 const LiveRadarBanner(),
+                const SizedBox(height: 16),
+                
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.notifications_active_outlined, color: AppColors.primary, size: 18),
+                    const SizedBox(width: 8),
+                    Text(
+                      AppLocalizations.of(context)!.dndNoticeTitle,
+                      style: const TextStyle(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    IconButton(
+                      icon: const Icon(Icons.info_outline, color: AppColors.textSecondary, size: 18),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      onPressed: () => _showDndDialog(context),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 20),
 
                 // 2. Tarjetas de Estado para cada pasaporte seleccionado
