@@ -99,12 +99,9 @@ def check_visa_status(request=None):
 
             # 5. DISPARAR ALERTA INMEDIATA PUSH & EMAIL
             if previous_status != "OPEN" and current_status == "OPEN":
-                logger.info(f"  APERTURA EN {country_name}! Disparando alertas Push (FCM) y Email...")
+                logger.info(f"  APERTURA EN {country_name}! Disparando alertas Push (FCM)...")
                 send_fcm_alert(country_code, country_name)
 
-                recipients = []
-                if db:
-                    
 
             results[country_code] = {"status": current_status, "changed": True, "writes": 1}
 
