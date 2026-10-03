@@ -89,6 +89,8 @@ class AuthRepositoryImpl implements AuthRepository {
     final user = _firebaseAuth.currentUser;
     if (user != null) {
       try {
+        await NotificationService().syncPassportSubscriptions([]);
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).delete();
         await user.delete();
       } catch (e) {
         // En caso de fallar por requerir login reciente u otro error, forzamos cierre de sesión.
