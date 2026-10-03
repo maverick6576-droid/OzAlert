@@ -55,6 +55,7 @@ def check_visa_status(request=None):
                 continue
 
             # 2.6 PROTECCION ANTI-BUCLE Y EXPIRACION DE CANDADO:
+            original_web_status = current_status
             source_to_save = "Public Web"
             
             lock_age_hours = 0
@@ -66,19 +67,23 @@ def check_visa_status(request=None):
 
             if previous_status in ["CLOSED", "PAUSED"] and source == "ImmiAccount Deep Scraper" and current_status == "OPEN":
                 if lock_age_hours < 8:
-                    logger.info(f"  [PROTECCION ANTI-BUCLE]: ImmiAccount cerro hace poco. La web publica miente. Forzando a PAUSED.")
+                    logger.info(f"  [PROTECCION ANTI-BUCLE]: ImmiAccount cerro hace poco (hace {lock_age_hours:.1f}h). La web publica miente. Forzando a PAUSED.")
                     current_status = "PAUSED"
                     source_to_save = "ImmiAccount Deep Scraper"
                 else:
-                    logger.info(f"  [APERTURA REAL]: Han pasado varias horas desde el cierre de ImmiAccount. La web publica anuncia nueva apertura.")
+                    logger.info(f"  [APERTURA REAL]: Han pasado {lock_age_hours:.1f}h desde el cierre de ImmiAccount. La web publica anuncia nueva apertura.")
                     source_to_save = "Public Web"
                     
             # 3. Optimizacion de cuota gratuita
             if current_status == previous_status and doc is not None and doc.exists:
-                if source == "ImmiAccount Deep Scraper" and current_status in ["CLOSED", "PAUSED"]:
-                    logger.info(f"  [DESBLOQUEO]: La web publica por fin marca {current_status}. Soltando candado de ImmiAccount.")
+                if source == "ImmiAccount Deep Scraper" and original_web_status == "CLOSED":
+                    logger.info(f"  [DESBLOQUEO]: La web publica por fin marca CLOSED de forma sincronizada. Soltando candado de ImmiAccount.")
                     source_to_save = "Public Web"
-                    # No hacemos continue, forzamos la escritura para actualizar el source
+                    # Al no hacer continue, se hara una escritura forzada para sobreescribir source_to_save = "Public Web"
+                elif source == "ImmiAccount Deep Scraper" and original_web_status == "OPEN":
+                    logger.info(f"  Manteniendo bloqueo activo sin sobreescribir la DB (0 operaciones de escritura).")
+                    results[country_code] = {"status": current_status, "changed": False, "writes": 0}
+                    continue
                 else:
                     logger.info(f"  Sin cambios en {country_code}. Terminando (0 operaciones de escritura).")
                     results[country_code] = {"status": current_status, "changed": False, "writes": 0}
