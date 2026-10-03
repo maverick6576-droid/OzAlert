@@ -4,7 +4,7 @@ import logging
 import functions_framework
 from google.cloud import firestore
 from config import COUNTRIES_CONFIG
-from scraper import scrape_country_status
+from scraper import scrape_country_status, clear_scraper_cache
 from notifier import send_fcm_alert, send_email_alert
 from datetime import datetime, timezone
 
@@ -19,6 +19,7 @@ except Exception as e:
 
 @functions_framework.http
 def check_visa_status(request=None):
+    clear_scraper_cache()
     logger.info("Iniciando rastreo de plazas del Departamento de Home Affairs de Australia...")
     results = {}
     total_writes = 0
@@ -41,6 +42,11 @@ def check_visa_status(request=None):
 
             current_status = scrape_country_status(country_code)
             logger.info(f"[{country_code} - {country_name}] Estado anterior: {previous_status} (Fuente: {source}) | Estado actual web: {current_status}")
+
+            if current_status == "ERROR":
+                logger.warning(f"  Omitiendo {country_code} debido a error en el scraper.")
+                results[country_code] = {"status": "ERROR", "changed": False, "writes": 0}
+                continue
 
             # 2.5 ARBITRAJE DE SISTEMAS HIBRIDOS:
             if previous_status == "OPEN" and source == "ImmiAccount Deep Scraper" and current_status in ["CLOSED", "PAUSED"]:
