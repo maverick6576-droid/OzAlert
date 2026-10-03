@@ -25,10 +25,14 @@ class PaywallNotifier extends StateNotifier<bool> {
     final repo = ref.read(paywallRepositoryProvider);
     final active = await repo.isUserSubscribed();
     
-    // 3. ACTUALIZAR FIREBASE EN AMBOS CASOS (Activo o Cancelado)
-    await _updateFirebasePremiumStatus(active);
-    
-    state = active;
+    if (active != null) {
+      // 3. ACTUALIZAR FIREBASE SOLO SI NO HUBO ERROR DE RED
+      await _updateFirebasePremiumStatus(active);
+      state = active;
+    } else {
+      // Si RevenueCat falla (ej. Modo Avion), bloqueamos el acceso local pero NO quitamos el Premium en Firebase
+      state = false;
+    }
   }
 
   Future<bool> subscribeMonthly() async {

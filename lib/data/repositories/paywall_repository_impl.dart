@@ -21,7 +21,7 @@ class PaywallRepositoryImpl implements PaywallRepository {
   }
 
   @override
-  Future<bool> isUserSubscribed() async {
+  Future<bool?> isUserSubscribed() async {
     if (_isDemoSubscribed) return true;
 
     try {
