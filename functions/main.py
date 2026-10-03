@@ -104,18 +104,16 @@ def check_visa_status(request=None):
 
                 recipients = []
                 if db:
-                    users_query = db.collection("users").where("passports", "array_contains", country_name).where("isPremium", "==", True).stream()
-                    vip_query = db.collection("users").where("passports", "array_contains", country_name).where("email", "in", ["maverick6576@gmail.com", "juditmaynou2000@gmail.com"]).stream()
-                    
+                    # Fetch all users for this country, filter premium and VIPs in memory to avoid Firestore composite index errors
+                    users_query = db.collection("users").where("passports", "array_contains", country_name).stream()
                     for u in users_query:
-                        email = u.to_dict().get("email")
-                        if email and email not in recipients:
-                            recipients.append(email)
-                            
-                    for u in vip_query:
-                        email = u.to_dict().get("email")
-                        if email and email not in recipients:
-                            recipients.append(email)
+                        data = u.to_dict()
+                        email = data.get("email")
+                        is_premium = data.get("isPremium", False)
+                        
+                        if email and (is_premium or email in ["maverick6576@gmail.com", "juditmaynou2000@gmail.com"]):
+                            if email not in recipients:
+                                recipients.append(email)
                 send_email_alert(country_code, country_name, recipients)
 
             results[country_code] = {"status": current_status, "changed": True, "writes": 1}

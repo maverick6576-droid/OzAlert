@@ -212,16 +212,14 @@ def trigger_alerts():
                 import resend
                 resend.api_key = resend_api_key
                 
-                users_query = db.collection("users").where("passports", "array_contains", "Spain").where("isPremium", "==", True).stream()
-                vip_query = db.collection("users").where("passports", "array_contains", "Spain").where("email", "in", ["maverick6576@gmail.com", "juditmaynou2000@gmail.com"]).stream()
-                
+                users_query = db.collection("users").where("passports", "array_contains", "Spain").stream()
                 emails_set = set()
                 for u in users_query:
-                    if u.to_dict().get("email"):
-                        emails_set.add(u.to_dict().get("email"))
-                for u in vip_query:
-                    if u.to_dict().get("email"):
-                        emails_set.add(u.to_dict().get("email"))
+                    data = u.to_dict()
+                    email = data.get("email")
+                    is_premium = data.get("isPremium", False)
+                    if email and (is_premium or email in ["maverick6576@gmail.com", "juditmaynou2000@gmail.com"]):
+                        emails_set.add(email)
                 emails = list(emails_set)
                 
                 html_body = "<div style=\"font-family: Arial; padding: 30px; background-color: #0A0F1D; color: #fff;\"><h1 style=\"color: #00F59B;\">¡Apertura Confirmada para Spain!</h1><p>El sistema de rastreo ImmiAccount de <b>OzVisa Alert</b> acaba de confirmar plazas disponibles.</p><a href=\"https://immi.homeaffairs.gov.au\" style=\"display: inline-block; background-color: #00F59B; color: #000; padding: 14px 28px; border-radius: 8px; font-weight: bold; text-decoration: none;\">Ir a ImmiAccount Ahora</a></div>"
