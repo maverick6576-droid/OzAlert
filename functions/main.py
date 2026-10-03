@@ -104,11 +104,17 @@ def check_visa_status(request=None):
 
                 recipients = []
                 if db:
-                    users_query = db.collection("users").where("passports", "array_contains", country_name).stream()
+                    users_query = db.collection("users").where("passports", "array_contains", country_name).where("isPremium", "==", True).stream()
+                    vip_query = db.collection("users").where("passports", "array_contains", country_name).where("email", "in", ["maverick6576@gmail.com", "juditmaynou2000@gmail.com"]).stream()
+                    
                     for u in users_query:
-                        data = u.to_dict()
-                        email = data.get("email")
-                        if email:
+                        email = u.to_dict().get("email")
+                        if email and email not in recipients:
+                            recipients.append(email)
+                            
+                    for u in vip_query:
+                        email = u.to_dict().get("email")
+                        if email and email not in recipients:
                             recipients.append(email)
                 send_email_alert(country_code, country_name, recipients)
 
