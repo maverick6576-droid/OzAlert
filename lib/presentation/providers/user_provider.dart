@@ -42,7 +42,12 @@ final userProfileProvider = StreamProvider<UserProfile?>((ref) async* {
               orElse: () => AppConstants.supportedCountries.first,
             ).code;
           }).toList();
-          NotificationService().syncPassportSubscriptions(countryCodes);
+          // CRÍTICO PARA EL NEGOCIO: Solo suscribir si ha pagado.
+          if (profile.isPremium) {
+            NotificationService().syncPassportSubscriptions(countryCodes);
+          } else {
+            NotificationService().syncPassportSubscriptions([]);
+          }
 
           return profile;
         }
