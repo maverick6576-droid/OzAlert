@@ -44,7 +44,7 @@ def check_visa_status(request=None):
 
             # 2.5 ARBITRAJE DE SISTEMAS HIBRIDOS:
             if previous_status == "OPEN" and source == "ImmiAccount Deep Scraper" and current_status in ["CLOSED", "PAUSED"]:
-                logger.info(f"  [Ignorado] ImmiAccount detectó OPEN. Ignorando el {current_status} de la web estática retrasada.")
+                logger.info(f"  [Ignorado] ImmiAccount detecto OPEN. Ignorando el {current_status} de la web estatica retrasada.")
                 results[country_code] = {"status": "OPEN (Override)", "changed": False, "writes": 0}
                 continue
 

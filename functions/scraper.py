@@ -8,16 +8,16 @@ logger = logging.getLogger("ozvisa-scraper")
 
 def scrape_country_status(country_code: str, mock_html: str = None) -> str:
     """
-    Inspecciona la página del Departamento de Home Affairs de Australia para el país especificado
+    Inspecciona la pÃgina del Departamento de Home Affairs de Australia para el paÃ­s especificado
     y determina si el estado de plazas es 'OPEN' o 'CLOSED'.
 
-    :param country_code: Código ISO (ej: 'ES', 'AR', 'IT')
+    :param country_code: CÃ³digo ISO (ej: 'ES', 'AR', 'IT')
     :param mock_html: HTML simulado para pruebas locales o unitarias sin red
-    :return: 'OPEN' si hay plazas abiertas, 'CLOSED' si está cerrado.
+    :return: 'OPEN' si hay plazas abiertas, 'CLOSED' si estÃ cerrado.
     """
     config = COUNTRIES_CONFIG.get(country_code)
     if not config:
-        logger.warning(f"País {country_code} no configurado en COUNTRIES_CONFIG")
+        logger.warning(f"PaÃ­s {country_code} no configurado en COUNTRIES_CONFIG")
         return "CLOSED"
 
     try:
@@ -32,14 +32,14 @@ def scrape_country_status(country_code: str, mock_html: str = None) -> str:
         soup = BeautifulSoup(html_content, "html.parser")
         text_lower = soup.get_text(separator=" ").lower()
 
-        # Estrategia de detección del estado en base al nombre del país en inglés y palabras clave
+        # Estrategia de detecciÃ³n del estado en base al nombre del paÃ­s en inglÃ©s y palabras clave
         country_en = config.get("en_name", config["name"].lower())
 
-        # Buscar tablas y párrafos específicos que incluyan al país (tr, li, p)
-        # Omitimos div o section porque agrupan múltiples países y causan falsos negativos
+        # Buscar tablas y pÃrrafos especÃ­ficos que incluyan al paÃ­s (tr, li, p)
+        # Omitimos div o section porque agrupan mÃºltiples paÃ­ses y causan falsos negativos
         for row_or_tag in soup.find_all(["tr", "li", "p"]):
             tag_text = row_or_tag.get_text(separator=" ").lower()
-            # Asegurarnos de que el texto es corto (una fila individual) y contiene el país
+            # Asegurarnos de que el texto es corto (una fila individual) y contiene el paÃ­s
             if len(tag_text) < 300 and country_en in tag_text:
                 if any(w in tag_text for w in ["open", "available", "lodgements open"]):
                     if not any(w in tag_text for w in ["closed", "paused", "filled"]):
