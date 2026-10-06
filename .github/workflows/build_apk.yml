@@ -2,9 +2,9 @@ name: Compilar APK de Android (OzVisa Alert)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, feature/fase2 ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, feature/fase2 ]
   workflow_dispatch: # Permite compilar manualmente con un clic desde la pestaña "Actions" de GitHub
 
 jobs:
