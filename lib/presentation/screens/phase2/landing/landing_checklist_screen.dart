@@ -176,7 +176,11 @@ class LandingChecklistScreen extends ConsumerWidget {
                     // SMART LINK hacia la Guía
                     GestureDetector(
                       onTap: () {
-                        ref.read(phase2NavigationProvider.notifier).navigateToGuide(task.targetGuideCategory!);
+                        if (task.targetGuideCategory == 'employment') {
+                          ref.read(phase2NavigationProvider.notifier).setTabIndex(2);
+                        } else {
+                          ref.read(phase2NavigationProvider.notifier).navigateToGuide(task.targetGuideCategory!);
+                        }
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -184,7 +188,9 @@ class LandingChecklistScreen extends ConsumerWidget {
                           const Icon(CupertinoIcons.arrow_right_circle_fill, size: 14, color: AppColors.secondary),
                           const SizedBox(width: 6),
                           Text(
-                            isEn ? 'View guide & comparisons' : 'Ver guía y comparativa',
+                            task.targetGuideCategory == 'employment'
+                                ? (isEn ? 'Build Australian CV & View Fair Work' : 'Crear CV & Ver Calculadora Fair Work')
+                                : (isEn ? 'View guide & comparisons' : 'Ver guía y comparativas'),
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,

@@ -7,10 +7,13 @@ import '../../../domain/repositories/phase2/affiliate_repository.dart';
 import '../../../domain/repositories/phase2/landing_repository.dart';
 import '../../../domain/repositories/phase2/postcode_repository.dart';
 import '../../../domain/repositories/phase2/visa_stats_repository.dart';
+import '../../../domain/repositories/phase2/guide_repository.dart';
+import '../../../domain/models/phase2/guide_data.dart';
 import '../../../data/repositories/phase2/affiliate_repository_impl.dart';
 import '../../../data/repositories/phase2/landing_repository_impl.dart';
 import '../../../data/repositories/phase2/postcode_repository_impl.dart';
 import '../../../data/repositories/phase2/visa_stats_repository_impl.dart';
+import '../../../data/repositories/phase2/guide_repository_impl.dart';
 
 // --- Repositories ---
 
@@ -22,6 +25,10 @@ final affiliateRepositoryProvider = Provider<AffiliateRepository>((ref) {
   final repo = AffiliateRepositoryImpl(remoteConfig: remoteConfig);
   repo.init();
   return repo;
+});
+
+final guideRepositoryProvider = Provider<GuideRepository>((ref) {
+  return GuideRepositoryImpl();
 });
 
 final postcodeRepositoryProvider = Provider<PostcodeRepository>((ref) {
@@ -44,6 +51,12 @@ final visaStatsRepositoryProvider = Provider<VisaStatsRepository>((ref) {
 final affiliateCategoryProvider = FutureProvider.family<List<AffiliatePartner>, String>((ref, category) async {
   final repo = ref.watch(affiliateRepositoryProvider);
   return repo.getPartnersByCategory(category);
+});
+
+/// Proveedor de guías y comparativas estructuradas por categoría
+final guideCategoryProvider = FutureProvider.family<CategoryGuide?, String>((ref, category) async {
+  final repo = ref.watch(guideRepositoryProvider);
+  return repo.getGuideForCategory(category);
 });
 
 /// Proveedor de tareas de aterrizaje
