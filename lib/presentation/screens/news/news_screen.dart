@@ -6,7 +6,6 @@ import 'package:ozvisa_alert/l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/news_provider.dart';
 import '../../widgets/news/news_card.dart';
-import '../../widgets/news/partner_banner.dart';
 
 class NewsScreen extends ConsumerStatefulWidget {
   const NewsScreen({super.key});

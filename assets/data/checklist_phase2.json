@@ -1,0 +1,94 @@
+{
+  "tasks": [
+    {
+      "id": "open_bank_account",
+      "title": "Abrir cuenta bancaria australiana",
+      "titleEn": "Open Australian Bank Account",
+      "subtitle": "Hazlo online hasta 14 días antes de volar para transferir tus fondos iniciales.",
+      "subtitleEn": "Open it online up to 14 days before flying to transfer your initial savings.",
+      "phase": "pre_departure",
+      "priority": 1,
+      "targetGuideCategory": "banking"
+    },
+    {
+      "id": "medical_insurance",
+      "title": "Contratar seguro médico internacional / OVHC",
+      "titleEn": "Get Travel or OVHC Health Insurance",
+      "subtitle": "Un accidente o ingreso médico en Australia puede costar miles de dólares sin póliza.",
+      "subtitleEn": "Medical emergencies in Australia can cost thousands of dollars without cover.",
+      "phase": "pre_departure",
+      "priority": 2,
+      "targetGuideCategory": "insurance"
+    },
+    {
+      "id": "book_initial_stay",
+      "title": "Reservar hostel o estancia inicial",
+      "titleEn": "Book Initial Hostel / Stay",
+      "subtitle": "Reserva al menos 7-10 días en un hostel céntrico para hacer gestiones presenciales.",
+      "subtitleEn": "Book at least 7-10 days in a central hostel for in-person administrative tasks.",
+      "phase": "pre_departure",
+      "priority": 3,
+      "targetGuideCategory": "housing"
+    },
+    {
+      "id": "buy_sim_card",
+      "title": "Comprar SIM o activar eSIM con número australiano",
+      "titleEn": "Get SIM or eSIM with Australian Number",
+      "subtitle": "Necesitarás un número +61 para el banco, tu CV y la solicitud del TFN.",
+      "subtitleEn": "You will need an active +61 phone number for your bank, CV and TFN application.",
+      "phase": "first_48h",
+      "priority": 4,
+      "targetGuideCategory": "telecom"
+    },
+    {
+      "id": "activate_bank_in_branch",
+      "title": "Activar cuenta bancaria en sucursal",
+      "titleEn": "Verify Bank Account In-Branch",
+      "subtitle": "Acude con tu pasaporte a cualquier sucursal del banco para recibir tu tarjeta de débito.",
+      "subtitleEn": "Visit any branch with your passport to complete ID check and collect your debit card.",
+      "phase": "first_48h",
+      "priority": 5,
+      "targetGuideCategory": "banking"
+    },
+    {
+      "id": "apply_tfn_ato",
+      "title": "Solicitar el TFN (Tax File Number) en la ATO",
+      "titleEn": "Apply for TFN at Australian Tax Office (ATO)",
+      "subtitle": "Trámite 100% gratuito online una vez estés físicamente dentro de Australia.",
+      "subtitleEn": "100% free online application once you have physically arrived in Australia.",
+      "phase": "first_week",
+      "priority": 6,
+      "targetGuideCategory": "tax"
+    },
+    {
+      "id": "prepare_australian_cv",
+      "title": "Generar tu CV en formato australiano (Sin foto/edad)",
+      "titleEn": "Build Australian Resume (No photo/age)",
+      "subtitle": "Adapta tu currículum a los estándares locales para empezar a aplicar a trabajos.",
+      "subtitleEn": "Format your resume to local Australian standards to start applying for jobs.",
+      "phase": "first_week",
+      "priority": 7,
+      "targetGuideCategory": "employment"
+    },
+    {
+      "id": "get_work_certifications",
+      "title": "Tramitar certificaciones obligatorias (RSA / White Card)",
+      "titleEn": "Obtain Mandatory Certifications (RSA / White Card)",
+      "subtitle": "RSA para servir alcohol en hostelería, White Card para entrar en obras de construcción.",
+      "subtitleEn": "RSA to serve alcohol in hospitality, White Card to access any construction site.",
+      "phase": "first_week",
+      "priority": 8,
+      "targetGuideCategory": "certifications"
+    },
+    {
+      "id": "superannuation_account",
+      "title": "Abrir o elegir tu fondo de Superannuation",
+      "titleEn": "Choose your Superannuation Fund",
+      "subtitle": "Elige un fondo líder (Hostplus/AustralianSuper) para que tus empleadores aporten tu 12%.",
+      "subtitleEn": "Select an industry fund (Hostplus/AustralianSuper) for your 12% mandatory employer super.",
+      "phase": "first_week",
+      "priority": 9,
+      "targetGuideCategory": "tax"
+    }
+  ]
+}

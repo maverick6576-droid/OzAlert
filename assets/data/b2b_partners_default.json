@@ -1,0 +1,108 @@
+{
+  "partners": [
+    {
+      "id": "commbank",
+      "name": "Commonwealth Bank (CommBank)",
+      "category": "banking",
+      "affiliateUrl": "https://www.commbank.com.au/travel/moving-to-australia.html",
+      "promoCode": null,
+      "badgeText": "Cuenta Everyday Smart Access (Hasta 14 días antes)",
+      "badgeTextEn": "Everyday Smart Access Account (Open 14 days before)",
+      "description": "El banco más grande de Australia. Puedes solicitarla online antes de volar y activarla en sucursal con tu pasaporte.",
+      "descriptionEn": "Australia's largest bank. Open online before flying and activate in branch with your passport.",
+      "isActive": true,
+      "priority": 1
+    },
+    {
+      "id": "wise",
+      "name": "Wise (Transferencias sin comisiones)",
+      "category": "banking",
+      "affiliateUrl": "https://wise.com/invite/u/ozalert",
+      "promoCode": "OZALERTWISE",
+      "badgeText": "Primera transferencia sin comisiones",
+      "badgeTextEn": "Fee-free first transfer",
+      "description": "La mejor opción para transferir tus euros o pesos a dólares australianos (AUD) con el tipo de cambio real del mercado.",
+      "descriptionEn": "The best option to convert your local currency to Australian Dollars (AUD) with real mid-market rate.",
+      "isActive": true,
+      "priority": 2
+    },
+    {
+      "id": "nab",
+      "name": "NAB (National Australia Bank)",
+      "category": "banking",
+      "affiliateUrl": "https://www.nab.com.au/personal/bank-accounts",
+      "promoCode": null,
+      "badgeText": "Sin comisiones mensuales de mantenimiento de por vida",
+      "badgeTextEn": "No monthly account keeping fees for life",
+      "description": "Cuenta bancaria sin comisiones mensuales independientemente de tus ingresos mensuales.",
+      "descriptionEn": "No monthly account fees regardless of your monthly deposits or student status.",
+      "isActive": true,
+      "priority": 3
+    },
+    {
+      "id": "boost_mobile",
+      "name": "Boost Mobile (Red Telstra Completa)",
+      "category": "telecom",
+      "affiliateUrl": "https://boost.com.au/pages/prepaid-plans",
+      "promoCode": "OZBOOST",
+      "badgeText": "Imprescindible para granjas (Cobertura Outback)",
+      "badgeTextEn": "Essential for farm work (Full Telstra coverage)",
+      "description": "Utiliza el 100% de la red de Telstra a precio prepago reducido. Si vas al campo, Optus y Vodafone suelen perder la señal.",
+      "descriptionEn": "Uses 100% of the Telstra mobile network. Critical for regional and farm work where others have no signal.",
+      "isActive": true,
+      "priority": 1
+    },
+    {
+      "id": "optus_sim",
+      "name": "Optus Mobile",
+      "category": "telecom",
+      "affiliateUrl": "https://www.optus.com.au/prepaid",
+      "promoCode": null,
+      "badgeText": "Ideal para ciudades y muchos gigas",
+      "badgeTextEn": "Great for cities with large data bundles",
+      "description": "Excelente velocidad en Sydney, Melbourne y Brisbane con paquetes de bienvenida y eSIM instantánea.",
+      "descriptionEn": "Fast 5G speeds in major metropolitan areas with instant eSIM activation.",
+      "isActive": true,
+      "priority": 2
+    },
+    {
+      "id": "bupa_insurance",
+      "name": "Bupa Short Stay Visitor Cover (OVHC)",
+      "category": "insurance",
+      "affiliateUrl": "https://www.bupa.com.au/health-insurance/overseas-visitors",
+      "promoCode": "BUPAOZ",
+      "badgeText": "Atención médica directa en Australia",
+      "badgeTextEn": "Direct medical billing across Australia",
+      "description": "Seguro de salud australiano para visitantes temporales. Permite acceso al sistema hospitalario local.",
+      "descriptionEn": "Dedicated Australian health cover for temporary working visa holders.",
+      "isActive": true,
+      "priority": 1
+    },
+    {
+      "id": "allianz_care",
+      "name": "Allianz Care Australia",
+      "category": "insurance",
+      "affiliateUrl": "https://www.allianzcare.com.au/en/visitors-visa-cop.html",
+      "promoCode": null,
+      "badgeText": "Cobertura aprobada por Inmigración",
+      "badgeTextEn": "Immigration compliant medical cover",
+      "description": "Póliza internacional completa con coberturas médicas de emergencia y repatriación.",
+      "descriptionEn": "Comprehensive policy covering medical emergencies, hospital stays and repatriation.",
+      "isActive": true,
+      "priority": 2
+    },
+    {
+      "id": "flatmates",
+      "name": "Flatmates.com.au",
+      "category": "housing",
+      "affiliateUrl": "https://flatmates.com.au/",
+      "promoCode": null,
+      "badgeText": "Plataforma #1 de habitaciones en Australia",
+      "badgeTextEn": "#1 Flat sharing platform in Australia",
+      "description": "La red más segura para encontrar habitación compartida en pisos y casas. Siempre inspecciona antes de transferir la fianza.",
+      "descriptionEn": "The safest network to find shared rooms. Always inspect in person before transferring any bond.",
+      "isActive": true,
+      "priority": 1
+    }
+  ]
+}

@@ -493,4 +493,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get referralOthers => 'Other';
+
+  @override
+  String get statsOfficialData => 'Official Data (Work & Holiday)';
+
+  @override
+  String get statsVolume => 'Application Volume';
+
+  @override
+  String get statsSourceTooltip => 'View official source';
+
+  @override
+  String get dndNoticeTitle => 'How to hear the alarm?';
+
+  @override
+  String get dndDialogTitle => 'Sound & Alarm Settings';
+
+  @override
+  String get dndDialogIntro =>
+      'For OzAlert to wake you up on time, you must configure your phone correctly. If your phone is on silent or \'Do Not Disturb\', you might miss the visa opening.';
+
+  @override
+  String get dndDialogIosTitle => '🍏 iPhone (iOS) Users';
+
+  @override
+  String get dndDialogIosSteps =>
+      '1. Go to Settings > OzAlert > Notifications.\n2. Ensure \'Allow Notifications\' and \'Sounds\' are enabled.\n3. If you use \'Do Not Disturb\' or \'Sleep\' Focus, go to its settings and add OzAlert as an Allowed App.';
+
+  @override
+  String get dndDialogAndroidTitle => '🤖 Android Users';
+
+  @override
+  String get dndDialogAndroidSteps =>
+      '1. Go to Settings > Apps > OzAlert > Notifications.\n2. Tap on the notification categories and select a loud custom sound.\n3. If you use \'Do Not Disturb\' mode, go to its settings and add OzAlert as an exception.';
+
+  @override
+  String get dndDialogClose => 'Got it';
 }

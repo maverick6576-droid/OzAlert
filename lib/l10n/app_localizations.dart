@@ -985,6 +985,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Other'**
   String get referralOthers;
+
+  /// No description provided for @statsOfficialData.
+  ///
+  /// In en, this message translates to:
+  /// **'Official Data (Work & Holiday)'**
+  String get statsOfficialData;
+
+  /// No description provided for @statsVolume.
+  ///
+  /// In en, this message translates to:
+  /// **'Application Volume'**
+  String get statsVolume;
+
+  /// No description provided for @statsSourceTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'View official source'**
+  String get statsSourceTooltip;
+
+  /// No description provided for @dndNoticeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to hear the alarm?'**
+  String get dndNoticeTitle;
+
+  /// No description provided for @dndDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound & Alarm Settings'**
+  String get dndDialogTitle;
+
+  /// No description provided for @dndDialogIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'For OzAlert to wake you up on time, you must configure your phone correctly. If your phone is on silent or \'Do Not Disturb\', you might miss the visa opening.'**
+  String get dndDialogIntro;
+
+  /// No description provided for @dndDialogIosTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'🍏 iPhone (iOS) Users'**
+  String get dndDialogIosTitle;
+
+  /// No description provided for @dndDialogIosSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Go to Settings > OzAlert > Notifications.\n2. Ensure \'Allow Notifications\' and \'Sounds\' are enabled.\n3. If you use \'Do Not Disturb\' or \'Sleep\' Focus, go to its settings and add OzAlert as an Allowed App.'**
+  String get dndDialogIosSteps;
+
+  /// No description provided for @dndDialogAndroidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'🤖 Android Users'**
+  String get dndDialogAndroidTitle;
+
+  /// No description provided for @dndDialogAndroidSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Go to Settings > Apps > OzAlert > Notifications.\n2. Tap on the notification categories and select a loud custom sound.\n3. If you use \'Do Not Disturb\' mode, go to its settings and add OzAlert as an exception.'**
+  String get dndDialogAndroidSteps;
+
+  /// No description provided for @dndDialogClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get dndDialogClose;
 }
 
 class _AppLocalizationsDelegate

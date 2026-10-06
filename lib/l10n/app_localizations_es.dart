@@ -498,4 +498,40 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get referralOthers => 'Otros';
+
+  @override
+  String get statsOfficialData => 'Datos Oficiales (Work & Holiday)';
+
+  @override
+  String get statsVolume => 'Volumen de Solicitudes';
+
+  @override
+  String get statsSourceTooltip => 'Ver fuente oficial';
+
+  @override
+  String get dndNoticeTitle => '¿Cómo enterarte de la alarma?';
+
+  @override
+  String get dndDialogTitle => 'Configuración de Sonido';
+
+  @override
+  String get dndDialogIntro =>
+      'Para que OzAlert te avise a tiempo, debes configurar tu móvil. Si tu teléfono está en silencio o en \'No Molestar\' y bloquea el aviso, podrías perder tu plaza.';
+
+  @override
+  String get dndDialogIosTitle => '🍏 Usuarios de iPhone';
+
+  @override
+  String get dndDialogIosSteps =>
+      '1. Ve a Ajustes > OzAlert > Notificaciones.\n2. Asegúrate de tener activado \'Permitir Notificaciones\' y \'Sonidos\'.\n3. Si usas el modo \'No Molestar\' o \'Descanso\', entra en su configuración y añade a OzAlert en la lista de Apps Permitidas.';
+
+  @override
+  String get dndDialogAndroidTitle => '🤖 Usuarios de Android';
+
+  @override
+  String get dndDialogAndroidSteps =>
+      '1. Ve a Ajustes > Aplicaciones > OzAlert > Notificaciones.\n2. Entra en las categorías de notificación y asegúrate de elegir un tono de llamada fuerte.\n3. Si usas el modo \'No Molestar\', ve a sus ajustes y añade a OzAlert como una app con permiso para interrumpir.';
+
+  @override
+  String get dndDialogClose => 'Entendido';
 }

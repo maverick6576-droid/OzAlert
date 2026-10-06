@@ -3,9 +3,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/theme/app_theme.dart';
 import 'presentation/navigation/main_navigation_screen.dart';
+import 'presentation/navigation/phase2_navigation_screen.dart';
 import 'presentation/screens/auth/login_screen.dart';
 import 'presentation/screens/onboarding/welcome_screen.dart';
-import 'presentation/screens/onboarding/onboarding_screen.dart';
 import 'presentation/screens/onboarding/referral_source_screen.dart';
 import 'presentation/screens/paywall/paywall_screen.dart';
 import 'presentation/providers/auth_provider.dart';
@@ -61,11 +61,14 @@ class OzVisaAlertApp extends ConsumerWidget {
               } else if (profile.referralSource == null) {
                 // Completó onboarding pero no ha dicho de dónde viene -> Referral Screen
                 return ReferralSourceScreen(onCompleted: () {});
+              } else if (profile.currentPhase == 2) {
+                // FASE 2: Experiencia dedicada en Australia (Llegada, Empleo, Guías y 88 Días)
+                return const Phase2NavigationScreen();
               } else if (!profile.isPremium) {
-                // Perfil completo, pero NO ha pagado -> Paywall
+                // Perfil completo, pero NO ha pagado -> Paywall (Fase 1)
                 return const PaywallScreen();
               } else {
-                // Perfil completo y PAGADO -> Dashboard Principal
+                // Perfil completo y PAGADO -> Dashboard Principal (Fase 1)
                 return const MainNavigationScreen();
               }
             },

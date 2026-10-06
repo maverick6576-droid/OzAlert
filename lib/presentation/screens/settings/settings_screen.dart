@@ -6,7 +6,6 @@ import '../../providers/auth_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/news_notifications_provider.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
-import '../../../../core/services/notification_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends ConsumerWidget {

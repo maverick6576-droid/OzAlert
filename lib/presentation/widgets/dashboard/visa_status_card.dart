@@ -7,7 +7,6 @@ import '../../providers/passport_provider.dart';
 import '../../../../domain/models/country_config.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
-import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class VisaStatusCard extends ConsumerStatefulWidget {
   final CountryConfig country;
@@ -68,11 +67,6 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
       return AppLocalizations.of(context)!.visaStatusClosedDesc;
     }
 
-    IconData getIconData() {
-      if (isOpen) return CupertinoIcons.location_solid;
-      if (isPaused) return CupertinoIcons.pause_solid;
-      return CupertinoIcons.xmark_circle_fill;
-    }
 
     return Stack(
       clipBehavior: Clip.none,

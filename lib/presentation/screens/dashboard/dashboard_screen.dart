@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../providers/passport_provider.dart';
 import '../../providers/paywall_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../widgets/dashboard/live_radar_banner.dart';
 import '../../widgets/dashboard/visa_status_card.dart';
-import '../../widgets/dashboard/paywall_modal.dart';
 import '../../widgets/dashboard/statistics_card.dart';
+import '../../widgets/dashboard/community_visa_times_card.dart';
+import '../../../../core/services/notification_service.dart';
 
 import '../settings/settings_screen.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
@@ -18,14 +18,7 @@ import 'package:ozvisa_alert/l10n/app_localizations.dart';
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
 
-  void _showPaywallModal(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => const PaywallModal(),
-    );
-  }
+
 
 
   void _showDndDialog(BuildContext context) {
@@ -94,7 +87,7 @@ class DashboardScreen extends ConsumerWidget {
   @override
 
   Widget build(BuildContext context, WidgetRef ref) {
-    final isSubscribed = ref.watch(paywallProvider);
+    ref.watch(paywallProvider);
     final userProfileState = ref.watch(userProfileProvider);
     final userProfile = userProfileState.value;
     final passports = userProfile?.passports ?? [];
@@ -220,7 +213,11 @@ class DashboardScreen extends ConsumerWidget {
 
                 const SizedBox(height: 10),
                 const StatisticsCard(),
-                const SizedBox(height: 32),
+                const SizedBox(height: 12),
+                const CommunityVisaTimesCard(),
+                const SizedBox(height: 16),
+                _buildPhase2TransitionCard(context, ref),
+                const SizedBox(height: 24),
 
                 // 4. Panel de información de seguridad
                 Container(
@@ -278,6 +275,88 @@ class DashboardScreen extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPhase2TransitionCard(BuildContext context, WidgetRef ref) {
+    return InkWell(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+            title: const Row(
+              children: [
+                Icon(Icons.flight_takeoff_rounded, color: AppColors.secondary),
+                SizedBox(width: 10),
+                Expanded(child: Text('¡Ya tengo mi visado! 🎉', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18))),
+              ],
+            ),
+            content: const Text(
+              'Al pasar a la Fase 2, accederás a la guía de llegada a Australia, generador de CV australiano, calculadora de salarios Fair Work y validador de los 88 días. Además, apagaremos las alarmas push de apertura de cupos para no molestarte.',
+              style: TextStyle(fontSize: 14, height: 1.4),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Cancelar', style: TextStyle(color: AppColors.textMuted)),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: AppColors.secondary),
+                onPressed: () async {
+                  Navigator.pop(ctx);
+                  await NotificationService().syncPassportSubscriptions([]);
+                  final profile = ref.read(userProfileProvider).value;
+                  if (profile != null) {
+                    await ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(currentPhase: 2));
+                    ref.invalidate(userProfileProvider);
+                  }
+                },
+                child: const Text('Entrar a la Fase 2', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              ),
+            ],
+          ),
+        );
+      },
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.secondary.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.secondary.withOpacity(0.4)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.secondary.withOpacity(0.18),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.flight_takeoff_rounded, color: AppColors.secondary, size: 24),
+            ),
+            const SizedBox(width: 14),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '¿Ya te concedieron el visado? ✈️',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
+                  ),
+                  SizedBox(height: 2),
+                  Text(
+                    'Pasa a la Fase 2: Guía de llegada, CV australiano y 88 días.',
+                    style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(CupertinoIcons.chevron_right, color: AppColors.secondary, size: 18),
+          ],
+        ),
       ),
     );
   }

@@ -1,0 +1,329 @@
+{
+  "version": "2026.1",
+  "disclaimer": "Información extraída de los instrumentos legislativos oficiales del Department of Home Affairs (LIN 22/050 y LIN 21/043).",
+  "postcodes": [
+    {
+      "code": "4870",
+      "location": "Cairns / Northern Beaches, QLD",
+      "state": "QLD",
+      "zone": "northern",
+      "subclass462": {
+        "agriculture": true,
+        "tourism_hospitality": true,
+        "construction": true,
+        "forestry_fishing": true
+      },
+      "subclass417": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": true,
+        "mining": true,
+        "forestry_fishing": true
+      }
+    },
+    {
+      "code": "4877",
+      "location": "Port Douglas, QLD",
+      "state": "QLD",
+      "zone": "northern",
+      "subclass462": {
+        "agriculture": true,
+        "tourism_hospitality": true,
+        "construction": true,
+        "forestry_fishing": true
+      },
+      "subclass417": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": true,
+        "mining": true,
+        "forestry_fishing": true
+      }
+    },
+    {
+      "code": "4810",
+      "location": "Townsville, QLD",
+      "state": "QLD",
+      "zone": "northern",
+      "subclass462": {
+        "agriculture": true,
+        "tourism_hospitality": true,
+        "construction": true,
+        "forestry_fishing": true
+      },
+      "subclass417": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": true,
+        "mining": true,
+        "forestry_fishing": true
+      }
+    },
+    {
+      "code": "0800",
+      "location": "Darwin City, NT",
+      "state": "NT",
+      "zone": "northern",
+      "subclass462": {
+        "agriculture": true,
+        "tourism_hospitality": true,
+        "construction": true,
+        "forestry_fishing": true
+      },
+      "subclass417": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": true,
+        "mining": true,
+        "forestry_fishing": true
+      }
+    },
+    {
+      "code": "0870",
+      "location": "Alice Springs, NT",
+      "state": "NT",
+      "zone": "remote",
+      "subclass462": {
+        "agriculture": true,
+        "tourism_hospitality": true,
+        "construction": true,
+        "forestry_fishing": true
+      },
+      "subclass417": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": true,
+        "mining": true,
+        "forestry_fishing": true
+      }
+    },
+    {
+      "code": "6725",
+      "location": "Broome, WA",
+      "state": "WA",
+      "zone": "northern",
+      "subclass462": {
+        "agriculture": true,
+        "tourism_hospitality": true,
+        "construction": true,
+        "forestry_fishing": true
+      },
+      "subclass417": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": true,
+        "mining": true,
+        "forestry_fishing": true
+      }
+    },
+    {
+      "code": "6721",
+      "location": "Port Hedland, WA",
+      "state": "WA",
+      "zone": "northern",
+      "subclass462": {
+        "agriculture": true,
+        "tourism_hospitality": true,
+        "construction": true,
+        "forestry_fishing": true
+      },
+      "subclass417": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": true,
+        "mining": true,
+        "forestry_fishing": true
+      }
+    },
+    {
+      "code": "4670",
+      "location": "Bundaberg, QLD",
+      "state": "QLD",
+      "zone": "regional_south",
+      "subclass462": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": false,
+        "forestry_fishing": false
+      },
+      "subclass417": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": true,
+        "mining": true,
+        "forestry_fishing": true
+      }
+    },
+    {
+      "code": "2481",
+      "location": "Byron Bay / Suffolk Park, NSW",
+      "state": "NSW",
+      "zone": "regional_nsw",
+      "subclass462": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": false,
+        "forestry_fishing": false
+      },
+      "subclass417": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": true,
+        "mining": true,
+        "forestry_fishing": true
+      }
+    },
+    {
+      "code": "2450",
+      "location": "Coffs Harbour, NSW",
+      "state": "NSW",
+      "zone": "regional_nsw",
+      "subclass462": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": false,
+        "forestry_fishing": false
+      },
+      "subclass417": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": true,
+        "mining": true,
+        "forestry_fishing": true
+      }
+    },
+    {
+      "code": "3500",
+      "location": "Mildura, VIC",
+      "state": "VIC",
+      "zone": "regional_vic",
+      "subclass462": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": false,
+        "forestry_fishing": false
+      },
+      "subclass417": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": true,
+        "mining": true,
+        "forestry_fishing": true
+      }
+    },
+    {
+      "code": "3630",
+      "location": "Shepparton, VIC",
+      "state": "VIC",
+      "zone": "regional_vic",
+      "subclass462": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": false,
+        "forestry_fishing": false
+      },
+      "subclass417": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": true,
+        "mining": true,
+        "forestry_fishing": true
+      }
+    },
+    {
+      "code": "6285",
+      "location": "Margaret River, WA",
+      "state": "WA",
+      "zone": "regional_wa",
+      "subclass462": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": false,
+        "forestry_fishing": false
+      },
+      "subclass417": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": true,
+        "mining": true,
+        "forestry_fishing": true
+      }
+    },
+    {
+      "code": "7000",
+      "location": "Hobart, TAS",
+      "state": "TAS",
+      "zone": "tasmania_all",
+      "subclass462": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": false,
+        "forestry_fishing": false
+      },
+      "subclass417": {
+        "agriculture": true,
+        "tourism_hospitality": false,
+        "construction": true,
+        "mining": true,
+        "forestry_fishing": true
+      }
+    },
+    {
+      "code": "2000",
+      "location": "Sydney CBD, NSW",
+      "state": "NSW",
+      "zone": "metro",
+      "subclass462": {
+        "agriculture": false,
+        "tourism_hospitality": false,
+        "construction": false,
+        "forestry_fishing": false
+      },
+      "subclass417": {
+        "agriculture": false,
+        "tourism_hospitality": false,
+        "construction": false,
+        "mining": false,
+        "forestry_fishing": false
+      }
+    },
+    {
+      "code": "3000",
+      "location": "Melbourne CBD, VIC",
+      "state": "VIC",
+      "zone": "metro",
+      "subclass462": {
+        "agriculture": false,
+        "tourism_hospitality": false,
+        "construction": false,
+        "forestry_fishing": false
+      },
+      "subclass417": {
+        "agriculture": false,
+        "tourism_hospitality": false,
+        "construction": false,
+        "mining": false,
+        "forestry_fishing": false
+      }
+    },
+    {
+      "code": "4000",
+      "location": "Brisbane CBD, QLD",
+      "state": "QLD",
+      "zone": "metro",
+      "subclass462": {
+        "agriculture": false,
+        "tourism_hospitality": false,
+        "construction": false,
+        "forestry_fishing": false
+      },
+      "subclass417": {
+        "agriculture": false,
+        "tourism_hospitality": false,
+        "construction": false,
+        "mining": false,
+        "forestry_fishing": false
+      }
+    }
+  ]
+}
