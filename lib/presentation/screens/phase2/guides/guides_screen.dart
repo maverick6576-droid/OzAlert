@@ -8,6 +8,7 @@ import '../../../providers/locale_provider.dart';
 import '../../../../domain/models/phase2/affiliate_partner.dart';
 import '../../../../domain/models/phase2/guide_data.dart';
 import '../../../widgets/phase2/premium_feature_gate.dart';
+import 'package:ozvisa_alert/presentation/widgets/phase2/phase2_app_bar.dart';
 
 class GuidesScreen extends ConsumerStatefulWidget {
   const GuidesScreen({super.key});
@@ -25,7 +26,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     {'id': 'telecom', 'label': '📱 SIM & Red', 'labelEn': '📱 Mobile & SIM'},
     {'id': 'insurance', 'label': '🏥 Seguros', 'labelEn': '🏥 Insurance'},
     {'id': 'housing', 'label': '🏠 Alquiler', 'labelEn': '🏠 Housing'},
-    {'id': 'tax', 'label': '🧾 Impuestos & TFN', 'labelEn': '🧾 Tax & Super'},
+    {'id': 'tax', 'label': '🧾 Impuestos', 'labelEn': '🧾 Tax & Super'},
     {'id': 'certifications', 'label': '📜 Cursos & RSA', 'labelEn': '📜 Certificates'},
   ];
 
@@ -45,14 +46,10 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        title: Text(
-          isEn ? 'Directory & Guides' : 'Guías & Comparativas',
-          style: const TextStyle(fontWeight: FontWeight.w900, color: AppColors.textPrimary, fontSize: 22),
-        ),
-        centerTitle: false,
+      appBar: Phase2AppBar(
+        title: isEn ? 'Guides & Reviews' : 'Guías & Comparativas',
+        isEn: isEn,
+        infoTopic: _selectedCategory,
       ),
       body: Column(
         children: [
@@ -74,9 +71,13 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     children: [
                       const Icon(CupertinoIcons.arrow_left, size: 16, color: AppColors.secondary),
                       const SizedBox(width: 8),
-                      Text(
-                        isEn ? 'Return to checklist to mark step done' : 'Volver al checklist para marcar la tarea',
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.secondary),
+                      Expanded(
+                        child: Text(
+                          isEn ? 'Return to checklist to mark step done' : 'Volver al checklist para marcar la tarea',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.secondary),
+                        ),
                       ),
                     ],
                   ),
@@ -84,7 +85,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
               ),
             ),
 
-          // Pestañas horizontales de categorías
+          // Pestañas horizontales de categorías con diseño limpio
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -97,17 +98,21 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     label: Text(
                       isEn ? c['labelEn']! : c['label']!,
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w700,
                         color: isSelected ? Colors.white : AppColors.textPrimary,
-                        fontSize: 13,
+                        fontSize: 12.5,
                       ),
                     ),
                     selected: isSelected,
                     selectedColor: AppColors.primary,
                     backgroundColor: AppColors.surface,
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(color: isSelected ? AppColors.primary : AppColors.cardBorder),
+                      borderRadius: BorderRadius.circular(14),
+                      side: BorderSide(
+                        color: isSelected ? AppColors.primary : AppColors.cardBorder,
+                        width: 1.2,
+                      ),
                     ),
                     onSelected: (selected) {
                       if (selected) {
@@ -122,20 +127,33 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             ),
           ),
 
-          // Sub-tabs segmentadas: Guía Paso a Paso | Comparativa | Servicios & Promos
+          // Sub-tabs segmentadas: compactas para evitar recortes de texto
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: Container(
+              padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(
                 color: AppColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.cardBorder),
               ),
               child: Row(
                 children: [
-                  _buildSubTabItem(index: 0, label: isEn ? '📘 Step Guide' : '📘 Guía Paso a Paso'),
-                  _buildSubTabItem(index: 1, label: isEn ? '⚖️ Comparison' : '⚖️ Comparativa'),
-                  _buildSubTabItem(index: 2, label: isEn ? '🎁 Services & B2B' : '🎁 Servicios & B2B'),
+                  _buildSubTabItem(
+                    index: 0,
+                    label: isEn ? '📘 Guide' : '📘 Guía',
+                    sublabel: isEn ? 'Step-by-step' : 'Paso a paso',
+                  ),
+                  _buildSubTabItem(
+                    index: 1,
+                    label: isEn ? '⚖️ Compare' : '⚖️ Comparativa',
+                    sublabel: isEn ? 'Features' : 'Detalles',
+                  ),
+                  _buildSubTabItem(
+                    index: 2,
+                    label: isEn ? '🎁 Deals' : '🎁 Promos B2B',
+                    sublabel: isEn ? 'Coupons' : 'Descuentos',
+                  ),
                 ],
               ),
             ),
@@ -143,7 +161,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
 
           const SizedBox(height: 6),
 
-          // Contenido principal dinámico según la sub-tab activa
+          // Contenido principal dinámico
           Expanded(
             child: guideAsync.when(
               data: (guide) {
@@ -164,7 +182,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   return _buildPartnersView(partnersAsync, isEn);
                 }
               },
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const Center(child: CircularProgressIndicator(color: AppColors.primary)),
               error: (err, _) => Center(child: Text('Error: $err')),
             ),
           ),
@@ -173,25 +191,52 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     );
   }
 
-  Widget _buildSubTabItem({required int index, required String label}) {
+  Widget _buildSubTabItem({
+    required int index,
+    required String label,
+    required String sublabel,
+  }) {
     final isSelected = _selectedSubTab == index;
     return Expanded(
       child: GestureDetector(
         onTap: () => setState(() => _selectedSubTab = index),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 9),
+        behavior: HitTestBehavior.opaque,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: 7),
           decoration: BoxDecoration(
             color: isSelected ? AppColors.primary : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(13),
+            boxShadow: isSelected
+                ? const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))]
+                : null,
           ),
           alignment: Alignment.center,
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.white : AppColors.textSecondary,
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w800,
+                  color: isSelected ? Colors.white : AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 1),
+              Text(
+                sublabel,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                  color: isSelected ? Colors.white.withValues(alpha: 0.85) : AppColors.textMuted,
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -203,20 +248,21 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       children: [
-        // Cabecera descriptiva de la guía
+        // Cabecera descriptiva de la categoría
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: AppColors.surface,
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(color: AppColors.cardBorder),
+            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2))],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 isEn ? guide.titleEn : guide.title,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
               ),
               const SizedBox(height: 6),
               Text(
@@ -233,7 +279,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
 
         const SizedBox(height: 16),
         _buildTaxHackBanner(isEn),
-        const SizedBox(height: 32),
+        const SizedBox(height: 36),
       ],
     );
   }
@@ -245,7 +291,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
         borderRadius: BorderRadius.circular(18),
         side: const BorderSide(color: AppColors.cardBorder),
       ),
-      elevation: 1,
+      elevation: 0,
+      color: AppColors.surface,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -265,7 +312,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 Expanded(
                   child: Text(
                     isEn ? step.titleEn : step.title,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5, color: AppColors.textPrimary),
                   ),
                 ),
               ],
@@ -278,11 +325,11 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             if ((isEn ? step.tipEn : step.tip).isNotEmpty) ...[
               const SizedBox(height: 10),
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(11),
                 decoration: BoxDecoration(
                   color: AppColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.warning.withValues(alpha: 0.35)),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -292,7 +339,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     Expanded(
                       child: Text(
                         isEn ? step.tipEn : step.tip,
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textPrimary, height: 1.35),
                       ),
                     ),
                   ],
@@ -313,7 +360,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
         ...guide.comparisons.map((c) => _buildComparisonCard(c, isEn)),
         const SizedBox(height: 16),
         _buildTaxHackBanner(isEn),
-        const SizedBox(height: 32),
+        const SizedBox(height: 36),
       ],
     );
   }
@@ -325,7 +372,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
         borderRadius: BorderRadius.circular(20),
         side: const BorderSide(color: AppColors.cardBorder),
       ),
-      elevation: 2,
+      elevation: 0,
+      color: AppColors.surface,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -334,7 +382,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             // Título y Tagline
             Text(
               item.name,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
             ),
             const SizedBox(height: 4),
             Container(
@@ -345,17 +393,17 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
               ),
               child: Text(
                 isEn ? item.taglineEn : item.tagline,
-                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12, color: AppColors.secondary),
+                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5, color: AppColors.secondary),
               ),
             ),
             const SizedBox(height: 12),
 
-            // Atributos clave en formato tabla
+            // Atributos clave en formato tabla limpia con anchos seguros
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: AppColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(14),
               ),
               child: Column(
                 children: item.keyAttributes.entries.map((entry) {
@@ -368,30 +416,32 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   }
 
                   String displayKey = entry.key.replaceAll('En', '');
-                  if (displayKey == 'monthlyFee') displayKey = isEn ? 'Monthly Fee' : 'Comisión mensual';
-                  if (displayKey == 'branchNetwork') displayKey = isEn ? 'Branch Network' : 'Red de Oficinas';
-                  if (displayKey == 'onlineOpening') displayKey = isEn ? 'Online Opening' : 'Apertura Online';
+                  if (displayKey == 'monthlyFee') displayKey = isEn ? 'Monthly Fee' : 'Comisión';
+                  if (displayKey == 'branchNetwork') displayKey = isEn ? 'Network' : 'Oficinas';
+                  if (displayKey == 'onlineOpening') displayKey = isEn ? 'Online Opening' : 'Apertura';
                   if (displayKey == 'networkType') displayKey = isEn ? 'Network' : 'Red Móvil';
-                  if (displayKey == 'farmCoverage') displayKey = isEn ? 'Farm Reach' : 'Cobertura Granja';
-                  if (displayKey == 'plans') displayKey = isEn ? 'Plan Pricing' : 'Tarifa / Planes';
-                  if (displayKey == 'coverageType') displayKey = isEn ? 'Cover Type' : 'Tipo Cobertura';
+                  if (displayKey == 'farmCoverage') displayKey = isEn ? 'Farm Signal' : 'En Granjas';
+                  if (displayKey == 'plans') displayKey = isEn ? 'Plans' : 'Tarifa';
+                  if (displayKey == 'coverageType') displayKey = isEn ? 'Coverage' : 'Cobertura';
                   if (displayKey == 'ambulanceCover') displayKey = isEn ? 'Ambulance' : 'Ambulancia';
-                  if (displayKey == 'pricing') displayKey = isEn ? 'Pricing' : 'Precio / Coste';
-                  if (displayKey == 'security') displayKey = isEn ? 'Trust Level' : 'Nivel Seguridad';
-                  if (displayKey == 'fundType') displayKey = isEn ? 'Fund Structure' : 'Tipo de Fondo';
+                  if (displayKey == 'pricing') displayKey = isEn ? 'Price' : 'Precio';
+                  if (displayKey == 'security') displayKey = isEn ? 'Safety' : 'Seguridad';
+                  if (displayKey == 'fundType') displayKey = isEn ? 'Structure' : 'Tipo Fondo';
                   if (displayKey == 'fees') displayKey = isEn ? 'Fees' : 'Comisiones';
-                  if (displayKey == 'format') displayKey = isEn ? 'Course Format' : 'Modalidad';
+                  if (displayKey == 'format') displayKey = isEn ? 'Format' : 'Modalidad';
                   if (displayKey == 'cost') displayKey = isEn ? 'Cost' : 'Precio';
 
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 3),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          displayKey,
-                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
+                        SizedBox(
+                          width: 85,
+                          child: Text(
+                            displayKey,
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
+                          ),
                         ),
                         const SizedBox(width: 8),
                         Expanded(
@@ -410,9 +460,9 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             const SizedBox(height: 12),
 
             // Ventajas (Pros)
-            const Text(
-              '✓ Puntos Fuertes',
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.secondary),
+            Text(
+              isEn ? '✓ Key Strengths' : '✓ Puntos Fuertes',
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.secondary),
             ),
             const SizedBox(height: 4),
             ...(isEn ? item.prosEn : item.pros).map((p) => Padding(
@@ -432,9 +482,9 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
 
             // Desventajas (Cons)
             if ((isEn ? item.consEn : item.cons).isNotEmpty) ...[
-              const Text(
-                '✗ Puntos a Considerar',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.statusClosed),
+              Text(
+                isEn ? '✗ Important Caveats' : '✗ A Tener en Cuenta',
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.statusClosed),
               ),
               const SizedBox(height: 4),
               ...(isEn ? item.consEn : item.cons).map((c) => Padding(
@@ -455,20 +505,21 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
 
             // Veredicto final
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(10),
+                color: AppColors.surfaceElevated,
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
               ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Icon(Icons.stars_rounded, color: AppColors.primary, size: 18),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Veredicto: ${isEn ? item.verdictEn : item.verdict}',
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                      '${isEn ? "Verdict" : "Veredicto"}: ${isEn ? item.verdictEn : item.verdict}',
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.textPrimary, height: 1.3),
                     ),
                   ),
                 ],
@@ -499,11 +550,11 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             ...partners.map((p) => _buildPartnerCard(p, isEn)),
             const SizedBox(height: 16),
             _buildTaxHackBanner(isEn),
-            const SizedBox(height: 32),
+            const SizedBox(height: 36),
           ],
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const Center(child: CircularProgressIndicator(color: AppColors.primary)),
       error: (err, _) => Center(child: Text('Error: $err')),
     );
   }
@@ -515,7 +566,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
         borderRadius: BorderRadius.circular(20),
         side: const BorderSide(color: AppColors.cardBorder),
       ),
-      elevation: 2,
+      elevation: 0,
+      color: AppColors.surface,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -537,7 +589,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
 
             Text(
               partner.name,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
             ),
             const SizedBox(height: 6),
 
@@ -557,15 +609,15 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   border: Border.all(color: AppColors.warning.withValues(alpha: 0.5)),
                 ),
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(CupertinoIcons.tag_fill, size: 16, color: AppColors.primary),
+                    const Icon(CupertinoIcons.tag_fill, size: 15, color: AppColors.primary),
                     const SizedBox(width: 8),
-                    Text(
-                      'Código Promo: ${partner.promoCode}',
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primary),
+                    Expanded(
+                      child: Text(
+                        '${isEn ? "Code" : "Código"}: ${partner.promoCode}',
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primary),
+                      ),
                     ),
-                    const SizedBox(width: 8),
                     Text(
                       isEn ? '(Auto-copied)' : '(Se copia al pulsar)',
                       style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
@@ -584,12 +636,15 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   partner.promoCode != null && partner.promoCode!.isNotEmpty
                       ? (isEn ? 'Apply Code & Open Official Site' : 'Aplicar Descuento & Abrir Web Oficial')
                       : (isEn ? 'Open Official Link' : 'Ir a la Web Oficial'),
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  elevation: 0,
                 ),
                 onPressed: () {
                   AffiliateLinkService.openPartnerLink(
@@ -626,9 +681,11 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
               children: [
                 const Icon(Icons.lightbulb_rounded, color: AppColors.warning),
                 const SizedBox(width: 8),
-                Text(
-                  isEn ? 'Pro Tax Deductions Guide' : 'Guía Pro de Deducciones Fiscales',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.textPrimary),
+                Expanded(
+                  child: Text(
+                    isEn ? 'Pro Tax Deductions Guide' : 'Guía Pro de Deducciones Fiscales',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
+                  ),
                 ),
               ],
             ),
@@ -637,7 +694,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
               isEn
                   ? 'How to claim back expenses from your farm, hospitality or construction jobs at end of financial year.'
                   : 'Cómo desgravar gastos de herramientas, visados y cursos de formación en la declaración de impuestos.',
-              style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+              style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
             ),
           ],
         ),

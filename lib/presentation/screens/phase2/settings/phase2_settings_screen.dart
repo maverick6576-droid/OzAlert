@@ -6,6 +6,7 @@ import '../../../providers/auth_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../providers/locale_provider.dart';
 import '../../../widgets/phase2/visa_dates_survey_dialog.dart';
+import 'package:ozvisa_alert/presentation/widgets/phase2/official_sources_modal.dart';
 
 class Phase2SettingsScreen extends ConsumerWidget {
   const Phase2SettingsScreen({super.key});
@@ -22,11 +23,23 @@ class Phase2SettingsScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(CupertinoIcons.back, color: AppColors.textPrimary, size: 22),
+          onPressed: () => Navigator.of(context).maybePop(),
+        ),
         title: Text(
           isEn ? 'Settings' : 'Ajustes',
-          style: const TextStyle(fontWeight: FontWeight.w900, color: AppColors.textPrimary, fontSize: 22),
+          style: const TextStyle(fontWeight: FontWeight.w900, color: AppColors.textPrimary, fontSize: 20),
         ),
         centerTitle: false,
+        actions: [
+          IconButton(
+            tooltip: isEn ? 'Official Legal Sources' : 'Fuentes Oficiales y Marco Legal',
+            icon: const Icon(CupertinoIcons.info_circle, color: AppColors.textPrimary, size: 22),
+            onPressed: () => showOfficialSourcesModal(context, isEn: isEn),
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -38,6 +51,7 @@ class Phase2SettingsScreen extends ConsumerWidget {
               color: AppColors.surface,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: AppColors.cardBorder),
+              boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2))],
             ),
             child: Row(
               children: [
@@ -53,6 +67,8 @@ class Phase2SettingsScreen extends ConsumerWidget {
                     children: [
                       Text(
                         user?.email ?? 'Usuario OzAlert',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
                       ),
                       const SizedBox(height: 4),
@@ -92,6 +108,8 @@ class Phase2SettingsScreen extends ConsumerWidget {
           _buildSectionTitle(isEn ? 'PREFERENCES' : 'PREFERENCIAS'),
           Card(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: AppColors.cardBorder)),
+            elevation: 0,
+            color: AppColors.surface,
             child: Column(
               children: [
                 // Idioma
@@ -99,29 +117,71 @@ class Phase2SettingsScreen extends ConsumerWidget {
                   leading: const Icon(CupertinoIcons.globe, color: AppColors.secondary),
                   title: Text(isEn ? 'Language' : 'Idioma de la App'),
                   subtitle: Text(isEn ? 'English' : 'Español'),
-                  trailing: const Icon(CupertinoIcons.chevron_right, size: 16),
-                  onTap: () {
-                    final newLocale = isEn ? const Locale('es') : const Locale('en');
-                    ref.read(localeProvider.notifier).setLocale(newLocale);
-                  },
+                  trailing: SegmentedButton<String>(
+                    segments: const [
+                      ButtonSegment(value: 'es', label: Text('ES', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))),
+                      ButtonSegment(value: 'en', label: Text('EN', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))),
+                    ],
+                    selected: {locale?.languageCode ?? 'es'},
+                    onSelectionChanged: (set) {
+                      ref.read(localeProvider.notifier).setLocale(Locale(set.first));
+                    },
+                    style: SegmentedButton.styleFrom(
+                      selectedBackgroundColor: AppColors.primary,
+                      selectedForegroundColor: Colors.white,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  ),
                 ),
                 const Divider(height: 1),
 
-                // Subclase de visado
+                // Subclase de Visado
                 ListTile(
-                  leading: const Icon(CupertinoIcons.doc_plaintext, color: AppColors.primary),
+                  leading: const Icon(CupertinoIcons.tag, color: AppColors.secondary),
                   title: Text(isEn ? 'Visa Subclass' : 'Subclase de Visado'),
-                  subtitle: Text(profile?.visaSubclass == '417' ? 'Subclass 417 (Working Holiday)' : 'Subclass 462 (Work and Holiday)'),
-                  trailing: const Icon(CupertinoIcons.chevron_right, size: 16),
-                  onTap: () async {
-                    if (profile != null) {
-                      final newSubclass = profile.visaSubclass == '462' ? '417' : '462';
-                      await ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(visaSubclass: newSubclass));
-                      ref.invalidate(userProfileProvider);
-                    }
-                  },
+                  subtitle: Text(
+                    (profile?.visaSubclass ?? '462') == '462'
+                        ? (isEn ? 'Work and Holiday (Subclass 462)' : 'Work and Holiday (Subclase 462)')
+                        : (isEn ? 'Working Holiday (Subclass 417)' : 'Working Holiday (Subclase 417)'),
+                  ),
+                  trailing: DropdownButton<String>(
+                    value: profile?.visaSubclass ?? '462',
+                    underline: const SizedBox(),
+                    items: const [
+                      DropdownMenuItem(value: '462', child: Text('462 (España/LatAm)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
+                      DropdownMenuItem(value: '417', child: Text('417 (EU/UK/ITA)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
+                    ],
+                    onChanged: (val) {
+                      if (val != null && profile != null) {
+                        ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(visaSubclass: val));
+                        ref.invalidate(userProfileProvider);
+                      }
+                    },
+                  ),
                 ),
               ],
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Fuentes Oficiales & Marco Legal
+          _buildSectionTitle(isEn ? 'LEGAL TRANSPARENCY' : 'TRANSPARENCIA LEGAL'),
+          Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: AppColors.cardBorder)),
+            elevation: 0,
+            color: AppColors.surface,
+            child: ListTile(
+              leading: const Icon(CupertinoIcons.info_circle_fill, color: AppColors.secondary),
+              title: Text(
+                isEn ? 'Official Government Sources' : 'Fuentes Oficiales del Gobierno',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              ),
+              subtitle: Text(
+                isEn ? 'Fair Work Ombudsman, Home Affairs & ATO' : 'Fair Work Ombudsman, Inmigración y ATO',
+                style: const TextStyle(fontSize: 12),
+              ),
+              trailing: const Icon(CupertinoIcons.chevron_right, size: 16),
+              onTap: () => showOfficialSourcesModal(context, isEn: isEn),
             ),
           ),
           const SizedBox(height: 16),
@@ -149,10 +209,12 @@ class Phase2SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 16),
           ],
 
-          // BOTÓN DE PÁNICO / RETORNO A FASE 1
+          // BOTÓN DE RETORNO A FASE 1
           _buildSectionTitle(isEn ? 'PHASE SWITCHER' : 'CAMBIO DE FASE'),
           Card(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: AppColors.cardBorder)),
+            elevation: 0,
+            color: AppColors.surface,
             child: ListTile(
               leading: const Icon(CupertinoIcons.compass, color: AppColors.primary),
               title: Text(
@@ -172,6 +234,8 @@ class Phase2SettingsScreen extends ConsumerWidget {
           // Cierre de Sesión
           Card(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: AppColors.cardBorder)),
+            elevation: 0,
+            color: AppColors.surface,
             child: ListTile(
               leading: const Icon(Icons.logout, color: AppColors.statusClosed),
               title: Text(
@@ -218,6 +282,7 @@ class Phase2SettingsScreen extends ConsumerWidget {
                 ref.invalidate(userProfileProvider);
               }
               if (ctx.mounted) Navigator.pop(ctx);
+              if (context.mounted) Navigator.of(context).maybePop();
             },
             child: Text(isEn ? 'Switch to Phase 1' : 'Cambiar a Fase 1'),
           ),

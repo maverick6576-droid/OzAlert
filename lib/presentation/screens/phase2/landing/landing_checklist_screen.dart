@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../providers/phase2/phase2_providers.dart';
 import '../../../providers/locale_provider.dart';
 import '../../../../domain/models/phase2/landing_task.dart';
+import 'package:ozvisa_alert/presentation/widgets/phase2/phase2_app_bar.dart';
 
 class LandingChecklistScreen extends ConsumerWidget {
   const LandingChecklistScreen({super.key});
@@ -17,14 +18,10 @@ class LandingChecklistScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        title: Text(
-          isEn ? 'Arrival Checklist' : 'Checklist de Aterrizaje',
-          style: const TextStyle(fontWeight: FontWeight.w900, color: AppColors.textPrimary, fontSize: 22),
-        ),
-        centerTitle: false,
+      appBar: Phase2AppBar(
+        title: isEn ? 'Arrival Hub' : 'Aterrizaje en Australia',
+        isEn: isEn,
+        infoTopic: 'arrival',
       ),
       body: tasksAsync.when(
         data: (tasks) {
@@ -33,44 +30,61 @@ class LandingChecklistScreen extends ConsumerWidget {
           final progressPercent = totalCount > 0 ? (completedCount / totalCount) : 0.0;
 
           return ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             children: [
-              // Tarjeta de progreso gamificada
+              // Tarjeta de progreso gamificada y limpia
               _buildProgressCard(completedCount, totalCount, progressPercent, isEn),
-              const SizedBox(height: 20),
+              const SizedBox(height: 22),
 
               // Sección: Antes de Volar
-              _buildSectionHeader(isEn ? '✈️ Pre-Departure (Before Flying)' : '✈️ Antes de Volar'),
+              _buildSectionHeader(
+                isEn ? '✈️ Pre-Departure Tasks' : '✈️ Antes de Volar',
+                isEn ? 'Complete before your flight' : 'Gestiones previas al despegue',
+              ),
               ...tasks.where((t) => t.phase == 'pre_departure').map((t) => _buildTaskTile(context, ref, t, isEn)),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 22),
               // Sección: Primeras 48 Horas
-              _buildSectionHeader(isEn ? '🧳 First 48 Hours in Australia' : '🧳 Primeras 48 Horas en Australia'),
+              _buildSectionHeader(
+                isEn ? '🧳 First 48 Hours in Australia' : '🧳 Primeras 48 Horas en Australia',
+                isEn ? 'Urgent arrival setup' : 'Prioritario nada más aterrizar',
+              ),
               ...tasks.where((t) => t.phase == 'first_48h').map((t) => _buildTaskTile(context, ref, t, isEn)),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 22),
               // Sección: Primera Semana
-              _buildSectionHeader(isEn ? '📄 First Week & Job Prep' : '📄 Primera Semana & Burocracia'),
+              _buildSectionHeader(
+                isEn ? '📄 First Week: Work & Bureaucracy' : '📄 Primera Semana: Trabajo & Papeleos',
+                isEn ? 'Essential setup for your first jobs' : 'Prepara todo para empezar a trabajar',
+              ),
               ...tasks.where((t) => t.phase == 'first_week').map((t) => _buildTaskTile(context, ref, t, isEn)),
 
               const SizedBox(height: 40),
             ],
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: CircularProgressIndicator(color: AppColors.primary)),
         error: (err, _) => Center(child: Text('Error: $err')),
       ),
     );
   }
 
   Widget _buildProgressCard(int completed, int total, double percent, bool isEn) {
+    final isDone = completed == total && total > 0;
+
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(22),
         border: Border.all(color: AppColors.cardBorder),
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4))],
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10,
+            offset: Offset(0, 3),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -78,34 +92,56 @@ class LandingChecklistScreen extends ConsumerWidget {
             alignment: Alignment.center,
             children: [
               SizedBox(
-                width: 64,
-                height: 64,
+                width: 62,
+                height: 62,
                 child: CircularProgressIndicator(
                   value: percent,
                   strokeWidth: 6,
                   backgroundColor: AppColors.surfaceElevated,
-                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.secondary),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    isDone ? AppColors.secondary : AppColors.primary,
+                  ),
                 ),
               ),
               Text(
                 '${(percent * 100).round()}%',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.textPrimary),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 15,
+                  color: AppColors.textPrimary,
+                ),
               ),
             ],
           ),
-          const SizedBox(width: 20),
+          const SizedBox(width: 18),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  isEn ? 'Landing Progress' : 'Progreso de Llegada',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.textPrimary),
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        isEn ? 'Arrival Readiness' : 'Preparación de Llegada',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 16,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    ),
+                    if (isDone) ...[
+                      const SizedBox(width: 6),
+                      const Icon(CupertinoIcons.checkmark_seal_fill, color: AppColors.secondary, size: 18),
+                    ],
+                  ],
                 ),
                 const SizedBox(height: 4),
                 Text(
                   isEn
-                      ? '$completed of $total essential steps ready'
+                      ? '$completed of $total tasks completed'
                       : '$completed de $total gestiones completadas',
                   style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
                 ),
@@ -117,64 +153,93 @@ class LandingChecklistScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(String title, String subtitle) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-      child: Text(
-        title,
-        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.primary),
+      padding: const EdgeInsets.only(left: 4, right: 4, bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w800,
+              color: AppColors.primary,
+              letterSpacing: -0.2,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            subtitle,
+            style: const TextStyle(
+              fontSize: 12,
+              color: AppColors.textMuted,
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildTaskTile(BuildContext context, WidgetRef ref, LandingTask task, bool isEn) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 6),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(18),
         side: BorderSide(
-          color: task.isCompleted ? AppColors.secondary.withValues(alpha: 0.4) : AppColors.cardBorder,
+          color: task.isCompleted ? AppColors.secondary.withValues(alpha: 0.35) : AppColors.cardBorder,
+          width: task.isCompleted ? 1.5 : 1.0,
         ),
       ),
+      elevation: 0,
+      color: task.isCompleted ? AppColors.surfaceElevated.withValues(alpha: 0.5) : AppColors.surface,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Checkbox(
-              value: task.isCompleted,
-              activeColor: AppColors.secondary,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-              onChanged: (val) {
-                ref.read(landingTasksProvider.notifier).toggleTask(task.id, val ?? false);
-              },
+            // Checkbox
+            Transform.scale(
+              scale: 1.05,
+              child: Checkbox(
+                value: task.isCompleted,
+                activeColor: AppColors.secondary,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                side: const BorderSide(color: AppColors.textMuted, width: 1.5),
+                onChanged: (val) {
+                  ref.read(landingTasksProvider.notifier).toggleTask(task.id, val ?? false);
+                },
+              ),
             ),
             const SizedBox(width: 4),
+            // Textos y botón de acción rápida
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 8),
                   Text(
                     isEn ? task.titleEn : task.title,
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14.5,
                       color: task.isCompleted ? AppColors.textMuted : AppColors.textPrimary,
                       decoration: task.isCompleted ? TextDecoration.lineThrough : null,
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 4),
                   Text(
                     isEn ? task.subtitleEn : task.subtitle,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 12.5,
                       color: task.isCompleted ? AppColors.textMuted : AppColors.textSecondary,
+                      height: 1.35,
                     ),
                   ),
                   if (task.targetGuideCategory != null) ...[
-                    const SizedBox(height: 8),
-                    // SMART LINK hacia la Guía
-                    GestureDetector(
+                    const SizedBox(height: 10),
+                    // Botón interactivo Smart Link
+                    InkWell(
                       onTap: () {
                         if (task.targetGuideCategory == 'employment') {
                           ref.read(phase2NavigationProvider.notifier).setTabIndex(2);
@@ -182,22 +247,35 @@ class LandingChecklistScreen extends ConsumerWidget {
                           ref.read(phase2NavigationProvider.notifier).navigateToGuide(task.targetGuideCategory!);
                         }
                       },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(CupertinoIcons.arrow_right_circle_fill, size: 14, color: AppColors.secondary),
-                          const SizedBox(width: 6),
-                          Text(
-                            task.targetGuideCategory == 'employment'
-                                ? (isEn ? 'Build Australian CV & View Fair Work' : 'Crear CV & Ver Calculadora Fair Work')
-                                : (isEn ? 'View guide & comparisons' : 'Ver guía y comparativas'),
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.secondary,
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: AppColors.secondary.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: AppColors.secondary.withValues(alpha: 0.3)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(CupertinoIcons.arrow_right_circle_fill, size: 14, color: AppColors.secondary),
+                            const SizedBox(width: 6),
+                            Flexible(
+                              child: Text(
+                                task.targetGuideCategory == 'employment'
+                                    ? (isEn ? 'Build Australian CV & Pay' : 'Crear CV & Ver Sueldos')
+                                    : (isEn ? 'View Guide & Comparisons' : 'Ver Guía y Comparativa'),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.secondary,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],

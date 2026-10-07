@@ -8,7 +8,6 @@ import '../screens/phase2/landing/landing_checklist_screen.dart';
 import '../screens/phase2/guides/guides_screen.dart';
 import '../screens/phase2/employment/employment_hub_screen.dart';
 import '../screens/phase2/regional_work/regional_work_screen.dart';
-import '../screens/phase2/settings/phase2_settings_screen.dart';
 import '../widgets/phase2/visa_dates_survey_dialog.dart';
 
 class Phase2NavigationScreen extends ConsumerStatefulWidget {
@@ -24,7 +23,6 @@ class _Phase2NavigationScreenState extends ConsumerState<Phase2NavigationScreen>
     GuidesScreen(),
     EmploymentHubScreen(),
     RegionalWorkScreen(),
-    Phase2SettingsScreen(),
   ];
 
   @override
@@ -42,9 +40,12 @@ class _Phase2NavigationScreenState extends ConsumerState<Phase2NavigationScreen>
     final locale = ref.watch(localeProvider);
     final isEn = locale?.languageCode == 'en';
 
+    // Clamp currentTabIndex to max 3
+    final activeIndex = navState.currentTabIndex.clamp(0, _screens.length - 1);
+
     return Scaffold(
       body: IndexedStack(
-        index: navState.currentTabIndex,
+        index: activeIndex,
         children: _screens,
       ),
       bottomNavigationBar: Container(
@@ -61,7 +62,7 @@ class _Phase2NavigationScreenState extends ConsumerState<Phase2NavigationScreen>
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -69,7 +70,7 @@ class _Phase2NavigationScreenState extends ConsumerState<Phase2NavigationScreen>
                   index: 0,
                   icon: CupertinoIcons.compass,
                   activeIcon: CupertinoIcons.compass_fill,
-                  label: isEn ? 'Arrival' : 'Llegada',
+                  label: isEn ? 'Arrival' : 'Aterrizaje',
                 ),
                 _buildNavItem(
                   index: 1,
@@ -88,12 +89,6 @@ class _Phase2NavigationScreenState extends ConsumerState<Phase2NavigationScreen>
                   icon: CupertinoIcons.calendar_badge_plus,
                   activeIcon: CupertinoIcons.calendar_badge_plus,
                   label: isEn ? '88 Days' : '88 Días',
-                ),
-                _buildNavItem(
-                  index: 4,
-                  icon: CupertinoIcons.settings,
-                  activeIcon: CupertinoIcons.settings_solid,
-                  label: isEn ? 'Settings' : 'Ajustes',
                 ),
               ],
             ),
@@ -119,21 +114,26 @@ class _Phase2NavigationScreenState extends ConsumerState<Phase2NavigationScreen>
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
-        padding: EdgeInsets.symmetric(horizontal: isSelected ? 12 : 8, vertical: 6),
+        padding: EdgeInsets.symmetric(horizontal: isSelected ? 14 : 10, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.secondary.withValues(alpha: 0.12) : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           border: isSelected ? Border.all(color: AppColors.secondary.withValues(alpha: 0.4), width: 1) : null,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(isSelected ? activeIcon : icon, color: color, size: 20),
+            Icon(isSelected ? activeIcon : icon, color: color, size: 21),
             if (isSelected) ...[
-              const SizedBox(width: 6),
+              const SizedBox(width: 7),
               Text(
                 label,
-                style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 12),
+                style: TextStyle(
+                  color: color,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                  letterSpacing: -0.2,
+                ),
               ),
             ],
           ],
