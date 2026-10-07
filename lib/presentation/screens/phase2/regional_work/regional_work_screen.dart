@@ -388,77 +388,227 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
       },
     ];
 
-    return Column(
-      children: industries.map((ind) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: industries.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: 1.4,
+      ),
+      itemBuilder: (context, index) {
+        final ind = industries[index];
         final isEligible = ind['eligible'] as bool;
         final icon = ind['icon'] as String;
         final name = ind['name'] as String;
-        final desc = ind['desc'] as String;
-        final tip = ind['legalTip'] as String;
 
-        return Container(
-          margin: const EdgeInsets.only(bottom: 8),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isEligible ? AppColors.secondary.withValues(alpha: 0.35) : AppColors.cardBorder,
+        return InkWell(
+          onTap: () => _showIndustryDetailsModal(context, ind, isEn, isEligible, subclass),
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isEligible
+                    ? AppColors.secondary.withValues(alpha: 0.4)
+                    : AppColors.statusClosed.withValues(alpha: 0.3),
+                width: 1.2,
+              ),
+              boxShadow: const [
+                BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1)),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(icon, style: const TextStyle(fontSize: 22)),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                      decoration: BoxDecoration(
+                        color: isEligible
+                            ? AppColors.secondary.withValues(alpha: 0.12)
+                            : AppColors.statusClosed.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            isEligible ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.xmark_circle_fill,
+                            size: 11,
+                            color: isEligible ? AppColors.secondary : AppColors.statusClosed,
+                          ),
+                          const SizedBox(width: 3),
+                          Text(
+                            isEligible ? (isEn ? 'VALID' : 'SÍ VALE') : (isEn ? 'INVALID' : 'NO VALE'),
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w900,
+                              color: isEligible ? AppColors.secondary : AppColors.statusClosed,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Text(
+                  name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 12,
+                    color: AppColors.textPrimary,
+                    height: 1.2,
+                  ),
+                ),
+                Row(
+                  children: [
+                    const Icon(CupertinoIcons.info_circle, size: 11, color: AppColors.textMuted),
+                    const SizedBox(width: 4),
+                    Text(
+                      isEn ? 'Tap for rules' : 'Toca para norma',
+                      style: const TextStyle(fontSize: 10, color: AppColors.textMuted, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        );
+      },
+    );
+  }
+
+  void _showIndustryDetailsModal(BuildContext context, Map<String, dynamic> ind, bool isEn, bool isEligible, String subclass) {
+    final icon = ind['icon'] as String;
+    final name = ind['name'] as String;
+    final desc = ind['desc'] as String;
+    final tip = ind['legalTip'] as String;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.cardBorder,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Text(icon, style: const TextStyle(fontSize: 26)),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    name,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: isEligible
+                        ? AppColors.secondary.withValues(alpha: 0.15)
+                        : AppColors.statusClosed.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    isEligible ? (isEn ? '✓ ELIGIBLE (LIN 22/050)' : '✓ VÁLIDO (LIN 22/050)') : (isEn ? '✗ INELIGIBLE' : '✗ NO VÁLIDO'),
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                      color: isEligible ? AppColors.secondary : AppColors.statusClosed,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              isEn ? 'Roles & Activities Included:' : 'Puestos y tareas comprendidas:',
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5, color: AppColors.textSecondary),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              desc,
+              style: const TextStyle(fontSize: 13, color: AppColors.textPrimary, height: 1.4),
+            ),
+            const SizedBox(height: 14),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceElevated,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: isEligible
+                      ? AppColors.secondary.withValues(alpha: 0.3)
+                      : AppColors.statusClosed.withValues(alpha: 0.3),
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(icon, style: const TextStyle(fontSize: 18)),
+                  Icon(
+                    isEligible ? CupertinoIcons.shield_fill : CupertinoIcons.exclamationmark_shield_fill,
+                    size: 16,
+                    color: isEligible ? AppColors.secondary : AppColors.statusClosed,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      name,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.textPrimary),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: isEligible
-                          ? AppColors.secondary.withValues(alpha: 0.12)
-                          : AppColors.statusClosed.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: isEligible
-                            ? AppColors.secondary.withValues(alpha: 0.4)
-                            : AppColors.statusClosed.withValues(alpha: 0.4),
-                      ),
-                    ),
-                    child: Text(
-                      isEligible ? (isEn ? 'ELIGIBLE' : 'VÁLIDO') : (isEn ? 'INELIGIBLE' : 'NO VÁLIDO'),
+                      tip,
                       style: TextStyle(
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.w900,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
                         color: isEligible ? AppColors.secondary : AppColors.statusClosed,
+                        height: 1.35,
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 4),
-              Text(desc, style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary)),
-              const SizedBox(height: 4),
-              Text(
-                '⚖️ $tip',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontStyle: FontStyle.italic,
-                  color: isEligible ? AppColors.secondary : AppColors.statusClosed,
-                  fontWeight: FontWeight.w600,
+            ),
+            const SizedBox(height: 18),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  elevation: 0,
                 ),
+                onPressed: () => Navigator.pop(ctx),
+                child: Text(isEn ? 'Got It' : 'Entendido', style: const TextStyle(fontWeight: FontWeight.bold)),
               ),
-            ],
-          ),
-        );
-      }).toList(),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -670,6 +820,42 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
 
               await PdfGeneratorService.shareOrPrintPdf(pdfBytes, 'Form_1263_Dossier.pdf');
             },
+          ),
+        ),
+        const SizedBox(height: 14),
+
+        // Tarjeta de Aversión a la Pérdida: Riesgo de auditoría y tasa de $650 AUD
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.statusClosed.withValues(alpha: 0.25)),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(CupertinoIcons.exclamationmark_triangle_fill, color: AppColors.statusClosed, size: 20),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      isEn ? 'Immigration Audit Protection' : 'Protección Frente a Auditorías de Inmigración',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.textPrimary),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      isEn
+                          ? 'Home Affairs audits ~23% of 2nd year applications. An invalid ABN or postcode leads to refusal and loss of the non-refundable \$650 AUD visa fee.'
+                          : 'Inmigración audita ~23% de solicitudes de 2º año. Un ABN o código erróneo provoca denegación inmediata y la pérdida de la tasa oficial de \$650 AUD.',
+                      style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary, height: 1.35),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 40),

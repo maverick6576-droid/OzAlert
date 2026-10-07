@@ -7,11 +7,18 @@ import '../../../providers/locale_provider.dart';
 import '../../../../domain/models/phase2/landing_task.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/phase2_app_bar.dart';
 
-class LandingChecklistScreen extends ConsumerWidget {
+class LandingChecklistScreen extends ConsumerStatefulWidget {
   const LandingChecklistScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LandingChecklistScreen> createState() => _LandingChecklistScreenState();
+}
+
+class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen> {
+  bool _showAllTasks = false;
+
+  @override
+  Widget build(BuildContext context) {
     final tasksAsync = ref.watch(landingTasksProvider);
     final locale = ref.watch(localeProvider);
     final isEn = locale?.languageCode == 'en';
@@ -28,45 +35,85 @@ class LandingChecklistScreen extends ConsumerWidget {
           final completedCount = tasks.where((t) => t.isCompleted).length;
           final totalCount = tasks.length;
           final progressPercent = totalCount > 0 ? (completedCount / totalCount) : 0.0;
+          final pendingTasks = tasks.where((t) => !t.isCompleted).toList();
 
           return ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             children: [
-              // Tarjeta de progreso gamificada y limpia
+              // 1. Tarjeta de progreso visual
               _buildProgressCard(completedCount, totalCount, progressPercent, isEn),
-              const SizedBox(height: 22),
+              const SizedBox(height: 14),
 
-              // Sección: Antes de Volar
-              _buildSectionHeader(
-                isEn ? '✈️ Pre-Departure Tasks' : '✈️ Antes de Volar',
-                isEn ? 'Complete before your flight' : 'Gestiones previas al despegue',
-              ),
-              ...tasks.where((t) => t.phase == 'pre_departure').map((t) => _buildTaskTile(context, ref, t, isEn)),
+              // 2. Banner de Psicología Financiera: Dinero en Riesgo
+              _buildSavingsTeaserBanner(isEn),
+              const SizedBox(height: 18),
 
-              const SizedBox(height: 22),
-              // Sección: Primeras 48 Horas
-              _buildSectionHeader(
-                isEn ? '🧳 First 48 Hours in Australia' : '🧳 Primeras 48 Horas en Australia',
-                isEn ? 'Urgent arrival setup' : 'Prioritario nada más aterrizar',
-              ),
-              ...tasks.where((t) => t.phase == 'first_48h').map((t) => _buildTaskTile(context, ref, t, isEn)),
-
-              const SizedBox(height: 22),
-              // Sección: Primera Semana
-              _buildSectionHeader(
-                isEn ? '📄 First Week: Work & Bureaucracy' : '📄 Primera Semana: Trabajo & Papeleos',
-                isEn ? 'Essential setup for your first jobs' : 'Prepara todo para empezar a trabajar',
-              ),
-              ...tasks.where((t) => t.phase == 'first_week').map((t) => _buildTaskTile(context, ref, t, isEn)),
-
-              if (tasks.any((t) => t.phase == 'first_month')) ...[
-                const SizedBox(height: 22),
-                // Sección: Primer Mes & Estancia
+              // 3. MODO FOCO: Si hay tareas pendientes, mostrar solo las 2 prioritarias
+              if (pendingTasks.isNotEmpty) ...[
                 _buildSectionHeader(
-                  isEn ? '🦘 First Month: Regional Work & Pro Savings' : '🦘 Primer Mes: Trabajo Regional & Ahorro',
-                  isEn ? 'Extend your visa and optimize your income' : 'Renovación de visado y optimización financiera',
+                  isEn ? '🎯 Your Next 2 Priority Steps' : '🎯 Tus Próximas 2 Gestiones Clave',
+                  isEn ? 'Focus only on these today to avoid overwhelm' : 'Céntrate solo en esto hoy sin agobios',
                 ),
-                ...tasks.where((t) => t.phase == 'first_month').map((t) => _buildTaskTile(context, ref, t, isEn)),
+                ...pendingTasks.take(2).map((t) => _buildTaskTile(context, ref, t, isEn)),
+                const SizedBox(height: 14),
+
+                // Botón interactivo para ver el resto de fases
+                Center(
+                  child: OutlinedButton.icon(
+                    icon: Icon(_showAllTasks ? CupertinoIcons.chevron_up : CupertinoIcons.chevron_down, size: 14),
+                    label: Text(
+                      _showAllTasks
+                          ? (isEn ? 'Hide other phases' : 'Ocultar resto de gestiones')
+                          : (isEn ? 'View all steps & phases ($totalCount)' : 'Ver todas las fases y gestiones ($totalCount)'),
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.primary,
+                      side: const BorderSide(color: AppColors.primary, width: 1.2),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                    ),
+                    onPressed: () => setState(() => _showAllTasks = !_showAllTasks),
+                  ),
+                ),
+                const SizedBox(height: 10),
+              ],
+
+              // 4. LISTADO COMPLETO POR FASES (Solo si _showAllTasks o todo completado)
+              if (_showAllTasks || pendingTasks.isEmpty) ...[
+                const SizedBox(height: 10),
+                // Sección: Antes de Volar
+                _buildSectionHeader(
+                  isEn ? '✈️ Pre-Departure Tasks' : '✈️ Antes de Volar',
+                  isEn ? 'Complete before your flight' : 'Gestiones previas al despegue',
+                ),
+                ...tasks.where((t) => t.phase == 'pre_departure').map((t) => _buildTaskTile(context, ref, t, isEn)),
+
+                const SizedBox(height: 20),
+                // Sección: Primeras 48 Horas
+                _buildSectionHeader(
+                  isEn ? '🧳 First 48 Hours in Australia' : '🧳 Primeras 48 Horas en Australia',
+                  isEn ? 'Urgent arrival setup' : 'Prioritario nada más aterrizar',
+                ),
+                ...tasks.where((t) => t.phase == 'first_48h').map((t) => _buildTaskTile(context, ref, t, isEn)),
+
+                const SizedBox(height: 20),
+                // Sección: Primera Semana
+                _buildSectionHeader(
+                  isEn ? '📄 First Week: Work & Bureaucracy' : '📄 Primera Semana: Trabajo & Papeleos',
+                  isEn ? 'Essential setup for your first jobs' : 'Prepara todo para empezar a trabajar',
+                ),
+                ...tasks.where((t) => t.phase == 'first_week').map((t) => _buildTaskTile(context, ref, t, isEn)),
+
+                if (tasks.any((t) => t.phase == 'first_month')) ...[
+                  const SizedBox(height: 20),
+                  // Sección: Primer Mes & Estancia
+                  _buildSectionHeader(
+                    isEn ? '🦘 First Month: Regional Work & Pro Savings' : '🦘 Primer Mes: Trabajo Regional & Ahorro',
+                    isEn ? 'Extend your visa and optimize your income' : 'Renovación de visado y optimización financiera',
+                  ),
+                  ...tasks.where((t) => t.phase == 'first_month').map((t) => _buildTaskTile(context, ref, t, isEn)),
+                ],
               ],
 
               const SizedBox(height: 40),
@@ -156,6 +203,65 @@ class LandingChecklistScreen extends ConsumerWidget {
                   style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSavingsTeaserBanner(bool isEn) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColors.secondary.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.secondary.withValues(alpha: 0.35)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColors.secondary,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(CupertinoIcons.money_dollar, color: Colors.white, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  isEn ? '⚠️ Lost Money Audit' : '⚠️ ¿Dinero en Riesgo en Australia?',
+                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: AppColors.textPrimary),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  isEn
+                      ? 'Reclaim up to \$3,850 AUD in tax deductions, DASP super and bond security.'
+                      : 'Descubre cómo salvar hasta \$3.850 AUD en impuestos, súper y fianza.',
+                  style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary, height: 1.3),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          ElevatedButton(
+            onPressed: () {
+              ref.read(phase2NavigationProvider.notifier).navigateToGuide('savings');
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.secondary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              elevation: 0,
+            ),
+            child: Text(
+              isEn ? 'Audit ➔' : 'Calcular ➔',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5),
             ),
           ),
         ],

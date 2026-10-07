@@ -43,6 +43,9 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
   List<String> _currentCertifications = [];
   List<WorkExperience> _currentExperiences = [];
 
+  // Opciones avanzadas de personalización colapsadas por defecto
+  bool _showAdvancedCvOptions = false;
+
   // Formato de Documento Seleccionado
   String _selectedDocType = 'resume'; // 'resume', 'cover_letter', 'rental_bio', 'fair_work_claim', 'resignation'
 
@@ -350,124 +353,172 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
         _buildRoleSelectorChips(isEn),
         const SizedBox(height: 18),
 
-        // 3. Bloque Contacto Local (Formato Australiano Estricto)
+        // 3. Bloque Contacto Esencial (Rápido y sin agobios)
         _buildSectionHeader(
           icon: CupertinoIcons.person_crop_circle_fill,
-          title: isEn ? '1. Local Contact Info' : '1. Datos de Contacto Local',
+          title: isEn ? '1. Essential Contact Info' : '1. Datos de Contacto Esenciales',
           subtitle: isEn
-              ? 'Australian law: No photo, no birthdate, no exact street address.'
-              : 'Norma australiana: Sin foto, sin edad ni calle exacta.',
+              ? 'Australian law: No photo, no birthdate, no street address.'
+              : 'Norma australiana: Sin foto, sin fecha de nacimiento ni dirección.',
         ),
         const SizedBox(height: 8),
         _buildTextField(_nameController, isEn ? 'Full Name' : 'Nombre Completo'),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            Expanded(child: _buildTextField(_phoneController, isEn ? 'Mobile (+61)' : 'Móvil australiano (+61)')),
-            const SizedBox(width: 10),
-            Expanded(child: _buildTextField(_suburbController, isEn ? 'Suburb, State Postcode' : 'Barrio, Estado y CP')),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Row(
-          children: [
-            Expanded(child: _buildTextField(_emailController, isEn ? 'Professional Email' : 'Correo Electrónico')),
-            const SizedBox(width: 10),
-            Expanded(child: _buildTextField(_linkedInController, isEn ? 'LinkedIn / Portfolio (Optional)' : 'LinkedIn (Opcional)')),
-          ],
-        ),
+        _buildTextField(_phoneController, isEn ? 'Australian Mobile (+61)' : 'Móvil Australiano (+61)'),
         const SizedBox(height: 18),
 
         // 4. Bloque Visado y Disponibilidad (Factor #1 para Jefes de Local)
         _buildSectionHeader(
           icon: CupertinoIcons.shield_lefthalf_fill,
-          title: isEn ? '2. Visa Work Rights & Availability' : '2. Permiso de Trabajo y Disponibilidad',
+          title: isEn ? '2. Visa Work Rights & Availability' : '2. Permiso de Trabajo y Visado',
           subtitle: isEn
-              ? 'Top filter: Eliminates recruiter fear of 20-hour limits.'
-              : 'Factor decisivo: Da tranquilidad inmediata al empleador.',
+              ? 'Top filter: Eliminates recruiter fear of 20-hour student limits.'
+              : 'Factor decisivo: Demuestra permiso ilimitado de trabajo.',
         ),
         const SizedBox(height: 8),
         _buildVisaSelector(isEn),
         const SizedBox(height: 18),
 
-        // 5. Bloque Puesto y Extracto Profesional
-        _buildSectionHeader(
-          icon: CupertinoIcons.briefcase_fill,
-          title: isEn ? '3. Position & Recruiter Summary' : '3. Puesto y Perfil Profesional',
-          subtitle: isEn ? 'Crafted in Australian English' : 'Redactado en inglés australiano profesional',
-        ),
-        const SizedBox(height: 8),
-        _buildTextField(_jobTitleController, isEn ? 'Job Title on Resume' : 'Título del puesto en el CV'),
-        const SizedBox(height: 10),
-        _buildTextField(_summaryController, isEn ? 'Executive Summary' : 'Extracto profesional', maxLines: 4),
-        const SizedBox(height: 6),
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextButton.icon(
-            onPressed: () => _loadPreset(_selectedIndustry),
-            icon: const Icon(CupertinoIcons.arrow_counterclockwise, size: 14, color: AppColors.secondary),
-            label: Text(
-              isEn ? 'Reset to Role Preset' : 'Restaurar texto modelo',
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.secondary),
+        // Desplegable de Opciones Avanzadas (Divulgación Progresiva)
+        InkWell(
+          onTap: () => setState(() => _showAdvancedCvOptions = !_showAdvancedCvOptions),
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: _showAdvancedCvOptions ? AppColors.secondary : AppColors.cardBorder,
+                width: 1.2,
+              ),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  _showAdvancedCvOptions ? CupertinoIcons.slider_horizontal_below_rectangle : CupertinoIcons.slider_horizontal_3,
+                  size: 18,
+                  color: AppColors.secondary,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    isEn
+                        ? (_showAdvancedCvOptions ? 'Hide Advanced Settings ▲' : '⚙️ Customise Details & Advanced Settings ▾')
+                        : (_showAdvancedCvOptions ? 'Ocultar Opciones Avanzadas ▲' : '⚙️ Personalizar Detalles & Opciones Avanzadas ▾'),
+                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13, color: AppColors.textPrimary),
+                  ),
+                ),
+                Icon(
+                  _showAdvancedCvOptions ? CupertinoIcons.chevron_up : CupertinoIcons.chevron_down,
+                  size: 15,
+                  color: AppColors.textMuted,
+                ),
+              ],
             ),
           ),
         ),
-        const SizedBox(height: 12),
 
-        // 6. Bloque Licencias y Cursos Australianos (Tickets)
-        _buildSectionHeader(
-          icon: CupertinoIcons.checkmark_seal_fill,
-          title: isEn ? '4. Australian Licences & Tickets' : '4. Licencias Oficiales (Tickets)',
-          subtitle: isEn ? 'Mandatory for Hospitality & Construction' : 'Obligatorio para hostelería y construcción',
-        ),
-        const SizedBox(height: 8),
-        _buildCertificationsChips(isEn),
-        const SizedBox(height: 18),
+        if (_showAdvancedCvOptions) ...[
+          const SizedBox(height: 16),
 
-        // 7. Bloque Habilidades Clave (Keywords ATS)
-        _buildSectionHeader(
-          icon: CupertinoIcons.sparkles,
-          title: isEn ? '5. Key Skills (ATS Optimized)' : '5. Habilidades Clave (Filtro ATS)',
-          subtitle: isEn ? 'Keywords recruiters search for' : 'Palabras clave que leen los algoritmos',
-        ),
-        const SizedBox(height: 8),
-        _buildSkillsChips(isEn),
-        const SizedBox(height: 18),
-
-        // 8. Bloque Experiencias Laborales Adaptables
-        _buildSectionHeader(
-          icon: CupertinoIcons.building_2_fill,
-          title: isEn ? '6. Experience (Recruiter-Tested)' : '6. Experiencia Laboral Adaptable',
-          subtitle: isEn ? 'Customise with 1 tap or keep high-converting models' : 'Modifica empresas y fechas con 1 toque',
-        ),
-        const SizedBox(height: 8),
-        ..._currentExperiences.asMap().entries.map((entry) {
-          final index = entry.key;
-          final exp = entry.value;
-          return _buildExperienceCard(exp, index, isEn);
-        }),
-        const SizedBox(height: 8),
-        OutlinedButton.icon(
-          onPressed: () => _showEditExperienceDialog(isEn, null),
-          icon: const Icon(CupertinoIcons.plus_circle, size: 16),
-          label: Text(isEn ? 'Add Another Job' : '+ Añadir Otra Experiencia'),
-          style: OutlinedButton.styleFrom(
-            foregroundColor: AppColors.primary,
-            side: const BorderSide(color: AppColors.primary),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-            padding: const EdgeInsets.symmetric(vertical: 11),
+          // Contacto Secundario (Barrio, Correo, LinkedIn)
+          _buildSectionHeader(
+            icon: CupertinoIcons.location_fill,
+            title: isEn ? 'Additional Contact Info' : 'Contacto Secundario',
+            subtitle: isEn ? 'Suburb and online links' : 'Barrio de residencia y enlaces',
           ),
-        ),
-        const SizedBox(height: 18),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(child: _buildTextField(_suburbController, isEn ? 'Suburb, State Postcode' : 'Barrio, Estado y CP')),
+              const SizedBox(width: 10),
+              Expanded(child: _buildTextField(_emailController, isEn ? 'Email' : 'Correo Electrónico')),
+            ],
+          ),
+          const SizedBox(height: 8),
+          _buildTextField(_linkedInController, isEn ? 'LinkedIn / Portfolio (Optional)' : 'LinkedIn (Opcional)'),
+          const SizedBox(height: 18),
 
-        // 9. Selector de Estilo y Color de Acento
-        _buildSectionHeader(
-          icon: CupertinoIcons.paintbrush_fill,
-          title: isEn ? '7. PDF Style Accent' : '7. Estilo Visual del PDF',
-          subtitle: isEn ? 'Executive recruiter palette' : 'Paleta corporativa ejecutiva',
-        ),
-        const SizedBox(height: 8),
-        _buildColorPicker(isEn),
+          // Puesto y Extracto
+          _buildSectionHeader(
+            icon: CupertinoIcons.briefcase_fill,
+            title: isEn ? 'Position & Executive Summary' : 'Puesto y Extracto Profesional',
+            subtitle: isEn ? 'Tailored Australian wording' : 'Redactado en inglés australiano profesional',
+          ),
+          const SizedBox(height: 8),
+          _buildTextField(_jobTitleController, isEn ? 'Job Title on Resume' : 'Título del puesto en el CV'),
+          const SizedBox(height: 10),
+          _buildTextField(_summaryController, isEn ? 'Executive Summary' : 'Extracto profesional', maxLines: 4),
+          const SizedBox(height: 6),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton.icon(
+              onPressed: () => _loadPreset(_selectedIndustry),
+              icon: const Icon(CupertinoIcons.arrow_counterclockwise, size: 14, color: AppColors.secondary),
+              label: Text(
+                isEn ? 'Reset to Role Preset' : 'Restaurar texto modelo',
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.secondary),
+              ),
+            ),
+          ),
+          const SizedBox(height: 14),
+
+          // Licencias Oficiales (Tickets)
+          _buildSectionHeader(
+            icon: CupertinoIcons.checkmark_seal_fill,
+            title: isEn ? 'Australian Licences & Tickets' : 'Licencias Oficiales (Tickets)',
+            subtitle: isEn ? 'Mandatory for Hospitality & Construction' : 'Obligatorio para hostelería y construcción',
+          ),
+          const SizedBox(height: 8),
+          _buildCertificationsChips(isEn),
+          const SizedBox(height: 18),
+
+          // Habilidades Clave (Keywords ATS)
+          _buildSectionHeader(
+            icon: CupertinoIcons.sparkles,
+            title: isEn ? 'Key Skills (ATS Keywords)' : 'Habilidades Clave (Filtro ATS)',
+            subtitle: isEn ? 'Keywords recruiters search for' : 'Palabras clave que leen los algoritmos',
+          ),
+          const SizedBox(height: 8),
+          _buildSkillsChips(isEn),
+          const SizedBox(height: 18),
+
+          // Experiencias Laborales
+          _buildSectionHeader(
+            icon: CupertinoIcons.building_2_fill,
+            title: isEn ? 'Experience (Recruiter-Tested)' : 'Experiencia Laboral Adaptable',
+            subtitle: isEn ? 'Customise with 1 tap' : 'Modifica empresas y fechas con 1 toque',
+          ),
+          const SizedBox(height: 8),
+          ..._currentExperiences.asMap().entries.map((entry) {
+            final index = entry.key;
+            final exp = entry.value;
+            return _buildExperienceCard(exp, index, isEn);
+          }),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: () => _showEditExperienceDialog(isEn, null),
+            icon: const Icon(CupertinoIcons.plus_circle, size: 16),
+            label: Text(isEn ? 'Add Another Job' : '+ Añadir Otra Experiencia'),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: AppColors.primary,
+              side: const BorderSide(color: AppColors.primary),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              padding: const EdgeInsets.symmetric(vertical: 11),
+            ),
+          ),
+          const SizedBox(height: 18),
+
+          // Selector de Color
+          _buildSectionHeader(
+            icon: CupertinoIcons.paintbrush_fill,
+            title: isEn ? 'PDF Style Accent' : 'Estilo Visual del PDF',
+            subtitle: isEn ? 'Executive recruiter palette' : 'Paleta corporativa ejecutiva',
+          ),
+          const SizedBox(height: 8),
+          _buildColorPicker(isEn),
+        ],
         const SizedBox(height: 24),
 
         // 10. Botón Principal: Generar y Descargar CV Oficial
@@ -1062,15 +1113,15 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
           const SizedBox(height: 12),
           Text(
             isEn
-                ? 'Guaranteed Australian Interview Format'
-                : 'Formato Diseñado para Conseguir Entrevistas en Australia',
+                ? '⚡ 90% of Foreign Resumes Get Discarded in 6 Seconds'
+                : '⚡ El 90% de los CVs extranjeros van directos a la papelera',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textPrimary),
           ),
           const SizedBox(height: 6),
           Text(
             isEn
-                ? '• 100% Anti-Bias (No photo or age, legally compliant)\n• Visa Rights & Availability prominently featured on top\n• Australian Tickets & verifiable metrics included'
-                : '• 100% Ley Anti-Discriminación (Sin foto ni edad, evita el 90% de descartes)\n• Permiso ilimitado y disponibilidad 7 días en cabecera\n• Licencias australianas (RSA, White Card) y métricas de impacto',
+                ? 'Australian recruiters and ATS filters instantly discard CVs with photos, birthdates, or vague visa permissions. OzAlert formats your profile into an executive standard designed to land trial shifts.'
+                : 'Los reclutadores y algoritmos ATS descartan al instante CVs con foto, edad o permisos de visado confusos. OzAlert estructura tu perfil con el estándar oficial para asegurar llamadas a entrevistas y trial shifts.',
             style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.45),
           ),
         ],

@@ -21,6 +21,24 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
   String _selectedCategory = 'banking';
   int _selectedSubTab = 0; // 0 = Guía Paso a Paso, 1 = Comparativa, 2 = Servicios & Promos
 
+  // Estado de la Calculadora de Ahorro / Pérdida en Australia
+  bool _calcDeductBoots = true;
+  bool _calcSuperDasp = true;
+  bool _calcBondRisk = true;
+  bool _calcMedicareTreaty = true;
+
+  // Seguimiento de pasos expandidos (Divulgación Progresiva)
+  final Set<int> _expandedSteps = {};
+
+  int get _calculatedLossAmount {
+    int total = 0;
+    if (_calcDeductBoots) total += 500;
+    if (_calcSuperDasp) total += 1850;
+    if (_calcBondRisk) total += 1500;
+    if (_calcMedicareTreaty) total += 600;
+    return total;
+  }
+
   final List<Map<String, String>> _categories = const [
     {'id': 'savings', 'label': '💰 Hacks Ahorro Pro', 'labelEn': '💰 Pro Money Hacks'},
     {'id': 'banking', 'label': '🏦 Bancos', 'labelEn': '🏦 Banking'},
@@ -251,7 +269,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       children: [
         if (isSavings) ...[
-          _buildSavingsHighlightCard(isEn),
+          _buildInteractiveMoneyCalculator(isEn),
           const SizedBox(height: 14),
         ],
 
@@ -308,139 +326,308 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     );
   }
 
-  Widget _buildSavingsHighlightCard(bool isEn) {
+  Widget _buildInteractiveMoneyCalculator(bool isEn) {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.primary,
-            AppColors.primary.withValues(alpha: 0.85),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(22),
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
-        ],
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 3))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: Row(
+                child: const Icon(CupertinoIcons.money_dollar_circle_fill, color: AppColors.primary, size: 22),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(CupertinoIcons.sparkles, color: Colors.white, size: 14),
-                    const SizedBox(width: 5),
                     Text(
-                      isEn ? 'PRO FINANCIAL AUDIT' : 'AUDITORÍA FINANCIERA PRO',
-                      style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900),
+                      isEn ? '⚠️ Money at Risk Calculator' : '⚠️ Calculadora de Dinero en Juego',
+                      style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15, color: AppColors.textPrimary),
+                    ),
+                    Text(
+                      isEn ? 'Cash often lost by WHV newcomers' : 'Dinero que se suele perder por desconocimiento',
+                      style: const TextStyle(fontSize: 11.5, color: AppColors.textMuted),
                     ),
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.secondary,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  isEn ? '+\$3,500 AUD / Year' : '+\$3.500 AUD / Año',
-                  style: const TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.bold),
-                ),
-              ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
+
+          // Totalizador de dinero en riesgo con diseño de alto impacto
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.primary.withValues(alpha: 0.1),
+                  AppColors.secondary.withValues(alpha: 0.1),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        isEn ? 'TOTAL RECLAIMABLE / SHIELDED' : 'TOTAL RECLAMABLE / PROTEGIDO',
+                        style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w800, color: AppColors.textSecondary, letterSpacing: 0.5),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        isEn ? 'Based on your selected options' : 'Según las opciones marcadas debajo',
+                        style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                  '\$$_calculatedLossAmount AUD',
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+
           Text(
-            isEn ? 'Legitimate Ways to Save & Reclaim Cash' : 'Estrategias Legales para Salvar y Reclamar Dinero',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+            isEn ? 'Select your situations to calculate:' : 'Marca tu situación para auditar tu caso:',
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
-          Text(
-            isEn
-                ? 'Avoid common pitfalls: WHV tax bracket deductions, DASP super refunds upon exit, Medicare reciprocal healthcare, and safe rental bonds.'
-                : 'Evita perder miles de dólares: deducciones fiscales en tu Tax Return, devolución DASP de superannuation, sanidad pública gratuita y fianzas de alquiler blindadas.',
-            style: TextStyle(fontSize: 12.5, color: Colors.white.withValues(alpha: 0.9), height: 1.4),
+
+          _buildCalcToggleRow(
+            title: isEn ? 'DASP: 12% Superannuation Exit Refund' : 'DASP: Devolución 12% Superannuation al salir',
+            amount: '+\$1,850 AUD',
+            value: _calcSuperDasp,
+            onChanged: (val) => setState(() => _calcSuperDasp = val),
+          ),
+          _buildCalcToggleRow(
+            title: isEn ? 'Official Bond Lodgement (Bond Board)' : 'Fianza blindada en organismo oficial estatal',
+            amount: '+\$1,500 AUD',
+            value: _calcBondRisk,
+            onChanged: (val) => setState(() => _calcBondRisk = val),
+          ),
+          _buildCalcToggleRow(
+            title: isEn ? 'Reciprocal Medicare (Free GP bulk-billing)' : 'Medicare Recíproco (Médico GP público gratis)',
+            amount: '+\$600 AUD',
+            value: _calcMedicareTreaty,
+            onChanged: (val) => setState(() => _calcMedicareTreaty = val),
+          ),
+          _buildCalcToggleRow(
+            title: isEn ? 'ATO Tax Deductions (Boots, gear, RSA)' : 'Deducciones ATO (Botas, cursos y ropa)',
+            amount: '+\$500 AUD',
+            value: _calcDeductBoots,
+            onChanged: (val) => setState(() => _calcDeductBoots = val),
+          ),
+
+          const SizedBox(height: 10),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppColors.secondary.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                const Icon(CupertinoIcons.checkmark_shield_fill, color: AppColors.secondary, size: 16),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    isEn
+                        ? 'Pro guides explain exactly how to claim and shield every single dollar.'
+                        : 'Las guías Pro te explican con precisión cómo blindar y recuperar cada dólar.',
+                    style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
+  Widget _buildCalcToggleRow({
+    required String title,
+    required String amount,
+    required bool value,
+    required ValueChanged<bool> onChanged,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: InkWell(
+        onTap: () => onChanged(!value),
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: value ? AppColors.surfaceElevated : Colors.transparent,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: value ? AppColors.cardBorder : Colors.transparent,
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                value ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.circle,
+                color: value ? AppColors.secondary : AppColors.textMuted,
+                size: 20,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    fontWeight: value ? FontWeight.w700 : FontWeight.w500,
+                    color: value ? AppColors.textPrimary : AppColors.textMuted,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 6),
+              Text(
+                amount,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                  color: value ? AppColors.primary : AppColors.textMuted,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildStepCard(GuideStep step, bool isEn) {
+    final isExpanded = _expandedSteps.contains(step.number);
+
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 6),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
-        side: const BorderSide(color: AppColors.cardBorder),
+        side: BorderSide(
+          color: isExpanded ? AppColors.primary.withValues(alpha: 0.4) : AppColors.cardBorder,
+        ),
       ),
       elevation: 0,
       color: AppColors.surface,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 14,
-                  backgroundColor: AppColors.secondary,
-                  child: Text(
-                    '${step.number}',
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            if (isExpanded) {
+              _expandedSteps.remove(step.number);
+            } else {
+              _expandedSteps.add(step.number);
+            }
+          });
+        },
+        borderRadius: BorderRadius.circular(18),
+        child: Padding(
+          padding: const EdgeInsets.all(14.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 13,
+                    backgroundColor: isExpanded ? AppColors.primary : AppColors.secondary,
+                    child: Text(
+                      '${step.number}',
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    isEn ? step.titleEn : step.title,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5, color: AppColors.textPrimary),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      isEn ? step.titleEn : step.title,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textPrimary),
+                    ),
                   ),
+                  Icon(
+                    isExpanded ? CupertinoIcons.chevron_up : CupertinoIcons.chevron_down,
+                    size: 16,
+                    color: AppColors.textMuted,
+                  ),
+                ],
+              ),
+
+              // Contenido con divulgación progresiva (solo visible si se expande)
+              if (isExpanded) ...[
+                const SizedBox(height: 10),
+                const Divider(height: 1, color: AppColors.cardBorder),
+                const SizedBox(height: 10),
+                Text(
+                  isEn ? step.descriptionEn : step.description,
+                  style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.45),
                 ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(
-              isEn ? step.descriptionEn : step.description,
-              style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.45),
-            ),
-            if ((isEn ? step.tipEn : step.tip).isNotEmpty) ...[
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.all(11),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.warning.withValues(alpha: 0.35)),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                if ((isEn ? step.tipEn : step.tip).isNotEmpty) ...[
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.all(11),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceElevated,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.warning.withValues(alpha: 0.35)),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.lightbulb_outline_rounded, size: 16, color: AppColors.warning),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            isEn ? step.tipEn : step.tip,
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textPrimary, height: 1.35),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ] else ...[
+                const SizedBox(height: 4),
+                Row(
                   children: [
-                    const Icon(Icons.lightbulb_outline_rounded, size: 16, color: AppColors.warning),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 36),
                     Expanded(
                       child: Text(
-                        isEn ? step.tipEn : step.tip,
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textPrimary, height: 1.35),
+                        isEn ? 'Tap to view step-by-step instructions ▾' : 'Toca para ver instrucciones paso a paso ▾',
+                        style: const TextStyle(fontSize: 11.5, color: AppColors.textMuted, fontWeight: FontWeight.w500),
                       ),
                     ),
                   ],
                 ),
-              ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
