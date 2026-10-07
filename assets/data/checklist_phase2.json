@@ -129,6 +129,106 @@
       "phase": "first_month",
       "priority": 13,
       "targetGuideCategory": "employment"
+    },
+    {
+      "id": "verify_88_days_second_visa",
+      "title": "Verificar y blindar tus 88 días para el 2º Año",
+      "titleEn": "Verify and Audit-Proof Your 88 Days (2nd Year)",
+      "subtitle": "Cruza tus nóminas, ABNs y extractos bancarios oficiales antes de pagar los $650 AUD de tasa.",
+      "subtitleEn": "Cross-check payslips, ABNs and bank statements before paying the $650 AUD visa fee.",
+      "phase": "visa_renewal",
+      "priority": 14,
+      "targetGuideCategory": "visa_renewal"
+    },
+    {
+      "id": "apply_second_visa_immi",
+      "title": "Solicitar la 2ª Visa en ImmiAccount (Onshore/Offshore)",
+      "titleEn": "Lodge 2nd Year WHV on ImmiAccount (Onshore/Offshore)",
+      "subtitle": "Preséntala antes de que venza tu visado para recibir la Bridging Visa A y no dejar de trabajar.",
+      "subtitleEn": "Apply before your visa expires to obtain Bridging Visa A and maintain full work rights.",
+      "phase": "visa_renewal",
+      "priority": 15,
+      "targetGuideCategory": "visa_renewal"
+    },
+    {
+      "id": "plan_third_visa_regional",
+      "title": "Completar los 6 meses (179 días) para la 3ª Visa",
+      "titleEn": "Complete 6 Months (179 Days) for 3rd Year Visa",
+      "subtitle": "Planifica el trabajo regional antes del mes 5 de tu 2º año para no quedarte sin tiempo.",
+      "subtitleEn": "Plan regional work before month 5 of year 2 to avoid running out of time.",
+      "phase": "visa_renewal",
+      "priority": 16,
+      "targetGuideCategory": "visa_renewal"
+    },
+    {
+      "id": "claim_bond_board_exit",
+      "title": "Reclamar el 100% de tu fianza de alquiler en el Bond Board",
+      "titleEn": "Reclaim 100% of Rental Bond via Official Bond Board",
+      "subtitle": "Pide el reembolso tú mismo en la web estatal (RBO/RTBA/RTA) el día de entrega de llaves.",
+      "subtitleEn": "Lodge your refund yourself on the official state portal on key handover day.",
+      "phase": "departure_exit",
+      "priority": 17,
+      "targetGuideCategory": "departure"
+    },
+    {
+      "id": "sell_car_rwc_rego",
+      "title": "Vender vehículo con RWC y transferir la Rego online",
+      "titleEn": "Sell Vehicle with RWC and Transfer Rego Online",
+      "subtitle": "Pasa la inspección técnica con semanas de antelación y transfiere la Rego para no asumir multas.",
+      "subtitleEn": "Obtain Roadworthy Certificate in advance and transfer Rego online to avoid fines.",
+      "phase": "departure_exit",
+      "priority": 18,
+      "targetGuideCategory": "departure"
+    },
+    {
+      "id": "early_tax_return_ato",
+      "title": "Solicitar el Early Tax Return (Declaración anticipada ATO)",
+      "titleEn": "Lodge Early Tax Return (Leaving Australia Permanently)",
+      "subtitle": "No esperes a julio: si te vas del país puedes reclamar tus retenciones de impuestos de inmediato.",
+      "subtitleEn": "Do not wait until July: claim back tax deductions and withholding refunds immediately.",
+      "phase": "departure_exit",
+      "priority": 19,
+      "targetGuideCategory": "departure"
+    },
+    {
+      "id": "dasp_super_refund_claim",
+      "title": "Tramitar la devolución DASP de Superannuation ($1,500-$3,000 AUD)",
+      "titleEn": "Claim DASP Superannuation Refund ($1,500-$3,000 AUD)",
+      "subtitle": "Reclama el 12% aportado por empleadores a través de la ATO tras despegar de Australia.",
+      "subtitleEn": "Claim your 12% employer super refund via ATO once physically departed from Australia.",
+      "phase": "departure_exit",
+      "priority": 20,
+      "targetGuideCategory": "departure"
+    },
+    {
+      "id": "cancel_visa_early_dasp",
+      "title": "Cancelación voluntaria de visa para cobrar DASP de inmediato",
+      "titleEn": "Voluntary Visa Cancellation to Release DASP Immediately",
+      "subtitle": "Si te vas antes de que caduque tu visa, cancélala en ImmiAccount para que la ATO libere tu dinero.",
+      "subtitleEn": "If leaving before visa expiry, cancel it via ImmiAccount so ATO unlocks your DASP payout.",
+      "phase": "departure_exit",
+      "priority": 21,
+      "targetGuideCategory": "departure"
+    },
+    {
+      "id": "transfer_funds_close_account",
+      "title": "Transferencia internacional sin comisiones y cierre bancario",
+      "titleEn": "Fee-Free International Funds Transfer & Account Closure",
+      "subtitle": "Evita perder un 4% en el banco tradicional usando cambio real (Wise) tras recibir DASP.",
+      "subtitleEn": "Avoid losing 4% markup at traditional banks by using mid-market exchange after DASP clears.",
+      "phase": "departure_exit",
+      "priority": 22,
+      "targetGuideCategory": "departure"
+    },
+    {
+      "id": "request_statement_of_service",
+      "title": "Pedir referencias formales y Statement of Service",
+      "titleEn": "Request Formal References & Statement of Service",
+      "subtitle": "Asegura cartas de recomendación en inglés para tu CV y futuras visas de patrocinio.",
+      "subtitleEn": "Secure signed employer references and work service statements for future visa options.",
+      "phase": "departure_exit",
+      "priority": 23,
+      "targetGuideCategory": "departure"
     }
   ]
 }

@@ -233,6 +233,71 @@
       "descriptionEn": "Mandatory official state registry to secure 100% of your rental bond refund.",
       "isActive": true,
       "priority": 3
+    },
+    {
+      "id": "mara_agents_network",
+      "name": "Red Oficial de Agentes Migratorios MARA",
+      "category": "visa_renewal",
+      "affiliateUrl": "https://portal.mara.gov.au/",
+      "promoCode": "OZVISA2026",
+      "badgeText": "Asesoría Legal Colegiada",
+      "badgeTextEn": "Official Registered Migration Advice",
+      "description": "Revisión profesional de expedientes complejos, apelaciones y dudas de elegibilidad antes de enviar a Home Affairs.",
+      "descriptionEn": "Professional compliance check for complex visa extension applications prior to Home Affairs lodgement.",
+      "isActive": true,
+      "priority": 1
+    },
+    {
+      "id": "immiaccount_official",
+      "name": "Portal ImmiAccount (Home Affairs)",
+      "category": "visa_renewal",
+      "affiliateUrl": "https://online.immi.gov.au/lusc/login",
+      "promoCode": null,
+      "badgeText": "Trámite Directo sin Intermediarios ($650 AUD)",
+      "badgeTextEn": "Direct Government Lodgement ($650 AUD)",
+      "description": "Presenta y abona tu solicitud de 2ª o 3ª visa directamente ante el Ministerio de Inmigración australiano.",
+      "descriptionEn": "Official lodgement and fee payment directly through the Australian Department of Home Affairs.",
+      "isActive": true,
+      "priority": 2
+    },
+    {
+      "id": "wise_departure",
+      "name": "Wise Multidivisa (Ahorra hasta $750 AUD)",
+      "category": "departure",
+      "affiliateUrl": "https://wise.com/invite/u/ozalert",
+      "promoCode": "OZALERTWISE",
+      "badgeText": "Tipo de Cambio Medio Real",
+      "badgeTextEn": "Real Mid-Market Exchange Rate",
+      "description": "Transfiere tus ahorros australianos de vuelta a casa sin comisiones ocultas y conserva tu balance AUD para cobrar el DASP.",
+      "descriptionEn": "Repatriate your Australian savings home with zero markup and keep an AUD account for DASP tax payouts.",
+      "isActive": true,
+      "priority": 1
+    },
+    {
+      "id": "ato_dasp_official",
+      "name": "ATO DASP Portal Oficial",
+      "category": "departure",
+      "affiliateUrl": "https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/temporary-residents-and-superannuation/departing-australia-superannuation-payment-dasp",
+      "promoCode": null,
+      "badgeText": "Devolución Oficial de tu Superannuation",
+      "badgeTextEn": "Official Superannuation Cash Claim",
+      "description": "Reclama el 12% aportado por tus empleadores una vez estés fuera del país y tu visa haya expirado o sido cancelada.",
+      "descriptionEn": "Directly reclaim your 12% employer super contributions once departed from Australia.",
+      "isActive": true,
+      "priority": 2
+    },
+    {
+      "id": "fantastic_bond_cleaning",
+      "name": "Limpieza de Fianza (End of Lease Guarantee)",
+      "category": "departure",
+      "affiliateUrl": "https://www.fantasticservices.com.au/end-of-lease-cleaning/",
+      "promoCode": "OZBOND10",
+      "badgeText": "100% Garantía Devolución de Fianza",
+      "badgeTextEn": "100% Bond Back Receipt Guarantee",
+      "description": "Empresas certificadas de limpieza con factura oficial exigible ante agencias para que te devuelvan el 100% de tu fianza.",
+      "descriptionEn": "Certified cleaners providing an official bond guarantee receipt to prevent agency deductions.",
+      "isActive": true,
+      "priority": 3
     }
   ]
 }

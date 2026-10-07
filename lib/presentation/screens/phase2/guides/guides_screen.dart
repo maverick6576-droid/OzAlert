@@ -26,6 +26,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
   bool _calcSuperDasp = true;
   bool _calcBondRisk = true;
   bool _calcMedicareTreaty = true;
+  bool _calcEarlyTaxReturn = true;
+  bool _calcBankSpread = true;
 
   // Seguimiento de pasos expandidos (Divulgación Progresiva)
   final Set<int> _expandedSteps = {};
@@ -36,11 +38,15 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     if (_calcSuperDasp) total += 1850;
     if (_calcBondRisk) total += 1500;
     if (_calcMedicareTreaty) total += 600;
+    if (_calcEarlyTaxReturn) total += 800;
+    if (_calcBankSpread) total += 450;
     return total;
   }
 
   final List<Map<String, String>> _categories = const [
     {'id': 'savings', 'label': '💰 Hacks Ahorro Pro', 'labelEn': '💰 Pro Money Hacks'},
+    {'id': 'visa_renewal', 'label': '🦘 2ª y 3ª Visa', 'labelEn': '🦘 2nd & 3rd Visa'},
+    {'id': 'departure', 'label': '🛫 Salida de Australia', 'labelEn': '🛫 Leaving Australia'},
     {'id': 'banking', 'label': '🏦 Bancos', 'labelEn': '🏦 Banking'},
     {'id': 'telecom', 'label': '📱 SIM & Red', 'labelEn': '📱 Mobile & SIM'},
     {'id': 'insurance', 'label': '🏥 Seguros', 'labelEn': '🏥 Insurance'},
@@ -265,10 +271,13 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
   // --- 1. VISTA DE GUÍA PASO A PASO ---
   Widget _buildStepsView(CategoryGuide guide, bool isEn) {
     final isSavings = guide.id == 'savings';
+    final isDeparture = guide.id == 'departure';
+    final isVisaRenewal = guide.id == 'visa_renewal';
+
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       children: [
-        if (isSavings) ...[
+        if (isSavings || isDeparture) ...[
           _buildInteractiveMoneyCalculator(isEn),
           const SizedBox(height: 14),
         ],
@@ -299,18 +308,30 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
         ),
         const SizedBox(height: 14),
 
-        if (isSavings) ...[
+        if (isSavings || isDeparture || isVisaRenewal) ...[
           // Paso 1 visible para todos (Free preview)
           if (guide.steps.isNotEmpty) _buildStepCard(guide.steps.first, isEn),
           const SizedBox(height: 4),
 
-          // Pasos 2, 3, 4 protegidos con candado Premium
+          // Pasos restantes protegidos con candado Premium
           if (guide.steps.length > 1)
             PremiumFeatureGate(
-              featureTitle: isEn ? 'Pro Money Hacks' : 'Hacks Pro de Ahorro Masivo',
-              featureBenefit: isEn
-                  ? 'Unlock full guides for DASP Super refund, Medicare RHCA free public health, and state bond lodgement guarantees.'
-                  : 'Desbloquea las guías completas para reclamar la Superannuation (DASP), tarjeta Medicare gratuita y protección oficial de fianza.',
+              featureTitle: isDeparture
+                  ? (isEn ? 'Departure Cash Recovery' : 'Protocolo Pro de Salida')
+                  : (isVisaRenewal
+                      ? (isEn ? '2nd & 3rd Year Visa Dossier' : 'Expediente Pro 2ª y 3ª Visa')
+                      : (isEn ? 'Pro Money Hacks' : 'Hacks Pro de Ahorro Masivo')),
+              featureBenefit: isDeparture
+                  ? (isEn
+                      ? 'Unlock full guides for DASP early release trick, Early Tax Return, and 100% rental bond recovery.'
+                      : 'Desbloquea las guías completas para liberar el DASP de inmediato, Early Tax Return y blindar tu fianza al 100%.')
+                  : (isVisaRenewal
+                      ? (isEn
+                          ? 'Unlock step-by-step audit-proof guides for 88 days, 179 days, and section 56 RFI responses.'
+                          : 'Desbloquea la guía paso a paso para blindar tus 88 días, 179 días y superar requerimientos s56 de Inmigración.')
+                      : (isEn
+                          ? 'Unlock full guides for DASP Super refund, Medicare RHCA free public health, and state bond lodgement guarantees.'
+                          : 'Desbloquea las guías completas para reclamar la Superannuation (DASP), tarjeta Medicare gratuita y protección oficial de fianza.')),
               child: Column(
                 children: guide.steps.skip(1).map((s) => _buildStepCard(s, isEn)).toList(),
               ),
@@ -442,6 +463,18 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             amount: '+\$500 AUD',
             value: _calcDeductBoots,
             onChanged: (val) => setState(() => _calcDeductBoots = val),
+          ),
+          _buildCalcToggleRow(
+            title: isEn ? 'Early Tax Return: Claim withholdings before July' : 'Early Tax Return: Devolución IRPF anticipada',
+            amount: '+\$800 AUD',
+            value: _calcEarlyTaxReturn,
+            onChanged: (val) => setState(() => _calcEarlyTaxReturn = val),
+          ),
+          _buildCalcToggleRow(
+            title: isEn ? 'Wise Transfer: Avoid 4% hidden bank SWIFT markup' : 'Transferencia Wise: Evita el 4% de spread bancario',
+            amount: '+\$450 AUD',
+            value: _calcBankSpread,
+            onChanged: (val) => setState(() => _calcBankSpread = val),
           ),
 
           const SizedBox(height: 10),

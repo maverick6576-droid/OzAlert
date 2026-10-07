@@ -912,6 +912,241 @@
           "verdictEn": "The biggest hidden gem for Spanish, Italian, British and European WHV travelers."
         }
       ]
+    },
+    "visa_renewal": {
+      "id": "visa_renewal",
+      "title": "Segunda y Tercera Visa (2nd & 3rd Year)",
+      "titleEn": "2nd & 3rd Year Visa Extension (WHV 417 & 462)",
+      "subtitle": "Normativa oficial LIN 22/050, cálculo legal de los 88 días y 6 meses, y cómo blindar tu expediente ante auditorías de Inmigración.",
+      "subtitleEn": "Official LIN 22/050 criteria, legal calculation of 88 days and 6 months, and audit-proofing your ImmiAccount submission.",
+      "steps": [
+        {
+          "number": 1,
+          "title": "Cálculo exacto de los 88 días para el 2º año",
+          "titleEn": "Legal calculation of the 88 days (2nd Year)",
+          "description": "Para la 2ª visa necesitas 88 días naturales de trabajo remunerado a jornada completa (normalmente 35-38 horas semanales o el turno estándar de la industria). Si trabajas 5 días completos de lunes a viernes, puedes computar los 7 días de la semana (incluyendo el fin de semana de descanso). Si trabajas a tiempo parcial o días sueltos, solo cuentas los días individuales efectivamente trabajados.",
+          "descriptionEn": "You need 88 calendar days of full-time specified work (usually 35-38 hrs/week or industry norm). A full 5-day week counts as 7 days including rest days. For part-time/casual irregular shifts, count only days actually worked.",
+          "tip": "Consejo: Guarda siempre los horarios semanales firmados y las hojas de control de turnos (timesheets) de cada semana.",
+          "tipEn": "Tip: Always keep signed weekly shift rosters and timesheet summaries for every single week."
+        },
+        {
+          "number": 2,
+          "title": "El expediente de pruebas que exige Inmigración",
+          "titleEn": "Evidence dossier required by Home Affairs",
+          "description": "El Departamento de Inmigración audita cerca del 23% de las solicitudes. Para superar la revisión sin problemas necesitas: 1) Formulario 1263 con ABNs y fechas exactas; 2) Todas las nóminas (payslips) oficiales con retención de impuestos (tax) y superannuation (12%); 3) Extractos bancarios oficiales (Bank Statements) que demuestren que cada nómina entró en tu cuenta (los pagos en efectivo 'cash' son motivo de denegación fulminante); 4) Contratos de trabajo y recibos de alojamiento en la zona regional.",
+          "descriptionEn": "Immigration audits ~23% of applications. You must provide: 1) Form 1263 with employer ABNs; 2) Official payslips with tax withholding and 12% superannuation; 3) Bank statements proving salary deposits (cash-in-hand is an instant rejection trigger); 4) Employment contracts and regional accommodation receipts.",
+          "tip": "Consejo: Usa el generador de Dossier Form 1263 de OzAlert para descargar un PDF oficial consolidado listo para ImmiAccount.",
+          "tipEn": "Tip: Use OzAlert's Form 1263 generator to compile a consolidated, audit-proof PDF for ImmiAccount."
+        },
+        {
+          "number": 3,
+          "title": "Cuándo y cómo solicitar la 2ª Visa en ImmiAccount",
+          "titleEn": "When and how to lodge your 2nd Visa in ImmiAccount",
+          "description": "Si estás en Australia (Onshore), debes solicitarla antes de que expire tu 1er año. Al enviar la solicitud se te concederá automáticamente una Bridging Visa A (BVA), que te permite seguir viviendo y trabajando legalmente a tiempo completo cuando expire tu primera visa hasta que aprueben la segunda. Si necesitas salir de Australia mientras esperas la resolución, debes solicitar una Bridging Visa B (BVB) antes de volar.",
+          "descriptionEn": "If onshore in Australia, lodge before your 1st year visa expires. You will automatically receive a Bridging Visa A (BVA) granting full legal work rights while your extension is processed. If traveling overseas while waiting, apply for Bridging Visa B (BVB) before boarding.",
+          "tip": "Consejo: La tasa oficial del gobierno es de $650 AUD no reembolsables. Verifica que los códigos postales del empleador coincidan con LIN 22/050.",
+          "tipEn": "Tip: The non-refundable government fee is $650 AUD. Triple check that workplace postcodes match LIN 22/050."
+        },
+        {
+          "number": 4,
+          "title": "Tercera Visa: 6 meses (179 días) en tu 2º año",
+          "titleEn": "3rd Year Visa: 6 Months (179 Days) in Year 2",
+          "description": "Para conseguir el 3er año de visado, debes completar 6 meses (mínimo 179 días naturales) de trabajo regional específico realizado EXCLUSIVAMENTE durante la vigencia de tu segundo año (o su Bridging Visa). El trabajo realizado durante el 1er año no computa para la 3ª visa. Se exigen al menos 26 nóminas semanales consecutivas o acumuladas en sectores y zonas aprobadas.",
+          "descriptionEn": "To qualify for the 3rd year visa, you must complete 6 months (minimum 179 calendar days) of regional work completed SOLELY during your 2nd year visa (or its BVA). 1st year work cannot be reused. At least 26 weekly payslips are required.",
+          "tip": "Consejo: Empieza el trabajo regional a más tardar en el mes 4 o 5 de tu 2º año para no quedarte sin margen de tiempo ante pausas por lluvia o final de temporada.",
+          "tipEn": "Tip: Start regional work by month 4-5 of your second year to maintain buffer against weather pauses or seasonal cuts."
+        },
+        {
+          "number": 5,
+          "title": "Cómo superar una auditoría s56 (Request for Information)",
+          "titleEn": "Handling a Section 56 Request for Information (RFI)",
+          "description": "Si recibes una notificación s56 de Inmigración, tendrás un plazo estricto de 28 días naturales para aportar pruebas adicionales. Los oficiales cruzan datos con la ATO y el registro de la empresa (ASIC). Nunca inventes un ABN ni recurras a intermediarios fraudulentos; las penas incluyen la prohibición de entrada a Australia por 3 años (Public Interest Criterion 4020).",
+          "descriptionEn": "If you receive an s56 RFI notice, you have exactly 28 days to provide extra proof. Immigration officers cross-check ATO and ASIC registers. Never fabricate ABNs or work records; penalties include a 3-year Australia entry ban under PIC 4020.",
+          "tip": "Consejo: Ante cualquier duda en casos complejos, consulta a un Agente Migratorio Registrado (MARA).",
+          "tipEn": "Tip: For complex or borderline eligibility inquiries, always consult a Registered MARA Migration Agent."
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "onshore_vs_offshore",
+          "name": "Solicitud Onshore vs Offshore",
+          "tagline": "Diferencias clave al solicitar dentro o fuera de Australia",
+          "taglineEn": "Key differences when lodging inside vs outside Australia",
+          "status": "Oficial Home Affairs",
+          "statusEn": "Official Home Affairs",
+          "cost": "$650 AUD (Tasa oficial del gobierno)",
+          "costEn": "$650 AUD (Official government visa charge)",
+          "pros": [
+            "Onshore: Te concede Bridging Visa A con derechos plenos de trabajo",
+            "Onshore: No necesitas interrumpir tu vida ni billetes de avión",
+            "Offshore: Puedes solicitarla desde tu país de origen en cualquier momento antes de los 31 o 36 años"
+          ],
+          "prosEn": [
+            "Onshore: Grants Bridging Visa A with unlimited work rights",
+            "Onshore: Seamless transition without international travel costs",
+            "Offshore: Lodge anytime from abroad before age limit (31 or 36)"
+          ],
+          "cons": [
+            "Offshore: No obtienes Bridging Visa; debes esperar la concesión fuera de Australia antes de volver"
+          ],
+          "consEn": [
+            "Offshore: No bridging visa granted; you must await approval outside Australia before entering"
+          ],
+          "verdict": "Si estás trabajando en Australia, solicita Onshore al menos 3-4 semanas antes de la expiración de tu primer año.",
+          "verdictEn": "If currently in Australia, lodge onshore 3-4 weeks before 1st year expiry for uninterrupted work rights."
+        },
+        {
+          "id": "alternative_pathways",
+          "name": "Vías Alternativas si no tienes los 88 Días",
+          "tagline": "Visa de Estudiante (500) o Patrocinio Laboral (TSS 482)",
+          "taglineEn": "Student Visa (Subclass 500) or Employer Sponsorship (TSS 482)",
+          "status": "Opciones de permanencia",
+          "statusEn": "Alternative stay pathways",
+          "cost": "Desde $1,600 AUD (Tasa visa + curso)",
+          "costEn": "From $1,600 AUD (Visa charge + course enrolment)",
+          "pros": [
+            "Visa de Estudiante 500: Permite quedarte 1 a 3 años estudiando cursos VET / Diploma o Universidad",
+            "Permite trabajar 48 horas por quincena en periodos lectivos y tiempo completo en vacaciones",
+            "Sponsorship 482: Vía de trabajo si encuentras un empleador dispuesto a patrocinarte en puestos cualificados"
+          ],
+          "prosEn": [
+            "Student Visa 500: Stay 1-3 years studying VET/Diploma or University",
+            "Work up to 48 hours per fortnight during terms and full-time during holidays",
+            "TSS 482 Sponsorship: Employer-sponsored pathway for eligible skilled roles"
+          ],
+          "cons": [
+            "Coste económico significativamente más alto que la renovación WHV de $650 AUD",
+            "Límite de horas laborales en época de clases"
+          ],
+          "consEn": [
+            "Significantly higher upfront costs than the standard $650 AUD WHV extension",
+            "Bi-weekly work hour restrictions during active term"
+          ],
+          "verdict": "La mejor salida si no conseguiste completar los 88 días o prefieres formarte en ciudades principales.",
+          "verdictEn": "The premier alternative if 88-day regional criteria cannot be met and you wish to remain in Australia."
+        }
+      ]
+    },
+    "departure": {
+      "id": "departure",
+      "title": "Protocolo de Salida & Recuperar Dinero",
+      "titleEn": "Departure Protocol & Cash Recovery",
+      "subtitle": "Cómo recuperar más de $4,500 AUD en Superannuation (DASP), fianza de alquiler y Tax Return al dejar Australia.",
+      "subtitleEn": "How to reclaim over $4,500 AUD in Super (DASP), rental bond and Tax Return when leaving Australia.",
+      "steps": [
+        {
+          "number": 1,
+          "title": "Reclamación DASP (Superannuation) tras salir de Australia",
+          "titleEn": "DASP Superannuation Refund after departing Australia",
+          "description": "Todo empleador en Australia paga por ley un 12% extra sobre tu salario base a tu fondo de pensiones (Hostplus, AustralianSuper, etc.). En 1-2 años acumulas entre $3,000 y $7,000 AUD. Puedes reclamar este dinero mediante el portal DASP Online de la ATO una vez hayas salido del país y tu visa haya expirado o sido cancelada. A los visados WHV se les aplica una retención impositiva del 65%, pero recuperas el 35% neto (entre $1,000 y $2,500 AUD limpios en tu cuenta que el 40% de los viajeros olvida reclamar).",
+          "descriptionEn": "Australian employers legally pay 12% superannuation on top of your wages. Over 1-2 years you accumulate $3,000-$7,000 AUD. Claim it via the ATO DASP portal once physically departed and visa has expired or been cancelled. WHV holders pay 65% tax rate, but recover 35% net ($1,000-$2,500 AUD in clean cash).",
+          "tip": "Consejo: Solicita que te ingresen el DASP por transferencia a tu cuenta bancaria australiana o en tu cuenta AUD de Wise para evitar gastos de cheques en papel.",
+          "tipEn": "Tip: Request DASP payout into your Australian bank or Wise AUD account to avoid lost international cheques."
+        },
+        {
+          "number": 2,
+          "title": "El truco de la Cancelación Voluntaria de Visa en ImmiAccount",
+          "titleEn": "Voluntary Visa Cancellation trick in ImmiAccount",
+          "description": "La ATO no puede procesar el pago del DASP si tu visado sigue legalmente activo en el sistema de Inmigración. Si decides volver a casa 2 o 3 meses antes de que expire tu visa, el DASP quedará congelado hasta esa fecha. Para cobrar de inmediato: una vez hayas despegado de Australia, entra en ImmiAccount y envía la solicitud 'Request to Cancel Visa'. En 24-48 horas cancelan tu visado y la ATO desbloquea el pago de tu dinero.",
+          "descriptionEn": "The ATO cannot issue DASP payments while your visa is active. If returning home 2-3 months early, funds freeze until your grant expiry date. Solution: once your flight takes off from Australia, submit 'Request to Cancel Visa' in ImmiAccount. They cancel it in 24-48 hrs, unlocking instant ATO payout.",
+          "tip": "Consejo: Haz esto SOLO después de haber salido físicamente de Australia y no planees regresar con esa misma visa.",
+          "tipEn": "Tip: Submit this ONLY after physically passing Australian border security outbound."
+        },
+        {
+          "number": 3,
+          "title": "Early Tax Return (Declaración de impuestos anticipada)",
+          "titleEn": "Early Tax Return (Lodgement before June 30)",
+          "description": "El año fiscal australiano termina el 30 de junio. Si te vas permanentemente antes de esa fecha (por ejemplo en febrero o abril), no tienes que esperar a julio para presentar tu declaración. La ATO permite presentar un 'Early lodgement of a tax return for individuals leaving Australia permanently' en papel o a través de un gestor fiscal registrado, recuperando entre $500 y $1,200 AUD en retenciones y gastos deducibles.",
+          "descriptionEn": "The Australian tax year finishes June 30. If departing permanently before then (e.g. Feb or April), lodge an Early Tax Return with the ATO instead of waiting. You can reclaim $500-$1,200 AUD in excess tax withholdings and deductions.",
+          "tip": "Consejo: Asegúrate de que todos tus empleadores hayan marcado tu Income Statement como 'Tax ready' en MyGov.",
+          "tipEn": "Tip: Verify all past employers have finalized your Income Statement ('Tax Ready') on MyGov."
+        },
+        {
+          "number": 4,
+          "title": "Blindaje del 100% de la Fianza de Alquiler (Bond Refund)",
+          "titleEn": "100% Rental Bond Recovery (Bond Board Strategy)",
+          "description": "Muchos caseros y agencias intentan quedarse con la fianza ($1,500 - $3,000 AUD) inventando desperfectos cuando ven que el inquilino tiene un vuelo internacional y no podrá asistir a un tribunal de arbitraje (NCAT/VCAT/QCAT). Regla de oro: Solicita tú mismo la devolución íntegra en la web oficial del organismo de fianzas de tu estado (Rental Bonds Online NSW, RTBA VIC, RTA QLD) el mismo día que entregas las llaves. La agencia tendrá solo 14 días para impugnar formalmente ante el tribunal, lo que casi nunca hacen si aportas factura de limpieza profesional.",
+          "descriptionEn": "Landlords frequently attempt to withhold rental bonds ($1,500-$3,000 AUD) claiming minor dust when they know tenants are boarding flights. Strategy: lodge the 100% refund yourself on the official state bond portal (RBO NSW, RTBA VIC, RTA QLD) the moment keys are handed over. The agent has only 14 days to formally dispute.",
+          "tip": "Consejo: Contrata siempre una empresa de limpieza de final de alquiler con 'Bond Back Guarantee' (garantía por escrito).",
+          "tipEn": "Tip: Book end-of-lease cleaners with a written 'Bond Back Guarantee' receipt."
+        },
+        {
+          "number": 5,
+          "title": "Venta de Vehículo / 4WD a tiempo & Transferencia de Rego",
+          "titleEn": "Vehicle Sale Timing, RWC and Online Rego Transfer",
+          "description": "Vender un coche o campervan en los últimos 4 días suele forzar a malvenderlo en el aeropuerto perdiendo entre $2,000 y $5,000 AUD. Pasa la inspección técnica oficial (Roadworthy Certificate / Pink Slip) con 3 semanas de antelación y ponlo a la venta con tiempo. En el momento de la venta, completa la transferencia de matrícula (Rego) por internet en la web de transporte de tu estado para asegurarte de que las multas y peajes del nuevo dueño no te lleguen a ti.",
+          "descriptionEn": "Leaving vehicle sales to the final week forces fire-sales at airports, forfeiting $2,000-$5,000 AUD. Get your Roadworthy Certificate (RWC/Pink Slip) 3 weeks early. Complete the Notice of Disposal / Rego transfer online immediately upon sale so the buyer's traffic fines do not trace back to your name.",
+          "tip": "Consejo: Conserva una foto del permiso de conducir del comprador y el comprobante de transferencia bancaria inmediata (PayID).",
+          "tipEn": "Tip: Keep a photo of the buyer's driver license and a signed receipt of sale."
+        },
+        {
+          "number": 6,
+          "title": "Transferencia de ahorros y cierre bancario sin comisiones",
+          "titleEn": "Transferring savings & closing bank accounts fee-free",
+          "description": "Los 4 grandes bancos australianos cobran entre un 3% y un 5% de margen oculto en el tipo de cambio al enviar transferencias internacionales SWIFT, perdiendo entre $300 y $750 AUD en un traspaso de $15,000 AUD. Usa Wise u operadores multidivisa con tipo de cambio real del mercado. NO cierres la cuenta bancaria australiana hasta haber cobrado el DASP y el Tax Return (o ten una cuenta AUD en Wise que admita depósitos directos de la ATO). Una vez cobrado todo, cierra tu cuenta en la app para no pagar comisiones de mantenimiento de $4 AUD al mes.",
+          "descriptionEn": "Major Australian banks pocket 3-5% hidden exchange rate margins on international SWIFT transfers, bleeding $300-$750 AUD on a $15,000 transfer. Use Wise with the real mid-market exchange rate. Do not shut your Australian account until your DASP and ATO tax refund have fully cleared. Close it via mobile app once empty.",
+          "tip": "Consejo: Pasa tu número de teléfono australiano a una eSIM prepago mínima ($10-$15/año) para seguir recibiendo códigos SMS de verificación bancaria.",
+          "tipEn": "Tip: Convert your Aussie SIM to an ultra-cheap yearly eSIM to continue receiving bank SMS OTPs overseas."
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "wise_vs_traditional_banks",
+          "name": "Wise vs Transferencia Bancaria Tradicional (SWIFT)",
+          "tagline": "Cómo transferir tus ahorros de vuelta a casa sin regalar dinero",
+          "taglineEn": "Repatriating your Australian savings without predatory bank margins",
+          "status": "Ahorro demostrado",
+          "statusEn": "Verified savings",
+          "cost": "Comisión Wise ~0.4% vs Bancos 3-5% oculto",
+          "costEn": "Wise fee ~0.4% vs Bank 3-5% hidden spread",
+          "pros": [
+            "Wise: Aplica el tipo de cambio interbancario real de Google/Reuters",
+            "Ahorra entre $450 y $750 AUD en transferencias de $15,000 AUD",
+            "Cuenta con BSB y Account Number australiano para recibir DASP y Tax Return tras haber salido del país"
+          ],
+          "prosEn": [
+            "Wise: Uses genuine mid-market rate with zero markup",
+            "Saves $450-$750 AUD on a $15,000 AUD transfer compared to Big 4 banks",
+            "Provides local Australian BSB & Account Number to receive DASP and tax refunds after departing"
+          ],
+          "cons": [
+            "Requiere verificar tu identidad con pasaporte antes de volar"
+          ],
+          "consEn": [
+            "Requires passport verification prior to departure"
+          ],
+          "verdict": "La herramienta indiscutible para repatriar ahorros de Australia sin perder cientos de dólares.",
+          "verdictEn": "The undisputed standard for moving Australian funds home without hefty bank fees."
+        },
+        {
+          "id": "ato_cheque_vs_direct_deposit",
+          "name": "Depósito en Cuenta AUD vs Cheque Postal Internacional de la ATO",
+          "tagline": "La forma en que cobras tu DASP y Tax Return determina cuánto dinero te queda",
+          "taglineEn": "How your DASP and Tax Refund are disbursed dictates your final return",
+          "status": "Métodos de cobro",
+          "statusEn": "Disbursement methods",
+          "cost": "Transferencia AUD $0 vs Cheque Internacional $50-$100 de comisión bancaria",
+          "costEn": "AUD deposit $0 fee vs International cheque $50-$100 bank processing",
+          "pros": [
+            "Depósito bancario AUD: Fondos disponibles en 3 a 5 días hábiles",
+            "Cero riesgo de extravío en correos postales internacionales",
+            "Puedes transferirlo a tu divisa con Wise al mejor tipo de cambio"
+          ],
+          "prosEn": [
+            "Direct AUD deposit: Available in 3-5 business days",
+            "Zero risk of lost postal mail overseas",
+            "Convert to local currency at mid-market rates via Wise"
+          ],
+          "cons": [
+            "Cheque en papel: Tarda 6 a 10 semanas en llegar, bancos en España/Latam cobran hasta 100€ por gestionarlo y tardan hasta 2 meses en liquidar"
+          ],
+          "consEn": [
+            "Paper cheque: Takes 6-10 weeks to arrive by airmail; overseas banks charge $50-$100 to clear foreign currency cheques"
+          ],
+          "verdict": "Mantén siempre una cuenta bancaria australiana activa o tu cuenta Wise AUD para recibir el depósito directo.",
+          "verdictEn": "Always keep an active Aussie bank account or Wise AUD balance for seamless electronic payouts."
+        }
+      ]
     }
   }
 }

@@ -114,6 +114,26 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                   ),
                   ...tasks.where((t) => t.phase == 'first_month').map((t) => _buildTaskTile(context, ref, t, isEn)),
                 ],
+
+                if (tasks.any((t) => t.phase == 'visa_renewal')) ...[
+                  const SizedBox(height: 20),
+                  // Sección: Renovación de Visado (2ª y 3ª Visa)
+                  _buildSectionHeader(
+                    isEn ? '🦘 2nd & 3rd Year Visa Extension' : '🦘 Renovación de Visado: 2ª y 3ª Visa',
+                    isEn ? '88 days & 6 months regional compliance under LIN 22/050' : 'Requisitos de 88 días y 6 meses bajo normativa LIN 22/050',
+                  ),
+                  ...tasks.where((t) => t.phase == 'visa_renewal').map((t) => _buildTaskTile(context, ref, t, isEn)),
+                ],
+
+                if (tasks.any((t) => t.phase == 'departure_exit')) ...[
+                  const SizedBox(height: 20),
+                  // Sección: Salida de Australia & Recuperación de Dinero
+                  _buildSectionHeader(
+                    isEn ? '🛫 Leaving Australia & Reclaiming Cash' : '🛫 Salida de Australia & Recuperación de Dinero',
+                    isEn ? 'Reclaim over \$4,500 AUD in super, bond & tax refund' : 'Recupera hasta \$4.500 AUD en superannuation, fianza y tasas',
+                  ),
+                  ...tasks.where((t) => t.phase == 'departure_exit').map((t) => _buildTaskTile(context, ref, t, isEn)),
+                ],
               ],
 
               const SizedBox(height: 40),
@@ -393,7 +413,10 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                                 ),
                               ),
                             ),
-                            if (task.targetGuideCategory == 'savings' || task.targetGuideCategory == '88days') ...[
+                            if (task.targetGuideCategory == 'savings' ||
+                                task.targetGuideCategory == '88days' ||
+                                task.targetGuideCategory == 'visa_renewal' ||
+                                task.targetGuideCategory == 'departure') ...[
                               const SizedBox(width: 6),
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
@@ -432,6 +455,10 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
         return isEn ? 'Regional Map & 88-Day Log 📍' : 'Mapa Oficial & 88 Días 📍';
       case 'savings':
         return isEn ? 'Pro Money & Tax Hacks 💵' : 'Hacks Pro de Ahorro Masivo 💵';
+      case 'visa_renewal':
+        return isEn ? '2nd & 3rd Visa Guide 🦘' : 'Guía 2ª y 3ª Visa 🦘';
+      case 'departure':
+        return isEn ? 'Exit Protocol & Reclaim Cash 🛫' : 'Protocolo Salida & Recuperar Dinero 🛫';
       default:
         return isEn ? 'View Guide & Comparisons' : 'Ver Guía y Comparativa';
     }
