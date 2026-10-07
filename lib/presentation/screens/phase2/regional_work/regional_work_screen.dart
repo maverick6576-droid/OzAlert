@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/services/pdf_generator_service.dart';
 import '../../../providers/locale_provider.dart';
@@ -23,6 +24,7 @@ class RegionalWorkScreen extends ConsumerStatefulWidget {
 
 class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  int _targetVisaYear = 2; // 2 = 2º Año (88 días), 3 = 3r Año (179 días)
 
   // Validador de Códigos Postales
   final _postcodeController = TextEditingController(text: '4870');
@@ -149,7 +151,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             Tab(
               text: !isPremium
                   ? (isEn ? '🗓️ Log ($totalDays/10 Free)' : '🗓️ Contador ($totalDays/10 Gratis)')
-                  : (isEn ? '🗓️ Work Log ($totalDays/88)' : '🗓️ Contador ($totalDays/88)'),
+                  : (isEn
+                      ? '🗓️ Work Log ($totalDays/${_targetVisaYear == 2 ? 88 : 179})'
+                      : '🗓️ Contador ($totalDays/${_targetVisaYear == 2 ? 88 : 179})'),
             ),
           ],
         ),
@@ -592,7 +596,29 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 ],
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 14),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                icon: const Icon(CupertinoIcons.link, size: 15, color: AppColors.primary),
+                label: Text(
+                  isEn ? 'Consult LIN 22/050 Official Legislation' : 'Consultar Normativa Oficial LIN 22/050',
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: AppColors.primary),
+                ),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 11),
+                  side: BorderSide(color: AppColors.primary.withValues(alpha: 0.35)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                ),
+                onPressed: () async {
+                  final uri = Uri.parse('https://www.legislation.gov.au/Details/F2022L00445');
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  }
+                },
+              ),
+            ),
+            const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -613,13 +639,109 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
   }
 
   Widget _buildWorkLogTab(bool isEn, bool isPremium, List<RegionalJobEntry> jobs, int totalDays, String applicantEmail, String visaSubclass) {
-    final maxTarget = isPremium ? 88 : 10;
+    final targetRequirement = _targetVisaYear == 2 ? 88 : 179;
+    final maxTarget = isPremium ? targetRequirement : 10;
     final progress = (totalDays / maxTarget.toDouble()).clamp(0.0, 1.0);
 
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       children: [
-        // Tarjeta de progreso 88 Días
+        // Selector Adaptativo: 2º Año (88 Días) vs 3r Año (179 Días / 6 Meses)
+        Container(
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceElevated,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.cardBorder),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => setState(() => _targetVisaYear = 2),
+                  behavior: HitTestBehavior.opaque,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      color: _targetVisaYear == 2 ? AppColors.primary : Colors.transparent,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: _targetVisaYear == 2
+                          ? const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1))]
+                          : null,
+                    ),
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          isEn ? '2nd Year Visa' : '2º Año de Visa',
+                          style: TextStyle(
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w800,
+                            color: _targetVisaYear == 2 ? Colors.white : AppColors.textPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 1),
+                        Text(
+                          isEn ? '88 Days Requirement' : 'Requisito: 88 Días',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                            color: _targetVisaYear == 2 ? Colors.white.withValues(alpha: 0.85) : AppColors.textMuted,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => setState(() => _targetVisaYear = 3),
+                  behavior: HitTestBehavior.opaque,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      color: _targetVisaYear == 3 ? AppColors.primary : Colors.transparent,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: _targetVisaYear == 3
+                          ? const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1))]
+                          : null,
+                    ),
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          isEn ? '3rd Year Visa' : '3r Año de Visa',
+                          style: TextStyle(
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w800,
+                            color: _targetVisaYear == 3 ? Colors.white : AppColors.textPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 1),
+                        Text(
+                          isEn ? '179 Days (6 Months)' : 'Requisito: 179 Días (6 Meses)',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                            color: _targetVisaYear == 3 ? Colors.white.withValues(alpha: 0.85) : AppColors.textMuted,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        // Tarjeta de progreso 88 Días / 179 Días
         Container(
           padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
@@ -637,11 +759,13 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                   Text(
                     !isPremium
                         ? (isEn ? 'Free Trial Progress (10-Day Cap)' : 'Progreso Gratuito (Límite 10 Días)')
-                        : (isEn ? '2nd Year Visa Progress' : 'Progreso 2º Año de Visa'),
+                        : (_targetVisaYear == 2
+                            ? (isEn ? '2nd Year Visa Progress' : 'Progreso 2º Año de Visa')
+                            : (isEn ? '3rd Year Visa Progress' : 'Progreso 3r Año de Visa')),
                     style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.textPrimary),
                   ),
                   Text(
-                    !isPremium ? '$totalDays / 10' : '$totalDays / 88 ${isEn ? "days" : "días"}',
+                    !isPremium ? '$totalDays / 10' : '$totalDays / $targetRequirement ${isEn ? "days" : "días"}',
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 16,
@@ -664,15 +788,19 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
               Text(
                 !isPremium
                     ? (totalDays >= 10
-                        ? (isEn ? '🔒 Free trial limit reached! Unlock the complete 88 days with Premium.' : '🔒 ¡Límite gratuito de 10 días alcanzado! Desbloquea los 88 días con Premium.')
+                        ? (isEn ? '🔒 Free trial limit reached! Unlock the complete $targetRequirement days with Premium.' : '🔒 ¡Límite gratuito de 10 días alcanzado! Desbloquea los $targetRequirement días con Premium.')
                         : (isEn ? '${10 - totalDays} free trial days remaining to log.' : 'Te quedan ${10 - totalDays} días de prueba gratuita por registrar.'))
-                    : (totalDays >= 88
-                        ? (isEn ? '🎉 Goal reached! Ready to lodge your 2nd year visa.' : '🎉 ¡Meta alcanzada! Listo para solicitar tu 2º año.')
-                        : (isEn ? '${88 - totalDays} days remaining to complete.' : 'Faltan ${88 - totalDays} días para completar la extensión.')),
+                    : (totalDays >= targetRequirement
+                        ? (_targetVisaYear == 2
+                            ? (isEn ? '🎉 Goal reached! Ready to lodge your 2nd year visa.' : '🎉 ¡Meta alcanzada! Listo para solicitar tu 2º año.')
+                            : (isEn ? '🎉 Goal reached! Ready to lodge your 3rd year visa.' : '🎉 ¡Meta alcanzada! Listo para solicitar tu 3r año.'))
+                        : (_targetVisaYear == 2
+                            ? (isEn ? '${88 - totalDays} days remaining to complete.' : 'Faltan ${88 - totalDays} días para completar la extensión.')
+                            : (isEn ? '${179 - totalDays} days remaining to complete.' : 'Faltan ${179 - totalDays} días para completar la extensión.'))),
                 style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
               ),
 
-              // Banner Promocional Freemium para Desbloquear los 88 Días
+              // Banner Promocional Freemium para Desbloquear los Días Completos
               if (!isPremium) ...[
                 const SizedBox(height: 12),
                 Container(
@@ -689,18 +817,20 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                       Expanded(
                         child: Text(
                           isEn
-                              ? 'Log all 88 days and generate official Form 1263 immigration PDF dossiers with Premium.'
-                              : 'Registra los 88 días al completo y genera el dossier oficial del Formulario 1263 con Premium.',
+                              ? 'Log all $targetRequirement days and generate official Form 1263 immigration PDF dossiers with Premium.'
+                              : 'Registra los $targetRequirement días al completo y genera el dossier oficial del Formulario 1263 con Premium.',
                           style: const TextStyle(fontSize: 11.5, color: AppColors.textPrimary, fontWeight: FontWeight.w600),
                         ),
                       ),
                       TextButton(
                         onPressed: () => showPhase2PaywallBottomSheet(
                           context: context,
-                          featureTitle: isEn ? '88-Day Tracker & Form 1263' : 'Contador 88 Días y Form 1263',
+                          featureTitle: isEn
+                              ? (_targetVisaYear == 2 ? '88-Day Tracker & Form 1263' : '179-Day Tracker & Form 1263')
+                              : (_targetVisaYear == 2 ? 'Contador 88 Días y Form 1263' : 'Contador 179 Días y Form 1263'),
                           featureBenefit: isEn
-                              ? 'Track all 88 days, verify employer ABNs, and export official Form 1263 immigration dossiers.'
-                              : 'Registra los 88 días al completo y descarga el Formulario 1263 oficial listo para ImmiAccount.',
+                              ? 'Track all $targetRequirement days, verify employer ABNs, and export official Form 1263 immigration dossiers.'
+                              : 'Registra los $targetRequirement días al completo y descarga el Formulario 1263 oficial listo para ImmiAccount.',
                         ),
                         child: Text(isEn ? 'Unlock' : 'Desbloquear', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.primary)),
                       ),
@@ -733,8 +863,8 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                   context: context,
                   featureTitle: isEn ? '10-Day Free Limit Reached' : 'Límite Gratuito de 10 Días',
                   featureBenefit: isEn
-                      ? 'You have recorded 10 free trial days. Upgrade to Premium to log the complete 88 days and generate your Form 1263 dossier.'
-                      : 'Has registrado los 10 días de prueba gratuitos. Pasa a Premium para registrar los 88 días completos y generar el Formulario 1263 oficial.',
+                      ? 'You have recorded 10 free trial days. Upgrade to Premium to log the complete $targetRequirement days and generate your Form 1263 dossier.'
+                      : 'Has registrado los 10 días de prueba gratuitos. Pasa a Premium para registrar los $targetRequirement días completos y generar el Formulario 1263 oficial.',
                 );
                 return;
               }
@@ -795,7 +925,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
               if (!isPremium) {
                 showPhase2PaywallBottomSheet(
                   context: context,
-                  featureTitle: isEn ? 'Form 1263 Immigration Dossier' : 'Dossier Formulario 1263',
+                  featureTitle: isEn
+                      ? (_targetVisaYear == 2 ? 'Form 1263 Immigration Dossier (2nd Year)' : 'Form 1263 Immigration Dossier (3rd Year)')
+                      : (_targetVisaYear == 2 ? 'Dossier Formulario 1263 (2º Año)' : 'Dossier Formulario 1263 (3r Año)'),
                   featureBenefit: isEn
                       ? 'Generate an audit-proof Form 1263 PDF dossier with ABNs, hours, and pay slips ready for ImmiAccount.'
                       : 'Genera el dossier en PDF del Formulario 1263 con ABNs, horas y recibos listo para adjuntar en ImmiAccount.',
@@ -816,9 +948,11 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 visaSubclass: visaSubclass,
                 jobs: jobs,
                 totalDays: totalDays,
+                targetYear: _targetVisaYear,
               );
 
-              await PdfGeneratorService.shareOrPrintPdf(pdfBytes, 'Form_1263_Dossier.pdf');
+              final pdfFileName = _targetVisaYear == 2 ? 'Form_1263_2ndYear_Dossier.pdf' : 'Form_1263_3rdYear_Dossier.pdf';
+              await PdfGeneratorService.shareOrPrintPdf(pdfBytes, pdfFileName);
             },
           ),
         ),
@@ -936,8 +1070,8 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                   context: context,
                   featureTitle: isEn ? '10-Day Free Limit Reached' : 'Límite Gratuito de 10 Días',
                   featureBenefit: isEn
-                      ? 'Free tier includes tracking up to 10 days. Upgrade to Premium to log the complete 88 days and export official Form 1263 PDF dossiers.'
-                      : 'Has intentado superar los 10 días de la versión gratuita. Pasa a Premium para registrar los 88 días completos y generar el Formulario 1263 oficial.',
+                      ? 'Free tier includes tracking up to 10 days. Upgrade to Premium to log the complete ${_targetVisaYear == 2 ? 88 : 179} days and export official Form 1263 PDF dossiers.'
+                      : 'Has intentado superar los 10 días de la versión gratuita. Pasa a Premium para registrar los ${_targetVisaYear == 2 ? 88 : 179} días completos y generar el Formulario 1263 oficial.',
                 );
                 return;
               }

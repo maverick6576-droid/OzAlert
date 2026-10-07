@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/services/affiliate_link_service.dart';
 import '../../../providers/phase2/phase2_providers.dart';
@@ -642,6 +643,44 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                ],
+                if (step.officialUrl != null && step.officialUrl!.isNotEmpty) ...[
+                  const SizedBox(height: 10),
+                  InkWell(
+                    onTap: () async {
+                      final uri = Uri.parse(step.officialUrl!);
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(uri, mode: LaunchMode.externalApplication);
+                      }
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(CupertinoIcons.link, size: 14, color: AppColors.primary),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              (isEn ? step.officialUrlLabelEn : step.officialUrlLabel) ??
+                                  (isEn ? 'Consult Official Source' : 'Consultar Fuente Oficial'),
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ),
+                          const Icon(CupertinoIcons.arrow_up_right, size: 13, color: AppColors.primary),
+                        ],
+                      ),
                     ),
                   ),
                 ],

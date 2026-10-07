@@ -6,6 +6,9 @@ class GuideStep {
   final String descriptionEn;
   final String tip;
   final String tipEn;
+  final String? officialUrl;
+  final String? officialUrlLabel;
+  final String? officialUrlLabelEn;
 
   GuideStep({
     required this.number,
@@ -15,6 +18,9 @@ class GuideStep {
     required this.descriptionEn,
     required this.tip,
     required this.tipEn,
+    this.officialUrl,
+    this.officialUrlLabel,
+    this.officialUrlLabelEn,
   });
 
   factory GuideStep.fromJson(Map<String, dynamic> json) {
@@ -26,6 +32,9 @@ class GuideStep {
       descriptionEn: json['descriptionEn'] as String? ?? '',
       tip: json['tip'] as String? ?? '',
       tipEn: json['tipEn'] as String? ?? '',
+      officialUrl: json['officialUrl'] as String?,
+      officialUrlLabel: json['officialUrlLabel'] as String?,
+      officialUrlLabelEn: json['officialUrlLabelEn'] as String?,
     );
   }
 }

@@ -350,15 +350,18 @@ class PdfGeneratorService {
     );
   }
 
-  /// Genera un Dossier de Verificación de Empleo Regional (88 Días / Formulario 1263 Summary)
+  /// Genera un Dossier de Verificación de Empleo Regional (88 Días / 179 Días / Formulario 1263 Summary)
   static Future<Uint8List> generateRegionalDossier({
     required String applicantName,
     required String passportNumber,
     required String visaSubclass,
     required List<RegionalJobEntry> jobs,
     required int totalDays,
+    int targetYear = 2,
   }) async {
     final pdf = pw.Document();
+    final targetDays = targetYear == 3 ? 179 : 88;
+    final yearTitle = targetYear == 3 ? 'THIRD' : 'SECOND';
 
     pdf.addPage(
       pw.MultiPage(
@@ -374,8 +377,8 @@ class PdfGeneratorService {
                   pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text('WORKING HOLIDAY VISA - SPECIFIED WORK SUMMARY',
-                          style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold, color: PdfColor.fromHex('#D96B43'))),
+                      pw.Text('$yearTitle WORKING HOLIDAY VISA - SPECIFIED WORK SUMMARY',
+                          style: pw.TextStyle(fontSize: 13, fontWeight: pw.FontWeight.bold, color: PdfColor.fromHex('#D96B43'))),
                       pw.Text('Evidence Summary for Form 1263 / ImmiAccount Lodgement',
                           style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey700)),
                     ],
@@ -386,7 +389,7 @@ class PdfGeneratorService {
                       color: PdfColor.fromHex('#00A896'),
                       borderRadius: pw.BorderRadius.circular(6),
                     ),
-                    child: pw.Text('TOTAL: $totalDays / 88 DAYS',
+                    child: pw.Text('TOTAL: $totalDays / $targetDays DAYS',
                         style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold, color: PdfColors.white)),
                   ),
                 ],

@@ -14,7 +14,10 @@
           "description": "Bancos como Commonwealth Bank (CommBank) te permiten iniciar la solicitud en su web con tu pasaporte y visa grant notice. No necesitas dirección fija en Australia; puedes indicar temporalmente la dirección de tu hostel inicial.",
           "descriptionEn": "Banks like Commonwealth Bank (CommBank) allow you to apply online with your passport and visa grant notice. You do not need a permanent address; you can use your initial hostel.",
           "tip": "Consejo: Anota el BSB y número de cuenta asignados para poder transferir fondos antes de embarcar.",
-          "tipEn": "Tip: Note your BSB and Account Number to transfer funds before your departure."
+          "tipEn": "Tip: Note your BSB and Account Number to transfer funds before your departure.",
+          "officialUrl": "https://www.commbank.com.au/moving-to-australia.html",
+          "officialUrlLabel": "CommBank - Apertura Pre-Llegada Oficial",
+          "officialUrlLabelEn": "CommBank - Official Pre-Arrival Account Opening"
         },
         {
           "number": 2,
@@ -23,7 +26,10 @@
           "description": "Los bancos tradicionales cobran comisiones ocultas de entre el 3% y el 5% en el cambio de divisas. Usar Wise te garantiza el tipo de cambio medio real del mercado con una comisión mínima transparente, ahorrándote hasta $150-$300 AUD en tus primeros ahorros.",
           "descriptionEn": "Traditional banks charge 3-5% hidden markup fees on currency exchange. Using Wise gives you the real mid-market exchange rate, saving $150-$300 AUD on your first transfer.",
           "tip": "Consejo: Realiza la transferencia 3-4 días hábiles antes de volar para tener el dinero disponible a tu llegada.",
-          "tipEn": "Tip: Make the transfer 3-4 business days before flying so funds are cleared when you land."
+          "tipEn": "Tip: Make the transfer 3-4 business days before flying so funds are cleared when you land.",
+          "officialUrl": "https://wise.com/au/compare/",
+          "officialUrlLabel": "Wise - Comparador de Tipos de Cambio Reales",
+          "officialUrlLabelEn": "Wise - Real Mid-Market Exchange Rate Comparator"
         },
         {
           "number": 3,
@@ -32,7 +38,10 @@
           "description": "En tus primeras 48 horas tras aterrizar, acude a cualquier sucursal física de tu banco con tu pasaporte original y una copia de tu visado. El empleado validará tu identidad al instante y te entregará tu tarjeta de débito Mastercard/Visa física.",
           "descriptionEn": "Within your first 48 hours in Australia, visit any branch with your original passport and visa grant letter. The staff will verify your ID on the spot and hand you your physical debit card.",
           "tip": "Consejo: Pide al asesor que active de inmediato Apple Pay / Google Pay en tu teléfono para empezar a pagar sin esperar al correo.",
-          "tipEn": "Tip: Ask the banker to link Apple Pay / Google Pay right away so you can pay instantly."
+          "tipEn": "Tip: Ask the banker to link Apple Pay / Google Pay right away so you can pay instantly.",
+          "officialUrl": "https://www.commbank.com.au/locate-us.html",
+          "officialUrlLabel": "CommBank - Localizador Oficial de Sucursales",
+          "officialUrlLabelEn": "CommBank - Official Branch & ATM Locator"
         },
         {
           "number": 4,
@@ -41,7 +50,10 @@
           "description": "En Australia no existen los códigos IBAN. Tu cuenta se compone de un BSB (código de 6 dígitos que identifica tu banco y sucursal, ej. 062-000) y tu Account Number (6 a 9 dígitos). Además, activa 'PayID' con tu número de teléfono móvil australiano para recibir transferencias instantáneas (Osko) en segundos.",
           "descriptionEn": "Australia does not use IBAN. Your account consists of a 6-digit BSB code and an Account Number (6-9 digits). Activate PayID linked to your Australian mobile number to receive instant payments (Osko) in seconds.",
           "tip": "Consejo: Este BSB y Account Number es lo que deberás poner en tu contrato de trabajo para cobrar tus nóminas.",
-          "tipEn": "Tip: Provide this BSB and Account Number to your employer to receive your wages."
+          "tipEn": "Tip: Provide this BSB and Account Number to your employer to receive your wages.",
+          "officialUrl": "https://payid.com.au/",
+          "officialUrlLabel": "PayID Australia - Red Oficial de Pagos Instantáneos",
+          "officialUrlLabelEn": "PayID Australia - Official Instant Payment System"
         }
       ],
       "comparisons": [
@@ -151,7 +163,10 @@
           "description": "Tener un número de teléfono australiano activo es requisito indispensable para prácticamente todos tus trámites: verificar tu cuenta de banco presencialmente, solicitar el TFN en la ATO y recibir llamadas de entrevistas de trabajo en tu CV.",
           "descriptionEn": "An active Australian phone number is mandatory for key arrival tasks: in-branch bank verification, applying for your TFN at the ATO, and receiving job interview calls.",
           "tip": "Consejo: Puedes activar una eSIM online antes de viajar o comprar una SIM prepago en el aeropuerto o en cualquier supermercado (Coles/Woolworths).",
-          "tipEn": "Tip: Activate an eSIM online before flying or grab a prepaid SIM at Coles/Woolworths upon arrival."
+          "tipEn": "Tip: Activate an eSIM online before flying or grab a prepaid SIM at Coles/Woolworths upon arrival.",
+          "officialUrl": "https://www.acma.gov.au/identity-checks-prepaid-mobiles",
+          "officialUrlLabel": "ACMA - Normativa Oficial de Verificación Móvil",
+          "officialUrlLabelEn": "ACMA - Official Mobile Identity Check Rules"
         },
         {
           "number": 2,
@@ -160,7 +175,10 @@
           "description": "Australia es un continente gigantesco. Existen solo 3 redes físicas: Telstra (cubre el 99.5% de la población y casi todas las carreteras y granjas regionales), Optus (buena en ciudades y costas pobladas) y Vodafone (básica en metrópolis). Si vas a hacer los 88 días o viajar por el interior, Optus y Vodafone se quedan 'Sin Servicio' durante cientos de kilómetros.",
           "descriptionEn": "Australia only has 3 physical networks: Telstra (99.5% population coverage, covers outback & farms), Optus (cities & coastline), and Vodafone (metro only). For 88 days regional work, Optus and Vodafone will have zero signal for hundreds of kilometers.",
           "tip": "Consejo: La mayoría de granjeros exigen que tengas un número en red Telstra para emergencias laborales en el campo.",
-          "tipEn": "Tip: Many farm employers require a Telstra-powered phone number for occupational safety in the fields."
+          "tipEn": "Tip: Many farm employers require a Telstra-powered phone number for occupational safety in the fields.",
+          "officialUrl": "https://www.telstra.com.au/coverage-networks/our-coverage",
+          "officialUrlLabel": "Telstra - Mapa Oficial de Cobertura en Australia",
+          "officialUrlLabelEn": "Telstra - Official Australia Coverage Map"
         },
         {
           "number": 3,
@@ -169,7 +187,10 @@
           "description": "Tanto Coles como Woolworths rotan semanalmente ofertas de paquetes de bienvenida de tarjetas prepago (Starter Packs) al 50% de descuento (ej. tarjeta de $35 o $40 con 30-50GB por solo $15 o $20 AUD).",
           "descriptionEn": "Coles and Woolworths rotate weekly 50% discount specials on prepaid Starter Packs (e.g. $35-40 plans with 30-50GB for just $15-20 AUD).",
           "tip": "Consejo: Nunca compres planes con contratos de permanencia de 12 o 24 meses; usa siempre planes prepago mensuales recargables.",
-          "tipEn": "Tip: Never sign 12/24 month postpaid contracts; stick to flexible 28-day prepaid recharges."
+          "tipEn": "Tip: Never sign 12/24 month postpaid contracts; stick to flexible 28-day prepaid recharges.",
+          "officialUrl": "https://www.woolworths.com.au/shop/browse/electronics/mobile-phones-plans",
+          "officialUrlLabel": "Woolworths Mobile - Ofertas Oficiales de Prepago",
+          "officialUrlLabelEn": "Woolworths Mobile - Official Prepaid Offers"
         }
       ],
       "comparisons": [
@@ -279,7 +300,10 @@
           "description": "Australia tiene un sistema sanitario de primer nivel, pero los extranjeros no tienen derecho automático a sanidad pública gratuita. Una noche de ingreso hospitalario privado o de urgencias puede superar los $1.500 AUD, y una operación quirúrgica puede ascender a más de $20.000 AUD sin póliza activa.",
           "descriptionEn": "Australia has world-class health care, but foreign visitors do not get automatic free medical care. A single night in an emergency ward costs upwards of $1,500 AUD, and surgery can exceed $20,000 AUD without cover.",
           "tip": "Consejo: Viajar a Australia sin seguro médico pone en riesgo tu patrimonio en caso de cualquier imprevisto.",
-          "tipEn": "Tip: Travelling to Australia uninsured exposes you to massive out-of-pocket medical debt."
+          "tipEn": "Tip: Travelling to Australia uninsured exposes you to massive out-of-pocket medical debt.",
+          "officialUrl": "https://www.privatehealth.gov.au/health_insurance/overseas/overseas_visitors_health_cover.htm",
+          "officialUrlLabel": "PrivateHealth.gov.au - Comparador Sanitario del Gobierno",
+          "officialUrlLabelEn": "PrivateHealth.gov.au - Official Government Health Comparison"
         },
         {
           "number": 2,
@@ -288,7 +312,10 @@
           "description": "Los ciudadanos de España, Italia, Reino Unido, Irlanda, Países Bajos y otros países tienen acceso al convenio recíproco de Medicare. Esto cubre atención médica médicamente necesaria en hospitales públicos y visitas a médicos de cabecera (GP) concertados. Sin embargo, los ciudadanos de países de Latinoamérica (Argentina, Chile, México, etc.) NO cuentan con convenio y deben cubrir el 100% de cualquier gasto médico.",
           "descriptionEn": "Passport holders from Spain, Italy, the UK, Ireland and others have reciprocal Medicare access for essential care in public hospitals and bulk-billed GPs. Citizens from Latin America have zero reciprocal coverage and must pay 100% of medical bills.",
           "tip": "Consejo: Incluso con convenio, Medicare NO cubre el servicio de ambulancia, repatriación ni odontología.",
-          "tipEn": "Tip: Even with reciprocal Medicare, ambulance transport, dental and medical evacuation are NOT covered."
+          "tipEn": "Tip: Even with reciprocal Medicare, ambulance transport, dental and medical evacuation are NOT covered.",
+          "officialUrl": "https://www.servicesaustralia.gov.au/reciprocal-health-care-agreements",
+          "officialUrlLabel": "Services Australia - Convenios Recíprocos de Medicare",
+          "officialUrlLabelEn": "Services Australia - Medicare Reciprocal Health Agreements"
         },
         {
           "number": 3,
@@ -297,7 +324,10 @@
           "description": "En casi todos los estados australianos (especialmente Victoria y Nueva Gales del Sur), las ambulancias NO son gratuitas ni están cubiertas por Medicare público. Una llamada a emergencias que requiera traslado en ambulancia terrestre cuesta entre $1.200 y $3.000 AUD, y un rescate aéreo en zonas regionales puede superar los $10.000 AUD.",
           "descriptionEn": "In most Australian states (especially NSW and VIC), emergency ambulance transport is not free under Medicare. A standard ambulance ride costs between $1,200 and $3,000 AUD, while an air rescue can top $10,000 AUD.",
           "tip": "Consejo: Asegúrate de que cualquier seguro que contrates incluya cobertura de ambulancia ilimitada ('Unlimited Emergency Ambulance').",
-          "tipEn": "Tip: Ensure your chosen policy explicitly includes 'Unlimited Emergency Ambulance Cover'."
+          "tipEn": "Tip: Ensure your chosen policy explicitly includes 'Unlimited Emergency Ambulance Cover'.",
+          "officialUrl": "https://www.privatehealth.gov.au/health_insurance/what_is_covered/ambulance.htm",
+          "officialUrlLabel": "PrivateHealth.gov.au - Cobertura de Ambulancias en Australia",
+          "officialUrlLabelEn": "PrivateHealth.gov.au - Ambulance Coverage Rules in Australia"
         }
       ],
       "comparisons": [
@@ -407,7 +437,10 @@
           "description": "Nunca intentes alquilar una habitación a largo plazo desde tu país de origen. Reserva un hostel bien valorado (o Airbnb) en una zona céntrica para tus primeros días. Esta estancia te permitirá explorar los barrios, familiarizarte con el transporte público e ir a inspecciones en persona.",
           "descriptionEn": "Never sign a lease or transfer rent for a shared room from abroad. Book a reputable central hostel for your first 7-14 days. This gives you time to inspect neighborhoods, check public transit, and attend viewings in person.",
           "tip": "Consejo: En los hostels conocerás a viajeros que dejan habitaciones o comparten contactos directos de caseros fiables.",
-          "tipEn": "Tip: In hostels you will meet fellow travelers who are vacating rooms or have direct landlord contacts."
+          "tipEn": "Tip: In hostels you will meet fellow travelers who are vacating rooms or have direct landlord contacts.",
+          "officialUrl": "https://www.accc.gov.au/consumers/buying-products-and-services/accommodation",
+          "officialUrlLabel": "ACCC - Derechos del Consumidor en Alojamientos",
+          "officialUrlLabelEn": "ACCC - Consumer Rights in Accommodation"
         },
         {
           "number": 2,
@@ -416,7 +449,10 @@
           "description": "Flatmates es la plataforma líder y más segura de Australia. Crea un perfil completo con foto sonriente, explicando tu trabajo, estilo de vida y fecha de entrada. El alquiler se cotiza 'per week' (pw, por semana) y suele abonarse quincenalmente.",
           "descriptionEn": "Flatmates is Australia's #1 verified flat-sharing portal. Build a clean profile with a friendly photo, work details, lifestyle habits and intended move-in date. Rent is quoted 'per week' (pw) and paid fortnightly.",
           "tip": "Consejo: Fíjate siempre en que el anuncio indique 'Bills Included' (electricidad, agua, gas e internet incluidos en el precio).",
-          "tipEn": "Tip: Always verify whether the listing states 'Bills Included' (power, water, gas & internet)."
+          "tipEn": "Tip: Always verify whether the listing states 'Bills Included' (power, water, gas & internet).",
+          "officialUrl": "https://flatmates.com.au/",
+          "officialUrlLabel": "Flatmates.com.au - Portal de Habitaciones Verificadas",
+          "officialUrlLabelEn": "Flatmates.com.au - Verified Room Rentals"
         },
         {
           "number": 3,
@@ -425,7 +461,10 @@
           "description": "El 100% de los anuncios que te pidan pagar por adelantado para 'guardarte la llave' o porque 'el casero está fuera del país' son estafas. Acude siempre a ver la habitación en persona, prueba los grifos, conoce a tus futuros compañeros y comprueba el ambiente de la casa.",
           "descriptionEn": "100% of listings demanding upfront transfer to 'reserve the keys' or claiming 'the owner is overseas' are scams. Always inspect the room in person, test amenities and meet your prospective flatmates.",
           "tip": "Consejo: Si el precio parece demasiado bueno para la zona (ej. habitación individual por $180 pw en Sydney CBD), sospecha de inmediato.",
-          "tipEn": "Tip: If the price looks too good to be true (e.g. single room for $180 pw in Sydney CBD), it is a scam."
+          "tipEn": "Tip: If the price looks too good to be true (e.g. single room for $180 pw in Sydney CBD), it is a scam.",
+          "officialUrl": "https://www.scamwatch.gov.au/types-of-scams/rental-scams",
+          "officialUrlLabel": "Scamwatch (ACCC) - Prevención de Fraudes de Alquiler",
+          "officialUrlLabelEn": "Scamwatch (ACCC) - Rental Scam Prevention Alerts"
         },
         {
           "number": 4,
@@ -434,7 +473,10 @@
           "description": "El Bond es la fianza legal y suele equivaler a 2 o 4 semanas de alquiler. Por ley australiana, el propietario o arrendador principal está obligado a depositar este dinero en la autoridad gubernamental del estado (ej. RTA en Queensland, RTBA en Victoria, NSW Fair Trading) y entregarte un recibo oficial con tu número de fianza.",
           "descriptionEn": "Bond is the legal security deposit, typically 2 to 4 weeks' rent. By Australian law, landlords must lodge this bond with the state tenancy authority (e.g. RTA in QLD, RTBA in VIC, NSW Fair Trading) and provide an official receipt number.",
           "tip": "Consejo: Exige siempre un recibo por escrito firmado al entregar cualquier cantidad de fianza.",
-          "tipEn": "Tip: Always demand a signed written receipt upon handing over any bond money."
+          "tipEn": "Tip: Always demand a signed written receipt upon handing over any bond money.",
+          "officialUrl": "https://www.fairtrading.nsw.gov.au/housing-and-property/renting/rental-bonds-online",
+          "officialUrlLabel": "NSW Fair Trading - Rental Bonds Online Oficial",
+          "officialUrlLabelEn": "NSW Fair Trading - Official Rental Bonds Online"
         }
       ],
       "comparisons": [
@@ -540,7 +582,10 @@
           "description": "El Tax File Number (TFN) es tu número de identificación fiscal único ante la ATO (Australian Taxation Office). Sin un TFN activo comunicado a tu empleador en tus primeros 28 días de trabajo, la empresa está obligada por ley a retenerte el 47% de tus ingresos bajo el tipo impositivo máximo de emergencia (Emergency Tax Rate).",
           "descriptionEn": "Your Tax File Number (TFN) is your unique 9-digit tax identifier with the ATO. Without providing a valid TFN within 28 days of starting work, your employer is legally bound to withhold 47% of your gross earnings under the emergency withholding rate.",
           "tip": "Consejo: Una vez obtenido, el TFN es tuyo de por vida en Australia, aunque regreses en el futuro.",
-          "tipEn": "Tip: Once issued, your TFN belongs to you for life in Australia, even if you leave and return later."
+          "tipEn": "Tip: Once issued, your TFN belongs to you for life in Australia, even if you leave and return later.",
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/tax-file-number/what-is-a-tfn",
+          "officialUrlLabel": "ATO - Guía Oficial del Tax File Number (TFN)",
+          "officialUrlLabelEn": "ATO - Official Tax File Number (TFN) Guide"
         },
         {
           "number": 2,
@@ -549,7 +594,10 @@
           "description": "REGLA VITAL: Solo puedes solicitar el TFN una vez hayas cruzado físicamente el control de pasaportes del aeropuerto en Australia. El sistema de la ATO valida tus datos en tiempo real con la base de datos del Departamento de Inmigración. El trámite es 100% GRATUITO en la web oficial 'ato.gov.au'.",
           "descriptionEn": "CRITICAL RULE: You can ONLY apply for a TFN once you have physically crossed Australian border control. The ATO system validates your passport number in real time with Home Affairs border records. The application is 100% FREE on 'ato.gov.au'.",
           "tip": "ALERTA ESTAFA: Hay webs privadas fraudulentas que cobran $50-$100 por solicitar el TFN. Nunca pagues por este trámite.",
-          "tipEn": "SCAM ALERT: Deceptive private websites charge $50-$100 to submit a TFN. Never pay for this free service."
+          "tipEn": "SCAM ALERT: Deceptive private websites charge $50-$100 to submit a TFN. Never pay for this free service.",
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/tax-file-number/apply-for-a-tfn/foreign-passport-holders-permanent-migrants-and-temporary-visitors-tfn-application",
+          "officialUrlLabel": "ATO - Solicitud de TFN para Titulares de Visado (Gratis)",
+          "officialUrlLabelEn": "ATO - Free TFN Application for Visa Holders"
         },
         {
           "number": 3,
@@ -558,7 +606,10 @@
           "description": "La ATO envía tu carta con el número TFN por correo postal a la dirección indicada en un plazo de 7 a 28 días. Si empiezas a trabajar antes de que llegue la carta, puedes marcar la casilla 'I have applied for a TFN' en tu formulario de inicio laboral (TFN Declaration) y tienes 28 días de margen para aportarlo sin penalizaciones.",
           "descriptionEn": "The ATO mails your TFN letter to your Australian postal address within 7 to 28 days. If you start work before it arrives, tick 'I have applied for a TFN' on your employee TFN Declaration form, granting you 28 days to provide it.",
           "tip": "Consejo: Si pasan 14 días y lo necesitas con urgencia, llama al 13 28 61 con el servicio de traducción gratuito (TIS National al 13 14 50) y te lo darán por teléfono tras verificar tu identidad.",
-          "tipEn": "Tip: If urgent after 14 days, call 13 28 61 with free phone interpreter service (TIS National 13 14 50) to receive it verbally."
+          "tipEn": "Tip: If urgent after 14 days, call 13 28 61 with free phone interpreter service (TIS National 13 14 50) to receive it verbally.",
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/tax-file-number/apply-for-a-tfn/tracking-your-tfn-application-or-enquiring-about-your-tfn",
+          "officialUrlLabel": "ATO - Seguimiento Oficial de Estado del TFN",
+          "officialUrlLabelEn": "ATO - Official TFN Application Tracking"
         },
         {
           "number": 4,
@@ -567,7 +618,10 @@
           "description": "En Australia, tu empleador está obligado por ley a ingresar un 12.0% adicional por encima de tu salario bruto en un fondo de pensiones ('Superannuation'). Este dinero NO te lo descuentan de tu sueldo. Para evitar que cada empleador te abra una cuenta distinta y te cobren comisiones dobles, abre tu propia cuenta en un fondo industrial (Hostplus o AustralianSuper) y dale los datos a todos tus jefes.",
           "descriptionEn": "By Australian law, employers must contribute an additional 12.0% on top of your gross wage into your Superannuation retirement fund. This is NOT deducted from your pay. Open one single fund (e.g. Hostplus or AustralianSuper) to avoid multiple account-keeping fees.",
           "tip": "Consejo DASP: Cuando finalice tu estancia y abandones Australia para siempre, puedes reclamar online la devolución de tus fondos de Superannuation a través del DASP (Departing Australia Superannuation Payment).",
-          "tipEn": "Tip: When leaving Australia permanently after your visa expires, claim your super balance back online via DASP."
+          "tipEn": "Tip: When leaving Australia permanently after your visa expires, claim your super balance back online via DASP.",
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/growing-and-keeping-track-of-your-super/how-much-super-should-you-get",
+          "officialUrlLabel": "ATO - Porcentajes Legales de Superannuation (12%)",
+          "officialUrlLabelEn": "ATO - Statutory Superannuation Rates (12%)"
         }
       ],
       "comparisons": [
@@ -671,7 +725,10 @@
           "description": "Si quieres trabajar como camarero, barista en locales con licencia, bartender, runner, o en estadios y eventos donde se sirva alcohol, la ley australiana te exige contar con el certificado RSA antes de tu primer turno. Las multas para los locales por tener personal sin RSA son de miles de dólares.",
           "descriptionEn": "If you plan to work as a waiter, bartender, bar-back, or in licensed cafes and stadium events, Australian liquor laws require an active RSA certificate before your first shift. Heavy fines apply to businesses employing uncertified staff.",
           "tip": "Consejo: En QLD, WA, SA, NT y TAS puedes hacer el curso 100% online en unas horas con una entidad RTO homologada.",
-          "tipEn": "Tip: In QLD, WA, SA, NT and TAS you can complete the RSA 100% online in a few hours through an accredited RTO."
+          "tipEn": "Tip: In QLD, WA, SA, NT and TAS you can complete the RSA 100% online in a few hours through an accredited RTO.",
+          "officialUrl": "https://www.australia.gov.au/information-and-services/business-and-industry/hospitality-and-tourism",
+          "officialUrlLabel": "Australia.gov.au - Normativa de Certificados de Hostelería",
+          "officialUrlLabelEn": "Australia.gov.au - Hospitality Licensing Rules"
         },
         {
           "number": 2,
@@ -680,7 +737,10 @@
           "description": "El estado de Nueva Gales del Sur (NSW / Sídney) tiene la normativa más estricta del país gestionada por 'Liquor & Gaming NSW'. Exige un curso específico de NSW y te otorgan un 'Interim Certificate' digital con el que puedes acudir a una oficina de Service NSW para sacarte la tarjeta fotográfica física (Competency Card).",
           "descriptionEn": "New South Wales (NSW / Sydney) has the strictest liquor regulations administered by Liquor & Gaming NSW. It requires a dedicated NSW-specific curriculum. You get a temporary Interim Certificate to collect a photo Competency Card at Service NSW.",
           "tip": "Consejo: El RSA de NSW es el más cotizado y te permite convalidarlo más fácilmente en otros estados.",
-          "tipEn": "Tip: The NSW RSA is the most widely recognized and easiest to bridge across other states."
+          "tipEn": "Tip: The NSW RSA is the most widely recognized and easiest to bridge across other states.",
+          "officialUrl": "https://www.liquorandgaming.nsw.gov.au/working-in-the-industry/training-to-work-in-the-industry/getting-trained/responsible-service-of-alcohol-rsa",
+          "officialUrlLabel": "Liquor & Gaming NSW - Licencia Oficial de RSA",
+          "officialUrlLabelEn": "Liquor & Gaming NSW - Official RSA Licensing"
         },
         {
           "number": 3,
@@ -689,7 +749,10 @@
           "description": "La White Card (General Construction Induction Training - CPCCWHS101) es una credencial obligatoria por ley para cualquier persona que acceda a una obra en Australia, incluidos peones (labourers), pintores, fontaneros, electricistas y controladores de tráfico. Se obtiene tras un curso de seguridad de 1 jornada.",
           "descriptionEn": "The White Card (CPCCWHS101 General Construction Induction) is legally mandatory for anyone stepping onto a building site in Australia, including general labourers, painters, trade assistants and traffic controllers.",
           "tip": "Consejo: En NSW y Victoria, la White Card se debe realizar en modalidad presencial de 1 día (Face-to-Face) con una academia RTO homologada por SafeWork.",
-          "tipEn": "Tip: In NSW and VIC, White Card training must be attended in-person (Face-to-Face) with a SafeWork-approved RTO."
+          "tipEn": "Tip: In NSW and VIC, White Card training must be attended in-person (Face-to-Face) with a SafeWork-approved RTO.",
+          "officialUrl": "https://www.safework.nsw.gov.au/licences-and-registrations/white-cards",
+          "officialUrlLabel": "SafeWork NSW - Acreditación Oficial White Card",
+          "officialUrlLabelEn": "SafeWork NSW - Official White Card Induction"
         },
         {
           "number": 4,
@@ -698,7 +761,10 @@
           "description": "Australia tiene una de las culturas de café más refinadas del planeta. Saber texturizar leche sedosa con microespuma para preparar un Flat White, dominar las alternativas vegetales (leche de avena/soja/almendra) y calibrar el molinillo comercial te abrirá las puertas a trabajos estables en cafeterías con salarios de $30 a $38 AUD la hora.",
           "descriptionEn": "Australia boasts one of the most sophisticated specialty coffee cultures in the world. Mastering silky microfoam texturing for Flat Whites, alternative milks (oat/soy/almond) and grinder calibration opens immediate cafe jobs paying $30 to $38 AUD/hour.",
           "tip": "Consejo: Hacer un curso intensivo de Barista de 3 a 5 horas al llegar te dará la práctica necesaria con máquinas de café industriales para superar pruebas laborales.",
-          "tipEn": "Tip: Taking a hands-on 3-5 hour intensive Barista class upon landing gives you the machine muscle memory needed to pass cafe trials."
+          "tipEn": "Tip: Taking a hands-on 3-5 hour intensive Barista class upon landing gives you the machine muscle memory needed to pass cafe trials.",
+          "officialUrl": "https://www.usi.gov.au/",
+          "officialUrlLabel": "USI.gov.au - Portal Único de Identificación del Estudiante",
+          "officialUrlLabelEn": "USI.gov.au - Unique Student Identifier Portal"
         }
       ],
       "comparisons": [
@@ -802,7 +868,10 @@
           "description": "El tramo fiscal de WHV tributa al 15% hasta $45,000 AUD. Puedes deducir gastos laborales directos: ropa obligatoria con logo, botas con punta de acero (steel cap boots), crema solar y gafas de sol si trabajas al aire libre (granjas/obra), cursos obligatorios (RSA/White Card) y porcentaje de tu teléfono móvil.",
           "descriptionEn": "WHV tax rate is 15% up to $45,000 AUD. You can legally deduct direct work-related expenses: mandatory logo uniforms, steel cap work boots, SPF50+ sunscreen and sunglasses for outdoor work, required tickets (RSA/White Card), and business mobile phone usage.",
           "tip": "Consejo: Guarda todas las fotos de tickets y facturas en la app MyGov / ATO para declararlas entre julio y octubre.",
-          "tipEn": "Tip: Keep photos of all receipts and invoices in MyGov ATO app to lodge between July and October."
+          "tipEn": "Tip: Keep photos of all receipts and invoices in MyGov ATO app to lodge between July and October.",
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/income-deductions-offsets-and-records/deductions-you-can-claim/clothing-laundry-and-dry-cleaning-expenses",
+          "officialUrlLabel": "ATO - Guía Oficial de Deducciones por Ropa y Uniformes",
+          "officialUrlLabelEn": "ATO - Official Clothing & Work Deduction Guidelines"
         },
         {
           "number": 2,
@@ -811,7 +880,10 @@
           "description": "Tu empleador está obligado por ley a aportar un 12% adicional a tu salario a tu fondo de jubilación. Al salir definitivamente de Australia y caducar tu visado, puedes solicitar el DASP (Departing Australia Superannuation Payment) a través del portal de ATO y recuperar el balance acumulado.",
           "descriptionEn": "Your employer is legally required to pay an extra 12% on top of your wage into your super fund. When your visa expires and you depart Australia, you can claim the DASP via the ATO online portal to withdraw your balance.",
           "tip": "Consejo: En visados WHV (417/462) la tasa de retención DASP es del 65%, pero aun así recuperas cientos o miles de dólares limpios que te corresponden.",
-          "tipEn": "Tip: WHV DASP tax is 65%, but you still walk away with hundreds or thousands of clean dollars that belong to you."
+          "tipEn": "Tip: WHV DASP tax is 65%, but you still walk away with hundreds or thousands of clean dollars that belong to you.",
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/temporary-residents-and-superannuation/departing-australia-superannuation-payment-dasp",
+          "officialUrlLabel": "ATO - Solicitud de DASP para Residentes Temporales",
+          "officialUrlLabelEn": "ATO - DASP Portal for Temporary Residents"
         },
         {
           "number": 3,
@@ -820,7 +892,10 @@
           "description": "Ciudadanos de España, Italia, Reino Unido, Irlanda, Bélgica, Países Bajos, Noruega, Finlandia y Suecia tienen derecho al acuerdo recíproco de Medicare. Te cubre visitas gratuitas a médicos de cabecera (GP bulk-billing) y atención de urgencia en hospitales públicos.",
           "descriptionEn": "Citizens of Spain, Italy, the UK, Ireland, Belgium, Netherlands, Norway, Finland and Sweden are eligible for Medicare reciprocal agreements. Covers free GP visits (bulk-billing) and public hospital emergencies.",
           "tip": "Consejo: Solicítala en cualquier oficina de Services Australia con tu pasaporte y tarjeta sanitaria de tu país de origen.",
-          "tipEn": "Tip: Apply at any Services Australia service centre with your passport and national health card."
+          "tipEn": "Tip: Apply at any Services Australia service centre with your passport and national health card.",
+          "officialUrl": "https://www.servicesaustralia.gov.au/enrol-reciprocal-health-care-agreements-medicare",
+          "officialUrlLabel": "Services Australia - Inscripción en Medicare Recíproco",
+          "officialUrlLabelEn": "Services Australia - Medicare Reciprocal Enrolment"
         },
         {
           "number": 4,
@@ -829,7 +904,10 @@
           "description": "NUNCA pagues una fianza de alquiler directamente en la cuenta personal del casero o compañero de piso sin contrato ni registro. Por ley en NSW (RBO), Victoria (RTBA) y Queensland (RTA), la fianza debe ser depositada en el organismo gubernamental de tenencia.",
           "descriptionEn": "NEVER transfer a rental bond directly into a private landlord's bank account without an official lodgement notice. By law in NSW (RBO), VIC (RTBA) and QLD (RTA), your bond must be lodged with the state tenancy authority.",
           "tip": "Consejo: Exige siempre el número de depósito de fianza (Bond Lodgement Number) oficial en un plazo máximo de 7 días tras mudarte.",
-          "tipEn": "Tip: Always demand your official State Bond Lodgement Receipt number within 7 days of moving in."
+          "tipEn": "Tip: Always demand your official State Bond Lodgement Receipt number within 7 days of moving in.",
+          "officialUrl": "https://www.fairtrading.nsw.gov.au/housing-and-property/renting/rental-bonds-online",
+          "officialUrlLabel": "Fair Trading - Ley de Depósito Estatal de Fianzas",
+          "officialUrlLabelEn": "Fair Trading - State Bond Protection Legislation"
         }
       ],
       "comparisons": [
@@ -927,7 +1005,10 @@
           "description": "Para la 2ª visa necesitas 88 días naturales de trabajo remunerado a jornada completa (normalmente 35-38 horas semanales o el turno estándar de la industria). Si trabajas 5 días completos de lunes a viernes, puedes computar los 7 días de la semana (incluyendo el fin de semana de descanso). Si trabajas a tiempo parcial o días sueltos, solo cuentas los días individuales efectivamente trabajados.",
           "descriptionEn": "You need 88 calendar days of full-time specified work (usually 35-38 hrs/week or industry norm). A full 5-day week counts as 7 days including rest days. For part-time/casual irregular shifts, count only days actually worked.",
           "tip": "Consejo: Guarda siempre los horarios semanales firmados y las hojas de control de turnos (timesheets) de cada semana.",
-          "tipEn": "Tip: Always keep signed weekly shift rosters and timesheet summaries for every single week."
+          "tipEn": "Tip: Always keep signed weekly shift rosters and timesheet summaries for every single week.",
+          "officialUrl": "https://www.legislation.gov.au/Details/F2022L00445",
+          "officialUrlLabel": "Federal Register of Legislation - LIN 22/050 Oficial",
+          "officialUrlLabelEn": "Federal Register of Legislation - Official LIN 22/050"
         },
         {
           "number": 2,
@@ -936,7 +1017,10 @@
           "description": "El Departamento de Inmigración audita cerca del 23% de las solicitudes. Para superar la revisión sin problemas necesitas: 1) Formulario 1263 con ABNs y fechas exactas; 2) Todas las nóminas (payslips) oficiales con retención de impuestos (tax) y superannuation (12%); 3) Extractos bancarios oficiales (Bank Statements) que demuestren que cada nómina entró en tu cuenta (los pagos en efectivo 'cash' son motivo de denegación fulminante); 4) Contratos de trabajo y recibos de alojamiento en la zona regional.",
           "descriptionEn": "Immigration audits ~23% of applications. You must provide: 1) Form 1263 with employer ABNs; 2) Official payslips with tax withholding and 12% superannuation; 3) Bank statements proving salary deposits (cash-in-hand is an instant rejection trigger); 4) Employment contracts and regional accommodation receipts.",
           "tip": "Consejo: Usa el generador de Dossier Form 1263 de OzAlert para descargar un PDF oficial consolidado listo para ImmiAccount.",
-          "tipEn": "Tip: Use OzAlert's Form 1263 generator to compile a consolidated, audit-proof PDF for ImmiAccount."
+          "tipEn": "Tip: Use OzAlert's Form 1263 generator to compile a consolidated, audit-proof PDF for ImmiAccount.",
+          "officialUrl": "https://immi.homeaffairs.gov.au/form-listing/forms/1263.pdf",
+          "officialUrlLabel": "Home Affairs - Formulario 1263 Oficial de Trabajo Regional",
+          "officialUrlLabelEn": "Home Affairs - Official Form 1263 Specified Work"
         },
         {
           "number": 3,
@@ -945,7 +1029,10 @@
           "description": "Si estás en Australia (Onshore), debes solicitarla antes de que expire tu 1er año. Al enviar la solicitud se te concederá automáticamente una Bridging Visa A (BVA), que te permite seguir viviendo y trabajando legalmente a tiempo completo cuando expire tu primera visa hasta que aprueben la segunda. Si necesitas salir de Australia mientras esperas la resolución, debes solicitar una Bridging Visa B (BVB) antes de volar.",
           "descriptionEn": "If onshore in Australia, lodge before your 1st year visa expires. You will automatically receive a Bridging Visa A (BVA) granting full legal work rights while your extension is processed. If traveling overseas while waiting, apply for Bridging Visa B (BVB) before boarding.",
           "tip": "Consejo: La tasa oficial del gobierno es de $650 AUD no reembolsables. Verifica que los códigos postales del empleador coincidan con LIN 22/050.",
-          "tipEn": "Tip: The non-refundable government fee is $650 AUD. Triple check that workplace postcodes match LIN 22/050."
+          "tipEn": "Tip: The non-refundable government fee is $650 AUD. Triple check that workplace postcodes match LIN 22/050.",
+          "officialUrl": "https://online.immi.gov.au/lusc/login",
+          "officialUrlLabel": "ImmiAccount - Portal Oficial de Solicitud del Gobierno",
+          "officialUrlLabelEn": "ImmiAccount - Official Visa Lodgement Portal"
         },
         {
           "number": 4,
@@ -954,7 +1041,10 @@
           "description": "Para conseguir el 3er año de visado, debes completar 6 meses (mínimo 179 días naturales) de trabajo regional específico realizado EXCLUSIVAMENTE durante la vigencia de tu segundo año (o su Bridging Visa). El trabajo realizado durante el 1er año no computa para la 3ª visa. Se exigen al menos 26 nóminas semanales consecutivas o acumuladas en sectores y zonas aprobadas.",
           "descriptionEn": "To qualify for the 3rd year visa, you must complete 6 months (minimum 179 calendar days) of regional work completed SOLELY during your 2nd year visa (or its BVA). 1st year work cannot be reused. At least 26 weekly payslips are required.",
           "tip": "Consejo: Empieza el trabajo regional a más tardar en el mes 4 o 5 de tu 2º año para no quedarte sin margen de tiempo ante pausas por lluvia o final de temporada.",
-          "tipEn": "Tip: Start regional work by month 4-5 of your second year to maintain buffer against weather pauses or seasonal cuts."
+          "tipEn": "Tip: Start regional work by month 4-5 of your second year to maintain buffer against weather pauses or seasonal cuts.",
+          "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462/specified-462-work",
+          "officialUrlLabel": "Home Affairs - Requisitos de Trabajo Específico para 3er Año",
+          "officialUrlLabelEn": "Home Affairs - 3rd Year Specified Work Requirements"
         },
         {
           "number": 5,
@@ -963,7 +1053,10 @@
           "description": "Si recibes una notificación s56 de Inmigración, tendrás un plazo estricto de 28 días naturales para aportar pruebas adicionales. Los oficiales cruzan datos con la ATO y el registro de la empresa (ASIC). Nunca inventes un ABN ni recurras a intermediarios fraudulentos; las penas incluyen la prohibición de entrada a Australia por 3 años (Public Interest Criterion 4020).",
           "descriptionEn": "If you receive an s56 RFI notice, you have exactly 28 days to provide extra proof. Immigration officers cross-check ATO and ASIC registers. Never fabricate ABNs or work records; penalties include a 3-year Australia entry ban under PIC 4020.",
           "tip": "Consejo: Ante cualquier duda en casos complejos, consulta a un Agente Migratorio Registrado (MARA).",
-          "tipEn": "Tip: For complex or borderline eligibility inquiries, always consult a Registered MARA Migration Agent."
+          "tipEn": "Tip: For complex or borderline eligibility inquiries, always consult a Registered MARA Migration Agent.",
+          "officialUrl": "https://portal.mara.gov.au/",
+          "officialUrlLabel": "OMARA - Registro Oficial de Agentes de Migración Registrados",
+          "officialUrlLabelEn": "OMARA - Official Register of Migration Agents"
         }
       ],
       "comparisons": [
@@ -1041,7 +1134,10 @@
           "description": "Todo empleador en Australia paga por ley un 12% extra sobre tu salario base a tu fondo de pensiones (Hostplus, AustralianSuper, etc.). En 1-2 años acumulas entre $3,000 y $7,000 AUD. Puedes reclamar este dinero mediante el portal DASP Online de la ATO una vez hayas salido del país y tu visa haya expirado o sido cancelada. A los visados WHV se les aplica una retención impositiva del 65%, pero recuperas el 35% neto (entre $1,000 y $2,500 AUD limpios en tu cuenta que el 40% de los viajeros olvida reclamar).",
           "descriptionEn": "Australian employers legally pay 12% superannuation on top of your wages. Over 1-2 years you accumulate $3,000-$7,000 AUD. Claim it via the ATO DASP portal once physically departed and visa has expired or been cancelled. WHV holders pay 65% tax rate, but recover 35% net ($1,000-$2,500 AUD in clean cash).",
           "tip": "Consejo: Solicita que te ingresen el DASP por transferencia a tu cuenta bancaria australiana o en tu cuenta AUD de Wise para evitar gastos de cheques en papel.",
-          "tipEn": "Tip: Request DASP payout into your Australian bank or Wise AUD account to avoid lost international cheques."
+          "tipEn": "Tip: Request DASP payout into your Australian bank or Wise AUD account to avoid lost international cheques.",
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/temporary-residents-and-superannuation/departing-australia-superannuation-payment-dasp",
+          "officialUrlLabel": "ATO - Sistema Oficial DASP Online para Retirada de Fondos",
+          "officialUrlLabelEn": "ATO - Official Online DASP Claim System"
         },
         {
           "number": 2,
@@ -1050,7 +1146,10 @@
           "description": "La ATO no puede procesar el pago del DASP si tu visado sigue legalmente activo en el sistema de Inmigración. Si decides volver a casa 2 o 3 meses antes de que expire tu visa, el DASP quedará congelado hasta esa fecha. Para cobrar de inmediato: una vez hayas despegado de Australia, entra en ImmiAccount y envía la solicitud 'Request to Cancel Visa'. En 24-48 horas cancelan tu visado y la ATO desbloquea el pago de tu dinero.",
           "descriptionEn": "The ATO cannot issue DASP payments while your visa is active. If returning home 2-3 months early, funds freeze until your grant expiry date. Solution: once your flight takes off from Australia, submit 'Request to Cancel Visa' in ImmiAccount. They cancel it in 24-48 hrs, unlocking instant ATO payout.",
           "tip": "Consejo: Haz esto SOLO después de haber salido físicamente de Australia y no planees regresar con esa misma visa.",
-          "tipEn": "Tip: Submit this ONLY after physically passing Australian border security outbound."
+          "tipEn": "Tip: Submit this ONLY after physically passing Australian border security outbound.",
+          "officialUrl": "https://immi.homeaffairs.gov.au/change-in-situation/cancel-your-visa",
+          "officialUrlLabel": "Home Affairs - Solicitud de Cancelación Voluntaria de Visa",
+          "officialUrlLabelEn": "Home Affairs - Voluntary Visa Cancellation Request"
         },
         {
           "number": 3,
@@ -1059,7 +1158,10 @@
           "description": "El año fiscal australiano termina el 30 de junio. Si te vas permanentemente antes de esa fecha (por ejemplo en febrero o abril), no tienes que esperar a julio para presentar tu declaración. La ATO permite presentar un 'Early lodgement of a tax return for individuals leaving Australia permanently' en papel o a través de un gestor fiscal registrado, recuperando entre $500 y $1,200 AUD en retenciones y gastos deducibles.",
           "descriptionEn": "The Australian tax year finishes June 30. If departing permanently before then (e.g. Feb or April), lodge an Early Tax Return with the ATO instead of waiting. You can reclaim $500-$1,200 AUD in excess tax withholdings and deductions.",
           "tip": "Consejo: Asegúrate de que todos tus empleadores hayan marcado tu Income Statement como 'Tax ready' en MyGov.",
-          "tipEn": "Tip: Verify all past employers have finalized your Income Statement ('Tax Ready') on MyGov."
+          "tipEn": "Tip: Verify all past employers have finalized your Income Statement ('Tax Ready') on MyGov.",
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/your-tax-return/how-to-lodge-your-tax-return/lodge-your-tax-return-before-leaving-australia",
+          "officialUrlLabel": "ATO - Declaración Fiscal Anticipada para Quien Abandona Australia",
+          "officialUrlLabelEn": "ATO - Early Tax Return Lodgement Guidelines"
         },
         {
           "number": 4,
@@ -1068,7 +1170,10 @@
           "description": "Muchos caseros y agencias intentan quedarse con la fianza ($1,500 - $3,000 AUD) inventando desperfectos cuando ven que el inquilino tiene un vuelo internacional y no podrá asistir a un tribunal de arbitraje (NCAT/VCAT/QCAT). Regla de oro: Solicita tú mismo la devolución íntegra en la web oficial del organismo de fianzas de tu estado (Rental Bonds Online NSW, RTBA VIC, RTA QLD) el mismo día que entregas las llaves. La agencia tendrá solo 14 días para impugnar formalmente ante el tribunal, lo que casi nunca hacen si aportas factura de limpieza profesional.",
           "descriptionEn": "Landlords frequently attempt to withhold rental bonds ($1,500-$3,000 AUD) claiming minor dust when they know tenants are boarding flights. Strategy: lodge the 100% refund yourself on the official state bond portal (RBO NSW, RTBA VIC, RTA QLD) the moment keys are handed over. The agent has only 14 days to formally dispute.",
           "tip": "Consejo: Contrata siempre una empresa de limpieza de final de alquiler con 'Bond Back Guarantee' (garantía por escrito).",
-          "tipEn": "Tip: Book end-of-lease cleaners with a written 'Bond Back Guarantee' receipt."
+          "tipEn": "Tip: Book end-of-lease cleaners with a written 'Bond Back Guarantee' receipt.",
+          "officialUrl": "https://www.fairtrading.nsw.gov.au/housing-and-property/renting/ending-a-tenancy",
+          "officialUrlLabel": "Fair Trading - Procedimiento Oficial de Final de Alquiler",
+          "officialUrlLabelEn": "Fair Trading - Ending a Tenancy Official Guide"
         },
         {
           "number": 5,
@@ -1077,7 +1182,10 @@
           "description": "Vender un coche o campervan en los últimos 4 días suele forzar a malvenderlo en el aeropuerto perdiendo entre $2,000 y $5,000 AUD. Pasa la inspección técnica oficial (Roadworthy Certificate / Pink Slip) con 3 semanas de antelación y ponlo a la venta con tiempo. En el momento de la venta, completa la transferencia de matrícula (Rego) por internet en la web de transporte de tu estado para asegurarte de que las multas y peajes del nuevo dueño no te lleguen a ti.",
           "descriptionEn": "Leaving vehicle sales to the final week forces fire-sales at airports, forfeiting $2,000-$5,000 AUD. Get your Roadworthy Certificate (RWC/Pink Slip) 3 weeks early. Complete the Notice of Disposal / Rego transfer online immediately upon sale so the buyer's traffic fines do not trace back to your name.",
           "tip": "Consejo: Conserva una foto del permiso de conducir del comprador y el comprobante de transferencia bancaria inmediata (PayID).",
-          "tipEn": "Tip: Keep a photo of the buyer's driver license and a signed receipt of sale."
+          "tipEn": "Tip: Keep a photo of the buyer's driver license and a signed receipt of sale.",
+          "officialUrl": "https://www.service.nsw.gov.au/transaction/submit-notice-disposal-vehicle",
+          "officialUrlLabel": "Service NSW - Notificación Oficial de Venta de Vehículo (Rego)",
+          "officialUrlLabelEn": "Service NSW - Official Notice of Disposal of Vehicle"
         },
         {
           "number": 6,
@@ -1086,7 +1194,10 @@
           "description": "Los 4 grandes bancos australianos cobran entre un 3% y un 5% de margen oculto en el tipo de cambio al enviar transferencias internacionales SWIFT, perdiendo entre $300 y $750 AUD en un traspaso de $15,000 AUD. Usa Wise u operadores multidivisa con tipo de cambio real del mercado. NO cierres la cuenta bancaria australiana hasta haber cobrado el DASP y el Tax Return (o ten una cuenta AUD en Wise que admita depósitos directos de la ATO). Una vez cobrado todo, cierra tu cuenta en la app para no pagar comisiones de mantenimiento de $4 AUD al mes.",
           "descriptionEn": "Major Australian banks pocket 3-5% hidden exchange rate margins on international SWIFT transfers, bleeding $300-$750 AUD on a $15,000 transfer. Use Wise with the real mid-market exchange rate. Do not shut your Australian account until your DASP and ATO tax refund have fully cleared. Close it via mobile app once empty.",
           "tip": "Consejo: Pasa tu número de teléfono australiano a una eSIM prepago mínima ($10-$15/año) para seguir recibiendo códigos SMS de verificación bancaria.",
-          "tipEn": "Tip: Convert your Aussie SIM to an ultra-cheap yearly eSIM to continue receiving bank SMS OTPs overseas."
+          "tipEn": "Tip: Convert your Aussie SIM to an ultra-cheap yearly eSIM to continue receiving bank SMS OTPs overseas.",
+          "officialUrl": "https://wise.com/",
+          "officialUrlLabel": "Wise - Transferencia de Ahorros con Tipo de Cambio Real",
+          "officialUrlLabelEn": "Wise - Savings Repatriation with Mid-Market Rate"
         }
       ],
       "comparisons": [

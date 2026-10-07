@@ -179,6 +179,48 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
                   icon: Icons.verified_user_rounded,
                   isHighlighted: initialTopic == 'certifications',
                 ),
+                const SizedBox(height: 14),
+
+                // 5. Federal Register of Legislation (LIN 22/050)
+                _buildSourceCard(
+                  title: 'Federal Register of Legislation',
+                  subtitle: isEn ? 'Instrument LIN 22/050 (Eligible Postcodes)' : 'Instrumento Legal LIN 22/050 (Códigos Postales)',
+                  description: isEn
+                      ? 'The definitive legal act governing all specified work postcodes and industries for Working Holiday Subclasses 417 & 462.'
+                      : 'La ley oficial vinculante que define cada código postal e industria habilitada para los 88 días y 179 días de las subclases 417 y 462.',
+                  url: 'https://www.legislation.gov.au/Details/F2022L00445',
+                  urlLabel: 'legislation.gov.au',
+                  icon: Icons.gavel_rounded,
+                  isHighlighted: initialTopic == 'legislation' || initialTopic == 'regional',
+                ),
+                const SizedBox(height: 14),
+
+                // 6. Services Australia
+                _buildSourceCard(
+                  title: 'Services Australia (Medicare RHCA)',
+                  subtitle: isEn ? 'Reciprocal Health Care Agreements' : 'Convenios Recíprocos de Cobertura Sanitaria',
+                  description: isEn
+                      ? 'Administers free Medicare enrollment for citizens of reciprocal countries (Spain, UK, Italy, Ireland, etc.) during their stay.'
+                      : 'Gestiona la inscripción gratuita en la sanidad pública de Australia (Medicare) para ciudadanos de países con convenio (España, Italia, Reino Unido, etc.).',
+                  url: 'https://www.servicesaustralia.gov.au/reciprocal-health-care-agreements',
+                  urlLabel: 'servicesaustralia.gov.au',
+                  icon: Icons.medical_services_rounded,
+                  isHighlighted: initialTopic == 'medicare' || initialTopic == 'insurance',
+                ),
+                const SizedBox(height: 14),
+
+                // 7. State Rental Bond Boards
+                _buildSourceCard(
+                  title: 'State Tenancy & Rental Bond Authorities',
+                  subtitle: isEn ? 'NSW Fair Trading, RTA QLD, RTBA VIC' : 'Organismos Estatales Oficiales de Fianzas',
+                  description: isEn
+                      ? 'Statutory state bodies where rental bonds must be legally lodged. Protects tenants from unfair deductions upon moving out.'
+                      : 'Entidades públicas estatales donde es obligatorio por ley depositar las fianzas de alquiler. Protege tu depósito de abusos al dejar el piso.',
+                  url: 'https://www.fairtrading.nsw.gov.au/housing-and-property/renting/rental-bonds-online',
+                  urlLabel: 'fairtrading.nsw.gov.au',
+                  icon: CupertinoIcons.building_2_fill,
+                  isHighlighted: initialTopic == 'housing' || initialTopic == 'departure',
+                ),
                 const SizedBox(height: 30),
               ],
             ),

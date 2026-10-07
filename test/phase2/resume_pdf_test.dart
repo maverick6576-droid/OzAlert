@@ -62,7 +62,7 @@ void main() {
       }
     });
 
-    test('Generate Regional Dossier PDF compiles valid bytes', () async {
+    test('Generate Regional Dossier PDF compiles valid bytes for 2nd and 3rd year', () async {
       final jobs = [
         RegionalJobEntry(
           id: '1',
@@ -79,16 +79,29 @@ void main() {
         ),
       ];
 
-      final dossierBytes = await PdfGeneratorService.generateRegionalDossier(
+      // 2nd Year (88 Days)
+      final dossier2ndYear = await PdfGeneratorService.generateRegionalDossier(
         applicantName: 'Test Applicant',
         passportNumber: 'ES123456',
         visaSubclass: '462',
         jobs: jobs,
         totalDays: 30,
+        targetYear: 2,
       );
+      expect(dossier2ndYear, isNotEmpty);
+      expect(dossier2ndYear.length, greaterThan(1000));
 
-      expect(dossierBytes, isNotEmpty);
-      expect(dossierBytes.length, greaterThan(1000));
+      // 3rd Year (179 Days)
+      final dossier3rdYear = await PdfGeneratorService.generateRegionalDossier(
+        applicantName: 'Test Applicant',
+        passportNumber: 'ES123456',
+        visaSubclass: '462',
+        jobs: jobs,
+        totalDays: 120,
+        targetYear: 3,
+      );
+      expect(dossier3rdYear, isNotEmpty);
+      expect(dossier3rdYear.length, greaterThan(1000));
     });
 
     test('Generate Australian Cover Letter PDF compiles valid bytes', () async {

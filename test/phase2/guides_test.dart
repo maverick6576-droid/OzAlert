@@ -14,7 +14,17 @@ void main() {
       final data = json.decode(jsonStr) as Map<String, dynamic>;
       final guidesMap = data['guides'] as Map<String, dynamic>;
 
-      final expectedCategories = ['banking', 'telecom', 'insurance', 'housing', 'tax', 'certifications'];
+      final expectedCategories = [
+        'banking',
+        'telecom',
+        'insurance',
+        'housing',
+        'tax',
+        'certifications',
+        'savings',
+        'visa_renewal',
+        'departure'
+      ];
 
       for (final cat in expectedCategories) {
         expect(guidesMap.containsKey(cat), isTrue, reason: 'Category $cat should be in guides_data.json');
@@ -24,6 +34,14 @@ void main() {
         expect(catGuide.titleEn.isNotEmpty, isTrue);
         expect(catGuide.steps.length, greaterThanOrEqualTo(3), reason: '$cat should have at least 3 detailed steps');
         expect(catGuide.comparisons.length, greaterThanOrEqualTo(2), reason: '$cat should compare at least 2 providers');
+
+        for (final step in catGuide.steps) {
+          expect(step.title.isNotEmpty, isTrue);
+          expect(step.description.isNotEmpty, isTrue);
+          expect(step.officialUrl, isNotNull, reason: 'Step ${step.number} in $cat should have an officialUrl');
+          expect(step.officialUrl!.startsWith('http'), isTrue);
+          expect(step.officialUrlLabel, isNotNull);
+        }
 
         for (final comp in catGuide.comparisons) {
           expect(comp.name.isNotEmpty, isTrue);
@@ -43,7 +61,16 @@ void main() {
           .map((p) => AffiliatePartner.fromJson(p as Map<String, dynamic>))
           .toList();
 
-      final expectedCategories = ['banking', 'telecom', 'insurance', 'housing', 'tax', 'certifications'];
+      final expectedCategories = [
+        'banking',
+        'telecom',
+        'insurance',
+        'housing',
+        'tax',
+        'certifications',
+        'visa_renewal',
+        'departure'
+      ];
 
       for (final cat in expectedCategories) {
         final matching = partnersList.where((p) => p.category == cat).toList();
