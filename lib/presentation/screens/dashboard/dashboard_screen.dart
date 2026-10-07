@@ -310,7 +310,6 @@ class DashboardScreen extends ConsumerWidget {
                   final profile = ref.read(userProfileProvider).value;
                   if (profile != null) {
                     await ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(currentPhase: 2));
-                    ref.invalidate(userProfileProvider);
                   }
                 },
                 child: const Text('Entrar a la Fase 2', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),

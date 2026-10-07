@@ -54,6 +54,7 @@ class OzVisaAlertApp extends ConsumerWidget {
 
           // Si el usuario está logueado, comprobamos si tiene perfil
           return userProfileState.when(
+            skipLoadingOnRefresh: true,
             data: (profile) {
               if (profile == null || !profile.onboardingCompleted) {
                 // No tiene perfil o no completó el onboarding -> Welcome Intro

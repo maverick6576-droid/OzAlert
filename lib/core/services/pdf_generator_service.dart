@@ -442,6 +442,394 @@ class PdfGeneratorService {
     return pdf.save();
   }
 
+  /// Genera una Carta de Presentación Australiana Oficial (Cover Letter)
+  static Future<Uint8List> generateCoverLetter({
+    required String applicantName,
+    required String phone,
+    required String email,
+    required String locationSuburb,
+    required String targetRole,
+    required String companyName,
+    required String visaStatus,
+    required String coverLetterBody,
+    String themeColorHex = '#D96B43',
+  }) async {
+    final pdf = pw.Document();
+    final accentColor = PdfColor.fromHex(themeColorHex.isNotEmpty ? themeColorHex : '#D96B43');
+    final navyColor = PdfColor.fromHex('#1E293B');
+
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.symmetric(horizontal: 36, vertical: 36),
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              // Cabecera del Candidato
+              pw.Text(
+                applicantName.toUpperCase(),
+                style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold, color: navyColor),
+              ),
+              pw.SizedBox(height: 3),
+              pw.Text(
+                '$phone   |   $email   |   $locationSuburb',
+                style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700),
+              ),
+              pw.SizedBox(height: 6),
+              pw.Container(
+                padding: const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: pw.BoxDecoration(
+                  color: PdfColor.fromHex('#F4F1EA'),
+                  borderRadius: pw.BorderRadius.circular(4),
+                ),
+                child: pw.Text(
+                  'VISA STATUS: $visaStatus [FULL WORK RIGHTS]',
+                  style: pw.TextStyle(fontSize: 8.5, fontWeight: pw.FontWeight.bold, color: accentColor),
+                ),
+              ),
+              pw.Divider(thickness: 0.8, color: PdfColors.grey300),
+              pw.SizedBox(height: 12),
+
+              // Fecha y Destinatario
+              pw.Text(
+                '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
+                style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700),
+              ),
+              pw.SizedBox(height: 8),
+              pw.Text(
+                'Hiring Manager / Recruitment Team\n$companyName',
+                style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold, color: navyColor),
+              ),
+              pw.SizedBox(height: 12),
+
+              // Asunto
+              pw.Container(
+                padding: const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(color: accentColor, width: 0.8),
+                  borderRadius: pw.BorderRadius.circular(4),
+                ),
+                child: pw.Text(
+                  'APPLICATION FOR: ${targetRole.toUpperCase()}',
+                  style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold, color: accentColor),
+                ),
+              ),
+              pw.SizedBox(height: 16),
+
+              // Cuerpo de la Carta
+              pw.Paragraph(
+                text: coverLetterBody,
+                style: const pw.TextStyle(fontSize: 9.5, lineSpacing: 2, color: PdfColors.grey900),
+              ),
+              pw.Spacer(),
+
+              // Firma
+              pw.Text('Sincerely,', style: const pw.TextStyle(fontSize: 9.5, color: PdfColors.grey800)),
+              pw.SizedBox(height: 14),
+              pw.Text(
+                applicantName,
+                style: pw.TextStyle(fontSize: 11, fontWeight: pw.FontWeight.bold, color: navyColor),
+              ),
+              pw.Text(
+                'Available for immediate trial shift & interview.',
+                style: pw.TextStyle(fontSize: 8.5, color: accentColor, fontStyle: pw.FontStyle.italic),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+
+    return pdf.save();
+  }
+
+  /// Genera un Perfil de Alquiler en Australia (Rental & Flatmate Bio)
+  static Future<Uint8List> generateRentalBio({
+    required String fullName,
+    required String phone,
+    required String email,
+    required String currentCity,
+    required String budgetAud,
+    required String moveInDate,
+    required String visaStatus,
+    required String employmentStatus,
+    required String aboutMe,
+    required List<String> houseHabits,
+    String references = 'Available upon request',
+  }) async {
+    final pdf = pw.Document();
+    final accentColor = PdfColor.fromHex('#00A896'); // Verde azulado
+    final navyColor = PdfColor.fromHex('#1E293B');
+
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.symmetric(horizontal: 36, vertical: 34),
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              // Cabecera
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Text(
+                        fullName.toUpperCase(),
+                        style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold, color: navyColor),
+                      ),
+                      pw.Text(
+                        'AUSTRALIAN RENTAL APPLICATION PROFILE & HOUSEMATE BIO',
+                        style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold, color: accentColor),
+                      ),
+                    ],
+                  ),
+                  pw.Container(
+                    padding: const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: pw.BoxDecoration(
+                      color: accentColor,
+                      borderRadius: pw.BorderRadius.circular(4),
+                    ),
+                    child: pw.Text(
+                      'BUDGET: \$$budgetAud AUD / WK',
+                      style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold, color: PdfColors.white),
+                    ),
+                  ),
+                ],
+              ),
+              pw.SizedBox(height: 6),
+              pw.Text('$phone  |  $email  |  Target Area: $currentCity  |  Move-in: $moveInDate',
+                  style: const pw.TextStyle(fontSize: 8.5, color: PdfColors.grey700)),
+              pw.Divider(thickness: 0.8, color: PdfColors.grey300),
+              pw.SizedBox(height: 8),
+
+              // Tarjeta de Solvencia y Visado
+              pw.Container(
+                padding: const pw.EdgeInsets.all(10),
+                decoration: pw.BoxDecoration(
+                  color: PdfColor.fromHex('#F8F6F0'),
+                  borderRadius: pw.BorderRadius.circular(6),
+                  border: pw.Border.all(color: PdfColor.fromHex('#E2DCD5')),
+                ),
+                child: pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+                      pw.Text('LEGAL VISA STATUS:', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                      pw.Text(visaStatus, style: const pw.TextStyle(fontSize: 8.5, color: PdfColors.grey800)),
+                    ]),
+                    pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+                      pw.Text('EMPLOYMENT & INCOME:', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                      pw.Text(employmentStatus, style: const pw.TextStyle(fontSize: 8.5, color: PdfColors.grey800)),
+                    ]),
+                    pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+                      pw.Text('BOND PAYMENT:', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                      pw.Text('Ready 4 Weeks Upfront', style: pw.TextStyle(fontSize: 8.5, fontWeight: pw.FontWeight.bold, color: accentColor)),
+                    ]),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 14),
+
+              // About Me
+              pw.Text('ABOUT ME', style: pw.TextStyle(fontSize: 10.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+              pw.SizedBox(height: 3),
+              pw.Paragraph(
+                text: aboutMe,
+                style: const pw.TextStyle(fontSize: 9, lineSpacing: 1.8, color: PdfColors.grey900),
+              ),
+              pw.SizedBox(height: 12),
+
+              // Hábitos de Convivencia
+              pw.Text('LIVING HABITS & HOUSE ETIQUETTE', style: pw.TextStyle(fontSize: 10.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+              pw.SizedBox(height: 4),
+              pw.Wrap(
+                spacing: 6,
+                runSpacing: 4,
+                children: houseHabits.map((habit) => pw.Container(
+                  padding: const pw.EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                  decoration: pw.BoxDecoration(
+                    color: PdfColors.white,
+                    borderRadius: pw.BorderRadius.circular(4),
+                    border: pw.Border.all(color: accentColor, width: 0.8),
+                  ),
+                  child: pw.Text('[+] $habit', style: pw.TextStyle(fontSize: 8.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                )).toList(),
+              ),
+              pw.Spacer(),
+
+              // Referencias
+              pw.Text('LANDLORD & CHARACTER REFERENCES', style: pw.TextStyle(fontSize: 10.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+              pw.SizedBox(height: 2),
+              pw.Text(references, style: const pw.TextStyle(fontSize: 8.5, color: PdfColors.grey700)),
+            ],
+          );
+        },
+      ),
+    );
+
+    return pdf.save();
+  }
+
+  /// Genera una Carta Formal de Reclamación Salarial ante Fair Work
+  static Future<Uint8List> generateFairWorkClaimLetter({
+    required String employeeName,
+    required String employeePhone,
+    required String employeeEmail,
+    required String employerName,
+    required String employerAbn,
+    required String employmentPeriod,
+    required double totalOwedAud,
+    required String underpaymentDetails,
+  }) async {
+    final pdf = pw.Document();
+    final alertColor = PdfColor.fromHex('#D96B43');
+    final navyColor = PdfColor.fromHex('#1E293B');
+
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.symmetric(horizontal: 36, vertical: 36),
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Text('FORMAL NOTICE OF WAGE UNDERPAYMENT',
+                      style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold, color: alertColor)),
+                  pw.Text('Date: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
+                      style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700)),
+                ],
+              ),
+              pw.Text('Under the Fair Work Act 2009 & Applicable Modern Award',
+                  style: const pw.TextStyle(fontSize: 8.5, color: PdfColors.grey700)),
+              pw.Divider(thickness: 1, color: PdfColors.grey300),
+              pw.SizedBox(height: 10),
+
+              pw.Text('ATTENTION:', style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold, color: navyColor)),
+              pw.Text('The Directors / Payroll Department\n$employerName (ABN: $employerAbn)',
+                  style: const pw.TextStyle(fontSize: 9.5, color: PdfColors.grey900)),
+              pw.SizedBox(height: 10),
+
+              pw.Text('FROM EMPLOYEE:', style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold, color: navyColor)),
+              pw.Text('$employeeName | $employeePhone | $employeeEmail\nPeriod of Employment: $employmentPeriod',
+                  style: const pw.TextStyle(fontSize: 9.5, color: PdfColors.grey900)),
+              pw.SizedBox(height: 14),
+
+              pw.Container(
+                padding: const pw.EdgeInsets.all(10),
+                decoration: pw.BoxDecoration(
+                  color: PdfColor.fromHex('#FEE2E2'),
+                  borderRadius: pw.BorderRadius.circular(6),
+                ),
+                child: pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text('TOTAL OUTSTANDING REMUNERATION CLAIMED:',
+                        style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold, color: PdfColor.fromHex('#991B1B'))),
+                    pw.Text('\$${totalOwedAud.toStringAsFixed(2)} AUD',
+                        style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold, color: PdfColor.fromHex('#991B1B'))),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 12),
+
+              pw.Text('STATEMENT OF CLAIM & PARTICULARS:', style: pw.TextStyle(fontSize: 9.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+              pw.SizedBox(height: 4),
+              pw.Text(
+                underpaymentDetails,
+                style: const pw.TextStyle(fontSize: 9, lineSpacing: 1.8, color: PdfColors.grey800),
+              ),
+              pw.SizedBox(height: 14),
+
+              pw.Text('FORMAL REQUEST FOR RECTIFICATION:', style: pw.TextStyle(fontSize: 9.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+              pw.SizedBox(height: 4),
+              pw.Text(
+                'In accordance with Fair Work Ombudsman procedures, I formally request that the outstanding amount of \$${totalOwedAud.toStringAsFixed(2)} AUD (inclusive of unpaid base award rates, casual loading and 12% superannuation guarantee) be deposited into my nominated Australian bank account within 14 business days from the date of this letter.\n\nShould this matter not be resolved by this date, I reserve the full right to escalate this formal record to the Fair Work Ombudsman (FWO) and the Australian Taxation Office (ATO) for statutory dispute mediation.',
+                style: const pw.TextStyle(fontSize: 8.5, lineSpacing: 1.8, color: PdfColors.grey800),
+              ),
+              pw.Spacer(),
+
+              pw.Text('Signed:', style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700)),
+              pw.SizedBox(height: 10),
+              pw.Text(employeeName, style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold, color: navyColor)),
+            ],
+          );
+        },
+      ),
+    );
+
+    return pdf.save();
+  }
+
+  /// Genera una Carta Formal de Renuncia con 2 Semanas de Preaviso (Two-Week Notice)
+  static Future<Uint8List> generateResignationLetter({
+    required String employeeName,
+    required String employerName,
+    required String role,
+    required DateTime lastWorkingDay,
+    required String gratitudeMessage,
+  }) async {
+    final pdf = pw.Document();
+    final navyColor = PdfColor.fromHex('#1E293B');
+
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Text('FORMAL LETTER OF RESIGNATION',
+                  style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold, color: navyColor)),
+              pw.Text('Standard Two-Week Notice Period',
+                  style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700)),
+              pw.Divider(thickness: 1, color: PdfColors.grey300),
+              pw.SizedBox(height: 12),
+
+              pw.Text('Date: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
+                  style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700)),
+              pw.SizedBox(height: 8),
+              pw.Text('To: Management Team\n$employerName',
+                  style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold, color: navyColor)),
+              pw.SizedBox(height: 14),
+
+              pw.Text('Dear Management,', style: const pw.TextStyle(fontSize: 9.5)),
+              pw.SizedBox(height: 8),
+              pw.Text(
+                'Please accept this letter as formal notification that I am resigning from my position as $role at $employerName. My final working day will be ${lastWorkingDay.day}/${lastWorkingDay.month}/${lastWorkingDay.year}, providing the standard two weeks notice.',
+                style: const pw.TextStyle(fontSize: 9.5, lineSpacing: 2, color: PdfColors.grey900),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Text(
+                gratitudeMessage,
+                style: const pw.TextStyle(fontSize: 9.5, lineSpacing: 2, color: PdfColors.grey900),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Text(
+                'During these next two weeks, I am fully committed to ensuring a smooth transition of my duties and assisting with training team members. I kindly request confirmation of my final payslip and an employment reference upon departure.',
+                style: const pw.TextStyle(fontSize: 9.5, lineSpacing: 2, color: PdfColors.grey900),
+              ),
+              pw.Spacer(),
+
+              pw.Text('Sincerely,', style: const pw.TextStyle(fontSize: 9.5)),
+              pw.SizedBox(height: 16),
+              pw.Text(employeeName, style: pw.TextStyle(fontSize: 11, fontWeight: pw.FontWeight.bold, color: navyColor)),
+            ],
+          );
+        },
+      ),
+    );
+
+    return pdf.save();
+  }
+
   /// Muestra el diálogo nativo para previsualizar o compartir el PDF generado
   static Future<void> shareOrPrintPdf(Uint8List pdfBytes, String fileName) async {
     await Printing.sharePdf(bytes: pdfBytes, filename: fileName);

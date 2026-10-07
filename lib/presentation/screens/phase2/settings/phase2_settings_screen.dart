@@ -277,12 +277,11 @@ class Phase2SettingsScreen extends ConsumerWidget {
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
             onPressed: () async {
-              if (profile != null) {
-                await ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(currentPhase: 1));
-                ref.invalidate(userProfileProvider);
-              }
               if (ctx.mounted) Navigator.pop(ctx);
               if (context.mounted) Navigator.of(context).maybePop();
+              if (profile != null) {
+                await ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(currentPhase: 1));
+              }
             },
             child: Text(isEn ? 'Switch to Phase 1' : 'Cambiar a Fase 1'),
           ),

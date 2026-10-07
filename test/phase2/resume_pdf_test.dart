@@ -90,5 +90,68 @@ void main() {
       expect(dossierBytes, isNotEmpty);
       expect(dossierBytes.length, greaterThan(1000));
     });
+
+    test('Generate Australian Cover Letter PDF compiles valid bytes', () async {
+      final pdfBytes = await PdfGeneratorService.generateCoverLetter(
+        applicantName: 'Alejandro Morales',
+        phone: '+61 412 345 678',
+        email: 'alejandro.whv@gmail.com',
+        locationSuburb: 'Surry Hills, NSW 2010',
+        targetRole: 'Head Barista & Café All-Rounder',
+        companyName: 'Merivale Hospitality Group',
+        visaStatus: 'Working Holiday Visa (Subclass 462) - Full Working Rights',
+        coverLetterBody: 'I am writing to express my strong interest in the role. With over 3 years of hands-on experience in high-volume customer service and specialty coffee, I thrive in fast-paced environments while maintaining exceptional hospitality standards.\n\nI hold an active Working Holiday Visa with full working rights and a 6-month work commitment. I am available for immediate start across all shift rotations, including weekends and public holidays.',
+      );
+
+      expect(pdfBytes, isNotEmpty);
+      expect(pdfBytes.length, greaterThan(1500));
+    });
+
+    test('Generate Rental & Housemate Bio PDF compiles valid bytes', () async {
+      final pdfBytes = await PdfGeneratorService.generateRentalBio(
+        fullName: 'Alejandro Morales',
+        phone: '+61 412 345 678',
+        email: 'alejandro.whv@gmail.com',
+        currentCity: 'Sydney Inner West / Eastern Suburbs',
+        budgetAud: '350',
+        moveInDate: 'Immediate',
+        visaStatus: 'Working Holiday Visa (Subclass 462) - Full Working Rights',
+        employmentStatus: 'Employed Full-Time Casual (Payslips Available)',
+        aboutMe: 'Hi everyone! I am a 26-year-old professional on a Working Holiday Visa. I am clean, respectful, non-smoker, and very considerate of shared living spaces. I love coastal walks and keeping a quiet, peaceful home environment.',
+        houseHabits: ['Non-smoker', 'Quiet after 10 PM', 'Clean & tidy common areas', 'Always pay rent on time'],
+      );
+
+      expect(pdfBytes, isNotEmpty);
+      expect(pdfBytes.length, greaterThan(1500));
+    });
+
+    test('Generate Fair Work Wage Claim Notice PDF compiles valid bytes', () async {
+      final pdfBytes = await PdfGeneratorService.generateFairWorkClaimLetter(
+        employeeName: 'Alejandro Morales',
+        employeePhone: '+61 412 345 678',
+        employeeEmail: 'alejandro.whv@gmail.com',
+        employerName: 'Sunny Coast Hospitality Pty Ltd',
+        employerAbn: '45 123 456 789',
+        employmentPeriod: '12/01/2026 - 28/02/2026',
+        totalOwedAud: 1420.50,
+        underpaymentDetails: 'Audit of timesheets and payslips indicates non-compliance with the Hospitality Industry (General) Award 2020. The statutory minimum casual base rate of \$30.91/hr was paid at \$24.00/hr cash-in-hand, omitting 25% casual loading, weekend penalty rates, and statutory 12% superannuation contributions.',
+      );
+
+      expect(pdfBytes, isNotEmpty);
+      expect(pdfBytes.length, greaterThan(1500));
+    });
+
+    test('Generate Two-Week Notice Resignation Letter PDF compiles valid bytes', () async {
+      final pdfBytes = await PdfGeneratorService.generateResignationLetter(
+        employeeName: 'Alejandro Morales',
+        employerName: 'The Grounds of Alexandria',
+        role: 'Barista / All-Rounder',
+        lastWorkingDay: DateTime.now().add(const Duration(days: 14)),
+        gratitudeMessage: 'I would like to sincerely thank you for the wonderful opportunity to work with the team. I have thoroughly enjoyed my time here and greatly appreciate the support and experience gained during my tenure.',
+      );
+
+      expect(pdfBytes, isNotEmpty);
+      expect(pdfBytes.length, greaterThan(1500));
+    });
   });
 }

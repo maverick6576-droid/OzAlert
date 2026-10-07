@@ -59,6 +59,16 @@ class LandingChecklistScreen extends ConsumerWidget {
               ),
               ...tasks.where((t) => t.phase == 'first_week').map((t) => _buildTaskTile(context, ref, t, isEn)),
 
+              if (tasks.any((t) => t.phase == 'first_month')) ...[
+                const SizedBox(height: 22),
+                // Sección: Primer Mes & Estancia
+                _buildSectionHeader(
+                  isEn ? '🦘 First Month: Regional Work & Pro Savings' : '🦘 Primer Mes: Trabajo Regional & Ahorro',
+                  isEn ? 'Extend your visa and optimize your income' : 'Renovación de visado y optimización financiera',
+                ),
+                ...tasks.where((t) => t.phase == 'first_month').map((t) => _buildTaskTile(context, ref, t, isEn)),
+              ],
+
               const SizedBox(height: 40),
             ],
           );
@@ -241,10 +251,15 @@ class LandingChecklistScreen extends ConsumerWidget {
                     // Botón interactivo Smart Link
                     InkWell(
                       onTap: () {
-                        if (task.targetGuideCategory == 'employment') {
+                        final target = task.targetGuideCategory!;
+                        if (target == 'employment') {
                           ref.read(phase2NavigationProvider.notifier).setTabIndex(2);
+                        } else if (target == 'fair_work') {
+                          ref.read(phase2NavigationProvider.notifier).setTabIndex(2);
+                        } else if (target == '88days' || target == 'regional_work') {
+                          ref.read(phase2NavigationProvider.notifier).setTabIndex(3);
                         } else {
-                          ref.read(phase2NavigationProvider.notifier).navigateToGuide(task.targetGuideCategory!);
+                          ref.read(phase2NavigationProvider.notifier).navigateToGuide(target);
                         }
                       },
                       borderRadius: BorderRadius.circular(10),
@@ -262,9 +277,7 @@ class LandingChecklistScreen extends ConsumerWidget {
                             const SizedBox(width: 6),
                             Flexible(
                               child: Text(
-                                task.targetGuideCategory == 'employment'
-                                    ? (isEn ? 'Build Australian CV & Pay' : 'Crear CV & Ver Sueldos')
-                                    : (isEn ? 'View Guide & Comparisons' : 'Ver Guía y Comparativa'),
+                                _getTaskActionLabel(task.targetGuideCategory!, isEn),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
@@ -274,6 +287,20 @@ class LandingChecklistScreen extends ConsumerWidget {
                                 ),
                               ),
                             ),
+                            if (task.targetGuideCategory == 'savings' || task.targetGuideCategory == '88days') ...[
+                              const SizedBox(width: 6),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: const Text(
+                                  'PRO',
+                                  style: TextStyle(color: Colors.white, fontSize: 8.5, fontWeight: FontWeight.w900),
+                                ),
+                              ),
+                            ],
                           ],
                         ),
                       ),
@@ -286,5 +313,21 @@ class LandingChecklistScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  String _getTaskActionLabel(String target, bool isEn) {
+    switch (target) {
+      case 'employment':
+        return isEn ? 'Pro Resume & Document Suite 📄' : 'Generador CV Pro & Documentos 📄';
+      case 'fair_work':
+        return isEn ? 'Fair Work Pay Calculator 💰' : 'Calcular Sueldo Fair Work 💰';
+      case '88days':
+      case 'regional_work':
+        return isEn ? 'Regional Map & 88-Day Log 📍' : 'Mapa Oficial & 88 Días 📍';
+      case 'savings':
+        return isEn ? 'Pro Money & Tax Hacks 💵' : 'Hacks Pro de Ahorro Masivo 💵';
+      default:
+        return isEn ? 'View Guide & Comparisons' : 'Ver Guía y Comparativa';
+    }
   }
 }

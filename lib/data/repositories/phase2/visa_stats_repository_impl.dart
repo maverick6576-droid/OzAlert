@@ -17,24 +17,26 @@ class VisaStatsRepositoryImpl implements VisaStatsRepository {
   }) async {
     final processingDays = grantDate.difference(lodgementDate).inDays;
 
-    // 1. Guardar en el perfil privado del usuario
+    // 1. Guardar en el perfil privado del usuario (con timeout de 6s)
     await _firestore.collection('users').doc(uid).set({
       'visaLodgementDate': lodgementDate.toIso8601String(),
       'visaGrantDate': grantDate.toIso8601String(),
       'visaProcessingDays': processingDays,
       'datesSurveyCompleted': true,
       'currentPhase': 2,
-    }, SetOptions(merge: true));
+    }, SetOptions(merge: true)).timeout(const Duration(seconds: 6));
 
-    // 2. Guardar en colección anónima comunitaria
-    await _firestore.collection('visa_grant_reports').add({
-      'countryCode': countryCode.toUpperCase(),
-      'subclass': subclass,
-      'lodgementDate': Timestamp.fromDate(lodgementDate),
-      'grantDate': Timestamp.fromDate(grantDate),
-      'processingDays': processingDays,
-      'reportedAt': FieldValue.serverTimestamp(),
-    });
+    // 2. Guardar en colección anónima comunitaria de fondo
+    try {
+      _firestore.collection('visa_grant_reports').add({
+        'countryCode': countryCode.toUpperCase(),
+        'subclass': subclass,
+        'lodgementDate': Timestamp.fromDate(lodgementDate),
+        'grantDate': Timestamp.fromDate(grantDate),
+        'processingDays': processingDays,
+        'reportedAt': FieldValue.serverTimestamp(),
+      });
+    } catch (_) {}
   }
 
   @override

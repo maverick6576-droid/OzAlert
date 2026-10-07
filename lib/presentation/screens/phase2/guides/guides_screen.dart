@@ -22,6 +22,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
   int _selectedSubTab = 0; // 0 = Guía Paso a Paso, 1 = Comparativa, 2 = Servicios & Promos
 
   final List<Map<String, String>> _categories = const [
+    {'id': 'savings', 'label': '💰 Hacks Ahorro Pro', 'labelEn': '💰 Pro Money Hacks'},
     {'id': 'banking', 'label': '🏦 Bancos', 'labelEn': '🏦 Banking'},
     {'id': 'telecom', 'label': '📱 SIM & Red', 'labelEn': '📱 Mobile & SIM'},
     {'id': 'insurance', 'label': '🏥 Seguros', 'labelEn': '🏥 Insurance'},
@@ -245,9 +246,15 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
 
   // --- 1. VISTA DE GUÍA PASO A PASO ---
   Widget _buildStepsView(CategoryGuide guide, bool isEn) {
+    final isSavings = guide.id == 'savings';
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       children: [
+        if (isSavings) ...[
+          _buildSavingsHighlightCard(isEn),
+          const SizedBox(height: 14),
+        ],
+
         // Cabecera descriptiva de la categoría
         Container(
           padding: const EdgeInsets.all(16),
@@ -274,13 +281,100 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
         ),
         const SizedBox(height: 14),
 
-        // Listado de pasos numerados
-        ...guide.steps.map((s) => _buildStepCard(s, isEn)),
+        if (isSavings) ...[
+          // Paso 1 visible para todos (Free preview)
+          if (guide.steps.isNotEmpty) _buildStepCard(guide.steps.first, isEn),
+          const SizedBox(height: 4),
 
-        const SizedBox(height: 16),
-        _buildTaxHackBanner(isEn),
+          // Pasos 2, 3, 4 protegidos con candado Premium
+          if (guide.steps.length > 1)
+            PremiumFeatureGate(
+              featureTitle: isEn ? 'Pro Money Hacks' : 'Hacks Pro de Ahorro Masivo',
+              featureBenefit: isEn
+                  ? 'Unlock full guides for DASP Super refund, Medicare RHCA free public health, and state bond lodgement guarantees.'
+                  : 'Desbloquea las guías completas para reclamar la Superannuation (DASP), tarjeta Medicare gratuita y protección oficial de fianza.',
+              child: Column(
+                children: guide.steps.skip(1).map((s) => _buildStepCard(s, isEn)).toList(),
+              ),
+            ),
+        ] else ...[
+          // Listado de pasos estándar
+          ...guide.steps.map((s) => _buildStepCard(s, isEn)),
+          const SizedBox(height: 16),
+          _buildTaxHackBanner(isEn),
+        ],
         const SizedBox(height: 36),
       ],
+    );
+  }
+
+  Widget _buildSavingsHighlightCard(bool isEn) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppColors.primary,
+            AppColors.primary.withValues(alpha: 0.85),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(CupertinoIcons.sparkles, color: Colors.white, size: 14),
+                    const SizedBox(width: 5),
+                    Text(
+                      isEn ? 'PRO FINANCIAL AUDIT' : 'AUDITORÍA FINANCIERA PRO',
+                      style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.secondary,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  isEn ? '+\$3,500 AUD / Year' : '+\$3.500 AUD / Año',
+                  style: const TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            isEn ? 'Legitimate Ways to Save & Reclaim Cash' : 'Estrategias Legales para Salvar y Reclamar Dinero',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            isEn
+                ? 'Avoid common pitfalls: WHV tax bracket deductions, DASP super refunds upon exit, Medicare reciprocal healthcare, and safe rental bonds.'
+                : 'Evita perder miles de dólares: deducciones fiscales en tu Tax Return, devolución DASP de superannuation, sanidad pública gratuita y fianzas de alquiler blindadas.',
+            style: TextStyle(fontSize: 12.5, color: Colors.white.withValues(alpha: 0.9), height: 1.4),
+          ),
+        ],
+      ),
     );
   }
 
@@ -695,6 +789,26 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   ? 'How to claim back expenses from your farm, hospitality or construction jobs at end of financial year.'
                   : 'Cómo desgravar gastos de herramientas, visados y cursos de formación en la declaración de impuestos.',
               style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton.icon(
+              onPressed: () {
+                setState(() {
+                  _selectedCategory = 'savings';
+                });
+              },
+              icon: const Icon(CupertinoIcons.sparkles, size: 14),
+              label: Text(
+                isEn ? 'Open Pro Savings Hacks (+ \$3,500 AUD)' : 'Ver Hacks Pro de Ahorro (+ \$3.500 AUD)',
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.secondary,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                elevation: 0,
+              ),
             ),
           ],
         ),

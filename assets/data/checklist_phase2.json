@@ -89,6 +89,46 @@
       "phase": "first_week",
       "priority": 9,
       "targetGuideCategory": "tax"
+    },
+    {
+      "id": "plan_88_days_regional",
+      "title": "Planificar los 88 Días de Trabajo Regional (LIN 22/050)",
+      "titleEn": "Plan 88 Days Regional Work (LIN 22/050)",
+      "subtitle": "Verifica códigos postales válidos en el mapa oficial y registra tus días para renovar el visado.",
+      "subtitleEn": "Verify eligible postcodes on the official regional map and log your days to extend your visa.",
+      "phase": "first_month",
+      "priority": 10,
+      "targetGuideCategory": "88days"
+    },
+    {
+      "id": "audit_fair_work_pay",
+      "title": "Auditar nóminas y salario mínimo Fair Work",
+      "titleEn": "Audit Payslips & Fair Work Minimum Wage",
+      "subtitle": "Comprueba que tu contrato cumple el salario legal ($24.97 base o $31.21 casual) y no sufres penalizaciones.",
+      "subtitleEn": "Ensure your hourly rate meets legal standards ($24.97 base or $31.21 casual) with no illegal deductions.",
+      "phase": "first_month",
+      "priority": 11,
+      "targetGuideCategory": "fair_work"
+    },
+    {
+      "id": "pro_savings_hacks",
+      "title": "Hacks Pro de Ahorro: Impuestos, DASP y Fianza",
+      "titleEn": "Pro Money Hacks: Tax Deductions, DASP & Bonds",
+      "subtitle": "Aprende cómo recuperar hasta $3,500 AUD en deducciones del ATO, devolución de Super y fianza protegida.",
+      "subtitleEn": "Learn how to reclaim up to $3,500 AUD in ATO tax deductions, Super refund and secured rental bonds.",
+      "phase": "first_month",
+      "priority": 12,
+      "targetGuideCategory": "savings"
+    },
+    {
+      "id": "prepare_work_documents",
+      "title": "Generar Suite de Documentos Laborales y Alquiler",
+      "titleEn": "Generate Pro Workplace & Rental Document Suite",
+      "subtitle": "Crea tu Cover Letter en inglés australiano, perfil de Flatmate con solvencia y cartas formales.",
+      "subtitleEn": "Create your Australian Cover Letter, Flatmate Rental Profile with bond proof, and formal letters.",
+      "phase": "first_month",
+      "priority": 13,
+      "targetGuideCategory": "employment"
     }
   ]
 }

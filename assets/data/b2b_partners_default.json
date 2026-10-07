@@ -194,6 +194,45 @@
       "descriptionEn": "Master Aussie coffee standards, espresso extraction and milk steaming on commercial gear to nail cafe trials.",
       "isActive": true,
       "priority": 3
+    },
+    {
+      "id": "ato_mygov_portal",
+      "name": "ATO MyGov (Tax Return & DASP)",
+      "category": "savings",
+      "affiliateUrl": "https://my.gov.au/",
+      "promoCode": null,
+      "badgeText": "Portal Oficial del Gobierno Australiano",
+      "badgeTextEn": "Official Australian Government Portal",
+      "description": "Gestiona tus deducciones de impuestos laborales y solicita la devolución íntegra de tu Superannuation (DASP) al salir de Australia.",
+      "descriptionEn": "Lodge work deductions and claim your Superannuation refund (DASP) directly when leaving Australia.",
+      "isActive": true,
+      "priority": 1
+    },
+    {
+      "id": "medicare_services_australia",
+      "name": "Services Australia (Medicare RHCA)",
+      "category": "savings",
+      "affiliateUrl": "https://www.servicesaustralia.gov.au/reciprocal-health-care-agreements",
+      "promoCode": null,
+      "badgeText": "Sanidad Pública Gratuita por Convenio",
+      "badgeTextEn": "Free Reciprocal Public Healthcare",
+      "description": "Acceso a médicos de cabecera y urgencias gratuitas para ciudadanos de España, Italia, Reino Unido y países con tratado bilateral.",
+      "descriptionEn": "Free GP bulk-billing and emergency hospital care for citizens of treaty partner countries.",
+      "isActive": true,
+      "priority": 2
+    },
+    {
+      "id": "tenancy_bonds_authorities",
+      "name": "Organismos Oficiales de Fianza (RBO / RTBA / RTA)",
+      "category": "savings",
+      "affiliateUrl": "https://www.fairtrading.nsw.gov.au/housing-and-property/renting/rental-bonds-online",
+      "promoCode": null,
+      "badgeText": "Protección Legal 100% de tu Fianza",
+      "badgeTextEn": "100% Legal Rental Bond Security",
+      "description": "Exige el depósito de tu fianza en el registro estatal oficial para evitar retenciones fraudulentas de caseros o compañeros.",
+      "descriptionEn": "Mandatory official state registry to secure 100% of your rental bond refund.",
+      "isActive": true,
+      "priority": 3
     }
   ]
 }

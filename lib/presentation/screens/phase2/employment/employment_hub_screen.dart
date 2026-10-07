@@ -43,6 +43,49 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
   List<String> _currentCertifications = [];
   List<WorkExperience> _currentExperiences = [];
 
+  // Formato de Documento Seleccionado
+  String _selectedDocType = 'resume'; // 'resume', 'cover_letter', 'rental_bio', 'fair_work_claim', 'resignation'
+
+  // Cover Letter
+  final _clCompanyController = TextEditingController(text: 'Merivale Hospitality Group');
+  final _clRoleController = TextEditingController(text: 'Food & Beverage Attendant / Barista');
+  final _clBodyController = TextEditingController(
+    text: 'I am writing to express my strong interest in the role. With over 3 years of hands-on experience in high-volume customer service and specialty coffee, I thrive in fast-paced environments while maintaining exceptional standards.\n\nI hold an active Working Holiday Visa with full working rights and a 6-month commitment. I am available for immediate start across all shift rotations, including weekends and public holidays.',
+  );
+
+  // Rental Bio
+  final _rentCityController = TextEditingController(text: 'Sydney Inner West / Eastern Suburbs');
+  final _rentBudgetController = TextEditingController(text: '350');
+  final _rentMoveInController = TextEditingController(text: 'Immediate / Next 7 Days');
+  final _rentEmploymentController = TextEditingController(text: 'Employed Full-Time Casual (Payslips Available)');
+  final _rentAboutController = TextEditingController(
+    text: 'Hi everyone! I am a 26-year-old professional on a Working Holiday Visa. I am clean, respectful, non-smoker, and very considerate of shared spaces. I love coastal walks, cooking, and keeping a quiet, peaceful home environment.',
+  );
+  final List<String> _rentHabits = [
+    'Non-smoker',
+    'Quiet after 10 PM',
+    'Clean & tidy common areas',
+    'Always pay rent on time',
+    'No parties inside',
+  ];
+
+  // Fair Work Claim
+  final _fwEmployerNameController = TextEditingController(text: 'Sunny Coast Hospitality Pty Ltd');
+  final _fwEmployerAbnController = TextEditingController(text: '45 123 456 789');
+  final _fwPeriodController = TextEditingController(text: '12/01/2026 - 28/02/2026');
+  final _fwOwedAmountController = TextEditingController(text: '1420.50');
+  final _fwDetailsController = TextEditingController(
+    text: 'Audit of timesheets and payslips indicates non-compliance with the Hospitality Industry (General) Award 2020. The statutory minimum casual base rate of \$30.91/hr was paid at \$24.00/hr cash-in-hand, omitting 25% casual loading, weekend penalty rates, and statutory 12% superannuation contributions.',
+  );
+
+  // Resignation
+  final _resEmployerController = TextEditingController(text: 'The Grounds of Alexandria');
+  final _resRoleController = TextEditingController(text: 'Barista / All-Rounder');
+  DateTime _resLastDay = DateTime.now().add(const Duration(days: 14));
+  final _resGratitudeController = TextEditingController(
+    text: 'I would like to sincerely thank you for the wonderful opportunity to work with the team. I have thoroughly enjoyed my time here and greatly appreciate the support and experience gained during my tenure.',
+  );
+
   // Calculadora Fair Work
   double _hoursWorked = 38.0;
   bool _isCasualContract = true;
@@ -99,6 +142,22 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
     _summaryController.dispose();
     _linkedInController.dispose();
     _grossPaidController.dispose();
+    _clCompanyController.dispose();
+    _clRoleController.dispose();
+    _clBodyController.dispose();
+    _rentCityController.dispose();
+    _rentBudgetController.dispose();
+    _rentMoveInController.dispose();
+    _rentEmploymentController.dispose();
+    _rentAboutController.dispose();
+    _fwEmployerNameController.dispose();
+    _fwEmployerAbnController.dispose();
+    _fwPeriodController.dispose();
+    _fwOwedAmountController.dispose();
+    _fwDetailsController.dispose();
+    _resEmployerController.dispose();
+    _resRoleController.dispose();
+    _resGratitudeController.dispose();
     super.dispose();
   }
 
@@ -142,11 +201,134 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
   }
 
   // ==========================================
-  // PESTAÑA 1: GENERADOR DE CV INTELIGENTE
+  // PESTAÑA 1: GENERADOR DE DOCUMENTOS LABORALES Y VITALES
   // ==========================================
   Widget _buildResumeBuilderTab(bool isEn, bool isPremium) {
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      children: [
+        // Selector horizontal de Documento Australiano
+        _buildDocumentTypeSelector(isEn),
+        const SizedBox(height: 14),
+
+        if (_selectedDocType == 'resume')
+          _buildResumeForm(isEn, isPremium)
+        else if (_selectedDocType == 'cover_letter')
+          _buildCoverLetterForm(isEn, isPremium)
+        else if (_selectedDocType == 'rental_bio')
+          _buildRentalBioForm(isEn, isPremium)
+        else if (_selectedDocType == 'fair_work_claim')
+          _buildFairWorkClaimForm(isEn, isPremium)
+        else if (_selectedDocType == 'resignation')
+          _buildResignationForm(isEn, isPremium),
+      ],
+    );
+  }
+
+  Widget _buildDocumentTypeSelector(bool isEn) {
+    final docs = [
+      {
+        'id': 'resume',
+        'icon': CupertinoIcons.doc_text_fill,
+        'label': '📄 CV Pro',
+        'labelEn': '📄 Pro Resume',
+        'isPro': false,
+      },
+      {
+        'id': 'cover_letter',
+        'icon': CupertinoIcons.mail_solid,
+        'label': '✉️ Cover Letter',
+        'labelEn': '✉️ Cover Letter',
+        'isPro': true,
+      },
+      {
+        'id': 'rental_bio',
+        'icon': CupertinoIcons.house_fill,
+        'label': '🏠 Perfil Alquiler',
+        'labelEn': '🏠 Rental Bio',
+        'isPro': true,
+      },
+      {
+        'id': 'fair_work_claim',
+        'icon': CupertinoIcons.shield_fill,
+        'label': '⚖️ Reclamo Fair Work',
+        'labelEn': '⚖️ Wage Claim',
+        'isPro': true,
+      },
+      {
+        'id': 'resignation',
+        'icon': CupertinoIcons.hand_raised_fill,
+        'label': '🤝 Renuncia 2 Sem.',
+        'labelEn': '🤝 2-Wk Resign',
+        'isPro': true,
+      },
+    ];
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: docs.map((doc) {
+          final id = doc['id'] as String;
+          final isSelected = _selectedDocType == id;
+          final isPro = doc['isPro'] as bool;
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: ChoiceChip(
+              label: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(isEn ? (doc['labelEn'] as String) : (doc['label'] as String)),
+                  if (isPro) ...[
+                    const SizedBox(width: 5),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 1.5),
+                      decoration: BoxDecoration(
+                        color: isSelected ? Colors.white : AppColors.secondary,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        'PRO',
+                        style: TextStyle(
+                          fontSize: 8.5,
+                          fontWeight: FontWeight.w900,
+                          color: isSelected ? AppColors.primary : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              selected: isSelected,
+              selectedColor: AppColors.primary,
+              backgroundColor: AppColors.surface,
+              labelStyle: TextStyle(
+                fontWeight: FontWeight.w700,
+                color: isSelected ? Colors.white : AppColors.textPrimary,
+                fontSize: 12.5,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+                side: BorderSide(
+                  color: isSelected ? AppColors.primary : AppColors.cardBorder,
+                  width: 1.2,
+                ),
+              ),
+              onSelected: (selected) {
+                if (selected) {
+                  setState(() => _selectedDocType = id);
+                }
+              },
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildResumeForm(bool isEn, bool isPremium) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // 1. Tarjeta de Puntuación de Empleabilidad Australiana (Recruiter Audit)
         _buildRecruiterScoreCard(isEn),
@@ -305,6 +487,520 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
               elevation: 2,
             ),
             onPressed: () => _generateAndShareResume(context, isEn, isPremium),
+          ),
+        ),
+        const SizedBox(height: 40),
+      ],
+    );
+  }
+
+  Widget _buildCoverLetterForm(bool isEn, bool isPremium) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.cardBorder),
+            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2))],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      isEn ? '✉️ SEEK & INDEED STANDARD' : '✉️ ESTÁNDAR SEEK & INDEED',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5, color: AppColors.secondary),
+                    ),
+                  ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceElevated,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      isEn ? '1-Page A4 PDF' : 'PDF 1 Página A4',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                isEn ? 'Official Australian Cover Letter' : 'Carta de Presentación Oficial Australiana',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                isEn
+                    ? 'Required by 80% of hiring managers in Australia. Formatted to highlight your visa validity, immediate availability, and local contact info.'
+                    : 'Exigida por el 80% de contratadores en Australia. Destaca tus derechos legales de visado, disponibilidad para trial shifts y contacto local.',
+                style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        _buildSectionHeader(
+          icon: CupertinoIcons.building_2_fill,
+          title: isEn ? 'Recipient & Target Role' : 'Destinatario y Puesto Objetivo',
+          subtitle: isEn ? 'Customised for the company you are targeting' : 'Personalizado para la empresa a la que aplicas',
+        ),
+        const SizedBox(height: 8),
+        _buildTextField(_clCompanyController, isEn ? 'Company / Employer Name' : 'Nombre de la Empresa (ej. Merivale Group)'),
+        const SizedBox(height: 10),
+        _buildTextField(_clRoleController, isEn ? 'Position Applying For' : 'Puesto al que aplicas (ej. Head Barista)'),
+        const SizedBox(height: 16),
+
+        _buildSectionHeader(
+          icon: CupertinoIcons.doc_text_fill,
+          title: isEn ? 'Cover Letter Body (Australian Tone)' : 'Cuerpo de la Carta (Tono Australiano)',
+          subtitle: isEn ? 'Proven pro structure ready to send' : 'Estructura redactada en inglés nativo con métricas',
+        ),
+        const SizedBox(height: 8),
+        _buildTextField(_clBodyController, isEn ? 'Letter Content' : 'Contenido de la Carta', maxLines: 7),
+        const SizedBox(height: 24),
+
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            icon: const Icon(CupertinoIcons.arrow_down_doc_fill, size: 20),
+            label: Text(
+              isEn ? 'Download Pro Cover Letter (PDF)' : 'Generar Cover Letter Oficial (PDF)',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              elevation: 2,
+            ),
+            onPressed: () => _generateAndShareCoverLetter(context, isEn, isPremium),
+          ),
+        ),
+        const SizedBox(height: 40),
+      ],
+    );
+  }
+
+  Widget _buildRentalBioForm(bool isEn, bool isPremium) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.cardBorder),
+            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2))],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      isEn ? '🏠 FLATMATE & TENANT PROFILE' : '🏠 PERFIL DE ALQUILER & FLATMATE',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5, color: AppColors.secondary),
+                    ),
+                  ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceElevated,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      isEn ? 'Bond-Ready' : 'Fianza Lista',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                isEn ? 'Stand Out in Australian Rentals' : 'Gana Habitaciones y Pisos en Australia',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                isEn
+                    ? 'Rental markets in Sydney and Melbourne are crowded. Send this executive bio to landlords on Flatmates.com.au and Domain to prove verified income and quiet living etiquette.'
+                    : 'El alquiler en Sídney y Melbourne es feroz. Envía este perfil en Flatmates.com.au y Domain para demostrar visado legal, 4 semanas de fianza y convivencia impecable.',
+                style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        _buildSectionHeader(
+          icon: CupertinoIcons.location_solid,
+          title: isEn ? 'Target Area & Budget' : 'Zona Buscada y Presupuesto Semanal',
+          subtitle: isEn ? 'Crucial info for landlords and housemates' : 'Datos clave para filtrar propietarios compatibles',
+        ),
+        const SizedBox(height: 8),
+        _buildTextField(_rentCityController, isEn ? 'Target Suburbs / City' : 'Barrios / Zona de Búsqueda (ej. Surry Hills, Bondi)'),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: _buildTextField(_rentBudgetController, isEn ? 'Budget (\$ AUD / Wk)' : 'Presupuesto (\$ AUD / Sem)'),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: _buildTextField(_rentMoveInController, isEn ? 'Move-in Date' : 'Fecha de Mudanza'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+
+        _buildSectionHeader(
+          icon: CupertinoIcons.person_badge_plus_fill,
+          title: isEn ? 'Employment, Income & Lifestyle' : 'Acreditación Laboral y Estilo de Vida',
+          subtitle: isEn ? 'Eliminates landlord fear of missed rent' : 'Garantiza al casero que no habrá problemas de pago',
+        ),
+        const SizedBox(height: 8),
+        _buildTextField(_rentEmploymentController, isEn ? 'Current Job & Income Status' : 'Situación Laboral y Solvencia (ej. Empleado Casual)'),
+        const SizedBox(height: 10),
+        _buildTextField(_rentAboutController, isEn ? 'About Me (English)' : 'Sobre Mí & Convivencia (en inglés)', maxLines: 4),
+        const SizedBox(height: 14),
+
+        Text(
+          isEn ? 'Living Habits & House Etiquette:' : 'Hábitos de Convivencia Destacados:',
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.textPrimary),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            'Non-smoker',
+            'Quiet after 10 PM',
+            'Clean & tidy common areas',
+            'Always pay rent on time',
+            'No parties inside',
+            'Respectful of privacy',
+          ].map((habit) {
+            final isChecked = _rentHabits.contains(habit);
+            return FilterChip(
+              label: Text(habit),
+              selected: isChecked,
+              selectedColor: AppColors.secondary.withValues(alpha: 0.2),
+              checkmarkColor: AppColors.secondary,
+              labelStyle: TextStyle(
+                fontSize: 12,
+                fontWeight: isChecked ? FontWeight.bold : FontWeight.normal,
+                color: isChecked ? AppColors.secondary : AppColors.textPrimary,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(color: isChecked ? AppColors.secondary : AppColors.cardBorder),
+              ),
+              onSelected: (val) {
+                setState(() {
+                  if (val) {
+                    _rentHabits.add(habit);
+                  } else {
+                    _rentHabits.remove(habit);
+                  }
+                });
+              },
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 24),
+
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            icon: const Icon(CupertinoIcons.arrow_down_doc_fill, size: 20),
+            label: Text(
+              isEn ? 'Download Rental Profile (PDF)' : 'Generar Perfil de Alquiler Oficial (PDF)',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              elevation: 2,
+            ),
+            onPressed: () => _generateAndShareRentalBio(context, isEn, isPremium),
+          ),
+        ),
+        const SizedBox(height: 40),
+      ],
+    );
+  }
+
+  Widget _buildFairWorkClaimForm(bool isEn, bool isPremium) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.cardBorder),
+            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2))],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.warning.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      isEn ? '⚖️ FAIR WORK ACT 2009' : '⚖️ LEY FAIR WORK ACT 2009',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5, color: AppColors.warning),
+                    ),
+                  ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceElevated,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      isEn ? '14-Day Notice' : 'Plazo 14 Días',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                isEn ? 'Formal Wage Underpayment Notice' : 'Notificación Formal de Reclamación Salarial',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                isEn
+                    ? 'Official letter based on Fair Work Ombudsman procedures. Legally demands unpaid minimum award rates, casual loading (25%), and superannuation (12%) within 14 days before escalation.'
+                    : 'Carta formal según el procedimiento del Ombudsman. Exige a tu empleador pagar salarios mínimos, casual loading (25%) y superannuation (12%) en 14 días antes de elevar la denuncia al gobierno.',
+                style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        _buildSectionHeader(
+          icon: CupertinoIcons.building_2_fill,
+          title: isEn ? 'Employer Details' : 'Datos de la Empresa Infractora',
+          subtitle: isEn ? 'Company name and registered ABN' : 'Nombre comercial y ABN obligatorio',
+        ),
+        const SizedBox(height: 8),
+        _buildTextField(_fwEmployerNameController, isEn ? 'Employer / Business Name' : 'Nombre de la Empresa o Local'),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(child: _buildTextField(_fwEmployerAbnController, isEn ? 'Employer ABN (11 digits)' : 'ABN de la Empresa (11 dígitos)')),
+            const SizedBox(width: 10),
+            Expanded(child: _buildTextField(_fwPeriodController, isEn ? 'Dates Worked' : 'Periodo de Trabajo')),
+          ],
+        ),
+        const SizedBox(height: 16),
+
+        _buildSectionHeader(
+          icon: CupertinoIcons.money_dollar_circle_fill,
+          title: isEn ? 'Underpayment Claim & Amount' : 'Importe Reclamado y Argumentación Legal',
+          subtitle: isEn ? 'Total estimated owed amount in AUD' : 'Total adeudado según tablas de Fair Work',
+        ),
+        const SizedBox(height: 8),
+        _buildTextField(_fwOwedAmountController, isEn ? 'Total Owed Amount (\$ AUD)' : 'Importe Total Adeudado (\$ AUD)'),
+        const SizedBox(height: 10),
+        _buildTextField(_fwDetailsController, isEn ? 'Statement of Claim Particulars' : 'Detalle del Incumplimiento Salarial', maxLines: 4),
+        const SizedBox(height: 24),
+
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            icon: const Icon(CupertinoIcons.arrow_down_doc_fill, size: 20),
+            label: Text(
+              isEn ? 'Download Fair Work Letter (PDF)' : 'Generar Carta Formal Fair Work (PDF)',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              elevation: 2,
+            ),
+            onPressed: () => _generateAndShareFairWorkClaim(context, isEn, isPremium),
+          ),
+        ),
+        const SizedBox(height: 40),
+      ],
+    );
+  }
+
+  Widget _buildResignationForm(bool isEn, bool isPremium) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.cardBorder),
+            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2))],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      isEn ? '🤝 TWO WEEKS NOTICE' : '🤝 PREAVISO 2 SEMANAS',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5, color: AppColors.secondary),
+                    ),
+                  ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceElevated,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      isEn ? 'Standard Protocol' : 'Protocolo Oficial',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                isEn ? 'Formal Letter of Resignation' : 'Carta Formal de Renuncia Laboral',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                isEn
+                    ? 'In Australia, standard protocol requires a 2-week written notice. Ensures you leave gracefully, receive your final payslip with super, and secure a written reference.'
+                    : 'En Australia, entregar 2 semanas de preaviso formal es la clave para salir de la empresa por la puerta grande y asegurar tu carta de recomendación.',
+                style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        _buildSectionHeader(
+          icon: CupertinoIcons.building_2_fill,
+          title: isEn ? 'Company & Position' : 'Empresa y Puesto a Renunciar',
+          subtitle: isEn ? 'Formal notice details' : 'Datos para la dirección de la empresa',
+        ),
+        const SizedBox(height: 8),
+        _buildTextField(_resEmployerController, isEn ? 'Employer / Company Name' : 'Nombre de la Empresa o Local'),
+        const SizedBox(height: 10),
+        _buildTextField(_resRoleController, isEn ? 'Your Position' : 'Tu Puesto Actual'),
+        const SizedBox(height: 16),
+
+        _buildSectionHeader(
+          icon: CupertinoIcons.calendar,
+          title: isEn ? 'Last Working Day & Note' : 'Último Día de Trabajo y Mensaje',
+          subtitle: isEn ? 'Standard 2 weeks notice period' : 'Fecha final de contrato y nota de transición',
+        ),
+        const SizedBox(height: 8),
+        InkWell(
+          onTap: () async {
+            final picked = await showDatePicker(
+              context: context,
+              initialDate: _resLastDay,
+              firstDate: DateTime.now(),
+              lastDate: DateTime.now().add(const Duration(days: 90)),
+            );
+            if (picked != null) {
+              setState(() => _resLastDay = picked);
+            }
+          },
+          borderRadius: BorderRadius.circular(14),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceElevated,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  isEn ? 'Final Working Day:' : 'Último día de trabajo:',
+                  style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+                ),
+                Row(
+                  children: [
+                    const Icon(CupertinoIcons.calendar, size: 16, color: AppColors.primary),
+                    const SizedBox(width: 6),
+                    Text(
+                      '${_resLastDay.day}/${_resLastDay.month}/${_resLastDay.year}',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: AppColors.textPrimary),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        _buildTextField(_resGratitudeController, isEn ? 'Gratitude & Transition Message' : 'Mensaje de Agradecimiento', maxLines: 3),
+        const SizedBox(height: 24),
+
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            icon: const Icon(CupertinoIcons.arrow_down_doc_fill, size: 20),
+            label: Text(
+              isEn ? 'Download Resignation Letter (PDF)' : 'Generar Carta de Renuncia Oficial (PDF)',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              elevation: 2,
+            ),
+            onPressed: () => _generateAndShareResignation(context, isEn, isPremium),
           ),
         ),
         const SizedBox(height: 40),
@@ -860,6 +1556,124 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
     final pdfBytes = await PdfGeneratorService.generateAustralianResume(resumeData);
     final cleanName = _nameController.text.trim().replaceAll(' ', '_');
     await PdfGeneratorService.shareOrPrintPdf(pdfBytes, 'Resume_${cleanName.isNotEmpty ? cleanName : "Australian"}.pdf');
+  }
+
+  String _getVisaLabel() {
+    return _visaSubclass == '462'
+        ? 'Working Holiday Visa (Subclass 462) - Full Working Rights'
+        : (_visaSubclass == '417'
+            ? 'Working Holiday Visa (Subclass 417) - Full Working Rights'
+            : 'Student Visa (Subclass 500) - Legal Work Rights');
+  }
+
+  Future<void> _generateAndShareCoverLetter(BuildContext context, bool isEn, bool isPremium) async {
+    if (!isPremium) {
+      showPhase2PaywallBottomSheet(
+        context: context,
+        featureTitle: isEn ? 'Official Australian Cover Letter' : 'Cover Letter Australiana Oficial',
+        featureBenefit: isEn
+            ? 'Generate customized, recruiter-compliant Australian cover letters that highlight your visa work rights and immediate availability.'
+            : 'Genera cartas de presentación adaptadas a ofertas de Seek e Indeed destacando tu permiso de trabajo y disponibilidad.',
+      );
+      return;
+    }
+
+    final visaLabel = _getVisaLabel();
+    final pdfBytes = await PdfGeneratorService.generateCoverLetter(
+      applicantName: _nameController.text.trim(),
+      phone: _phoneController.text.trim(),
+      email: _emailController.text.trim(),
+      locationSuburb: _suburbController.text.trim(),
+      targetRole: _clRoleController.text.trim(),
+      companyName: _clCompanyController.text.trim(),
+      visaStatus: visaLabel,
+      coverLetterBody: _clBodyController.text.trim(),
+      themeColorHex: _themeColorHex,
+    );
+
+    final cleanName = _nameController.text.trim().replaceAll(' ', '_');
+    await PdfGeneratorService.shareOrPrintPdf(pdfBytes, 'Cover_Letter_${cleanName.isNotEmpty ? cleanName : "Australian"}.pdf');
+  }
+
+  Future<void> _generateAndShareRentalBio(BuildContext context, bool isEn, bool isPremium) async {
+    if (!isPremium) {
+      showPhase2PaywallBottomSheet(
+        context: context,
+        featureTitle: isEn ? 'Rental & Flatmate Profile' : 'Perfil de Alquiler en Australia',
+        featureBenefit: isEn
+            ? 'Stand out to landlords and housemates in competitive rental markets with proof of income, bond readiness, and living etiquette.'
+            : 'Destaca ante caseros y compañeros en Flatmates con acreditación de solvencia, fianza lista y convivencia impecable.',
+      );
+      return;
+    }
+
+    final visaLabel = _getVisaLabel();
+    final pdfBytes = await PdfGeneratorService.generateRentalBio(
+      fullName: _nameController.text.trim(),
+      phone: _phoneController.text.trim(),
+      email: _emailController.text.trim(),
+      currentCity: _rentCityController.text.trim(),
+      budgetAud: _rentBudgetController.text.trim(),
+      moveInDate: _rentMoveInController.text.trim(),
+      visaStatus: visaLabel,
+      employmentStatus: _rentEmploymentController.text.trim(),
+      aboutMe: _rentAboutController.text.trim(),
+      houseHabits: _rentHabits,
+    );
+
+    final cleanName = _nameController.text.trim().replaceAll(' ', '_');
+    await PdfGeneratorService.shareOrPrintPdf(pdfBytes, 'Rental_Bio_${cleanName.isNotEmpty ? cleanName : "Australian"}.pdf');
+  }
+
+  Future<void> _generateAndShareFairWorkClaim(BuildContext context, bool isEn, bool isPremium) async {
+    if (!isPremium) {
+      showPhase2PaywallBottomSheet(
+        context: context,
+        featureTitle: isEn ? 'Fair Work Formal Notice' : 'Reclamación Salarial Fair Work',
+        featureBenefit: isEn
+            ? 'Demand backpay and unpaid superannuation with a legally drafted formal notice under the Fair Work Act 2009.'
+            : 'Exige el pago de salarios impagados y superannuation con una carta formal respaldada por la ley Fair Work Act 2009.',
+      );
+      return;
+    }
+
+    final pdfBytes = await PdfGeneratorService.generateFairWorkClaimLetter(
+      employeeName: _nameController.text.trim(),
+      employeePhone: _phoneController.text.trim(),
+      employeeEmail: _emailController.text.trim(),
+      employerName: _fwEmployerNameController.text.trim(),
+      employerAbn: _fwEmployerAbnController.text.trim(),
+      employmentPeriod: _fwPeriodController.text.trim(),
+      totalOwedAud: double.tryParse(_fwOwedAmountController.text.trim()) ?? 0.0,
+      underpaymentDetails: _fwDetailsController.text.trim(),
+    );
+
+    final cleanName = _nameController.text.trim().replaceAll(' ', '_');
+    await PdfGeneratorService.shareOrPrintPdf(pdfBytes, 'FairWork_Claim_${cleanName.isNotEmpty ? cleanName : "Notice"}.pdf');
+  }
+
+  Future<void> _generateAndShareResignation(BuildContext context, bool isEn, bool isPremium) async {
+    if (!isPremium) {
+      showPhase2PaywallBottomSheet(
+        context: context,
+        featureTitle: isEn ? 'Two-Week Notice Resignation Letter' : 'Carta de Renuncia (2 Semanas)',
+        featureBenefit: isEn
+            ? 'Resign with standard Australian protocol, guaranteeing your final payslip and essential employer reference.'
+            : 'Renuncia con el protocolo australiano estándar de 2 semanas garantizando tu finiquito y carta de recomendación.',
+      );
+      return;
+    }
+
+    final pdfBytes = await PdfGeneratorService.generateResignationLetter(
+      employeeName: _nameController.text.trim(),
+      employerName: _resEmployerController.text.trim(),
+      role: _resRoleController.text.trim(),
+      lastWorkingDay: _resLastDay,
+      gratitudeMessage: _resGratitudeController.text.trim(),
+    );
+
+    final cleanName = _nameController.text.trim().replaceAll(' ', '_');
+    await PdfGeneratorService.shareOrPrintPdf(pdfBytes, 'Resignation_${cleanName.isNotEmpty ? cleanName : "Notice"}.pdf');
   }
 
   // ==========================================

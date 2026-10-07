@@ -147,20 +147,22 @@ class _VisaDatesSurveyDialogState extends ConsumerState<VisaDatesSurveyDialog> {
                         final user = ref.read(authStateProvider).value;
                         final profile = ref.read(userProfileProvider).value;
 
-                        if (user != null && profile != null) {
-                          final country = profile.passports.isNotEmpty ? profile.passports.first : 'ES';
-                          await ref.read(visaStatsRepositoryProvider).submitVisaDates(
-                                uid: user.uid,
-                                countryCode: country,
-                                subclass: profile.visaSubclass,
-                                lodgementDate: _lodgementDate,
-                                grantDate: _grantDate,
-                              );
-                          // Forzar refresco del perfil local
-                          ref.invalidate(userProfileProvider);
+                        try {
+                          if (user != null && profile != null) {
+                            final country = profile.passports.isNotEmpty ? profile.passports.first : 'ES';
+                            await ref.read(visaStatsRepositoryProvider).submitVisaDates(
+                                  uid: user.uid,
+                                  countryCode: country,
+                                  subclass: profile.visaSubclass,
+                                  lodgementDate: _lodgementDate,
+                                  grantDate: _grantDate,
+                                );
+                          }
+                        } catch (e) {
+                          debugPrint('Error submitVisaDates: $e');
+                        } finally {
+                          if (mounted) navigator.pop();
                         }
-
-                        if (mounted) navigator.pop();
                       },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,

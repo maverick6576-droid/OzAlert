@@ -5,6 +5,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/paywall_provider.dart';
+import '../../providers/user_provider.dart';
+import '../../providers/locale_provider.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class PaywallScreen extends ConsumerWidget {
@@ -14,6 +16,8 @@ class PaywallScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Escuchamos el estado del paywall por si se actualiza (ej: comprando)
     ref.watch(paywallProvider);
+    final locale = ref.watch(localeProvider);
+    final isEn = locale?.languageCode == 'en';
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -114,6 +118,51 @@ class PaywallScreen extends ConsumerWidget {
                   ),
                 ),
               ).animate().fadeIn(delay: 800.ms),
+
+              const SizedBox(height: 12),
+
+              // Tarjeta de Bifurcación: Acceso a Fase 2 (Llegada a Australia Gratis)
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.secondary.withValues(alpha: 0.35)),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      isEn
+                          ? 'Already got your visa or traveling soon to Australia?'
+                          : '¿Ya tienes tu visado o viajas pronto a Australia?',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        icon: const Icon(CupertinoIcons.airplane, size: 16, color: AppColors.secondary),
+                        label: Text(
+                          isEn ? 'Go to Phase 2: Australia Arrival (Free)' : 'Acceder a Fase 2: Llegada a Australia (Gratis)',
+                          style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: AppColors.secondary),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: AppColors.secondary, width: 1.5),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                        ),
+                        onPressed: () async {
+                          final profile = ref.read(userProfileProvider).value;
+                          if (profile != null) {
+                            await ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(currentPhase: 2));
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ).animate().fadeIn(delay: 900.ms),
 
               const SizedBox(height: 16),
               

@@ -787,6 +787,131 @@
           "verdictEn": "Highly recommended for newcomers targeting morning cafe barista positions."
         }
       ]
+    },
+    "savings": {
+      "id": "savings",
+      "title": "Hacks Pro de Ahorro Masivo (Impuestos, Tasas y Fianzas)",
+      "titleEn": "Pro Money Hacks (Tax, Super, Medicare & Bonds)",
+      "subtitle": "Ahorra más de $3,500 AUD legalmente con deducciones ATO, devolución DASP de superannuation, sanidad gratuita y protección de fianza.",
+      "subtitleEn": "Save over $3,500 AUD legitimately with ATO tax deductions, DASP super refund, Medicare RHCA access and bond security.",
+      "steps": [
+        {
+          "number": 1,
+          "title": "Deducciones legítimas en el Tax Return de WHV (Hasta $2,500 AUD)",
+          "titleEn": "Legitimate tax deductions on WHV Tax Return (Up to $2,500 AUD)",
+          "description": "El tramo fiscal de WHV tributa al 15% hasta $45,000 AUD. Puedes deducir gastos laborales directos: ropa obligatoria con logo, botas con punta de acero (steel cap boots), crema solar y gafas de sol si trabajas al aire libre (granjas/obra), cursos obligatorios (RSA/White Card) y porcentaje de tu teléfono móvil.",
+          "descriptionEn": "WHV tax rate is 15% up to $45,000 AUD. You can legally deduct direct work-related expenses: mandatory logo uniforms, steel cap work boots, SPF50+ sunscreen and sunglasses for outdoor work, required tickets (RSA/White Card), and business mobile phone usage.",
+          "tip": "Consejo: Guarda todas las fotos de tickets y facturas en la app MyGov / ATO para declararlas entre julio y octubre.",
+          "tipEn": "Tip: Keep photos of all receipts and invoices in MyGov ATO app to lodge between July and October."
+        },
+        {
+          "number": 2,
+          "title": "Devolución de Superannuation al salir de Australia (DASP)",
+          "titleEn": "Superannuation refund upon departing Australia (DASP)",
+          "description": "Tu empleador está obligado por ley a aportar un 12% adicional a tu salario a tu fondo de jubilación. Al salir definitivamente de Australia y caducar tu visado, puedes solicitar el DASP (Departing Australia Superannuation Payment) a través del portal de ATO y recuperar el balance acumulado.",
+          "descriptionEn": "Your employer is legally required to pay an extra 12% on top of your wage into your super fund. When your visa expires and you depart Australia, you can claim the DASP via the ATO online portal to withdraw your balance.",
+          "tip": "Consejo: En visados WHV (417/462) la tasa de retención DASP es del 65%, pero aun así recuperas cientos o miles de dólares limpios que te corresponden.",
+          "tipEn": "Tip: WHV DASP tax is 65%, but you still walk away with hundreds or thousands of clean dollars that belong to you."
+        },
+        {
+          "number": 3,
+          "title": "Tarjeta Sanitaria Recíproca Gratuita (Medicare RHCA)",
+          "titleEn": "Free Reciprocal Healthcare Card (Medicare RHCA)",
+          "description": "Ciudadanos de España, Italia, Reino Unido, Irlanda, Bélgica, Países Bajos, Noruega, Finlandia y Suecia tienen derecho al acuerdo recíproco de Medicare. Te cubre visitas gratuitas a médicos de cabecera (GP bulk-billing) y atención de urgencia en hospitales públicos.",
+          "descriptionEn": "Citizens of Spain, Italy, the UK, Ireland, Belgium, Netherlands, Norway, Finland and Sweden are eligible for Medicare reciprocal agreements. Covers free GP visits (bulk-billing) and public hospital emergencies.",
+          "tip": "Consejo: Solicítala en cualquier oficina de Services Australia con tu pasaporte y tarjeta sanitaria de tu país de origen.",
+          "tipEn": "Tip: Apply at any Services Australia service centre with your passport and national health card."
+        },
+        {
+          "number": 4,
+          "title": "Protección de Fianza de Alquiler (Organismos Estatales Oficiales)",
+          "titleEn": "Rental bond protection (Official State Authorities)",
+          "description": "NUNCA pagues una fianza de alquiler directamente en la cuenta personal del casero o compañero de piso sin contrato ni registro. Por ley en NSW (RBO), Victoria (RTBA) y Queensland (RTA), la fianza debe ser depositada en el organismo gubernamental de tenencia.",
+          "descriptionEn": "NEVER transfer a rental bond directly into a private landlord's bank account without an official lodgement notice. By law in NSW (RBO), VIC (RTBA) and QLD (RTA), your bond must be lodged with the state tenancy authority.",
+          "tip": "Consejo: Exige siempre el número de depósito de fianza (Bond Lodgement Number) oficial en un plazo máximo de 7 días tras mudarte.",
+          "tipEn": "Tip: Always demand your official State Bond Lodgement Receipt number within 7 days of moving in."
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "ato_tax_return",
+          "name": "ATO Tax Return & Deducciones",
+          "tagline": "Recupera impuestos y deduce gastos de trabajo",
+          "taglineEn": "Reclaim overpaid tax and deduct work expenses",
+          "cost": "Gratis a través de ATO MyGov",
+          "costEn": "100% Free via ATO MyGov",
+          "pros": [
+            "Proceso 100% online y guiado directamente por la agencia tributaria",
+            "Deduce herramientas, cursos, indumentaria de seguridad y teléfono",
+            "Depósito bancario directo en tu cuenta australiana en 10-14 días"
+          ],
+          "prosEn": [
+            "100% online guided process directly with the Australian Taxation Office",
+            "Deduct protective gear, tickets, safety boots and phone usage",
+            "Direct bank deposit into your Aussie account in 10-14 business days"
+          ],
+          "cons": [
+            "Debes guardar recibos si tus deducciones totales superan $300 AUD"
+          ],
+          "consEn": [
+            "Must retain receipts if total work deductions exceed $300 AUD"
+          ],
+          "verdict": "Imprescindible hacerlo cada mes de julio u octubre para no regalar dinero al gobierno.",
+          "verdictEn": "Must-do every July to October to avoid leaving your hard-earned money behind."
+        },
+        {
+          "id": "dasp_super_refund",
+          "name": "DASP (Devolución de Superannuation)",
+          "tagline": "Recupera tu fondo de pensiones al marcharte de Australia",
+          "taglineEn": "Withdraw your pension balance upon departing Australia",
+          "cost": "Gratis vía portal online del ATO",
+          "costEn": "Free via ATO online application",
+          "pros": [
+            "Tus jefes aportaron el 12% de cada nómina a tu cuenta de Super",
+            "Se tramita en minutos tras la expiración o cancelación de tu visado",
+            "Transferencia internacional a tu banco europeo o australiano"
+          ],
+          "prosEn": [
+            "Employers contributed 12% on top of all your wages",
+            "Takes minutes to submit once your visa expires or is cancelled",
+            "Transfer sent to your Australian or international bank account"
+          ],
+          "cons": [
+            "Retención impositiva del 65% para visados WHV (aún así recuperas el 35% neto)"
+          ],
+          "consEn": [
+            "65% tax rate applies to WHV holders (still leaves you with 35% net cash)"
+          ],
+          "verdict": "Un ahorro final de entre $800 y $3,000 AUD limpios al terminar tu estancia.",
+          "verdictEn": "A clean exit windfall of $800 to $3,000+ AUD when leaving Australia."
+        },
+        {
+          "id": "medicare_rhca_card",
+          "name": "Medicare Tarjeta Sanitaria Recíproca",
+          "tagline": "Atención médica pública gratuita para países con convenio",
+          "taglineEn": "Free public healthcare for treaty partner nations",
+          "cost": "$0 (Totalmente gratuito por acuerdo bilateral)",
+          "costEn": "$0 (Completely free under reciprocal treaty)",
+          "pros": [
+            "Consultas con médicos de cabecera gratuitas (Bulk Billing)",
+            "Tratamiento médico urgente en hospitales públicos cubierto al 100%",
+            "Ahorra cientos de dólares en pólizas médicas redundantes"
+          ],
+          "prosEn": [
+            "Free visits to GP doctors offering bulk-billing",
+            "100% emergency medical care in public hospitals",
+            "Save hundreds on redundant private insurance policies"
+          ],
+          "cons": [
+            "No cubre ambulancias en algunos estados (NSW/VIC sin suscripción) ni dentista"
+          ],
+          "consEn": [
+            "Does not cover emergency ambulance in some states or dental"
+          ],
+          "verdict": "La mayor ventaja oculta para españoles, italianos y británicos en Australia.",
+          "verdictEn": "The biggest hidden gem for Spanish, Italian, British and European WHV travelers."
+        }
+      ]
     }
   }
 }
