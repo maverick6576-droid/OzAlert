@@ -15,7 +15,7 @@ class LandingChecklistScreen extends ConsumerStatefulWidget {
 }
 
 class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen> {
-  bool _showAllTasks = false;
+  int _selectedStageIndex = 0; // 0 = Pre-vuelo, 1 = Llegada, 2 = 88 Días, 3 = Salida
 
   @override
   Widget build(BuildContext context) {
@@ -35,108 +35,159 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
           final completedCount = tasks.where((t) => t.isCompleted).length;
           final totalCount = tasks.length;
           final progressPercent = totalCount > 0 ? (completedCount / totalCount) : 0.0;
-          final pendingTasks = tasks.where((t) => !t.isCompleted).toList();
+
+          // Agrupación en 4 etapas ejecutivas
+          final preDepartureTasks = tasks.where((t) => t.phase == 'pre_departure').toList();
+          final arrivalTasks = tasks.where((t) => t.phase == 'first_48h' || t.phase == 'first_week').toList();
+          final renewalTasks = tasks.where((t) => t.phase == 'first_month' || t.phase == 'visa_renewal').toList();
+          final departureTasks = tasks.where((t) => t.phase == 'departure_exit').toList();
+
+          final stages = [
+            {
+              'title': isEn ? '✈️ Pre-Flight' : '✈️ Pre-Vuelo',
+              'subtitle': isEn ? 'Before boarding' : 'Antes de despegar',
+              'tasks': preDepartureTasks,
+            },
+            {
+              'title': isEn ? '🧳 Arrival' : '🧳 Llegada',
+              'subtitle': isEn ? 'First 48h & week' : 'Primeros días',
+              'tasks': arrivalTasks,
+            },
+            {
+              'title': isEn ? '🚜 88 Days' : '🚜 88 Días',
+              'subtitle': isEn ? 'Regional & 2nd visa' : 'Renovación de visa',
+              'tasks': renewalTasks,
+            },
+            {
+              'title': isEn ? '🛫 Departure' : '🛫 Salida',
+              'subtitle': isEn ? 'Reclaim DASP & cash' : 'Recuperar dinero',
+              'tasks': departureTasks,
+            },
+          ];
+
+          final currentStage = stages[_selectedStageIndex.clamp(0, stages.length - 1)];
+          final currentStageTasks = currentStage['tasks'] as List<LandingTask>;
+          final currentPendingTasks = currentStageTasks.where((t) => !t.isCompleted).toList();
 
           return ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             children: [
-              // 1. Tarjeta de progreso visual
+              // 1. Tarjeta de progreso visual general
               _buildProgressCard(completedCount, totalCount, progressPercent, isEn),
+              const SizedBox(height: 12),
+
+              // 2. Banner de Psicología Financiera: Dinero en Riesgo (Compacto)
+              _buildSavingsTeaserBanner(isEn),
               const SizedBox(height: 14),
 
-              // 2. Banner de Psicología Financiera: Dinero en Riesgo
-              _buildSavingsTeaserBanner(isEn),
-              const SizedBox(height: 18),
-
-              // 3. MODO FOCO: Si hay tareas pendientes, mostrar solo las 2 prioritarias
-              if (pendingTasks.isNotEmpty) ...[
-                _buildSectionHeader(
-                  isEn ? '🎯 Your Next 2 Priority Steps' : '🎯 Tus Próximas 2 Gestiones Clave',
-                  isEn ? 'Focus only on these today to avoid overwhelm' : 'Céntrate solo en esto hoy sin agobios',
+              // 3. SELECTOR DE FASES SEGMENTADO (PILLS HORIZONTALES)
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceElevated,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.cardBorder),
                 ),
-                ...pendingTasks.take(2).map((t) => _buildTaskTile(context, ref, t, isEn)),
-                const SizedBox(height: 14),
+                child: Row(
+                  children: List.generate(stages.length, (idx) {
+                    final stage = stages[idx];
+                    final stTasks = stage['tasks'] as List<LandingTask>;
+                    final stCompleted = stTasks.where((t) => t.isCompleted).length;
+                    final isSelected = _selectedStageIndex == idx;
 
-                // Botón interactivo para ver el resto de fases
-                Center(
-                  child: OutlinedButton.icon(
-                    icon: Icon(_showAllTasks ? CupertinoIcons.chevron_up : CupertinoIcons.chevron_down, size: 14),
-                    label: Text(
-                      _showAllTasks
-                          ? (isEn ? 'Hide other phases' : 'Ocultar resto de gestiones')
-                          : (isEn ? 'View all steps & phases ($totalCount)' : 'Ver todas las fases y gestiones ($totalCount)'),
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.primary,
-                      side: const BorderSide(color: AppColors.primary, width: 1.2),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                    ),
-                    onPressed: () => setState(() => _showAllTasks = !_showAllTasks),
+                    return Expanded(
+                      child: GestureDetector(
+                        onTap: () => setState(() => _selectedStageIndex = idx),
+                        behavior: HitTestBehavior.opaque,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            color: isSelected ? AppColors.primary : Colors.transparent,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: isSelected
+                                ? const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1))]
+                                : null,
+                          ),
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                stage['title'] as String,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 11.5,
+                                  fontWeight: FontWeight.w800,
+                                  color: isSelected ? Colors.white : AppColors.textPrimary,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? Colors.white.withValues(alpha: 0.22)
+                                      : AppColors.surface,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  '$stCompleted/${stTasks.length}',
+                                  style: TextStyle(
+                                    fontSize: 9.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: isSelected ? Colors.white : AppColors.textMuted,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+              const SizedBox(height: 14),
+
+              // 4. MODO FOCO: Si hay tareas pendientes en la fase activa, destacar la próxima
+              if (currentPendingTasks.isNotEmpty) ...[
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: AppColors.secondary.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppColors.secondary.withValues(alpha: 0.25)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(CupertinoIcons.flame_fill, size: 16, color: AppColors.secondary),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          isEn
+                              ? 'Next up: Complete this step first to avoid delays.'
+                              : 'Prioridad: Completa esta gestión primero para no retrasarte.',
+                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 10),
               ],
 
-              // 4. LISTADO COMPLETO POR FASES (Solo si _showAllTasks o todo completado)
-              if (_showAllTasks || pendingTasks.isEmpty) ...[
-                const SizedBox(height: 10),
-                // Sección: Antes de Volar
-                _buildSectionHeader(
-                  isEn ? '✈️ Pre-Departure Tasks' : '✈️ Antes de Volar',
-                  isEn ? 'Complete before your flight' : 'Gestiones previas al despegue',
-                ),
-                ...tasks.where((t) => t.phase == 'pre_departure').map((t) => _buildTaskTile(context, ref, t, isEn)),
+              // 5. TÍTULO DE LA FASE ACTIVA
+              _buildSectionHeader(
+                currentStage['title'] as String,
+                currentStage['subtitle'] as String,
+              ),
 
-                const SizedBox(height: 20),
-                // Sección: Primeras 48 Horas
-                _buildSectionHeader(
-                  isEn ? '🧳 First 48 Hours in Australia' : '🧳 Primeras 48 Horas en Australia',
-                  isEn ? 'Urgent arrival setup' : 'Prioritario nada más aterrizar',
-                ),
-                ...tasks.where((t) => t.phase == 'first_48h').map((t) => _buildTaskTile(context, ref, t, isEn)),
+              // 6. TAREAS DE LA FASE SELECCIONADA (SOLO 3 A 7 TAREAS EN PANTALLA)
+              ...currentStageTasks.map((t) => _buildTaskTile(context, ref, t, isEn)),
 
-                const SizedBox(height: 20),
-                // Sección: Primera Semana
-                _buildSectionHeader(
-                  isEn ? '📄 First Week: Work & Bureaucracy' : '📄 Primera Semana: Trabajo & Papeleos',
-                  isEn ? 'Essential setup for your first jobs' : 'Prepara todo para empezar a trabajar',
-                ),
-                ...tasks.where((t) => t.phase == 'first_week').map((t) => _buildTaskTile(context, ref, t, isEn)),
-
-                if (tasks.any((t) => t.phase == 'first_month')) ...[
-                  const SizedBox(height: 20),
-                  // Sección: Primer Mes & Estancia
-                  _buildSectionHeader(
-                    isEn ? '🦘 First Month: Regional Work & Pro Savings' : '🦘 Primer Mes: Trabajo Regional & Ahorro',
-                    isEn ? 'Extend your visa and optimize your income' : 'Renovación de visado y optimización financiera',
-                  ),
-                  ...tasks.where((t) => t.phase == 'first_month').map((t) => _buildTaskTile(context, ref, t, isEn)),
-                ],
-
-                if (tasks.any((t) => t.phase == 'visa_renewal')) ...[
-                  const SizedBox(height: 20),
-                  // Sección: Renovación de Visado (2ª y 3ª Visa)
-                  _buildSectionHeader(
-                    isEn ? '🦘 2nd & 3rd Year Visa Extension' : '🦘 Renovación de Visado: 2ª y 3ª Visa',
-                    isEn ? '88 days & 6 months regional compliance under LIN 22/050' : 'Requisitos de 88 días y 6 meses bajo normativa LIN 22/050',
-                  ),
-                  ...tasks.where((t) => t.phase == 'visa_renewal').map((t) => _buildTaskTile(context, ref, t, isEn)),
-                ],
-
-                if (tasks.any((t) => t.phase == 'departure_exit')) ...[
-                  const SizedBox(height: 20),
-                  // Sección: Salida de Australia & Recuperación de Dinero
-                  _buildSectionHeader(
-                    isEn ? '🛫 Leaving Australia & Reclaiming Cash' : '🛫 Salida de Australia & Recuperación de Dinero',
-                    isEn ? 'Reclaim over \$4,500 AUD in super, bond & tax refund' : 'Recupera hasta \$4.500 AUD en superannuation, fianza y tasas',
-                  ),
-                  ...tasks.where((t) => t.phase == 'departure_exit').map((t) => _buildTaskTile(context, ref, t, isEn)),
-                ],
-              ],
-
-              const SizedBox(height: 40),
+              const SizedBox(height: 36),
             ],
           );
         },

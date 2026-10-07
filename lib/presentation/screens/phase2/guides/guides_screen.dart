@@ -19,6 +19,7 @@ class GuidesScreen extends ConsumerStatefulWidget {
 }
 
 class _GuidesScreenState extends ConsumerState<GuidesScreen> {
+  int _selectedThemeIndex = 0; // 0 = Llegada, 1 = Trabajo & Ahorro, 2 = Visa & Retorno
   String _selectedCategory = 'banking';
   int _selectedSubTab = 0; // 0 = Guía Paso a Paso, 1 = Comparativa, 2 = Servicios & Promos
 
@@ -44,16 +45,37 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     return total;
   }
 
-  final List<Map<String, String>> _categories = const [
-    {'id': 'savings', 'label': '💰 Hacks Ahorro Pro', 'labelEn': '💰 Pro Money Hacks'},
-    {'id': 'visa_renewal', 'label': '🦘 2ª y 3ª Visa', 'labelEn': '🦘 2nd & 3rd Visa'},
-    {'id': 'departure', 'label': '🛫 Salida de Australia', 'labelEn': '🛫 Leaving Australia'},
-    {'id': 'banking', 'label': '🏦 Bancos', 'labelEn': '🏦 Banking'},
-    {'id': 'telecom', 'label': '📱 SIM & Red', 'labelEn': '📱 Mobile & SIM'},
-    {'id': 'insurance', 'label': '🏥 Seguros', 'labelEn': '🏥 Insurance'},
-    {'id': 'housing', 'label': '🏠 Alquiler', 'labelEn': '🏠 Housing'},
-    {'id': 'tax', 'label': '🧾 Impuestos', 'labelEn': '🧾 Tax & Super'},
-    {'id': 'certifications', 'label': '📜 Cursos & RSA', 'labelEn': '📜 Certificates'},
+  static const List<Map<String, dynamic>> _themes = [
+    {
+      'id': 'arrival',
+      'label': '🛬 Llegada',
+      'labelEn': '🛬 Arrival',
+      'categories': [
+        {'id': 'banking', 'label': '🏦 Bancos & Wise', 'labelEn': '🏦 Banks & Wise'},
+        {'id': 'telecom', 'label': '📱 SIM & Red', 'labelEn': '📱 Mobile & SIM'},
+        {'id': 'insurance', 'label': '🏥 Medicare & Salud', 'labelEn': '🏥 Healthcare'},
+        {'id': 'housing', 'label': '🏠 Alquiler & Fianza', 'labelEn': '🏠 Housing & Bond'},
+      ]
+    },
+    {
+      'id': 'work',
+      'label': '💼 Trabajo & Ahorro',
+      'labelEn': '💼 Work & Tax',
+      'categories': [
+        {'id': 'tax', 'label': '🧾 TFN & Super (12%)', 'labelEn': '🧾 Tax & Super'},
+        {'id': 'certifications', 'label': '📜 White Card & RSA', 'labelEn': '📜 Certificates'},
+        {'id': 'savings', 'label': '💰 Hacks de Ahorro', 'labelEn': '💰 Pro Money Hacks'},
+      ]
+    },
+    {
+      'id': 'visa_departure',
+      'label': '🔄 Visa & Retorno',
+      'labelEn': '🔄 Visa & Exit',
+      'categories': [
+        {'id': 'visa_renewal', 'label': '🦘 2ª y 3ª Visa', 'labelEn': '🦘 2nd & 3rd Visa'},
+        {'id': 'departure', 'label': '🛫 Vuelta & DASP', 'labelEn': '🛫 Exit & DASP'},
+      ]
+    },
   ];
 
   @override
@@ -65,10 +87,19 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     // Redirección directa desde checklist de Aterrizaje
     if (navState.activeGuideCategory != null && navState.activeGuideCategory != _selectedCategory) {
       _selectedCategory = navState.activeGuideCategory!;
+      for (int i = 0; i < _themes.length; i++) {
+        final cats = _themes[i]['categories'] as List<Map<String, String>>;
+        if (cats.any((c) => c['id'] == _selectedCategory)) {
+          _selectedThemeIndex = i;
+          break;
+        }
+      }
     }
 
     final guideAsync = ref.watch(guideCategoryProvider(_selectedCategory));
     final partnersAsync = ref.watch(affiliateCategoryProvider(_selectedCategory));
+    final currentTheme = _themes[_selectedThemeIndex.clamp(0, _themes.length - 1)];
+    final currentCategories = currentTheme['categories'] as List<Map<String, String>>;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -111,12 +142,66 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
               ),
             ),
 
-          // Pestañas horizontales de categorías con diseño limpio
+          // 1. BANNER FLOTANTE INTELIGENTE: CALCULADORA DE DINERO EN JUEGO
+          _buildFinancialRiskFloatingBanner(isEn),
+
+          // 2. SELECTOR DE BLOQUES TEMÁTICOS (PILLS HORIZONTALES)
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceElevated,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: AppColors.cardBorder),
+            ),
+            child: Row(
+              children: List.generate(_themes.length, (idx) {
+                final theme = _themes[idx];
+                final isSelected = _selectedThemeIndex == idx;
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedThemeIndex = idx;
+                        final cats = theme['categories'] as List<Map<String, String>>;
+                        if (!cats.any((c) => c['id'] == _selectedCategory)) {
+                          _selectedCategory = cats.first['id']!;
+                        }
+                      });
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.symmetric(vertical: 7),
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppColors.primary : Colors.transparent,
+                        borderRadius: BorderRadius.circular(11),
+                        boxShadow: isSelected
+                            ? const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1))]
+                            : null,
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        isEn ? (theme['labelEn'] as String) : (theme['label'] as String),
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w800,
+                          color: isSelected ? Colors.white : AppColors.textPrimary,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
+
+          // 3. CATEGORÍAS CORRESPONDIENTES AL BLOQUE SELECCIONADO (MÁXIMO 2 A 4 CHIPS)
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: Row(
-              children: _categories.map((c) {
+              children: currentCategories.map((c) {
                 final isSelected = c['id'] == _selectedCategory;
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),
@@ -126,17 +211,17 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         color: isSelected ? Colors.white : AppColors.textPrimary,
-                        fontSize: 12.5,
+                        fontSize: 12,
                       ),
                     ),
                     selected: isSelected,
-                    selectedColor: AppColors.primary,
+                    selectedColor: AppColors.secondary,
                     backgroundColor: AppColors.surface,
                     padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(12),
                       side: BorderSide(
-                        color: isSelected ? AppColors.primary : AppColors.cardBorder,
+                        color: isSelected ? AppColors.secondary : AppColors.cardBorder,
                         width: 1.2,
                       ),
                     ),
@@ -153,7 +238,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             ),
           ),
 
-          // Sub-tabs segmentadas: compactas para evitar recortes de texto
+          // 4. SUB-TABS SEGMENTADAS (Guía, Comparativa, Promos B2B)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: Container(
@@ -269,6 +354,139 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     );
   }
 
+  // 1. BANNER FLOTANTE INTELIGENTE: AUDITORÍA DE RIESGO FINANCIERO
+  Widget _buildFinancialRiskFloatingBanner(bool isEn) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1))],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3.5),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Text(
+              '⚠️ AUD \$5,700',
+              style: TextStyle(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w900,
+                fontSize: 11,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  isEn ? 'Money at Risk in Australia' : 'Dinero en juego en Australia',
+                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12, color: AppColors.textPrimary),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  isEn ? 'Super, Bond, Taxes & Medicare' : 'Super, Fianza, Tax y Medicare',
+                  style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          InkWell(
+            onTap: () => _showCalculatorModal(context, isEn),
+            borderRadius: BorderRadius.circular(9),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(9),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    isEn ? 'Audit' : 'Auditar',
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 11),
+                  ),
+                  const SizedBox(width: 2),
+                  const Icon(CupertinoIcons.chevron_right, color: Colors.white, size: 10),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showCalculatorModal(BuildContext context, bool isEn) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.85,
+              decoration: const BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 10, bottom: 6),
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.cardBorder,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          isEn ? 'Money Audit & Simulator' : 'Auditoría & Simulador de Dinero',
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
+                        ),
+                        IconButton(
+                          icon: const Icon(CupertinoIcons.xmark_circle_fill, color: AppColors.textMuted),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(height: 1, color: AppColors.cardBorder),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(16),
+                      child: _buildInteractiveMoneyCalculator(isEn, setModalState),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   // --- 1. VISTA DE GUÍA PASO A PASO ---
   Widget _buildStepsView(CategoryGuide guide, bool isEn) {
     final isSavings = guide.id == 'savings';
@@ -279,7 +497,46 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       children: [
         if (isSavings || isDeparture) ...[
-          _buildInteractiveMoneyCalculator(isEn),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
+            ),
+            child: Row(
+              children: [
+                const Icon(CupertinoIcons.money_dollar_circle_fill, color: AppColors.primary, size: 28),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        isEn ? 'Personalized Loss Calculator' : 'Calculadora de Dinero en Juego',
+                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppColors.textPrimary),
+                      ),
+                      Text(
+                        isEn ? 'Audit up to \$5,700 AUD before you leave' : 'Audita hasta \$5,700 AUD antes de salir',
+                        style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                      ),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () => _showCalculatorModal(context, isEn),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: Text(isEn ? 'Open' : 'Abrir', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: 14),
         ],
 
@@ -348,7 +605,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     );
   }
 
-  Widget _buildInteractiveMoneyCalculator(bool isEn) {
+  Widget _buildInteractiveMoneyCalculator(bool isEn, [void Function(void Function())? modalSetState]) {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -445,37 +702,55 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             title: isEn ? 'DASP: 12% Superannuation Exit Refund' : 'DASP: Devolución 12% Superannuation al salir',
             amount: '+\$1,850 AUD',
             value: _calcSuperDasp,
-            onChanged: (val) => setState(() => _calcSuperDasp = val),
+            onChanged: (val) {
+              setState(() => _calcSuperDasp = val);
+              modalSetState?.call(() {});
+            },
           ),
           _buildCalcToggleRow(
             title: isEn ? 'Official Bond Lodgement (Bond Board)' : 'Fianza blindada en organismo oficial estatal',
             amount: '+\$1,500 AUD',
             value: _calcBondRisk,
-            onChanged: (val) => setState(() => _calcBondRisk = val),
+            onChanged: (val) {
+              setState(() => _calcBondRisk = val);
+              modalSetState?.call(() {});
+            },
           ),
           _buildCalcToggleRow(
             title: isEn ? 'Reciprocal Medicare (Free GP bulk-billing)' : 'Medicare Recíproco (Médico GP público gratis)',
             amount: '+\$600 AUD',
             value: _calcMedicareTreaty,
-            onChanged: (val) => setState(() => _calcMedicareTreaty = val),
+            onChanged: (val) {
+              setState(() => _calcMedicareTreaty = val);
+              modalSetState?.call(() {});
+            },
           ),
           _buildCalcToggleRow(
             title: isEn ? 'ATO Tax Deductions (Boots, gear, RSA)' : 'Deducciones ATO (Botas, cursos y ropa)',
             amount: '+\$500 AUD',
             value: _calcDeductBoots,
-            onChanged: (val) => setState(() => _calcDeductBoots = val),
+            onChanged: (val) {
+              setState(() => _calcDeductBoots = val);
+              modalSetState?.call(() {});
+            },
           ),
           _buildCalcToggleRow(
             title: isEn ? 'Early Tax Return: Claim withholdings before July' : 'Early Tax Return: Devolución IRPF anticipada',
             amount: '+\$800 AUD',
             value: _calcEarlyTaxReturn,
-            onChanged: (val) => setState(() => _calcEarlyTaxReturn = val),
+            onChanged: (val) {
+              setState(() => _calcEarlyTaxReturn = val);
+              modalSetState?.call(() {});
+            },
           ),
           _buildCalcToggleRow(
             title: isEn ? 'Wise Transfer: Avoid 4% hidden bank SWIFT markup' : 'Transferencia Wise: Evita el 4% de spread bancario',
             amount: '+\$450 AUD',
             value: _calcBankSpread,
-            onChanged: (val) => setState(() => _calcBankSpread = val),
+            onChanged: (val) {
+              setState(() => _calcBankSpread = val);
+              modalSetState?.call(() {});
+            },
           ),
 
           const SizedBox(height: 10),

@@ -121,9 +121,18 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
     });
   }
 
+  StateSetter? _activeModalSetState;
+
+  void _syncState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+      _activeModalSetState?.call(() {});
+    }
+  }
+
   void _loadPreset(String industryId) {
     final preset = ResumePresets.getById(industryId);
-    setState(() {
+    _syncState(() {
       _selectedIndustry = industryId;
       _jobTitleController.text = preset.defaultJobTitle;
       _summaryController.text = preset.summary;
@@ -204,28 +213,361 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
   }
 
   // ==========================================
-  // PESTAÑA 1: GENERADOR DE DOCUMENTOS LABORALES Y VITALES
+  // PESTAÑA 1: SUITE DE DOCUMENTOS LABORALES Y VITALES
   // ==========================================
   Widget _buildResumeBuilderTab(bool isEn, bool isPremium) {
     return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       children: [
-        // Selector horizontal de Documento Australiano
-        _buildDocumentTypeSelector(isEn),
-        const SizedBox(height: 14),
+        // Cabecera Ejecutiva de la Suite
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.cardBorder),
+            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2))],
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Icon(CupertinoIcons.briefcase_fill, color: AppColors.primary, size: 28),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      isEn ? 'Australian Document Suite' : 'Suite Documental de Australia',
+                      style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: AppColors.textPrimary),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      isEn
+                          ? 'Select a tool to configure and export recruiter-ready & legally compliant PDF documents.'
+                          : 'Selecciona una herramienta para configurar y exportar documentos PDF con formato oficial.',
+                      style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.3),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
 
-        if (_selectedDocType == 'resume')
-          _buildResumeForm(isEn, isPremium)
-        else if (_selectedDocType == 'cover_letter')
-          _buildCoverLetterForm(isEn, isPremium)
-        else if (_selectedDocType == 'rental_bio')
-          _buildRentalBioForm(isEn, isPremium)
-        else if (_selectedDocType == 'fair_work_claim')
-          _buildFairWorkClaimForm(isEn, isPremium)
-        else if (_selectedDocType == 'resignation')
-          _buildResignationForm(isEn, isPremium),
+        // 1. Australian Resume ATS-Friendly
+        _buildDocumentHubCard(
+          docId: 'resume',
+          icon: CupertinoIcons.doc_text_fill,
+          iconColor: AppColors.primary,
+          title: isEn ? 'Australian Pro Resume (ATS)' : 'Currículum Australiano Pro (ATS)',
+          subtitle: isEn
+              ? 'A4 format with native bullet points, 1-tap presets (Mining, Hospitality, Construction) and recruiter audit.'
+              : 'Formato A4 sin foto con viñetas nativas de alto impacto, preajustes en 1 toque (Minas, Hostelería, Obra) y auditoría.',
+          tags: [isEn ? 'ATS-Optimized' : 'Filtro ATS', isEn ? '1-Tap Roles' : 'Auto-rellenado', 'Free + Pro'],
+          isPro: false,
+          isEn: isEn,
+          isPremium: isPremium,
+        ),
+        const SizedBox(height: 12),
+
+        // 2. Cover Letter
+        _buildDocumentHubCard(
+          docId: 'cover_letter',
+          icon: CupertinoIcons.mail_solid,
+          iconColor: AppColors.secondary,
+          title: isEn ? 'Australian Cover Letter' : 'Cover Letter (Carta Presentación)',
+          subtitle: isEn
+              ? 'Formal introductory letter tailored to job ads on Seek/Indeed, highlighting your visa rights and immediate start.'
+              : 'Carta formal adaptada a ofertas de Seek e Indeed. Destaca permiso de trabajo legal, disponibilidad y flexibilidad.',
+          tags: [isEn ? 'Recruiter Ready' : 'Seek & Indeed', isEn ? 'Visa Highlights' : 'Visado Legal', 'PRO'],
+          isPro: true,
+          isEn: isEn,
+          isPremium: isPremium,
+        ),
+        const SizedBox(height: 12),
+
+        // 3. Rental Bio
+        _buildDocumentHubCard(
+          docId: 'rental_bio',
+          icon: CupertinoIcons.house_fill,
+          iconColor: const Color(0xFF0D9488),
+          title: isEn ? 'Rental & Flatmate Bio' : 'Perfil de Alquiler & Flatmates',
+          subtitle: isEn
+              ? 'Stand out in tight rental markets with verified proof of income, bond readiness, and clean living etiquette.'
+              : 'Destaca ante caseros y compañeros con solvencia acreditada, fianza lista y normas de convivencia impecables.',
+          tags: [isEn ? 'Fast Approval' : 'Aprobación Rápida', isEn ? 'Bond Ready' : 'Fianza Lista', 'PRO'],
+          isPro: true,
+          isEn: isEn,
+          isPremium: isPremium,
+        ),
+        const SizedBox(height: 12),
+
+        // 4. Fair Work Claim
+        _buildDocumentHubCard(
+          docId: 'fair_work_claim',
+          icon: CupertinoIcons.shield_fill,
+          iconColor: const Color(0xFFDC2626),
+          title: isEn ? 'Fair Work Underpayment Claim' : 'Reclamación Formal Fair Work',
+          subtitle: isEn
+              ? 'Legally drafted formal notice under Fair Work Act 2009 demanding backpay, 25% casual loading or unpaid super.'
+              : 'Requerimiento formal bajo la Fair Work Act 2009 exigiendo salarios impagados, 25% casual loading o Superannuation.',
+          tags: [isEn ? 'Fair Work Act 2009' : 'Ley Fair Work 2009', isEn ? 'Backpay Demand' : 'Reclamar Dinero', 'PRO'],
+          isPro: true,
+          isEn: isEn,
+          isPremium: isPremium,
+        ),
+        const SizedBox(height: 12),
+
+        // 5. Resignation Letter
+        _buildDocumentHubCard(
+          docId: 'resignation',
+          icon: CupertinoIcons.hand_raised_fill,
+          iconColor: AppColors.textPrimary,
+          title: isEn ? '2-Week Resignation Letter' : 'Carta de Renuncia Legal (2 Semanas)',
+          subtitle: isEn
+              ? 'Standard Australian 14-day notice guaranteeing your final payslip calculation and positive employer reference.'
+              : 'Preaviso estándar de 14 días para asegurar el finiquito íntegro y una referencia laboral impecable.',
+          tags: [isEn ? '14-Day Notice' : 'Preaviso 14 Días', isEn ? 'Guaranteed Reference' : 'Referencia Segura', 'PRO'],
+          isPro: true,
+          isEn: isEn,
+          isPremium: isPremium,
+        ),
+        const SizedBox(height: 24),
       ],
     );
+  }
+
+  Widget _buildDocumentHubCard({
+    required String docId,
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String subtitle,
+    required List<String> tags,
+    required bool isPro,
+    required bool isEn,
+    required bool isPremium,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.cardBorder),
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1))],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => _openDocumentAssistantModal(context, docId, isEn, isPremium),
+          borderRadius: BorderRadius.circular(20),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: iconColor.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Icon(icon, color: iconColor, size: 24),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  title,
+                                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.textPrimary),
+                                ),
+                              ),
+                              if (isPro)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                                  decoration: BoxDecoration(
+                                    color: isPremium ? AppColors.secondary : AppColors.primary,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    isPremium ? 'PRO UNLOCKED' : 'PRO',
+                                    style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w900, color: Colors.white),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            subtitle,
+                            style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.35),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Wrap(
+                      spacing: 6,
+                      children: tags.map((t) => Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceElevated,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: AppColors.cardBorder),
+                        ),
+                        child: Text(
+                          t,
+                          style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: AppColors.textMuted),
+                        ),
+                      )).toList(),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          isEn ? 'Configure' : 'Configurar',
+                          style: TextStyle(
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w800,
+                            color: iconColor,
+                          ),
+                        ),
+                        const SizedBox(width: 3),
+                        Icon(CupertinoIcons.chevron_right, size: 12, color: iconColor),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _openDocumentAssistantModal(BuildContext context, String docType, bool isEn, bool isPremium) {
+    setState(() {
+      _selectedDocType = docType;
+    });
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (modalContext) {
+        return StatefulBuilder(
+          builder: (ctx, setModalState) {
+            _activeModalSetState = setModalState;
+            final title = _getDocTitle(_selectedDocType, isEn);
+            return Container(
+              height: MediaQuery.of(modalContext).size.height * 0.92,
+              decoration: const BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 10, bottom: 6),
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.cardBorder,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(CupertinoIcons.xmark_circle_fill, color: AppColors.textMuted),
+                          onPressed: () => Navigator.pop(modalContext),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(height: 1, color: AppColors.cardBorder),
+                  // Selector rápido de documento dentro del modal
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: _buildDocumentTypeSelector(isEn),
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: _buildSelectedDocForm(isEn, isPremium),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    ).whenComplete(() {
+      _activeModalSetState = null;
+    });
+  }
+
+  String _getDocTitle(String docId, bool isEn) {
+    switch (docId) {
+      case 'resume':
+        return isEn ? 'Australian Pro Resume (ATS)' : 'Currículum Australiano Pro (ATS)';
+      case 'cover_letter':
+        return isEn ? 'Australian Cover Letter' : 'Cover Letter Australiana';
+      case 'rental_bio':
+        return isEn ? 'Rental & Flatmate Bio' : 'Perfil de Alquiler en Australia';
+      case 'fair_work_claim':
+        return isEn ? 'Fair Work Formal Claim' : 'Reclamación Salarial Fair Work';
+      case 'resignation':
+        return isEn ? '2-Week Resignation Letter' : 'Carta de Renuncia (2 Semanas)';
+      default:
+        return isEn ? 'Document Assistant' : 'Asistente de Documentos';
+    }
+  }
+
+  Widget _buildSelectedDocForm(bool isEn, bool isPremium) {
+    if (_selectedDocType == 'resume') {
+      return _buildResumeForm(isEn, isPremium);
+    } else if (_selectedDocType == 'cover_letter') {
+      return _buildCoverLetterForm(isEn, isPremium);
+    } else if (_selectedDocType == 'rental_bio') {
+      return _buildRentalBioForm(isEn, isPremium);
+    } else if (_selectedDocType == 'fair_work_claim') {
+      return _buildFairWorkClaimForm(isEn, isPremium);
+    } else {
+      return _buildResignationForm(isEn, isPremium);
+    }
   }
 
   Widget _buildDocumentTypeSelector(bool isEn) {
@@ -319,7 +661,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
               ),
               onSelected: (selected) {
                 if (selected) {
-                  setState(() => _selectedDocType = id);
+                  _syncState(() => _selectedDocType = id);
                 }
               },
             ),
@@ -381,7 +723,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
 
         // Desplegable de Opciones Avanzadas (Divulgación Progresiva)
         InkWell(
-          onTap: () => setState(() => _showAdvancedCvOptions = !_showAdvancedCvOptions),
+          onTap: () => _syncState(() => _showAdvancedCvOptions = !_showAdvancedCvOptions),
           borderRadius: BorderRadius.circular(16),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -770,7 +1112,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                 side: BorderSide(color: isChecked ? AppColors.secondary : AppColors.cardBorder),
               ),
               onSelected: (val) {
-                setState(() {
+                _syncState(() {
                   if (val) {
                     _rentHabits.add(habit);
                   } else {
@@ -1001,7 +1343,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
               lastDate: DateTime.now().add(const Duration(days: 90)),
             );
             if (picked != null) {
-              setState(() => _resLastDay = picked);
+              _syncState(() => _resLastDay = picked);
             }
           },
           borderRadius: BorderRadius.circular(14),
@@ -1214,7 +1556,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                         DropdownMenuItem(value: '500', child: Text('Subclass 500 (Student Visa)')),
                       ],
                       onChanged: (val) {
-                        if (val != null) setState(() => _visaSubclass = val);
+                        if (val != null) _syncState(() => _visaSubclass = val);
                       },
                     ),
                   ],
@@ -1250,7 +1592,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                   ),
                 ],
                 onChanged: (val) {
-                  if (val != null) setState(() => _availability = val);
+                  if (val != null) _syncState(() => _availability = val);
                 },
               ),
             ],
@@ -1293,7 +1635,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
             side: BorderSide(color: isChecked ? AppColors.secondary : AppColors.cardBorder),
           ),
           onSelected: (val) {
-            setState(() {
+            _syncState(() {
               if (val) {
                 _currentCertifications.add(ticket);
               } else {
@@ -1316,7 +1658,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
           backgroundColor: AppColors.surfaceElevated,
           deleteIcon: const Icon(CupertinoIcons.xmark_circle_fill, size: 14, color: AppColors.textMuted),
           onDeleted: () {
-            setState(() => _currentSkills.remove(skill));
+            _syncState(() => _currentSkills.remove(skill));
           },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -1367,7 +1709,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                 IconButton(
                   icon: const Icon(CupertinoIcons.trash, color: AppColors.statusClosed, size: 18),
                   onPressed: () {
-                    setState(() => _currentExperiences.removeAt(index));
+                    _syncState(() => _currentExperiences.removeAt(index));
                   },
                 ),
               ],
@@ -1409,7 +1751,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
 
         return Expanded(
           child: GestureDetector(
-            onTap: () => setState(() => _themeColorHex = hex),
+            onTap: () => _syncState(() => _themeColorHex = hex),
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 4),
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
@@ -1462,7 +1804,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
           ElevatedButton(
             onPressed: () {
               if (skillController.text.trim().isNotEmpty) {
-                setState(() => _currentSkills.add(skillController.text.trim()));
+                _syncState(() => _currentSkills.add(skillController.text.trim()));
               }
               Navigator.pop(ctx);
             },
@@ -1548,7 +1890,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                       bulletPoints: bullets.isNotEmpty ? bullets : ['Executed daily responsibilities with high punctuality and accuracy.'],
                     );
 
-                    setState(() {
+                    _syncState(() {
                       if (isNew) {
                         _currentExperiences.add(newExp);
                       } else {

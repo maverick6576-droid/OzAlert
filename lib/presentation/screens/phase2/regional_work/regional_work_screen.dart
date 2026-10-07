@@ -294,28 +294,16 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
         ),
         const SizedBox(height: 18),
 
-        // MATRIZ COMPLETA DE ELEGIBILIDAD POR INDUSTRIA (LIN 22/050)
-        Text(
-          isEn ? 'Industry Eligibility Matrix (LIN 22/050)' : 'Matriz de Elegibilidad por Industria (LIN 22/050)',
-          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.textPrimary),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          isEn
-              ? 'Real-time breakdown of which jobs qualify in this postcode under your active visa subclass.'
-              : 'Desglose oficial de qué sectores computan legalmente en esta zona para tu visado.',
-          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
-        ),
-        const SizedBox(height: 10),
-        _buildIndustryEligibilityMatrix(isEn, subclass, _searchResult),
+        // RESUMEN EJECUTIVO DE ELEGIBILIDAD POR INDUSTRIA (LIN 22/050)
+        _buildCompactIndustrySummaryCard(isEn, subclass, _searchResult),
 
-        const SizedBox(height: 40),
+        const SizedBox(height: 36),
       ],
     );
   }
 
-  Widget _buildIndustryEligibilityMatrix(bool isEn, String subclass, PostcodeInfo? postcode) {
-    final industries = [
+  List<Map<String, dynamic>> _getIndustriesList(bool isEn, String subclass, PostcodeInfo? postcode) {
+    return [
       {
         'id': 'agriculture',
         'icon': '🌾',
@@ -391,6 +379,224 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             : 'Elegible en zonas declaradas de catástrofe por el gobierno.',
       },
     ];
+  }
+
+  Widget _buildCompactIndustrySummaryCard(bool isEn, String subclass, PostcodeInfo? postcode) {
+    final industries = _getIndustriesList(isEn, subclass, postcode);
+    final eligibleCount = industries.where((i) => i['eligible'] as bool).length;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.cardBorder),
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1))],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const Text('🏛️', style: TextStyle(fontSize: 18)),
+                  const SizedBox(width: 8),
+                  Text(
+                    isEn ? 'Industry Eligibility (LIN 22/050)' : 'Elegibilidad por Industria',
+                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: AppColors.textPrimary),
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
+                decoration: BoxDecoration(
+                  color: (eligibleCount > 0 ? AppColors.secondary : AppColors.statusClosed).withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  isEn ? '$eligibleCount/${industries.length} Valid' : '$eligibleCount/${industries.length} Válidos',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w900,
+                    color: eligibleCount > 0 ? AppColors.secondary : AppColors.statusClosed,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            isEn
+                ? 'Quick overview for postcode ${_postcodeController.text} under Visa Subclass $subclass:'
+                : 'Resumen rápido para CP ${_postcodeController.text} bajo Subclase $subclass:',
+            style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+          ),
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: industries.map((ind) {
+              final isEligible = ind['eligible'] as bool;
+              final icon = ind['icon'] as String;
+              final shortName = (ind['name'] as String).split('&').first.trim();
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: isEligible
+                      ? AppColors.secondary.withValues(alpha: 0.1)
+                      : AppColors.statusClosed.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: isEligible
+                        ? AppColors.secondary.withValues(alpha: 0.3)
+                        : AppColors.statusClosed.withValues(alpha: 0.2),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(icon, style: const TextStyle(fontSize: 12)),
+                    const SizedBox(width: 4),
+                    Text(
+                      shortName,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: isEligible ? AppColors.textPrimary : AppColors.textMuted,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      isEligible ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.xmark_circle_fill,
+                      size: 11,
+                      color: isEligible ? AppColors.secondary : AppColors.statusClosed,
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 14),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              icon: const Icon(CupertinoIcons.square_list_fill, size: 16),
+              label: Text(
+                isEn ? 'View Full Rules for All 8 Industries' : 'Ver Normativa de las 8 Industrias (LIN 22/050)',
+                style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                elevation: 0,
+              ),
+              onPressed: () => _showAllIndustriesModal(context, isEn, subclass, postcode),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAllIndustriesModal(BuildContext context, bool isEn, String subclass, PostcodeInfo? postcode) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.88,
+          decoration: const BoxDecoration(
+            color: AppColors.background,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 10, bottom: 6),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.cardBorder,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            isEn ? 'Industry Matrix (LIN 22/050)' : 'Matriz de Industrias (LIN 22/050)',
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
+                          ),
+                          Text(
+                            isEn
+                                ? 'Postcode ${_postcodeController.text} • Visa Subclass $subclass'
+                                : 'Código Postal ${_postcodeController.text} • Subclase $subclass',
+                            style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(CupertinoIcons.xmark_circle_fill, color: AppColors.textMuted),
+                      onPressed: () => Navigator.pop(ctx),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1, color: AppColors.cardBorder),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Column(
+                    children: [
+                      _buildIndustryEligibilityMatrix(isEn, subclass, postcode),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          icon: const Icon(CupertinoIcons.link, size: 15, color: AppColors.primary),
+                          label: Text(
+                            isEn ? 'Consult LIN 22/050 Official Legislation' : 'Consultar Normativa Oficial LIN 22/050',
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: AppColors.primary),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            side: BorderSide(color: AppColors.primary.withValues(alpha: 0.35)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                          ),
+                          onPressed: () async {
+                            final uri = Uri.parse('https://www.legislation.gov.au/Details/F2022L00445');
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                            }
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildIndustryEligibilityMatrix(bool isEn, String subclass, PostcodeInfo? postcode) {
+    final industries = _getIndustriesList(isEn, subclass, postcode);
 
     return GridView.builder(
       shrinkWrap: true,
