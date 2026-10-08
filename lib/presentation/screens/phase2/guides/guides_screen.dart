@@ -9,6 +9,7 @@ import '../../../providers/locale_provider.dart';
 import '../../../../domain/models/phase2/affiliate_partner.dart';
 import '../../../../domain/models/phase2/guide_data.dart';
 import '../../../widgets/phase2/premium_feature_gate.dart';
+import '../../../widgets/phase2/official_sources_modal.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/phase2_app_bar.dart';
 
 class GuidesScreen extends ConsumerStatefulWidget {
@@ -260,12 +261,42 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
+          InkWell(
+            onTap: () {
+              showOfficialSourcesModal(context, isEn: isEn, initialTopic: _selectedCategory);
+            },
+            borderRadius: BorderRadius.circular(10),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6.5),
+              decoration: BoxDecoration(
+                color: AppColors.secondary.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColors.secondary.withValues(alpha: 0.3)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(CupertinoIcons.info_circle_fill, size: 13, color: AppColors.secondary),
+                  const SizedBox(width: 4),
+                  Text(
+                    isEn ? 'Official' : 'Oficial',
+                    style: const TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.secondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 6),
           InkWell(
             onTap: () => _showGuidesCatalogModal(context, isEn),
             borderRadius: BorderRadius.circular(10),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6.5),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6.5),
               decoration: BoxDecoration(
                 color: AppColors.surfaceElevated,
                 borderRadius: BorderRadius.circular(10),
@@ -275,16 +306,16 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Icon(CupertinoIcons.square_grid_2x2_fill, size: 13, color: AppColors.textPrimary),
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 4),
                   Text(
-                    isEn ? 'All (9)' : 'Ver todas (9)',
+                    isEn ? 'All (9)' : 'Ver todas',
                     style: const TextStyle(
                       fontSize: 11.5,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  const SizedBox(width: 3),
+                  const SizedBox(width: 2),
                   const Icon(CupertinoIcons.chevron_down, size: 10, color: AppColors.textMuted),
                 ],
               ),
@@ -720,6 +751,27 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 isEn ? guide.subtitleEn : guide.subtitle,
                 style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.4),
               ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 15, color: AppColors.secondary),
+                  label: Text(
+                    isEn ? 'Consult Official Legal Regulations' : 'Consultar Normativa Oficial y Fuentes Legales',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: AppColors.secondary),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: AppColors.secondary.withValues(alpha: 0.4)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                  ),
+                  onPressed: () {
+                    showOfficialSourcesModal(context, isEn: isEn, initialTopic: guide.id);
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -934,6 +986,27 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
               ],
             ),
           ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 14, color: AppColors.primary),
+              label: Text(
+                isEn ? 'Consult Official Sources (ATO & Home Affairs)' : 'Consultar Fuentes Oficiales (ATO e Inmigración)',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.primary),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: AppColors.primary.withValues(alpha: 0.35)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                padding: const EdgeInsets.symmetric(vertical: 10),
+              ),
+              onPressed: () {
+                showOfficialSourcesModal(context, isEn: isEn, initialTopic: 'tax');
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -1039,6 +1112,21 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textPrimary),
                     ),
                   ),
+                  if (step.officialUrl != null && step.officialUrl!.isNotEmpty) ...[
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      tooltip: isEn ? 'Open Official Link' : 'Abrir Web Oficial',
+                      icon: const Icon(CupertinoIcons.arrow_up_right_circle_fill, size: 20, color: AppColors.primary),
+                      onPressed: () async {
+                        final uri = Uri.parse(step.officialUrl!);
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(uri, mode: LaunchMode.externalApplication);
+                        }
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                  ],
                   Icon(
                     isExpanded ? CupertinoIcons.chevron_up : CupertinoIcons.chevron_down,
                     size: 16,
@@ -1081,40 +1169,31 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   ),
                 ],
                 if (step.officialUrl != null && step.officialUrl!.isNotEmpty) ...[
-                  const SizedBox(height: 10),
-                  InkWell(
-                    onTap: () async {
-                      final uri = Uri.parse(step.officialUrl!);
-                      if (await canLaunchUrl(uri)) {
-                        await launchUrl(uri, mode: LaunchMode.externalApplication);
-                      }
-                    },
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 15),
+                      label: Text(
+                        (isEn ? step.officialUrlLabelEn : step.officialUrlLabel) ??
+                            (isEn ? 'Consult Official Source' : 'Consultar Fuente Oficial'),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5),
                       ),
-                      child: Row(
-                        children: [
-                          const Icon(CupertinoIcons.link, size: 14, color: AppColors.primary),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              (isEn ? step.officialUrlLabelEn : step.officialUrlLabel) ??
-                                  (isEn ? 'Consult Official Source' : 'Consultar Fuente Oficial'),
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.primary,
-                              ),
-                            ),
-                          ),
-                          const Icon(CupertinoIcons.arrow_up_right, size: 13, color: AppColors.primary),
-                        ],
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        elevation: 0,
                       ),
+                      onPressed: () async {
+                        final uri = Uri.parse(step.officialUrl!);
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(uri, mode: LaunchMode.externalApplication);
+                        }
+                      },
                     ),
                   ),
                 ],
@@ -1312,6 +1391,37 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 ],
               ),
             ),
+
+            // Botón oficial de referencia a la web
+            if (item.officialUrl != null && item.officialUrl!.isNotEmpty) ...[
+              const SizedBox(height: 14),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 15),
+                  label: Text(
+                    (isEn ? item.officialUrlLabelEn : item.officialUrlLabel) ??
+                        (isEn ? 'Consult Official Website' : 'Consultar Web Oficial'),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    elevation: 0,
+                  ),
+                  onPressed: () async {
+                    final uri = Uri.parse(item.officialUrl!);
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri, mode: LaunchMode.externalApplication);
+                    }
+                  },
+                ),
+              ),
+            ],
           ],
         ),
       ),
@@ -1483,25 +1593,56 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   : 'Cómo desgravar gastos de herramientas, visados y cursos de formación en la declaración de impuestos.',
               style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
             ),
-            const SizedBox(height: 10),
-            ElevatedButton.icon(
-              onPressed: () {
-                setState(() {
-                  _selectedCategory = 'savings';
-                });
-              },
-              icon: const Icon(CupertinoIcons.sparkles, size: 14),
-              label: Text(
-                isEn ? 'Open Pro Savings Hacks (+ \$3,500 AUD)' : 'Ver Hacks Pro de Ahorro (+ \$3.500 AUD)',
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.secondary,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                elevation: 0,
-              ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        _selectedCategory = 'savings';
+                      });
+                    },
+                    icon: const Icon(CupertinoIcons.sparkles, size: 14),
+                    label: Text(
+                      isEn ? 'Savings Guide' : 'Guía de Ahorro',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.secondary,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      elevation: 0,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      final uri = Uri.parse('https://www.ato.gov.au/individuals-and-families/income-deductions-offsets-and-records/deductions-you-can-claim');
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(uri, mode: LaunchMode.externalApplication);
+                      }
+                    },
+                    icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 14, color: AppColors.primary),
+                    label: Text(
+                      isEn ? 'Official ATO Web' : 'Web Oficial ATO',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primary),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: AppColors.primary.withValues(alpha: 0.4)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

@@ -85,7 +85,10 @@
             "$4 monthly fee if deposit or age criteria are not met"
           ],
           "verdict": "La opción recomendada para la gran mayoría de viajeros por su red de oficinas y fiabilidad.",
-          "verdictEn": "Top recommendation for most travelers due to unmatched branch coverage and app reliability."
+          "verdictEn": "Top recommendation for most travelers due to unmatched branch coverage and app reliability.",
+          "officialUrl": "https://www.commbank.com.au/travel/moving-to-australia.html",
+          "officialUrlLabel": "CommBank - Web Oficial & Apertura de Cuenta",
+          "officialUrlLabelEn": "CommBank - Official Website & Account Opening"
         },
         {
           "id": "nab",
@@ -115,7 +118,10 @@
             "Mobile app interface is simpler than CommBank"
           ],
           "verdict": "La mejor opción para quienes buscan despreocuparse al 100% de comisiones bancarias.",
-          "verdictEn": "Best choice if you want zero monthly fees without worrying about salary thresholds."
+          "verdictEn": "Best choice if you want zero monthly fees without worrying about salary thresholds.",
+          "officialUrl": "https://www.nab.com.au/personal/bank-accounts",
+          "officialUrlLabel": "NAB - Web Oficial de Cuentas Sin Comisión",
+          "officialUrlLabelEn": "NAB - Official No-Fee Accounts"
         },
         {
           "id": "wise",
@@ -145,7 +151,10 @@
             "Does not fully replace a local Australian bank for certain payroll systems"
           ],
           "verdict": "Complemento imprescindible para mover tus ahorros a Australia sin perder cientos de dólares.",
-          "verdictEn": "Essential tool to move your savings into Australia without losing hundreds in bank margins."
+          "verdictEn": "Essential tool to move your savings into Australia without losing hundreds in bank margins.",
+          "officialUrl": "https://wise.com/au/compare/",
+          "officialUrlLabel": "Wise - Portal Oficial de Transferencias Internacionales",
+          "officialUrlLabelEn": "Wise - Official International Transfers"
         }
       ]
     },
@@ -222,7 +231,10 @@
             "Customer support is predominantly app/chat based"
           ],
           "verdict": "La opción número 1 recomendada para cualquier Working Holiday Visa que planee hacer días de granja.",
-          "verdictEn": "#1 undisputed recommendation for WHV backpackers planning to do regional work."
+          "verdictEn": "#1 undisputed recommendation for WHV backpackers planning to do regional work.",
+          "officialUrl": "https://boost.com.au/pages/prepaid-plans",
+          "officialUrlLabel": "Boost Mobile - Planes Prepago Oficiales (Red Telstra)",
+          "officialUrlLabelEn": "Boost Mobile - Official Prepaid Plans"
         },
         {
           "id": "optus",
@@ -252,7 +264,10 @@
             "Loses reception rapidly when travelling into agricultural regions"
           ],
           "verdict": "Gran opción si tu plan es vivir y trabajar exclusivamente en grandes ciudades costeras.",
-          "verdictEn": "Solid pick if you plan to stay strictly in major metropolitan coastal hubs."
+          "verdictEn": "Solid pick if you plan to stay strictly in major metropolitan coastal hubs.",
+          "officialUrl": "https://www.optus.com.au/prepaid",
+          "officialUrlLabel": "Optus - Tarifas Oficiales de Telefonía Prepago",
+          "officialUrlLabelEn": "Optus - Official Prepaid Plans"
         },
         {
           "id": "felix",
@@ -282,7 +297,10 @@
             "Telstra Wholesale footprint excludes the furthest outback cell towers"
           ],
           "verdict": "Buena opción urbana si buscas datos ilimitados y no viajas a zonas remotas.",
-          "verdictEn": "Viable urban alternative if unlimited data matters more than outback reach."
+          "verdictEn": "Viable urban alternative if unlimited data matters more than outback reach.",
+          "officialUrl": "https://felixmobile.com.au/",
+          "officialUrlLabel": "Felix Mobile - Planes Ilimitados Oficiales",
+          "officialUrlLabelEn": "Felix Mobile - Official Unlimited Plans"
         }
       ]
     },
@@ -359,7 +377,10 @@
             "Does not cover lost flight luggage or ticket cancellations"
           ],
           "verdict": "La mejor opción para cobertura médica local directa sin tener que adelantar dinero.",
-          "verdictEn": "Best choice for seamless in-country medical treatment without out-of-pocket fronting."
+          "verdictEn": "Best choice for seamless in-country medical treatment without out-of-pocket fronting.",
+          "officialUrl": "https://www.bupa.com.au/health-insurance/overseas-visitors",
+          "officialUrlLabel": "Bupa - Seguro Oficial para Visitantes (OVHC)",
+          "officialUrlLabelEn": "Bupa - Official Visitor Health Cover"
         },
         {
           "id": "allianz",
@@ -389,7 +410,10 @@
             "Certain minor GP claims processed through claim reimbursement"
           ],
           "verdict": "Alternativa sólida y prestigiosa para estancias de 1 a 2 años en Australia.",
-          "verdictEn": "Robust and reliable option for 1 to 2 year working holiday stays."
+          "verdictEn": "Robust and reliable option for 1 to 2 year working holiday stays.",
+          "officialUrl": "https://www.allianzcare.com.au/en/visitors-visa-cop.html",
+          "officialUrlLabel": "Allianz Care - Cobertura Médica Oficial de Visados",
+          "officialUrlLabelEn": "Allianz Care - Official Visitor Cover"
         },
         {
           "id": "travel_insurance",
@@ -419,7 +443,10 @@
             "Requires paying full annual premium upfront before departure"
           ],
           "verdict": "Excelente opción si quieres protección global de viaje (vuelos + maletas + salud) en un solo paquete.",
-          "verdictEn": "Ideal if you desire total travel protection (flights + luggage + health) in one single plan."
+          "verdictEn": "Ideal if you desire total travel protection (flights + luggage + health) in one single plan.",
+          "officialUrl": "https://www.smartraveller.gov.au/before-you-go/the-basics/insurance",
+          "officialUrlLabel": "Smartraveller - Guía Oficial de Seguros del Gobierno",
+          "officialUrlLabelEn": "Smartraveller - Official Travel Insurance Guide"
         }
       ]
     },
@@ -506,7 +533,10 @@
             "Certain fresh listings require early-bird VIP pass or a short waiting period"
           ],
           "verdict": "La herramienta indispensable y más segura para encontrar habitación estable en Australia.",
-          "verdictEn": "The safest and most reliable platform to secure a quality shared room in Australia."
+          "verdictEn": "The safest and most reliable platform to secure a quality shared room in Australia.",
+          "officialUrl": "https://flatmates.com.au/",
+          "officialUrlLabel": "Flatmates.com.au - Portal Oficial de Habitaciones",
+          "officialUrlLabelEn": "Flatmates.com.au - Official Room Search Portal"
         },
         {
           "id": "hostels",
@@ -534,7 +564,10 @@
             "Limited privacy in larger shared dormitory rooms"
           ],
           "verdict": "La mejor opción para aterrizar con tranquilidad mientras buscas tu habitación definitiva.",
-          "verdictEn": "Best starting point upon landing while you scout suburbs and attend inspections."
+          "verdictEn": "Best starting point upon landing while you scout suburbs and attend inspections.",
+          "officialUrl": "https://www.yha.com.au/",
+          "officialUrlLabel": "YHA Australia - Red Oficial de Hostels Certificados",
+          "officialUrlLabelEn": "YHA Australia - Official Certified Hostels"
         },
         {
           "id": "facebook_groups",
@@ -564,7 +597,10 @@
             "Lack of formal tenancy agreements protecting your bond"
           ],
           "verdict": "Úsalo solo para inspecciones presenciales y nunca transfieras un solo dólar por adelantado.",
-          "verdictEn": "Use only for in-person viewings and never transfer any funds beforehand."
+          "verdictEn": "Use only for in-person viewings and never transfer any funds beforehand.",
+          "officialUrl": "https://www.scamwatch.gov.au/types-of-scams/rental-scams",
+          "officialUrlLabel": "Scamwatch - Advertencia Oficial de Estafas de Alquiler",
+          "officialUrlLabelEn": "Scamwatch - Official Rental Scam Protection"
         }
       ]
     },
@@ -651,7 +687,10 @@
             "Remember to opt out of default life insurance if you do not want deduction fees"
           ],
           "verdict": "La elección #1 recomendada para la gran mayoría de trabajadores de Working Holiday en hostelería.",
-          "verdictEn": "#1 recommendation for working holiday makers employed in cafes, bars, and restaurants."
+          "verdictEn": "#1 recommendation for working holiday makers employed in cafes, bars, and restaurants.",
+          "officialUrl": "https://hostplus.com.au/",
+          "officialUrlLabel": "Hostplus - Fondo Oficial Industry Super",
+          "officialUrlLabelEn": "Hostplus - Official Industry Super Fund"
         },
         {
           "id": "australiansuper",
@@ -679,7 +718,10 @@
             "Formal steps required to adjust default insurance coverages"
           ],
           "verdict": "Excelente opción si vas a trabajar en construcción, granjas o diversos sectores mixtos.",
-          "verdictEn": "Premier choice if you alternate between farming, construction, and corporate work."
+          "verdictEn": "Premier choice if you alternate between farming, construction, and corporate work.",
+          "officialUrl": "https://www.australiansuper.com/",
+          "officialUrlLabel": "AustralianSuper - Mayor Fondo de Pensiones Oficial",
+          "officialUrlLabelEn": "AustralianSuper - Australia's Largest Super Fund"
         },
         {
           "id": "ato_portal",
@@ -707,7 +749,10 @@
             "Only activates once your entry scan is logged by Australian customs"
           ],
           "verdict": "La única forma legítima y segura de solicitar tu número fiscal TFN.",
-          "verdictEn": "The sole legitimate and safe platform to secure your Australian tax file number."
+          "verdictEn": "The sole legitimate and safe platform to secure your Australian tax file number.",
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/tax-file-number/apply-for-a-tfn",
+          "officialUrlLabel": "ATO - Portal Oficial de Solicitud de TFN",
+          "officialUrlLabelEn": "ATO - Official TFN Application Portal"
         }
       ]
     },
@@ -794,7 +839,10 @@
             "Does not cover NSW venues without the dedicated Liquor & Gaming NSW curriculum"
           ],
           "verdict": "La vía más rápida y económica para empezar a buscar trabajo de camarero fuera de Sídney.",
-          "verdictEn": "Fastest and most affordable route to begin hospitality work outside of NSW."
+          "verdictEn": "Fastest and most affordable route to begin hospitality work outside of NSW.",
+          "officialUrl": "https://cleartowork.com.au/",
+          "officialUrlLabel": "Clear To Work - Curso Oficial Homologado de RSA",
+          "officialUrlLabelEn": "Clear To Work - Official Accredited RSA Course"
         },
         {
           "id": "white_card_safework",
@@ -822,7 +870,10 @@
             "Requires attending a 6-hour classroom session at an accredited RTO facility"
           ],
           "verdict": "Imprescindible para cualquier persona que quiera trabajar en obra, reformas o mantenimiento.",
-          "verdictEn": "Essential investment for anyone considering construction, site cleaning or trade work."
+          "verdictEn": "Essential investment for anyone considering construction, site cleaning or trade work.",
+          "officialUrl": "https://www.safework.nsw.gov.au/licences-and-registrations/white-cards",
+          "officialUrlLabel": "SafeWork NSW - Acreditación Oficial White Card",
+          "officialUrlLabelEn": "SafeWork NSW - Official White Card Induction"
         },
         {
           "id": "barista_course",
@@ -850,7 +901,10 @@
             "Not a legal government prerequisite, but a practical job skill"
           ],
           "verdict": "Altamente recomendado si quieres trabajar en el mundo del café australiano y no tienes experiencia previa.",
-          "verdictEn": "Highly recommended for newcomers targeting morning cafe barista positions."
+          "verdictEn": "Highly recommended for newcomers targeting morning cafe barista positions.",
+          "officialUrl": "https://www.coffeeschool.com.au/",
+          "officialUrlLabel": "Coffee School - Cursos Oficiales de Barista",
+          "officialUrlLabelEn": "Coffee School - Official Barista Training"
         }
       ]
     },
@@ -935,7 +989,10 @@
             "Must retain receipts if total work deductions exceed $300 AUD"
           ],
           "verdict": "Imprescindible hacerlo cada mes de julio u octubre para no regalar dinero al gobierno.",
-          "verdictEn": "Must-do every July to October to avoid leaving your hard-earned money behind."
+          "verdictEn": "Must-do every July to October to avoid leaving your hard-earned money behind.",
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/your-tax-return",
+          "officialUrlLabel": "ATO - Guía Oficial de Declaración de la Renta",
+          "officialUrlLabelEn": "ATO - Official Tax Return Guidelines"
         },
         {
           "id": "dasp_super_refund",
@@ -961,7 +1018,10 @@
             "65% tax rate applies to WHV holders (still leaves you with 35% net cash)"
           ],
           "verdict": "Un ahorro final de entre $800 y $3,000 AUD limpios al terminar tu estancia.",
-          "verdictEn": "A clean exit windfall of $800 to $3,000+ AUD when leaving Australia."
+          "verdictEn": "A clean exit windfall of $800 to $3,000+ AUD when leaving Australia.",
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/temporary-residents-and-superannuation/departing-australia-superannuation-payment-dasp",
+          "officialUrlLabel": "ATO - Sistema Oficial de Cobro DASP Online",
+          "officialUrlLabelEn": "ATO - Official Online DASP System"
         },
         {
           "id": "medicare_rhca_card",
@@ -987,7 +1047,10 @@
             "Does not cover emergency ambulance in some states or dental"
           ],
           "verdict": "La mayor ventaja oculta para españoles, italianos y británicos en Australia.",
-          "verdictEn": "The biggest hidden gem for Spanish, Italian, British and European WHV travelers."
+          "verdictEn": "The biggest hidden gem for Spanish, Italian, British and European WHV travelers.",
+          "officialUrl": "https://www.servicesaustralia.gov.au/reciprocal-health-care-agreements",
+          "officialUrlLabel": "Services Australia - Inscripción en Medicare Recíproco",
+          "officialUrlLabelEn": "Services Australia - Official Medicare RHCA Enrolment"
         }
       ]
     },
@@ -1086,7 +1149,10 @@
             "Offshore: No bridging visa granted; you must await approval outside Australia before entering"
           ],
           "verdict": "Si estás trabajando en Australia, solicita Onshore al menos 3-4 semanas antes de la expiración de tu primer año.",
-          "verdictEn": "If currently in Australia, lodge onshore 3-4 weeks before 1st year expiry for uninterrupted work rights."
+          "verdictEn": "If currently in Australia, lodge onshore 3-4 weeks before 1st year expiry for uninterrupted work rights.",
+          "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462",
+          "officialUrlLabel": "Home Affairs - Normativa Oficial de Concesión de Visados",
+          "officialUrlLabelEn": "Home Affairs - Official Visa Grant Rules"
         },
         {
           "id": "alternative_pathways",
@@ -1116,7 +1182,10 @@
             "Bi-weekly work hour restrictions during active term"
           ],
           "verdict": "La mejor salida si no conseguiste completar los 88 días o prefieres formarte en ciudades principales.",
-          "verdictEn": "The premier alternative if 88-day regional criteria cannot be met and you wish to remain in Australia."
+          "verdictEn": "The premier alternative if 88-day regional criteria cannot be met and you wish to remain in Australia.",
+          "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing",
+          "officialUrlLabel": "Home Affairs - Directorio Oficial de Tipos de Visado",
+          "officialUrlLabelEn": "Home Affairs - Official Visa Options Directory"
         }
       ]
     },
@@ -1227,7 +1296,10 @@
             "Requires passport verification prior to departure"
           ],
           "verdict": "La herramienta indiscutible para repatriar ahorros de Australia sin perder cientos de dólares.",
-          "verdictEn": "The undisputed standard for moving Australian funds home without hefty bank fees."
+          "verdictEn": "The undisputed standard for moving Australian funds home without hefty bank fees.",
+          "officialUrl": "https://wise.com/au/compare/",
+          "officialUrlLabel": "Wise - Comparador de Tipos de Cambio Reales",
+          "officialUrlLabelEn": "Wise - Mid-Market Exchange Rate Comparator"
         },
         {
           "id": "ato_cheque_vs_direct_deposit",
@@ -1255,7 +1327,10 @@
             "Paper cheque: Takes 6-10 weeks to arrive by airmail; overseas banks charge $50-$100 to clear foreign currency cheques"
           ],
           "verdict": "Mantén siempre una cuenta bancaria australiana activa o tu cuenta Wise AUD para recibir el depósito directo.",
-          "verdictEn": "Always keep an active Aussie bank account or Wise AUD balance for seamless electronic payouts."
+          "verdictEn": "Always keep an active Aussie bank account or Wise AUD balance for seamless electronic payouts.",
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/your-tax-return/how-to-lodge-your-tax-return/lodge-your-tax-return-before-leaving-australia",
+          "officialUrlLabel": "ATO - Procedimiento Oficial de Cobro al Dejar Australia",
+          "officialUrlLabelEn": "ATO - Early Tax Refund Official Procedure"
         }
       ]
     }

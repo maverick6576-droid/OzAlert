@@ -51,6 +51,9 @@ class ServiceComparison {
   final List<String> consEn;
   final String verdict;
   final String verdictEn;
+  final String? officialUrl;
+  final String? officialUrlLabel;
+  final String? officialUrlLabelEn;
 
   ServiceComparison({
     required this.id,
@@ -64,13 +67,20 @@ class ServiceComparison {
     required this.consEn,
     required this.verdict,
     required this.verdictEn,
+    this.officialUrl,
+    this.officialUrlLabel,
+    this.officialUrlLabelEn,
   });
 
   factory ServiceComparison.fromJson(Map<String, dynamic> json) {
     final attrs = <String, String>{};
+    const reservedKeys = [
+      'id', 'name', 'tagline', 'taglineEn', 'pros', 'prosEn', 'cons', 'consEn',
+      'verdict', 'verdictEn', 'officialUrl', 'officialUrlLabel', 'officialUrlLabelEn'
+    ];
     // Extract dynamic attributes (fees, coverage, etc.)
     for (final key in json.keys) {
-      if (!['id', 'name', 'tagline', 'taglineEn', 'pros', 'prosEn', 'cons', 'consEn', 'verdict', 'verdictEn'].contains(key)) {
+      if (!reservedKeys.contains(key)) {
         attrs[key] = json[key]?.toString() ?? '';
       }
     }
@@ -87,6 +97,9 @@ class ServiceComparison {
       consEn: (json['consEn'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
       verdict: json['verdict'] as String? ?? '',
       verdictEn: json['verdictEn'] as String? ?? '',
+      officialUrl: json['officialUrl'] as String?,
+      officialUrlLabel: json['officialUrlLabel'] as String?,
+      officialUrlLabelEn: json['officialUrlLabelEn'] as String?,
     );
   }
 }
