@@ -100,6 +100,10 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     final partnersAsync = ref.watch(affiliateCategoryProvider(_selectedCategory));
     final currentTheme = _themes[_selectedThemeIndex.clamp(0, _themes.length - 1)];
     final currentCategories = currentTheme['categories'] as List<Map<String, String>>;
+    final currentCategoryItem = currentCategories.firstWhere(
+      (c) => c['id'] == _selectedCategory,
+      orElse: () => currentCategories.first,
+    );
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -142,87 +146,36 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
               ),
             ),
 
-          // 1. BANNER FLOTANTE INTELIGENTE: CALCULADORA DE DINERO EN JUEGO
-          _buildFinancialRiskFloatingBanner(isEn),
+          // 1. TARJETA EJECUTIVA DE CONTEXTO: ESTÁS CONSULTANDO [TEMA]
+          _buildActiveTopicHeaderCard(isEn, currentTheme, currentCategoryItem),
 
-          // 2. SELECTOR DE BLOQUES TEMÁTICOS (PILLS HORIZONTALES)
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            padding: const EdgeInsets.all(3),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceElevated,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppColors.cardBorder),
-            ),
-            child: Row(
-              children: List.generate(_themes.length, (idx) {
-                final theme = _themes[idx];
-                final isSelected = _selectedThemeIndex == idx;
-                return Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedThemeIndex = idx;
-                        final cats = theme['categories'] as List<Map<String, String>>;
-                        if (!cats.any((c) => c['id'] == _selectedCategory)) {
-                          _selectedCategory = cats.first['id']!;
-                        }
-                      });
-                    },
-                    behavior: HitTestBehavior.opaque,
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(vertical: 7),
-                      decoration: BoxDecoration(
-                        color: isSelected ? AppColors.primary : Colors.transparent,
-                        borderRadius: BorderRadius.circular(11),
-                        boxShadow: isSelected
-                            ? const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1))]
-                            : null,
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        isEn ? (theme['labelEn'] as String) : (theme['label'] as String),
-                        style: TextStyle(
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w800,
-                          color: isSelected ? Colors.white : AppColors.textPrimary,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            ),
-          ),
-
-          // 3. CATEGORÍAS CORRESPONDIENTES AL BLOQUE SELECCIONADO (MÁXIMO 2 A 4 CHIPS)
+          // 2. SELECTOR RÁPIDO DE CATEGORÍAS HERMANAS DEL BLOQUE ACTIVO
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
             child: Row(
               children: currentCategories.map((c) {
                 final isSelected = c['id'] == _selectedCategory;
                 return Padding(
-                  padding: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.only(right: 6),
                   child: ChoiceChip(
                     label: Text(
                       isEn ? c['labelEn']! : c['label']!,
                       style: TextStyle(
-                        fontWeight: FontWeight.w700,
+                        fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                         color: isSelected ? Colors.white : AppColors.textPrimary,
-                        fontSize: 12,
+                        fontSize: 11.5,
                       ),
                     ),
                     selected: isSelected,
-                    selectedColor: AppColors.secondary,
+                    selectedColor: AppColors.primary,
                     backgroundColor: AppColors.surface,
-                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1.5),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(11),
                       side: BorderSide(
-                        color: isSelected ? AppColors.secondary : AppColors.cardBorder,
-                        width: 1.2,
+                        color: isSelected ? AppColors.primary : AppColors.cardBorder,
+                        width: 1.1,
                       ),
                     ),
                     onSelected: (selected) {
@@ -238,32 +191,29 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             ),
           ),
 
-          // 4. SUB-TABS SEGMENTADAS (Guía, Comparativa, Promos B2B)
+          // 3. SUB-TABS SEGMENTADAS DE 1 SOLA LÍNEA (Paso a Paso / Comparativa / Descuentos & Apps)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: Container(
               padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(
                 color: AppColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(14),
                 border: Border.all(color: AppColors.cardBorder),
               ),
               child: Row(
                 children: [
                   _buildSubTabItem(
                     index: 0,
-                    label: isEn ? '📘 Guide' : '📘 Guía',
-                    sublabel: isEn ? 'Step-by-step' : 'Paso a paso',
+                    label: isEn ? '📘 Step-by-Step' : '📘 Paso a Paso',
                   ),
                   _buildSubTabItem(
                     index: 1,
                     label: isEn ? '⚖️ Compare' : '⚖️ Comparativa',
-                    sublabel: isEn ? 'Features' : 'Detalles',
                   ),
                   _buildSubTabItem(
                     index: 2,
-                    label: isEn ? '🎁 Deals' : '🎁 Promos B2B',
-                    sublabel: isEn ? 'Coupons' : 'Descuentos',
+                    label: isEn ? '🎁 Deals & Apps' : '🎁 Descuentos & Apps',
                   ),
                 ],
               ),
@@ -302,10 +252,316 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     );
   }
 
+  // 1. TARJETA EJECUTIVA DE CONTEXTO
+  Widget _buildActiveTopicHeaderCard(
+    bool isEn,
+    Map<String, dynamic> currentTheme,
+    Map<String, String> currentCategoryItem,
+  ) {
+    final themeLabel = isEn ? (currentTheme['labelEn'] as String) : (currentTheme['label'] as String);
+    final categoryLabel = isEn ? currentCategoryItem['labelEn']! : currentCategoryItem['label']!;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.cardBorder),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1)),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  (isEn ? 'STAGE: ' : 'ETAPA: ') + themeLabel.toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.6,
+                    color: AppColors.primary,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  categoryLabel,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textPrimary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          InkWell(
+            onTap: () => _showGuidesCatalogModal(context, isEn),
+            borderRadius: BorderRadius.circular(10),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6.5),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceElevated,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColors.cardBorder),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(CupertinoIcons.square_grid_2x2_fill, size: 13, color: AppColors.textPrimary),
+                  const SizedBox(width: 5),
+                  Text(
+                    isEn ? 'All (9)' : 'Ver todas (9)',
+                    style: const TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(width: 3),
+                  const Icon(CupertinoIcons.chevron_down, size: 10, color: AppColors.textMuted),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 2. MODAL EXPLORADOR DE TODAS LAS GUÍAS AGRUPADAS POR ETAPA
+  void _showGuidesCatalogModal(BuildContext context, bool isEn) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.88,
+          decoration: const BoxDecoration(
+            color: AppColors.background,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 10, bottom: 6),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.cardBorder,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            isEn ? 'Guides & Reviews Directory' : 'Catálogo de Guías & Revisiones',
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
+                          ),
+                          Text(
+                            isEn
+                                ? '9 essential topics organized by your journey stage'
+                                : '9 temas esenciales ordenados por etapa de tu estancia',
+                            style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(CupertinoIcons.xmark_circle_fill, color: AppColors.textMuted),
+                      onPressed: () => Navigator.pop(ctx),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1, color: AppColors.cardBorder),
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  itemCount: _themes.length,
+                  itemBuilder: (context, themeIdx) {
+                    final theme = _themes[themeIdx];
+                    final themeLabel = isEn ? (theme['labelEn'] as String) : (theme['label'] as String);
+                    final categories = theme['categories'] as List<Map<String, String>>;
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8, bottom: 8),
+                          child: Text(
+                            themeLabel.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 0.6,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                        ...categories.map((cat) {
+                          final isCurrent = cat['id'] == _selectedCategory;
+                          final label = isEn ? cat['labelEn']! : cat['label']!;
+                          final desc = _getCategoryDescription(cat['id']!, isEn);
+
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            decoration: BoxDecoration(
+                              color: isCurrent ? AppColors.primary.withValues(alpha: 0.08) : AppColors.surface,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: isCurrent ? AppColors.primary : AppColors.cardBorder,
+                                width: isCurrent ? 1.5 : 1,
+                              ),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedThemeIndex = themeIdx;
+                                    _selectedCategory = cat['id']!;
+                                  });
+                                  Navigator.pop(ctx);
+                                },
+                                borderRadius: BorderRadius.circular(16),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    label,
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w800,
+                                                      color: isCurrent ? AppColors.primary : AppColors.textPrimary,
+                                                    ),
+                                                  ),
+                                                ),
+                                                if (isCurrent)
+                                                  Container(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                                                    decoration: BoxDecoration(
+                                                      color: AppColors.primary,
+                                                      borderRadius: BorderRadius.circular(8),
+                                                    ),
+                                                    child: Text(
+                                                      isEn ? 'ACTIVE' : 'ACTIVA',
+                                                      style: const TextStyle(
+                                                        fontSize: 9.5,
+                                                        fontWeight: FontWeight.w900,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 3),
+                                            Text(
+                                              desc,
+                                              style: const TextStyle(
+                                                fontSize: 11.5,
+                                                color: AppColors.textSecondary,
+                                                height: 1.3,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Icon(
+                                        CupertinoIcons.chevron_right,
+                                        size: 14,
+                                        color: isCurrent ? AppColors.primary : AppColors.textMuted,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  String _getCategoryDescription(String catId, bool isEn) {
+    switch (catId) {
+      case 'banking':
+        return isEn
+            ? 'Fee-free Australian bank accounts and low-spread Wise international transfers.'
+            : 'Cuentas bancarias sin comisiones de apertura y transferencias con Wise.';
+      case 'telecom':
+        return isEn
+            ? 'Telstra vs Optus mobile coverage, eSIMs and prepaid newcomer plans.'
+            : 'Comparativa de cobertura entre Telstra, Optus y SIMs prepago.';
+      case 'insurance':
+        return isEn
+            ? 'Reciprocal Medicare free healthcare card and OVHC private insurance.'
+            : 'Tarjeta Medicare gratuita (convenio RHCA) y seguros de salud.';
+      case 'housing':
+        return isEn
+            ? 'Finding rooms on Flatmates, lease agreements and official state bond lodgement.'
+            : 'Buscar habitación en Flatmates, contratos e ingreso oficial de fianza.';
+      case 'tax':
+        return isEn
+            ? 'TFN & ABN registration, tax withholding rates and statutory 12% super.'
+            : 'Solicitud de TFN, ABN, retenciones IRPF y el 12% de Superannuation.';
+      case 'certifications':
+        return isEn
+            ? 'Mandatory certificates: White Card for construction and state RSA for bar/cafe.'
+            : 'Cursos obligatorios oficiales: White Card de obra y RSA de hostelería.';
+      case 'savings':
+        return isEn
+            ? 'ATO tax deduction tricks, grocery hacks and massive cash-saving strategies.'
+            : 'Estrategias y deducciones de impuestos ATO para ahorrar miles de dólares.';
+      case 'visa_renewal':
+        return isEn
+            ? '2nd and 3rd year requirements: 88 regional days and audit-proof dossier.'
+            : 'Requisitos para 2º y 3r año: 88 días regionales y expediente blindado.';
+      case 'departure':
+        return isEn
+            ? 'Exit checklist: DASP Superannuation refund, bond recovery and early tax return.'
+            : 'Protocolo de salida: reclamar Superannuation (DASP), fianza e impuestos.';
+      default:
+        return isEn ? 'Comprehensive guide with step-by-step instructions.' : 'Guía completa con instrucciones paso a paso.';
+    }
+  }
+
   Widget _buildSubTabItem({
     required int index,
     required String label,
-    required String sublabel,
   }) {
     final isSelected = _selectedSubTab == index;
     return Expanded(
@@ -314,40 +570,24 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
         behavior: HitTestBehavior.opaque,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(vertical: 7),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             color: isSelected ? AppColors.primary : Colors.transparent,
-            borderRadius: BorderRadius.circular(13),
+            borderRadius: BorderRadius.circular(11),
             boxShadow: isSelected
-                ? const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))]
+                ? const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1))]
                 : null,
           ),
           alignment: Alignment.center,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w800,
-                  color: isSelected ? Colors.white : AppColors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 1),
-              Text(
-                sublabel,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w500,
-                  color: isSelected ? Colors.white.withValues(alpha: 0.85) : AppColors.textMuted,
-                ),
-              ),
-            ],
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 11.5,
+              fontWeight: FontWeight.w800,
+              color: isSelected ? Colors.white : AppColors.textPrimary,
+            ),
           ),
         ),
       ),
@@ -497,47 +737,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       children: [
         if (isSavings || isDeparture) ...[
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
-            ),
-            child: Row(
-              children: [
-                const Icon(CupertinoIcons.money_dollar_circle_fill, color: AppColors.primary, size: 28),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        isEn ? 'Personalized Loss Calculator' : 'Calculadora de Dinero en Juego',
-                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppColors.textPrimary),
-                      ),
-                      Text(
-                        isEn ? 'Audit up to \$5,700 AUD before you leave' : 'Audita hasta \$5,700 AUD antes de salir',
-                        style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
-                      ),
-                    ],
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () => _showCalculatorModal(context, isEn),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  ),
-                  child: Text(isEn ? 'Open' : 'Abrir', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 14),
+          _buildFinancialRiskFloatingBanner(isEn),
+          const SizedBox(height: 12),
         ],
 
         // Cabecera descriptiva de la categoría
