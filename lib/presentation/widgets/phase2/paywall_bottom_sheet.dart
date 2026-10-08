@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../providers/locale_provider.dart';
 import '../../providers/paywall_provider.dart';
 
 void showPhase2PaywallBottomSheet({
@@ -44,6 +45,11 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
   Widget build(BuildContext context) {
     final monthlyPriceAsync = ref.watch(monthlyPriceProvider);
     final priceText = monthlyPriceAsync.value ?? '1,99 €';
+    final locale = ref.watch(localeProvider);
+    final isEn = locale?.languageCode == 'en';
+    final benefitText = (isEn && widget.featureBenefitEn != null && widget.featureBenefitEn!.isNotEmpty)
+        ? widget.featureBenefitEn!
+        : widget.featureBenefit;
 
     return Container(
       decoration: const BoxDecoration(
@@ -92,7 +98,7 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
           const SizedBox(height: 8),
 
           Text(
-            widget.featureBenefit,
+            benefitText,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 14,
@@ -114,23 +120,25 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
               children: [
                 const Icon(Icons.star_rounded, color: AppColors.primary, size: 28),
                 const SizedBox(width: 12),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Acceso Completo OzAlert Pro',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
+                        isEn ? 'Full OzAlert Pro Access' : 'Acceso Completo OzAlert Pro',
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
                       ),
                       Text(
-                        'CVs ilimitados en PDF, auditoría de nóminas y Formulario 1263',
-                        style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                        isEn
+                            ? 'Unlimited PDF CVs, payslip audits & Form 1263'
+                            : 'CVs ilimitados en PDF, auditoría de nóminas y Formulario 1263',
+                        style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
                       ),
                     ],
                   ),
                 ),
                 Text(
-                  '$priceText/mes',
+                  isEn ? '$priceText/mo' : '$priceText/mes',
                   style: const TextStyle(
                     fontWeight: FontWeight.w900,
                     fontSize: 16,
@@ -157,9 +165,13 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
                         if (success && mounted) {
                           navigator.pop();
                           messenger.showSnackBar(
-                            const SnackBar(
+                            SnackBar(
                               backgroundColor: AppColors.secondary,
-                              content: Text('¡Bienvenido a OzAlert Pro! Todas las funciones están desbloqueadas.'),
+                              content: Text(
+                                isEn
+                                    ? 'Welcome to OzAlert Pro! All features unlocked.'
+                                    : '¡Bienvenido a OzAlert Pro! Todas las funciones están desbloqueadas.',
+                              ),
                             ),
                           );
                         }
@@ -175,7 +187,7 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
               child: _isLoading
                   ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
                   : Text(
-                      'Desbloquear por $priceText / mes',
+                      isEn ? 'Unlock for $priceText / month' : 'Desbloquear por $priceText / mes',
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
                     ),
             ),
@@ -191,7 +203,10 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
                 navigator.pop();
               }
             },
-            child: const Text('Restaurar compras previas', style: TextStyle(color: AppColors.textMuted, fontSize: 13)),
+            child: Text(
+              isEn ? 'Restore previous purchases' : 'Restaurar compras previas',
+              style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+            ),
           ),
         ],
       ),

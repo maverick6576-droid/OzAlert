@@ -26,7 +26,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: Phase2AppBar(
-        title: isEn ? 'Arrival Hub' : 'Aterrizaje en Australia',
+        title: isEn ? 'Arrival Hub' : 'Guía de Aterrizaje',
         isEn: isEn,
         infoTopic: 'arrival',
       ),
@@ -175,42 +175,51 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: AppColors.secondary.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(10),
+              Expanded(
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: AppColors.secondary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Text('🦘', style: TextStyle(fontSize: 16)),
                     ),
-                    child: const Text('🦘', style: TextStyle(fontSize: 16)),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        isEn ? 'THE GREAT AUSSIE TRAIL' : 'LA GRAN RUTA AUSTRALIANA',
-                        style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w900,
-                          color: AppColors.primary,
-                          letterSpacing: 0.7,
-                        ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            isEn ? 'THE GREAT AUSSIE TRAIL' : 'LA GRAN RUTA AUSTRALIANA',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w900,
+                              color: AppColors.primary,
+                              letterSpacing: 0.7,
+                            ),
+                          ),
+                          const SizedBox(height: 1),
+                          Text(
+                            isEn ? 'Your Journey in Australia' : 'Tu Camino en Australia',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 14.5,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 1),
-                      Text(
-                        isEn ? 'Your Journey in Australia' : 'Tu Camino en Australia',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 14.5,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
                 decoration: BoxDecoration(
@@ -329,32 +338,39 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                     ),
 
                     // C) Canguro Viajero Animado que Avanza por el Camino
-                    TweenAnimationBuilder<double>(
-                      tween: Tween<double>(begin: 0, end: progressPercent.clamp(0.0, 1.0)),
-                      duration: const Duration(milliseconds: 700),
-                      curve: Curves.easeInOutCubic,
-                      builder: (context, val, _) {
-                        final maxTrack = availableWidth - nodeWidth;
-                        final leftPos = (nodeWidth / 2) + (maxTrack * val) - 12;
-                        return Positioned(
-                          top: 7,
-                          left: leftPos.clamp(0.0, availableWidth - 24),
-                          child: Container(
-                            width: 24,
-                            height: 24,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: AppColors.surface,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: AppColors.primary, width: 1.5),
-                              boxShadow: const [
-                                BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
-                              ],
+                    Positioned(
+                      top: 7,
+                      left: 0,
+                      right: 0,
+                      child: TweenAnimationBuilder<double>(
+                        tween: Tween<double>(begin: 0, end: progressPercent.clamp(0.0, 1.0)),
+                        duration: const Duration(milliseconds: 700),
+                        curve: Curves.easeInOutCubic,
+                        builder: (context, val, _) {
+                          final maxTrack = availableWidth - nodeWidth;
+                          final leftPos = ((nodeWidth / 2) + (maxTrack * val) - 12).clamp(0.0, availableWidth - 24);
+                          return Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: EdgeInsets.only(left: leftPos),
+                              child: Container(
+                                width: 24,
+                                height: 24,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: AppColors.surface,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: AppColors.primary, width: 1.5),
+                                  boxShadow: const [
+                                    BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
+                                  ],
+                                ),
+                                child: const Text('🦘', style: TextStyle(fontSize: 13)),
+                              ),
                             ),
-                            child: const Text('🦘', style: TextStyle(fontSize: 13)),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
 
                     // D) Los 4 Hitos Interactivos
@@ -473,10 +489,14 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                     children: [
                       Text(
                         '${currentStage['title']} • ${currentStage['landmark']}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
                       ),
                       Text(
                         currentStage['aussieTheme'] as String,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
                       ),
                     ],

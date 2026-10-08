@@ -424,22 +424,27 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                 const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Wrap(
-                      spacing: 6,
-                      children: tags.map((t) => Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: AppColors.surfaceElevated,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: AppColors.cardBorder),
-                        ),
-                        child: Text(
-                          t,
-                          style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: AppColors.textMuted),
-                        ),
-                      )).toList(),
+                    Expanded(
+                      child: Wrap(
+                        spacing: 6,
+                        runSpacing: 4,
+                        children: tags.map((t) => Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppColors.surfaceElevated,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: AppColors.cardBorder),
+                          ),
+                          child: Text(
+                            t,
+                            style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: AppColors.textMuted),
+                          ),
+                        )).toList(),
+                      ),
                     ),
+                    const SizedBox(width: 8),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -2159,17 +2164,17 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
                       ),
-                      child: Column(
+                      child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            isEn ? 'Casual (+25%)' : 'Mínimo Casual (+25%)',
+                            'Casual (+25%)',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 11.5, color: AppColors.primary, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 11.5, color: AppColors.primary, fontWeight: FontWeight.bold),
                           ),
-                          const SizedBox(height: 2),
-                          const Text(
+                          SizedBox(height: 2),
+                          Text(
                             '\$33.05 / hr',
                             style: TextStyle(fontWeight: FontWeight.w900, fontSize: 17, color: AppColors.primary),
                           ),
@@ -2211,7 +2216,9 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                     ),
                     alignment: Alignment.center,
                     child: Text(
-                      isEn ? 'Casual (+25% Loading)' : 'Casual (+25% Carga)',
+                      'Casual (+25%)',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: _isCasualContract ? Colors.white : AppColors.textSecondary,
                         fontWeight: FontWeight.bold,
@@ -2232,7 +2239,9 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                     ),
                     alignment: Alignment.center,
                     child: Text(
-                      isEn ? 'Full-Time / Part-Time' : 'Jornada Completa / Media',
+                      isEn ? 'Full / Part-Time' : 'Completa / Media',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: !_isCasualContract ? Colors.white : AppColors.textSecondary,
                         fontWeight: FontWeight.bold,

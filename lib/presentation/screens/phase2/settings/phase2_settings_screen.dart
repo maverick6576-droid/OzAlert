@@ -148,8 +148,8 @@ class Phase2SettingsScreen extends ConsumerWidget {
                     value: profile?.visaSubclass ?? '462',
                     underline: const SizedBox(),
                     items: const [
-                      DropdownMenuItem(value: '462', child: Text('462 (España/LatAm)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                      DropdownMenuItem(value: '417', child: Text('417 (EU/UK/ITA)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
+                      DropdownMenuItem(value: '462', child: Text('Subclase 462', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
+                      DropdownMenuItem(value: '417', child: Text('Subclase 417', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
                     ],
                     onChanged: (val) {
                       if (val != null && profile != null) {

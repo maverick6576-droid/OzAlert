@@ -163,15 +163,15 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 children: [
                   _buildSubTabItem(
                     index: 0,
-                    label: isEn ? '📘 Step-by-Step' : '📘 Paso a Paso',
+                    label: isEn ? '📘 Steps' : '📘 Pasos',
                   ),
                   _buildSubTabItem(
                     index: 1,
-                    label: isEn ? '⚖️ Compare' : '⚖️ Comparativa',
+                    label: isEn ? '⚖️ Compare' : '⚖️ Comparar',
                   ),
                   _buildSubTabItem(
                     index: 2,
-                    label: isEn ? '🎁 Deals & Apps' : '🎁 Descuentos & Apps',
+                    label: isEn ? '🎁 Deals' : '🎁 Descuentos',
                   ),
                 ],
               ),
@@ -1224,7 +1224,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: 85,
+                          width: 96,
                           child: Text(
                             displayKey,
                             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
@@ -1421,7 +1421,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 16),
                 label: Text(
                   partner.promoCode != null && partner.promoCode!.isNotEmpty
-                      ? (isEn ? 'Apply Code & Open Official Site' : 'Aplicar Descuento & Abrir Web Oficial')
+                      ? (isEn ? 'Apply Code & Open Site' : 'Aplicar Código & Abrir Web')
                       : (isEn ? 'Open Official Link' : 'Ir a la Web Oficial'),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

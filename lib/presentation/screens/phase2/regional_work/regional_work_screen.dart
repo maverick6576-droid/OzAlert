@@ -135,7 +135,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: Phase2AppBar(
-        title: isEn ? '88 Days Visa Renewal' : 'Visa 88 Días / 6 Meses',
+        title: isEn ? '88 Days Regional' : '88 Días Regionales',
         isEn: isEn,
         infoTopic: 'regional',
         bottom: TabBar(
@@ -149,10 +149,10 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             Tab(text: isEn ? '📍 Postcode & Map' : '📍 Mapa & Códigos'),
             Tab(
               text: !isPremium
-                  ? (isEn ? '🗓️ Log ($totalDays/10 Free)' : '🗓️ Contador ($totalDays/10 Gratis)')
+                  ? (isEn ? '🗓️ 88 Days ($totalDays/10)' : '🗓️ 88 Días ($totalDays/10)')
                   : (isEn
-                      ? '🗓️ Work Log ($totalDays/${_targetVisaYear == 2 ? 88 : 179})'
-                      : '🗓️ Contador ($totalDays/${_targetVisaYear == 2 ? 88 : 179})'),
+                      ? '🗓️ 88 Days ($totalDays/${_targetVisaYear == 2 ? 88 : 179})'
+                      : '🗓️ 88 Días ($totalDays/${_targetVisaYear == 2 ? 88 : 179})'),
             ),
           ],
         ),
@@ -1446,11 +1446,11 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              isEn ? 'Smart Regional Work Log' : 'Registro Completo y Transparente de Empleo',
+                              isEn ? 'Smart Regional Job Entry' : 'Registro Inteligente de Empleo',
                               style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: AppColors.textPrimary),
                             ),
                             Text(
-                              isEn ? 'Validated against LIN 22/050 & Fair Work awards' : 'Tus datos reales validados contra LIN 22/050 y Fair Work',
+                              isEn ? 'Validated against LIN 22/050 & Fair Work' : 'Validado según LIN 22/050 y Fair Work',
                               style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
                             ),
                           ],
