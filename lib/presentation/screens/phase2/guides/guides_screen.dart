@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/services/affiliate_link_service.dart';
+import '../../../../core/services/url_launcher_service.dart';
 import '../../../providers/phase2/phase2_providers.dart';
 import '../../../providers/locale_provider.dart';
 import '../../../../domain/models/phase2/affiliate_partner.dart';
@@ -1118,11 +1118,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                       constraints: const BoxConstraints(),
                       tooltip: isEn ? 'Open Official Link' : 'Abrir Web Oficial',
                       icon: const Icon(CupertinoIcons.arrow_up_right_circle_fill, size: 20, color: AppColors.primary),
-                      onPressed: () async {
-                        final uri = Uri.parse(step.officialUrl!);
-                        if (await canLaunchUrl(uri)) {
-                          await launchUrl(uri, mode: LaunchMode.externalApplication);
-                        }
+                      onPressed: () {
+                        UrlLauncherService.openUrl(context, step.officialUrl!);
                       },
                     ),
                     const SizedBox(width: 8),
@@ -1188,11 +1185,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         elevation: 0,
                       ),
-                      onPressed: () async {
-                        final uri = Uri.parse(step.officialUrl!);
-                        if (await canLaunchUrl(uri)) {
-                          await launchUrl(uri, mode: LaunchMode.externalApplication);
-                        }
+                      onPressed: () {
+                        UrlLauncherService.openUrl(context, step.officialUrl!);
                       },
                     ),
                   ),
@@ -1413,11 +1407,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                     elevation: 0,
                   ),
-                  onPressed: () async {
-                    final uri = Uri.parse(item.officialUrl!);
-                    if (await canLaunchUrl(uri)) {
-                      await launchUrl(uri, mode: LaunchMode.externalApplication);
-                    }
+                  onPressed: () {
+                    UrlLauncherService.openUrl(context, item.officialUrl!);
                   },
                 ),
               ),
@@ -1622,11 +1613,11 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: OutlinedButton.icon(
-                    onPressed: () async {
-                      final uri = Uri.parse('https://www.ato.gov.au/individuals-and-families/income-deductions-offsets-and-records/deductions-you-can-claim');
-                      if (await canLaunchUrl(uri)) {
-                        await launchUrl(uri, mode: LaunchMode.externalApplication);
-                      }
+                    onPressed: () {
+                      UrlLauncherService.openUrl(
+                        context,
+                        'https://www.ato.gov.au/individuals-and-families/income-deductions-offsets-and-records/deductions-you-can-claim',
+                      );
                     },
                     icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 14, color: AppColors.primary),
                     label: Text(

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../../../../core/services/url_launcher_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/services/pdf_generator_service.dart';
 import '../../../providers/locale_provider.dart';
@@ -579,11 +579,8 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                             side: BorderSide(color: AppColors.primary.withValues(alpha: 0.35)),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                           ),
-                          onPressed: () async {
-                            final uri = Uri.parse('https://www.legislation.gov.au/Details/F2022L00445');
-                            if (await canLaunchUrl(uri)) {
-                              await launchUrl(uri, mode: LaunchMode.externalApplication);
-                            }
+                          onPressed: () {
+                            UrlLauncherService.openUrl(context, 'https://www.legislation.gov.au/Details/F2022L00445');
                           },
                         ),
                       ),
@@ -820,11 +817,8 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                   side: BorderSide(color: AppColors.primary.withValues(alpha: 0.35)),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 ),
-                onPressed: () async {
-                  final uri = Uri.parse('https://www.legislation.gov.au/Details/F2022L00445');
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(uri, mode: LaunchMode.externalApplication);
-                  }
+                onPressed: () {
+                  UrlLauncherService.openUrl(context, 'https://www.legislation.gov.au/Details/F2022L00445');
                 },
               ),
             ),

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../../../core/services/url_launcher_service.dart';
 import '../../../core/theme/app_colors.dart';
 
 void showOfficialSourcesModal(BuildContext context, {bool isEn = false, String? initialTopic}) {
@@ -21,11 +21,8 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
     this.initialTopic,
   });
 
-  Future<void> _launchUrl(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    }
+  Future<void> _launchUrl(BuildContext context, String url) async {
+    await UrlLauncherService.openUrl(context, url);
   }
 
   @override
@@ -127,6 +124,7 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
 
                 // 1. Fair Work Ombudsman
                 _buildSourceCard(
+                  context,
                   title: 'Fair Work Ombudsman',
                   subtitle: isEn ? 'National Minimum Wage & Employment Awards' : 'Salarios Mínimos y Convenios Laborales',
                   description: isEn
@@ -141,6 +139,7 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
 
                 // 2. Department of Home Affairs
                 _buildSourceCard(
+                  context,
                   title: 'Department of Home Affairs',
                   subtitle: isEn ? 'Regional Work 88 Days & Visa Conditions' : 'Trabajo Regional 88 Días y Requisitos de Visado',
                   description: isEn
@@ -155,6 +154,7 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
 
                 // 3. Australian Taxation Office (ATO)
                 _buildSourceCard(
+                  context,
                   title: 'Australian Taxation Office (ATO)',
                   subtitle: isEn ? 'TFN Application & Superannuation Rules' : 'Solicitud Gratuita de TFN y Fondos de Pensiones',
                   description: isEn
@@ -169,6 +169,7 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
 
                 // 4. SafeWork Australia
                 _buildSourceCard(
+                  context,
                   title: 'SafeWork Australia & Liquor Regulators',
                   subtitle: isEn ? 'White Card & RSA Mandatory Certifications' : 'White Card de Construcción y Certificados RSA',
                   description: isEn
@@ -183,6 +184,7 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
 
                 // 5. Federal Register of Legislation (LIN 22/050)
                 _buildSourceCard(
+                  context,
                   title: 'Federal Register of Legislation',
                   subtitle: isEn ? 'Instrument LIN 22/050 (Eligible Postcodes)' : 'Instrumento Legal LIN 22/050 (Códigos Postales)',
                   description: isEn
@@ -197,6 +199,7 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
 
                 // 6. Services Australia
                 _buildSourceCard(
+                  context,
                   title: 'Services Australia (Medicare RHCA)',
                   subtitle: isEn ? 'Reciprocal Health Care Agreements' : 'Convenios Recíprocos de Cobertura Sanitaria',
                   description: isEn
@@ -211,6 +214,7 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
 
                 // 7. State Rental Bond Boards
                 _buildSourceCard(
+                  context,
                   title: 'State Tenancy & Rental Bond Authorities',
                   subtitle: isEn ? 'NSW Fair Trading, RTA QLD, RTBA VIC' : 'Organismos Estatales Oficiales de Fianzas',
                   description: isEn
@@ -230,7 +234,8 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildSourceCard({
+  Widget _buildSourceCard(
+    BuildContext context, {
     required String title,
     required String subtitle,
     required String description,
@@ -287,7 +292,7 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           InkWell(
-            onTap: () => _launchUrl(url),
+            onTap: () => _launchUrl(context, url),
             borderRadius: BorderRadius.circular(8),
             child: Row(
               mainAxisSize: MainAxisSize.min,
