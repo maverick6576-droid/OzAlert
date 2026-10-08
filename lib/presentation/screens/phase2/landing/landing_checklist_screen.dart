@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -152,7 +153,6 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
     required bool isEn,
   }) {
     final isDone = completedCount == totalCount && totalCount > 0;
-    final currentStage = stages[_selectedStageIndex.clamp(0, stages.length - 1)];
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -256,297 +256,244 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
             ],
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 14),
 
-          // 2. Micro-lore divertido y corporativo según el avance real
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceElevated,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.cardBorder),
-            ),
-            child: Row(
-              children: [
-                const Text('🧭', style: TextStyle(fontSize: 13)),
-                const SizedBox(width: 7),
-                Expanded(
-                  child: Text(
-                    _getAussieLoreText(progressPercent, isEn),
-                    style: const TextStyle(
-                      fontSize: 11.5,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textSecondary,
-                      height: 1.25,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // 3. El Camino Animado con los 4 Hitos y el Canguro Viajero
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final availableWidth = constraints.maxWidth;
-              const nodeWidth = 58.0;
-
-              return SizedBox(
-                height: 88,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    // A) Carretera Base (Outback Track)
-                    Positioned(
-                      top: 22,
-                      left: nodeWidth / 2,
-                      right: nodeWidth / 2,
-                      child: Container(
-                        height: 6,
-                        decoration: BoxDecoration(
-                          color: AppColors.surfaceElevated,
-                          borderRadius: BorderRadius.circular(3),
-                          border: Border.all(color: AppColors.cardBorder, width: 0.8),
-                        ),
-                      ),
-                    ),
-
-                    // B) Tramo Recorrido Animado con Gradiente
-                    Positioned(
-                      top: 22,
-                      left: nodeWidth / 2,
-                      child: TweenAnimationBuilder<double>(
-                        tween: Tween<double>(begin: 0, end: progressPercent.clamp(0.0, 1.0)),
-                        duration: const Duration(milliseconds: 700),
-                        curve: Curves.easeInOutCubic,
-                        builder: (context, val, _) {
-                          final maxTrack = availableWidth - nodeWidth;
-                          return Container(
-                            height: 6,
-                            width: maxTrack * val,
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [AppColors.primary, AppColors.secondary],
-                              ),
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-
-                    // C) Canguro Viajero Animado que Avanza por el Camino
-                    Positioned(
-                      top: 7,
-                      left: 0,
-                      right: 0,
-                      child: TweenAnimationBuilder<double>(
-                        tween: Tween<double>(begin: 0, end: progressPercent.clamp(0.0, 1.0)),
-                        duration: const Duration(milliseconds: 700),
-                        curve: Curves.easeInOutCubic,
-                        builder: (context, val, _) {
-                          final maxTrack = availableWidth - nodeWidth;
-                          final leftPos = ((nodeWidth / 2) + (maxTrack * val) - 12).clamp(0.0, availableWidth - 24);
-                          return Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: EdgeInsets.only(left: leftPos),
-                              child: Container(
-                                width: 24,
-                                height: 24,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: AppColors.surface,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: AppColors.primary, width: 1.5),
-                                  boxShadow: const [
-                                    BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
-                                  ],
-                                ),
-                                child: const Text('🦘', style: TextStyle(fontSize: 13)),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-
-                    // D) Los 4 Hitos Interactivos
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: List.generate(stages.length, (idx) {
-                        final st = stages[idx];
-                        final stTasks = st['tasks'] as List<LandingTask>;
-                        final stDone = stTasks.where((t) => t.isCompleted).length;
-                        final isStageDone = stTasks.isNotEmpty && stDone == stTasks.length;
-                        final isSelected = _selectedStageIndex == idx;
-
-                        return GestureDetector(
-                          onTap: () => setState(() => _selectedStageIndex = idx),
-                          behavior: HitTestBehavior.opaque,
-                          child: SizedBox(
-                            width: nodeWidth,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                // Nodo circular del hito
-                                AnimatedContainer(
-                                  duration: const Duration(milliseconds: 250),
-                                  width: 44,
-                                  height: 44,
-                                  decoration: BoxDecoration(
-                                    color: isStageDone
-                                        ? AppColors.secondary
-                                        : (isSelected ? AppColors.primary : AppColors.surface),
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: isSelected
-                                          ? (isStageDone ? AppColors.secondary : AppColors.primary)
-                                          : (isStageDone ? AppColors.secondary : AppColors.cardBorder),
-                                      width: isSelected ? 2.5 : 1.5,
-                                    ),
-                                    boxShadow: isSelected
-                                        ? [
-                                            BoxShadow(
-                                              color: (isStageDone ? AppColors.secondary : AppColors.primary).withValues(alpha: 0.35),
-                                              blurRadius: 8,
-                                              offset: const Offset(0, 3),
-                                            ),
-                                          ]
-                                        : null,
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: isStageDone
-                                      ? const Icon(CupertinoIcons.checkmark_alt, color: Colors.white, size: 20)
-                                      : Text(
-                                          st['icon'] as String,
-                                          style: const TextStyle(fontSize: 19),
-                                        ),
-                                ),
-                                const SizedBox(height: 5),
-                                // Nombre corto del hito
-                                Text(
-                                  st['shortTitle'] as String,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 10.5,
-                                    fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
-                                    color: isSelected ? AppColors.primary : AppColors.textPrimary,
-                                  ),
-                                ),
-                                // Badge con gestiones listas
-                                Container(
-                                  margin: const EdgeInsets.only(top: 2),
-                                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                                  decoration: BoxDecoration(
-                                    color: isSelected
-                                        ? AppColors.primary.withValues(alpha: 0.12)
-                                        : AppColors.surfaceElevated,
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: Text(
-                                    '$stDone/${stTasks.length}',
-                                    style: TextStyle(
-                                      fontSize: 9,
-                                      fontWeight: FontWeight.bold,
-                                      color: isSelected ? AppColors.primary : AppColors.textMuted,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-
-          const SizedBox(height: 10),
-
-          // 4. Parada Activa Seleccionada con Landmark y Temática
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceElevated,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.cardBorder),
-            ),
-            child: Row(
-              children: [
-                Text(currentStage['icon'] as String, style: const TextStyle(fontSize: 18)),
-                const SizedBox(width: 9),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${currentStage['title']} • ${currentStage['landmark']}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
-                      ),
-                      Text(
-                        currentStage['aussieTheme'] as String,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    isEn ? 'Active Stop' : 'Parada Activa',
-                    style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w800, color: AppColors.primary),
-                  ),
-                ),
-              ],
-            ),
+          // 2. Camino Animado en 'S' (The Great Aussie S-Trail)
+          _buildAussieSTrail(
+            progressPercent: progressPercent,
+            stages: stages,
+            isEn: isEn,
           ),
         ],
       ),
     );
   }
 
-  String _getAussieLoreText(double percent, bool isEn) {
-    if (percent == 0.0) {
-      return isEn
-          ? '🎒 Packing your Akubra hat, visa & passport for Down Under!'
-          : '🎒 Empacando el sombrero Akubra, visa y pasaporte para Down Under!';
-    } else if (percent < 0.30) {
-      return isEn
-          ? '✈️ Crossing 14,000 km across oceans towards Australia!'
-          : '✈️ Cruzando 14.000 km sobre los océanos rumbo a Australia!';
-    } else if (percent < 0.60) {
-      return isEn
-          ? '🏄 Coastal landing: flat white in hand, SIM, TFN & bank account ready!'
-          : '🏄 Aterrizaje en la costa: flat white en mano, SIM, TFN y banco listos!';
-    } else if (percent < 0.90) {
-      return isEn
-          ? '🚜 Conquering the Red Dirt Outback: 88 days logged and counting!'
-          : '🚜 Conquistando la tierra roja del Outback: 88 días computando!';
-    } else if (percent < 1.0) {
-      return isEn
-          ? '🦘 True Aussie mate: renewal locked, Super & tax return prepared!'
-          : '🦘 Auténtico mate australiano: 2º año listo y tax return preparado!';
-    } else {
-      return isEn
-          ? '🏆 Down Under Legend! All checklist points complete, zero dollars lost!'
-          : '🏆 ¡Leyenda de Australia! Todo completado y ni un dólar perdido!';
-    }
+  Widget _buildAussieSTrail({
+    required double progressPercent,
+    required List<Map<String, dynamic>> stages,
+    required bool isEn,
+  }) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableWidth = constraints.maxWidth;
+        const canvasHeight = 224.0;
+        const padX = 42.0;
+        const y0 = 38.0;
+        const y1 = 118.0;
+        const y2 = 188.0;
+
+        // Trayectoria en 'S' continua, elegante y fluida
+        final path = Path();
+        path.moveTo(padX, y0);
+        path.lineTo(availableWidth - padX, y0);
+        path.cubicTo(
+          availableWidth - 2, y0,
+          availableWidth - 2, y1,
+          availableWidth - padX, y1,
+        );
+        path.lineTo(padX, y1);
+        path.cubicTo(
+          2, y1,
+          2, y2,
+          padX, y2,
+        );
+        path.lineTo(availableWidth - padX, y2);
+
+        final metric = path.computeMetrics().first;
+        final totalLength = metric.length;
+
+        final waypoints = [
+          const Offset(padX, y0),
+          Offset(availableWidth - padX, y0),
+          const Offset(padX, y1),
+          Offset(availableWidth - padX, y2),
+        ];
+
+        return SizedBox(
+          height: canvasHeight,
+          child: TweenAnimationBuilder<double>(
+            tween: Tween<double>(begin: 0, end: progressPercent.clamp(0.0, 1.0)),
+            duration: const Duration(milliseconds: 700),
+            curve: Curves.easeInOutCubic,
+            builder: (context, animatedVal, _) {
+              final tangent = metric.getTangentForOffset(totalLength * animatedVal);
+              final kPos = tangent?.position ?? const Offset(padX, y0);
+
+              return Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  // Capa 1 y 2: Carretera Outback base + Tramo activo animado + Waypoints
+                  Positioned.fill(
+                    child: CustomPaint(
+                      painter: _AussieSTrailPainter(
+                        basePath: path,
+                        metric: metric,
+                        progress: animatedVal,
+                        waypoints: waypoints,
+                        selectedIndex: _selectedStageIndex,
+                        stages: stages,
+                      ),
+                    ),
+                  ),
+
+                  // Capa 3: Botones interactivos de las 4 etapas situados en las bahías abiertas de la S
+                  // Etapa 0 (Pre-Vuelo): Arriba a la izquierda (sobre el carril 1)
+                  Positioned(
+                    top: 2,
+                    left: 4,
+                    child: _buildStagePill(
+                      index: 0,
+                      stage: stages[0],
+                      isSelected: _selectedStageIndex == 0,
+                    ),
+                  ),
+
+                  // Etapa 1 (Llegada): Arriba a la derecha (sobre el carril 1)
+                  Positioned(
+                    top: 2,
+                    right: 4,
+                    child: _buildStagePill(
+                      index: 1,
+                      stage: stages[1],
+                      isSelected: _selectedStageIndex == 1,
+                    ),
+                  ),
+
+                  // Etapa 2 (88 Días): Centro a la izquierda (en la bahía abierta entre carril 1 y carril 2)
+                  Positioned(
+                    top: 80,
+                    left: 4,
+                    child: _buildStagePill(
+                      index: 2,
+                      stage: stages[2],
+                      isSelected: _selectedStageIndex == 2,
+                    ),
+                  ),
+
+                  // Etapa 3 (Salida): Abajo a la derecha (en la bahía abierta entre carril 2 y carril 3)
+                  Positioned(
+                    top: 148,
+                    right: 4,
+                    child: _buildStagePill(
+                      index: 3,
+                      stage: stages[3],
+                      isSelected: _selectedStageIndex == 3,
+                    ),
+                  ),
+
+                  // Capa 4: CANGURO VIAJERO (EN LA CAPA SUPERIOR, NUNCA TAPADO POR NADA)
+                  Positioned(
+                    left: (kPos.dx - 15).clamp(0.0, availableWidth - 30),
+                    top: (kPos.dy - 15).clamp(0.0, canvasHeight - 30),
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.primary, width: 2.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withValues(alpha: 0.35),
+                            blurRadius: 8,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: const Text('🦘', style: TextStyle(fontSize: 16)),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildStagePill({
+    required int index,
+    required Map<String, dynamic> stage,
+    required bool isSelected,
+  }) {
+    final tasks = stage['tasks'] as List<LandingTask>;
+    final doneCount = tasks.where((t) => t.isCompleted).length;
+    final isDone = tasks.isNotEmpty && doneCount == tasks.length;
+
+    return GestureDetector(
+      onTap: () => setState(() => _selectedStageIndex = index),
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? (isDone ? AppColors.secondary : AppColors.primary)
+              : AppColors.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSelected
+                ? (isDone ? AppColors.secondary : AppColors.primary)
+                : (isDone ? AppColors.secondary.withValues(alpha: 0.6) : AppColors.cardBorder),
+            width: isSelected ? 2.0 : 1.2,
+          ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: (isDone ? AppColors.secondary : AppColors.primary).withValues(alpha: 0.35),
+                    blurRadius: 7,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : const [
+                  BoxShadow(color: Colors.black12, blurRadius: 3, offset: Offset(0, 1)),
+                ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              stage['icon'] as String,
+              style: const TextStyle(fontSize: 13),
+            ),
+            const SizedBox(width: 5),
+            Text(
+              stage['shortTitle'] as String,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: isSelected ? FontWeight.w900 : FontWeight.w700,
+                color: isSelected
+                    ? Colors.white
+                    : (isDone ? AppColors.secondary : AppColors.textPrimary),
+              ),
+            ),
+            const SizedBox(width: 5),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? Colors.white.withValues(alpha: 0.25)
+                    : (isDone ? AppColors.secondary.withValues(alpha: 0.12) : AppColors.surfaceElevated),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                '$doneCount/${tasks.length}',
+                style: TextStyle(
+                  fontSize: 9.5,
+                  fontWeight: FontWeight.w900,
+                  color: isSelected
+                      ? Colors.white
+                      : (isDone ? AppColors.secondary : AppColors.textMuted),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildSectionHeader(String title, String subtitle) {
@@ -722,5 +669,97 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
       default:
         return isEn ? 'View Guide & Comparisons' : 'Ver Guía y Comparativa';
     }
+  }
+}
+
+class _AussieSTrailPainter extends CustomPainter {
+  final Path basePath;
+  final PathMetric metric;
+  final double progress;
+  final List<Offset> waypoints;
+  final int selectedIndex;
+  final List<Map<String, dynamic>> stages;
+
+  _AussieSTrailPainter({
+    required this.basePath,
+    required this.metric,
+    required this.progress,
+    required this.waypoints,
+    required this.selectedIndex,
+    required this.stages,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // 1. Carretera Outback Base
+    final roadBorderPaint = Paint()
+      ..color = AppColors.cardBorder
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 9.0
+      ..strokeCap = StrokeCap.round;
+
+    final roadInnerPaint = Paint()
+      ..color = AppColors.surfaceElevated
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 6.5
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawPath(basePath, roadBorderPaint);
+    canvas.drawPath(basePath, roadInnerPaint);
+
+    // 2. Tramo activo completado con gradiente corporativo
+    if (progress > 0.001) {
+      final totalLen = metric.length;
+      final activePath = metric.extractPath(0.0, totalLen * progress);
+
+      final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+      final activePaint = Paint()
+        ..shader = const LinearGradient(
+          colors: [AppColors.primary, AppColors.secondary],
+        ).createShader(rect)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 7.0
+        ..strokeCap = StrokeCap.round;
+
+      canvas.drawPath(activePath, activePaint);
+    }
+
+    // 3. Waypoints / Estaciones marcadas sobre la calzada
+    for (int i = 0; i < waypoints.length; i++) {
+      final pt = waypoints[i];
+      final tasks = stages[i]['tasks'] as List<LandingTask>;
+      final done = tasks.isNotEmpty && tasks.every((t) => t.isCompleted);
+      final isSel = selectedIndex == i;
+
+      // Halo o anillo exterior de estación
+      final ringPaint = Paint()
+        ..color = isSel
+            ? (done ? AppColors.secondary : AppColors.primary)
+            : (done ? AppColors.secondary : AppColors.cardBorder)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = isSel ? 2.5 : 1.8;
+
+      final fillPaint = Paint()
+        ..color = AppColors.surface
+        ..style = PaintingStyle.fill;
+
+      canvas.drawCircle(pt, 7.5, fillPaint);
+      canvas.drawCircle(pt, 7.5, ringPaint);
+
+      // Núcleo central
+      final corePaint = Paint()
+        ..color = done
+            ? AppColors.secondary
+            : (isSel ? AppColors.primary : AppColors.textMuted.withValues(alpha: 0.5))
+        ..style = PaintingStyle.fill;
+
+      canvas.drawCircle(pt, 3.5, corePaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _AussieSTrailPainter oldDelegate) {
+    return oldDelegate.progress != progress ||
+        oldDelegate.selectedIndex != selectedIndex;
   }
 }
