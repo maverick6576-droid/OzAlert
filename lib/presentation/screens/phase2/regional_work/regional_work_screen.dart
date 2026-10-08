@@ -288,7 +288,12 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
           activeState: currentState,
           activeZone: currentZone,
           activeLocation: _searchResult?.location,
+          activePostcode: _postcodeController.text,
           isEn: isEn,
+          onRegionSelected: (postcode, state) {
+            _postcodeController.text = postcode;
+            _executePostcodeSearch(postcode);
+          },
           onStateTap: (st) => _selectStateSample(st),
         ),
         const SizedBox(height: 18),
@@ -1161,11 +1166,16 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                   children: [
                     const SizedBox(height: 3),
                     Text(
-                      '${job.workSiteLocation} (${job.workSitePostcode}) • ${job.totalDaysCounted} días • ${job.totalHours.toStringAsFixed(1)}h (${avgHours.toStringAsFixed(1)}h/día)',
-                      style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                      '${job.jobRole} • ${job.workSiteLocation} (${job.workSitePostcode})',
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '${job.totalDaysCounted} días • ${job.totalHours.toStringAsFixed(1)}h (${avgHours.toStringAsFixed(1)}h/día) • ABN: ${job.employerAbn}',
+                      style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
                     ),
                     Text(
-                      'ABN: ${job.employerAbn} • \$${job.grossEarningsAud.toStringAsFixed(0)} AUD',
+                      'Bruto: \$${job.grossEarningsAud.toStringAsFixed(0)} AUD${job.isFullTimeWeekly ? ' • Full-Time (7d)' : ''}${job.hasPieceworkAgreement ? ' • Destajo/Piecework' : ''}${job.payslipFileRef != null && job.payslipFileRef!.isNotEmpty ? ' • Ref: ${job.payslipFileRef}' : ''}',
                       style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                     ),
                   ],
@@ -1216,17 +1226,13 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 return;
               }
 
-              final pdfBytes = await PdfGeneratorService.generateRegionalDossier(
-                applicantName: applicantEmail,
-                passportNumber: 'PA1234567',
-                visaSubclass: visaSubclass,
+              _showDossierExportSheet(
+                isEn: isEn,
                 jobs: jobs,
                 totalDays: totalDays,
-                targetYear: _targetVisaYear,
+                visaSubclass: visaSubclass,
+                defaultEmail: applicantEmail,
               );
-
-              final pdfFileName = _targetVisaYear == 2 ? 'Form_1263_2ndYear_Dossier.pdf' : 'Form_1263_3rdYear_Dossier.pdf';
-              await PdfGeneratorService.shareOrPrintPdf(pdfBytes, pdfFileName);
             },
           ),
         ),
@@ -1280,8 +1286,16 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     final postcodeCtrl = TextEditingController(
       text: _postcodeController.text.isNotEmpty ? _postcodeController.text : '4870',
     );
+    final roleCtrl = TextEditingController(text: isEn ? 'Fruit Picker / Farm Hand' : 'Recolector / Peón Agrícola');
+    final locationCtrl = TextEditingController(
+      text: _searchResult?.location ?? 'Cairns Regional Area',
+    );
     final daysCtrl = TextEditingController(text: '10');
     final hoursCtrl = TextEditingController(text: '76');
+    final grossPayCtrl = TextEditingController(text: '2511');
+    final payslipRefCtrl = TextEditingController();
+    bool isFullTimeWeekly = false;
+    bool hasPieceworkAgreement = false;
 
     showModalBottomSheet(
       context: context,
@@ -1332,7 +1346,15 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             }
           }
 
-          // 4. Fechas y Span de Calendario
+          // 4. Ubicación y Puesto
+          if (locationCtrl.text.trim().isEmpty) {
+            blockingErrors.add(isEn ? 'Work site location / town is required.' : 'La localidad o ubicación de la granja es obligatoria.');
+          }
+          if (roleCtrl.text.trim().isEmpty) {
+            blockingErrors.add(isEn ? 'Job role / position is required.' : 'El puesto o rol desempeñado es obligatorio.');
+          }
+
+          // 5. Fechas y Span de Calendario
           final calendarSpan = endDate.difference(startDate).inDays + 1;
           if (startDate.isAfter(endDate)) {
             blockingErrors.add(isEn ? 'Start date cannot be after end date.' : 'La fecha de inicio no puede ser posterior a la de fin.');
@@ -1341,7 +1363,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             blockingErrors.add(isEn ? 'Future dates are not permitted. Only completed days count.' : 'No puedes indicar fechas futuras. Solo computan periodos ya trabajados.');
           }
 
-          // 5. Días Computados
+          // 6. Días Computados
           final days = int.tryParse(daysCtrl.text.trim()) ?? 0;
           if (days <= 0) {
             blockingErrors.add(isEn ? 'Days counted must be greater than 0.' : 'Los días deben ser mayores a cero.');
@@ -1355,7 +1377,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 : 'Límite Free: Supera los 10 días de prueba (${currentTotalDays + days}/10). Requiere versión Pro.');
           }
 
-          // 6. Horas Totales y Ratio Home Affairs
+          // 7. Horas Totales y Ratio Home Affairs
           final hours = double.tryParse(hoursCtrl.text.trim()) ?? 0.0;
           final double avgHoursPerDay = days > 0 ? (hours / days) : 0.0;
           if (hours <= 0) {
@@ -1424,11 +1446,11 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              isEn ? 'Smart Regional Work Log' : 'Registro Inteligente de Empleo',
+                              isEn ? 'Smart Regional Work Log' : 'Registro Completo y Transparente de Empleo',
                               style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: AppColors.textPrimary),
                             ),
                             Text(
-                              isEn ? 'Validated against LIN 22/050 & Fair Work' : 'Validación en tiempo real contra LIN 22/050 y Fair Work',
+                              isEn ? 'Validated against LIN 22/050 & Fair Work awards' : 'Tus datos reales validados contra LIN 22/050 y Fair Work',
                               style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
                             ),
                           ],
@@ -1477,11 +1499,54 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                         child: TextField(
                           controller: postcodeCtrl,
                           keyboardType: TextInputType.number,
-                          onChanged: (_) => setModalState(() {}),
+                          onChanged: (val) {
+                            if (val.length == 4) {
+                              final repo = ref.read(postcodeRepositoryProvider);
+                              final found = repo.findPostcode(val);
+                              if (found != null && locationCtrl.text.isEmpty) {
+                                locationCtrl.text = found.location;
+                              }
+                            }
+                            setModalState(() {});
+                          },
                           decoration: InputDecoration(
                             labelText: isEn ? 'Postcode *' : 'Cód. Postal *',
                             hintText: '4870',
                             prefixIcon: const Icon(CupertinoIcons.location_solid, size: 18),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+
+                  // 3. Localidad / Granja y Puesto Desempeñado (Editables por el usuario)
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: locationCtrl,
+                          onChanged: (_) => setModalState(() {}),
+                          decoration: InputDecoration(
+                            labelText: isEn ? 'Town / Work Location *' : 'Localidad / Granja *',
+                            hintText: isEn ? 'e.g. Mareeba, QLD' : 'ej: Mareeba, QLD',
+                            prefixIcon: const Icon(CupertinoIcons.location_circle_fill, size: 18),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          controller: roleCtrl,
+                          onChanged: (_) => setModalState(() {}),
+                          decoration: InputDecoration(
+                            labelText: isEn ? 'Job Role / Position *' : 'Puesto / Rol Desempeñado *',
+                            hintText: isEn ? 'e.g. Fruit Picker' : 'ej: Fruit Picker / Peón',
+                            prefixIcon: const Icon(CupertinoIcons.briefcase_fill, size: 18),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
                             contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                           ),
@@ -1494,14 +1559,14 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     Padding(
                       padding: const EdgeInsets.only(left: 4),
                       child: Text(
-                        '📍 ${resolvedPostcode.location} (${resolvedPostcode.state})',
+                        '📍 ${resolvedPostcode.location} (${resolvedPostcode.state}) - Zona elegible LIN 22/050',
                         style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.secondary),
                       ),
                     ),
                   ],
                   const SizedBox(height: 12),
 
-                  // 3. Selector de Industria
+                  // 4. Selector de Industria
                   Text(
                     isEn ? 'Industry / Activity Sector:' : 'Sector de Actividad:',
                     style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.textSecondary),
@@ -1537,7 +1602,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                   ),
                   const SizedBox(height: 12),
 
-                  // 4. Selector de Fechas (Inicio & Fin)
+                  // 5. Selector de Fechas (Inicio & Fin)
                   Row(
                     children: [
                       Expanded(
@@ -1615,7 +1680,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                   ),
                   const SizedBox(height: 12),
 
-                  // 5. Días Computados y Horas Totales
+                  // 6. Días Computados y Horas Totales
                   Row(
                     children: [
                       Expanded(
@@ -1637,11 +1702,51 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                         child: TextField(
                           controller: hoursCtrl,
                           keyboardType: TextInputType.number,
-                          onChanged: (_) => setModalState(() {}),
+                          onChanged: (val) {
+                            final h = double.tryParse(val) ?? 0.0;
+                            if (h > 0) {
+                              grossPayCtrl.text = (h * 33.05).toStringAsFixed(0);
+                            }
+                            setModalState(() {});
+                          },
                           decoration: InputDecoration(
                             labelText: isEn ? 'Total Hours *' : 'Horas Totales *',
                             hintText: '76',
                             prefixIcon: const Icon(CupertinoIcons.clock, size: 18),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+
+                  // 7. Salario Bruto Real y Referencia de Nóminas
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: grossPayCtrl,
+                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          onChanged: (_) => setModalState(() {}),
+                          decoration: InputDecoration(
+                            labelText: isEn ? 'Gross Earnings (\$ AUD) *' : 'Salario Bruto Real (\$ AUD) *',
+                            hintText: estGross.toStringAsFixed(0),
+                            prefixIcon: const Icon(CupertinoIcons.money_dollar, size: 18),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          controller: payslipRefCtrl,
+                          decoration: InputDecoration(
+                            labelText: isEn ? 'Payslips Ref / Evidence' : 'Ref. Nóminas / Recibos',
+                            hintText: isEn ? 'e.g. Payslips #1-4' : 'ej: Nóminas #1 a #4',
+                            prefixIcon: const Icon(CupertinoIcons.doc_text, size: 18),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
                             contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                           ),
@@ -1655,14 +1760,70 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                       padding: const EdgeInsets.only(left: 4),
                       child: Text(
                         isEn
-                            ? 'Average: ${avgHoursPerDay.toStringAsFixed(1)}h/day • Est. Gross: \$${estGross.toStringAsFixed(0)} AUD'
-                            : 'Media: ${avgHoursPerDay.toStringAsFixed(1)}h/día • Salario bruto est.: \$${estGross.toStringAsFixed(0)} AUD',
+                            ? 'Average: ${avgHoursPerDay.toStringAsFixed(1)}h/day • Fair Work benchmark (~33.05/h): \$${estGross.toStringAsFixed(0)} AUD'
+                            : 'Media: ${avgHoursPerDay.toStringAsFixed(1)}h/día • Referencia legal Fair Work: \$${estGross.toStringAsFixed(0)} AUD',
                         style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
                       ),
                     ),
+                  const SizedBox(height: 12),
+
+                  // 8. Opciones avanzadas de Inmigración (Switches)
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceElevated,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: AppColors.cardBorder),
+                    ),
+                    child: Column(
+                      children: [
+                        SwitchListTile.adaptive(
+                          dense: true,
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                          title: Text(
+                            isEn ? 'Full-Time Weekly Rule (5 days = 7 days count)' : 'Jornada Semanal Completa (5 días = 7 días computables)',
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+                          ),
+                          subtitle: Text(
+                            isEn
+                                ? 'Under LIN 22/050, working >=35h in 5 days allows counting all 7 days of the week.'
+                                : 'Según LIN 22/050, trabajar >=35h en 5 días permite computar los 7 días de la semana completa.',
+                            style: const TextStyle(fontSize: 10.5, color: AppColors.textSecondary),
+                          ),
+                          activeTrackColor: AppColors.secondary,
+                          value: isFullTimeWeekly,
+                          onChanged: (val) {
+                            setModalState(() {
+                              isFullTimeWeekly = val;
+                              if (val && daysCtrl.text == '5') {
+                                daysCtrl.text = '7';
+                              }
+                            });
+                          },
+                        ),
+                        const Divider(height: 1, indent: 12, endIndent: 12),
+                        SwitchListTile.adaptive(
+                          dense: true,
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                          title: Text(
+                            isEn ? 'Signed Piecework Agreement' : 'Contrato a Destajo Firmado (Piecework Agreement)',
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+                          ),
+                          subtitle: Text(
+                            isEn
+                                ? 'Required by Fair Work for piece rate picking/packing jobs to ensure floor rate compliance.'
+                                : 'Exigido por Fair Work en tareas a destajo para certificar el suelo legal salarial.',
+                            style: const TextStyle(fontSize: 10.5, color: AppColors.textSecondary),
+                          ),
+                          activeTrackColor: AppColors.secondary,
+                          value: hasPieceworkAgreement,
+                          onChanged: (val) => setModalState(() => hasPieceworkAgreement = val),
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 14),
 
-                  // 6. PANEL INTELIGENTE DE DIAGNÓSTICO EN TIEMPO REAL
+                  // 9. PANEL INTELIGENTE DE DIAGNÓSTICO EN TIEMPO REAL
                   if (blockingErrors.isNotEmpty)
                     Container(
                       padding: const EdgeInsets.all(12),
@@ -1757,7 +1918,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     ),
                   const SizedBox(height: 18),
 
-                  // 7. Botones Cancelar / Guardar Empleo
+                  // 10. Botones Cancelar / Guardar Empleo
                   Row(
                     children: [
                       Expanded(
@@ -1809,18 +1970,29 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                               return;
                             }
 
+                            final userGross = double.tryParse(grossPayCtrl.text.trim()) ?? estGross;
                             final entry = RegionalJobEntry(
                               id: DateTime.now().millisecondsSinceEpoch.toString(),
                               employerBusinessName: nameClean,
-                              employerAbn: abnCtrl.text.trim(),
+                              employerAbn: abnClean,
                               workSitePostcode: pCode,
-                              workSiteLocation: resolvedPostcode?.location ?? 'Regional Area',
+                              workSiteLocation: locationCtrl.text.trim().isNotEmpty
+                                  ? locationCtrl.text.trim()
+                                  : (resolvedPostcode?.location ?? 'Regional Area'),
                               industry: selectedIndustry,
+                              jobRole: roleCtrl.text.trim().isNotEmpty
+                                  ? roleCtrl.text.trim()
+                                  : 'Specified Worker',
                               startDate: startDate,
                               endDate: endDate,
                               totalDaysCounted: days,
                               totalHours: hours,
-                              grossEarningsAud: estGross,
+                              grossEarningsAud: userGross,
+                              isFullTimeWeekly: isFullTimeWeekly,
+                              hasPieceworkAgreement: hasPieceworkAgreement,
+                              payslipFileRef: payslipRefCtrl.text.trim().isNotEmpty
+                                  ? payslipRefCtrl.text.trim()
+                                  : null,
                             );
 
                             ref.read(regionalJobsProvider.notifier).addJob(entry);
@@ -1839,6 +2011,228 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                             isEn ? 'Save & Audit Job' : 'Guardar y Validar Empleo',
                             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: Colors.white),
                           ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void _showDossierExportSheet({
+    required bool isEn,
+    required List<RegionalJobEntry> jobs,
+    required int totalDays,
+    required String visaSubclass,
+    required String defaultEmail,
+  }) {
+    final defaultName = defaultEmail.contains('@') ? defaultEmail.split('@').first : defaultEmail;
+    final nameCtrl = TextEditingController(text: defaultName);
+    final passportCtrl = TextEditingController();
+    final grantCtrl = TextEditingController();
+    final phoneCtrl = TextEditingController();
+    final emailCtrl = TextEditingController(text: defaultEmail);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (sheetCtx) => StatefulBuilder(
+        builder: (context, setSheetState) {
+          final isFormValid = nameCtrl.text.trim().isNotEmpty && passportCtrl.text.trim().isNotEmpty;
+
+          return Padding(
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 16,
+              bottom: MediaQuery.of(sheetCtx).viewInsets.bottom + 24,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: 14),
+                      decoration: BoxDecoration(
+                        color: AppColors.cardBorder,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(CupertinoIcons.doc_text_fill, color: AppColors.primary, size: 22),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              isEn
+                                  ? (_targetVisaYear == 2 ? 'Form 1263 Dossier (2nd Year)' : 'Form 1263 Dossier (3rd Year)')
+                                  : (_targetVisaYear == 2 ? 'Dossier Formulario 1263 (2º Año)' : 'Dossier Formulario 1263 (3r Año)'),
+                              style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: AppColors.textPrimary),
+                            ),
+                            Text(
+                              isEn
+                                  ? 'Enter your official applicant details for ImmiAccount verification'
+                                  : 'Introduce tus datos oficiales reales para la verificación en Inmigración',
+                              style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: nameCtrl,
+                    onChanged: (_) => setSheetState(() {}),
+                    decoration: InputDecoration(
+                      labelText: isEn ? 'Full Legal Name (as in Passport) *' : 'Nombre Legal Completo (según Pasaporte) *',
+                      prefixIcon: const Icon(CupertinoIcons.person_fill, size: 18),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: passportCtrl,
+                    textCapitalization: TextCapitalization.characters,
+                    onChanged: (_) => setSheetState(() {}),
+                    decoration: InputDecoration(
+                      labelText: isEn ? 'Passport Number *' : 'Número de Pasaporte *',
+                      hintText: isEn ? 'e.g. YB1234567' : 'ej: YB1234567',
+                      prefixIcon: const Icon(CupertinoIcons.creditcard_fill, size: 18),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: grantCtrl,
+                          decoration: InputDecoration(
+                            labelText: isEn ? 'Visa Grant No. (Optional)' : 'Nº Concesión Visado (Opcional)',
+                            hintText: 'ej: 1398247012',
+                            prefixIcon: const Icon(CupertinoIcons.shield_lefthalf_fill, size: 18),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          controller: phoneCtrl,
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(
+                            labelText: isEn ? 'Australian Phone' : 'Teléfono Australiano',
+                            hintText: '+61 412 345 678',
+                            prefixIcon: const Icon(CupertinoIcons.phone_fill, size: 18),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: emailCtrl,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: isEn ? 'Contact Email (ImmiAccount)' : 'Email de Contacto (ImmiAccount)',
+                      prefixIcon: const Icon(CupertinoIcons.mail_solid, size: 18),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: AppColors.secondary.withValues(alpha: 0.3)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(CupertinoIcons.lock_shield_fill, color: AppColors.secondary, size: 20),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            isEn
+                                ? 'No mock data is generated. The PDF table will contain only the verified jobs, exact ABNs and hours you entered.'
+                                : 'Sin datos inventados. El PDF incluirá únicamente los empleos, ABNs reales y horas que has registrado.',
+                            style: const TextStyle(fontSize: 11.5, color: AppColors.secondary, fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () => Navigator.pop(sheetCtx),
+                          child: Text(isEn ? 'Cancel' : 'Cancelar', style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.textSecondary)),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        flex: 2,
+                        child: ElevatedButton.icon(
+                          icon: const Icon(CupertinoIcons.printer_fill, size: 18),
+                          label: Text(isEn ? 'Generate Official PDF' : 'Generar PDF Oficial', style: const TextStyle(fontWeight: FontWeight.bold)),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: isFormValid ? AppColors.primary : AppColors.textMuted,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 13),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                            elevation: 0,
+                          ),
+                          onPressed: !isFormValid
+                              ? null
+                              : () async {
+                                  Navigator.pop(sheetCtx);
+                                  final pdfBytes = await PdfGeneratorService.generateRegionalDossier(
+                                    applicantName: nameCtrl.text.trim(),
+                                    passportNumber: passportCtrl.text.trim(),
+                                    visaSubclass: visaSubclass,
+                                    jobs: jobs,
+                                    totalDays: totalDays,
+                                    targetYear: _targetVisaYear,
+                                    visaGrantNumber: grantCtrl.text.trim().isNotEmpty ? grantCtrl.text.trim() : null,
+                                    contactEmail: emailCtrl.text.trim().isNotEmpty ? emailCtrl.text.trim() : null,
+                                    contactPhone: phoneCtrl.text.trim().isNotEmpty ? phoneCtrl.text.trim() : null,
+                                  );
+                                  final pdfFileName = _targetVisaYear == 2 ? 'Form_1263_2ndYear_Dossier.pdf' : 'Form_1263_3rdYear_Dossier.pdf';
+                                  await PdfGeneratorService.shareOrPrintPdf(pdfBytes, pdfFileName);
+                                },
                         ),
                       ),
                     ],

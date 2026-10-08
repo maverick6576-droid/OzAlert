@@ -5,6 +5,7 @@ class RegionalJobEntry {
   final String workSitePostcode;
   final String workSiteLocation;
   final String industry; // 'agriculture', 'tourism_hospitality', 'construction', etc.
+  final String jobRole; // 'Fruit Picker', 'Farm Hand', 'Kitchen Hand', etc.
   final DateTime startDate;
   final DateTime endDate;
   final int totalDaysCounted;
@@ -21,6 +22,7 @@ class RegionalJobEntry {
     required this.workSitePostcode,
     required this.workSiteLocation,
     required this.industry,
+    this.jobRole = 'Specified Worker',
     required this.startDate,
     required this.endDate,
     required this.totalDaysCounted,
@@ -38,6 +40,7 @@ class RegionalJobEntry {
     'workSitePostcode': workSitePostcode,
     'workSiteLocation': workSiteLocation,
     'industry': industry,
+    'jobRole': jobRole,
     'startDate': startDate.toIso8601String(),
     'endDate': endDate.toIso8601String(),
     'totalDaysCounted': totalDaysCounted,
@@ -55,6 +58,7 @@ class RegionalJobEntry {
     workSitePostcode: json['workSitePostcode'] as String? ?? '',
     workSiteLocation: json['workSiteLocation'] as String? ?? '',
     industry: json['industry'] as String? ?? 'agriculture',
+    jobRole: json['jobRole'] as String? ?? 'Specified Worker',
     startDate: DateTime.tryParse(json['startDate'] ?? '') ?? DateTime.now(),
     endDate: DateTime.tryParse(json['endDate'] ?? '') ?? DateTime.now(),
     totalDaysCounted: (json['totalDaysCounted'] as num?)?.toInt() ?? 0,

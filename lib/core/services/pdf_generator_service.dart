@@ -358,6 +358,9 @@ class PdfGeneratorService {
     required List<RegionalJobEntry> jobs,
     required int totalDays,
     int targetYear = 2,
+    String? visaGrantNumber,
+    String? contactEmail,
+    String? contactPhone,
   }) async {
     final pdf = pw.Document();
     final targetDays = targetYear == 3 ? 179 : 88;
@@ -403,12 +406,29 @@ class PdfGeneratorService {
                 color: PdfColors.grey100,
                 borderRadius: pw.BorderRadius.circular(6),
               ),
-              child: pw.Row(
-                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              child: pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  pw.Text('Applicant: $applicantName', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10)),
-                  pw.Text('Passport: $passportNumber', style: const pw.TextStyle(fontSize: 10)),
-                  pw.Text('Subclass: $visaSubclass', style: const pw.TextStyle(fontSize: 10)),
+                  pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text('Applicant: $applicantName', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10)),
+                      pw.Text('Passport: $passportNumber', style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold)),
+                      pw.Text('Subclass: $visaSubclass', style: const pw.TextStyle(fontSize: 10)),
+                    ],
+                  ),
+                  if ((visaGrantNumber != null && visaGrantNumber.isNotEmpty) || (contactEmail != null && contactEmail.isNotEmpty)) ...[
+                    pw.SizedBox(height: 4),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (visaGrantNumber != null && visaGrantNumber.isNotEmpty)
+                          pw.Text('Visa Grant No: $visaGrantNumber', style: const pw.TextStyle(fontSize: 8.5, color: PdfColors.grey700)),
+                        if (contactEmail != null && contactEmail.isNotEmpty)
+                          pw.Text('Contact: $contactEmail', style: const pw.TextStyle(fontSize: 8.5, color: PdfColors.grey700)),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -416,17 +436,19 @@ class PdfGeneratorService {
 
             // Tabla de Empleos
             pw.TableHelper.fromTextArray(
-              headers: ['Employer / Business', 'ABN', 'Site Postcode', 'Industry', 'Period', 'Days'],
-              headerStyle: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold, color: PdfColors.white),
+              headers: ['Employer / Business', 'ABN', 'Location & Code', 'Role / Industry', 'Period', 'Days', 'Hours', 'Gross AUD'],
+              headerStyle: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: PdfColors.white),
               headerDecoration: pw.BoxDecoration(color: PdfColor.fromHex('#1E293B')),
-              cellStyle: const pw.TextStyle(fontSize: 8.5),
+              cellStyle: const pw.TextStyle(fontSize: 7.5),
               data: jobs.map((j) => [
                 j.employerBusinessName,
                 j.employerAbn,
-                j.workSitePostcode,
-                j.industry.replaceAll('_', ' ').toUpperCase(),
-                '${j.startDate.day}/${j.startDate.month}/${j.startDate.year} - ${j.endDate.day}/${j.endDate.month}/${j.endDate.year}',
+                '${j.workSiteLocation}\n(${j.workSitePostcode})',
+                '${j.jobRole}\n[${j.industry.replaceAll('_', ' ').toUpperCase()}]',
+                '${j.startDate.day}/${j.startDate.month}/${j.startDate.year} -\n${j.endDate.day}/${j.endDate.month}/${j.endDate.year}',
                 j.totalDaysCounted.toString(),
+                '${j.totalHours.toStringAsFixed(0)}h',
+                '\$${j.grossEarningsAud.toStringAsFixed(0)}',
               ]).toList(),
             ),
 
