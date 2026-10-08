@@ -149,49 +149,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
           // 1. TARJETA EJECUTIVA DE CONTEXTO: ESTÁS CONSULTANDO [TEMA]
           _buildActiveTopicHeaderCard(isEn, currentTheme, currentCategoryItem),
 
-          // 2. SELECTOR RÁPIDO DE CATEGORÍAS HERMANAS DEL BLOQUE ACTIVO
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-            child: Row(
-              children: currentCategories.map((c) {
-                final isSelected = c['id'] == _selectedCategory;
-                return Padding(
-                  padding: const EdgeInsets.only(right: 6),
-                  child: ChoiceChip(
-                    label: Text(
-                      isEn ? c['labelEn']! : c['label']!,
-                      style: TextStyle(
-                        fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-                        color: isSelected ? Colors.white : AppColors.textPrimary,
-                        fontSize: 11.5,
-                      ),
-                    ),
-                    selected: isSelected,
-                    selectedColor: AppColors.primary,
-                    backgroundColor: AppColors.surface,
-                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1.5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(11),
-                      side: BorderSide(
-                        color: isSelected ? AppColors.primary : AppColors.cardBorder,
-                        width: 1.1,
-                      ),
-                    ),
-                    onSelected: (selected) {
-                      if (selected) {
-                        setState(() {
-                          _selectedCategory = c['id']!;
-                        });
-                      }
-                    },
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-
-          // 3. SUB-TABS SEGMENTADAS DE 1 SOLA LÍNEA (Paso a Paso / Comparativa / Descuentos & Apps)
+          // 2. SUB-TABS SEGMENTADAS DE 1 SOLA LÍNEA (Paso a Paso / Comparativa / Descuentos & Apps)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: Container(

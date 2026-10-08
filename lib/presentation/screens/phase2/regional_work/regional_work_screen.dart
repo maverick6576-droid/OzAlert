@@ -28,7 +28,6 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
 
   // Validador de Códigos Postales
   final _postcodeController = TextEditingController(text: '4870');
-  final String _selectedIndustry = 'agriculture';
   PostcodeInfo? _searchResult;
 
   // Controladores de nuevo empleo
@@ -1074,7 +1073,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 );
                 return;
               }
-              _showAddJobDialog(isEn, isPremium, totalDays);
+              _showAddJobDialog(isEn, isPremium, totalDays, visaSubclass);
             },
           ),
         ),
@@ -1092,23 +1091,92 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             ),
           )
         else
-          ...jobs.map((job) => Card(
-            margin: const EdgeInsets.only(bottom: 10),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: AppColors.cardBorder)),
-            elevation: 0,
-            color: AppColors.surface,
-            child: ListTile(
-              title: Text(job.employerBusinessName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-              subtitle: Text(
-                '${job.workSiteLocation} (${job.workSitePostcode}) • ${job.totalDaysCounted} días',
-                style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
+          ...jobs.map((job) {
+            final avgHours = job.totalDaysCounted > 0 ? (job.totalHours / job.totalDaysCounted) : 0.0;
+            final isHoursRisk = avgHours < 7.0;
+            final isHoursExcess = avgHours > 16.0;
+            final isAbnValid = job.employerAbn.replaceAll(RegExp(r'\s+'), '').length == 11;
+
+            return Card(
+              margin: const EdgeInsets.only(bottom: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(
+                  color: (isHoursRisk || !isAbnValid || isHoursExcess)
+                      ? Colors.amber.withValues(alpha: 0.5)
+                      : AppColors.cardBorder,
+                ),
               ),
-              trailing: IconButton(
-                icon: const Icon(CupertinoIcons.trash, color: AppColors.statusClosed, size: 18),
-                onPressed: () => ref.read(regionalJobsProvider.notifier).removeJob(job.id),
+              elevation: 0,
+              color: AppColors.surface,
+              child: ListTile(
+                title: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        job.employerBusinessName,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      ),
+                    ),
+                    if (isHoursRisk)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.amber.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          isEn ? '⚠️ <7h/day risk' : '⚠️ <7h/d (Riesgo)',
+                          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.orange),
+                        ),
+                      )
+                    else if (!isAbnValid)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: AppColors.statusClosed.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          isEn ? '⚠️ ABN issue' : '⚠️ ABN irregular',
+                          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.statusClosed),
+                        ),
+                      )
+                    else
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: AppColors.secondary.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          isEn ? '✓ Compliant' : '✓ Conforme',
+                          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.secondary),
+                        ),
+                      ),
+                  ],
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 3),
+                    Text(
+                      '${job.workSiteLocation} (${job.workSitePostcode}) • ${job.totalDaysCounted} días • ${job.totalHours.toStringAsFixed(1)}h (${avgHours.toStringAsFixed(1)}h/día)',
+                      style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                    ),
+                    Text(
+                      'ABN: ${job.employerAbn} • \$${job.grossEarningsAud.toStringAsFixed(0)} AUD',
+                      style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+                    ),
+                  ],
+                ),
+                trailing: IconButton(
+                  icon: const Icon(CupertinoIcons.trash, color: AppColors.statusClosed, size: 18),
+                  onPressed: () => ref.read(regionalJobsProvider.notifier).removeJob(job.id),
+                ),
               ),
-            ),
-          )),
+            );
+          }),
 
         const SizedBox(height: 20),
 
@@ -1203,111 +1271,583 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     );
   }
 
-  void _showAddJobDialog(bool isEn, bool isPremium, int currentTotalDays) {
-    showDialog(
+  void _showAddJobDialog(bool isEn, bool isPremium, int currentTotalDays, String visaSubclass) {
+    String selectedIndustry = 'agriculture';
+    DateTime startDate = DateTime.now().subtract(const Duration(days: 14));
+    DateTime endDate = DateTime.now();
+    final nameCtrl = TextEditingController();
+    final abnCtrl = TextEditingController();
+    final postcodeCtrl = TextEditingController(
+      text: _postcodeController.text.isNotEmpty ? _postcodeController.text : '4870',
+    );
+    final daysCtrl = TextEditingController(text: '10');
+    final hoursCtrl = TextEditingController(text: '76');
+
+    showModalBottomSheet(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(isEn ? 'Add Regional Job' : 'Registrar Nuevo Empleo Regional', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: _employerNameController,
-                decoration: InputDecoration(
-                  labelText: isEn ? 'Business Name' : 'Nombre de la Empresa',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: _abnController,
-                decoration: InputDecoration(
-                  labelText: isEn ? 'ABN (11 Digits)' : 'ABN (11 Dígitos)',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Row(
+      isScrollControlled: true,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => StatefulBuilder(
+        builder: (modalContext, setModalState) {
+          // --- VALIDADOR EN TIEMPO REAL ---
+          final List<String> blockingErrors = [];
+          final List<String> riskWarnings = [];
+
+          // 1. Nombre de la empresa
+          final nameClean = nameCtrl.text.trim();
+          if (nameClean.isEmpty) {
+            blockingErrors.add(isEn ? 'Employer / Business Name is required.' : 'El nombre de la empresa es obligatorio.');
+          }
+
+          // 2. ABN (11 dígitos numéricos)
+          final abnClean = abnCtrl.text.replaceAll(RegExp(r'\s+'), '');
+          if (abnClean.isEmpty) {
+            blockingErrors.add(isEn ? 'ABN is required for Form 1263 verification.' : 'El ABN es obligatorio para el Formulario 1263.');
+          } else if (abnClean.length != 11 || int.tryParse(abnClean) == null) {
+            blockingErrors.add(isEn ? 'ABN must contain exactly 11 digits (e.g., 51 824 753 556).' : 'El ABN debe tener exactamente 11 dígitos numéricos (ej: 51 824 753 556).');
+          }
+
+          // 3. Código Postal & LIN 22/050
+          final pCode = postcodeCtrl.text.trim();
+          PostcodeInfo? resolvedPostcode;
+          if (pCode.length != 4 || int.tryParse(pCode) == null) {
+            blockingErrors.add(isEn ? 'Postcode must be a 4-digit Australian code.' : 'El código postal debe tener 4 dígitos australianos.');
+          } else {
+            final repo = ref.read(postcodeRepositoryProvider);
+            resolvedPostcode = repo.findPostcode(pCode);
+            if (resolvedPostcode == null) {
+              blockingErrors.add(isEn
+                  ? 'Postcode $pCode is NOT regional under LIN 22/050. Home Affairs will reject these days.'
+                  : 'El código postal $pCode NO figura en las zonas regionales de LIN 22/050. Inmigración rechazará estos días.');
+            } else {
+              final isIndEligible = resolvedPostcode.isEligible(visaSubclass, selectedIndustry);
+              if (!isIndEligible) {
+                blockingErrors.add(isEn
+                    ? 'Activity not valid for visa $visaSubclass in $pCode (e.g. hospitality only counts in Northern Australia).'
+                    : 'La industria no es computable en $pCode para tu visado $visaSubclass (ej. hostelería solo computa en el Norte de Australia).');
+              }
+            }
+          }
+
+          // 4. Fechas y Span de Calendario
+          final calendarSpan = endDate.difference(startDate).inDays + 1;
+          if (startDate.isAfter(endDate)) {
+            blockingErrors.add(isEn ? 'Start date cannot be after end date.' : 'La fecha de inicio no puede ser posterior a la de fin.');
+          }
+          if (endDate.isAfter(DateTime.now().add(const Duration(days: 1)))) {
+            blockingErrors.add(isEn ? 'Future dates are not permitted. Only completed days count.' : 'No puedes indicar fechas futuras. Solo computan periodos ya trabajados.');
+          }
+
+          // 5. Días Computados
+          final days = int.tryParse(daysCtrl.text.trim()) ?? 0;
+          if (days <= 0) {
+            blockingErrors.add(isEn ? 'Days counted must be greater than 0.' : 'Los días deben ser mayores a cero.');
+          } else if (calendarSpan > 0 && days > calendarSpan) {
+            blockingErrors.add(isEn
+                ? 'Inconsistency: $days days entered in a span of only $calendarSpan calendar days.'
+                : 'Inconsistencia: Has puesto $days días trabajados en un periodo de solo $calendarSpan días naturales.');
+          } else if (!isPremium && (currentTotalDays + days > 10)) {
+            blockingErrors.add(isEn
+                ? 'Free Limit: Exceeds 10-day trial (${currentTotalDays + days}/10). Upgrade to Pro to unlock.'
+                : 'Límite Free: Supera los 10 días de prueba (${currentTotalDays + days}/10). Requiere versión Pro.');
+          }
+
+          // 6. Horas Totales y Ratio Home Affairs
+          final hours = double.tryParse(hoursCtrl.text.trim()) ?? 0.0;
+          final double avgHoursPerDay = days > 0 ? (hours / days) : 0.0;
+          if (hours <= 0) {
+            blockingErrors.add(isEn ? 'Total hours must be greater than 0.' : 'Las horas totales deben ser mayores a cero.');
+          } else if (days > 0) {
+            if (avgHoursPerDay < 7.0) {
+              riskWarnings.add(isEn
+                  ? 'Home Affairs Risk (${avgHoursPerDay.toStringAsFixed(1)}h/day average): Standard full-time is 7–7.6h/day (35–38h/week). Below 7h/day risks being deemed part-time and refused.'
+                  : 'Riesgo Home Affairs (media de ${avgHoursPerDay.toStringAsFixed(1)}h/día): Inmigración exige jornada completa estándar (7–7.6h/día o 35–38h/semana). Menos de 7h/día corre riesgo de ser catalogado como media jornada y anulado.');
+            } else if (avgHoursPerDay > 16.0) {
+              riskWarnings.add(isEn
+                  ? 'Excessive Hours (${avgHoursPerDay.toStringAsFixed(1)}h/day): Declaring >16h daily triggers ATO anti-fraud audits.'
+                  : 'Horas Inverosímiles (${avgHoursPerDay.toStringAsFixed(1)}h/día): Declarar más de 16h/día dispara auditorías de la ATO e Inmigración por sospecha de fraude.');
+            }
+          }
+
+          final estGross = hours * 33.05;
+
+          final industryOptions = [
+            {'id': 'agriculture', 'label': isEn ? '🌱 Agriculture & Fruit' : '🌱 Agricultura & Fruta'},
+            {'id': 'tourism_hospitality', 'label': isEn ? '☕ Hospitality & Tourism' : '☕ Hostelería & Turismo'},
+            {'id': 'construction', 'label': isEn ? '🔨 Construction' : '🔨 Construcción'},
+            {'id': 'mining', 'label': isEn ? '⛏️ Mining' : '⛏️ Minería'},
+            {'id': 'forestry_fishing', 'label': isEn ? '🐟 Fishing & Forestry' : '🐟 Pesca & Silvicultura'},
+          ];
+
+          return Padding(
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 16,
+              bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _daysController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: isEn ? 'Days Counted' : 'Días Totales',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  // Asa superior de arrastre
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: 14),
+                      decoration: BoxDecoration(
+                        color: AppColors.cardBorder,
+                        borderRadius: BorderRadius.circular(2),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      controller: _hoursController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: isEn ? 'Total Hours' : 'Horas Totales',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+
+                  // Título con insignia de auditoría inteligente
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(7),
+                        decoration: BoxDecoration(
+                          color: AppColors.secondary.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(CupertinoIcons.shield_lefthalf_fill, color: AppColors.secondary, size: 20),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              isEn ? 'Smart Regional Work Log' : 'Registro Inteligente de Empleo',
+                              style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: AppColors.textPrimary),
+                            ),
+                            Text(
+                              isEn ? 'Validated against LIN 22/050 & Fair Work' : 'Validación en tiempo real contra LIN 22/050 y Fair Work',
+                              style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+
+                  // 1. Nombre de la empresa
+                  TextField(
+                    controller: nameCtrl,
+                    onChanged: (_) => setModalState(() {}),
+                    decoration: InputDecoration(
+                      labelText: isEn ? 'Employer / Business Name *' : 'Nombre de la Empresa o Granja *',
+                      hintText: isEn ? 'e.g. Queensland Berry Farms Pty Ltd' : 'ej: Queensland Berry Farms Pty Ltd',
+                      prefixIcon: const Icon(CupertinoIcons.building_2_fill, size: 18),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // 2. ABN y Código Postal en la misma fila
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 6,
+                        child: TextField(
+                          controller: abnCtrl,
+                          keyboardType: TextInputType.number,
+                          onChanged: (_) => setModalState(() {}),
+                          decoration: InputDecoration(
+                            labelText: isEn ? 'ABN (11 digits) *' : 'ABN (11 dígitos) *',
+                            hintText: '51 824 753 556',
+                            prefixIcon: const Icon(CupertinoIcons.number, size: 18),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        flex: 4,
+                        child: TextField(
+                          controller: postcodeCtrl,
+                          keyboardType: TextInputType.number,
+                          onChanged: (_) => setModalState(() {}),
+                          decoration: InputDecoration(
+                            labelText: isEn ? 'Postcode *' : 'Cód. Postal *',
+                            hintText: '4870',
+                            prefixIcon: const Icon(CupertinoIcons.location_solid, size: 18),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (resolvedPostcode != null) ...[
+                    const SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: Text(
+                        '📍 ${resolvedPostcode.location} (${resolvedPostcode.state})',
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.secondary),
                       ),
                     ),
+                  ],
+                  const SizedBox(height: 12),
+
+                  // 3. Selector de Industria
+                  Text(
+                    isEn ? 'Industry / Activity Sector:' : 'Sector de Actividad:',
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.textSecondary),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceElevated,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: AppColors.cardBorder),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: selectedIndustry,
+                        isExpanded: true,
+                        items: industryOptions.map((opt) {
+                          return DropdownMenuItem<String>(
+                            value: opt['id'],
+                            child: Text(
+                              opt['label']!,
+                              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (val) {
+                          if (val != null) {
+                            setModalState(() => selectedIndustry = val);
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // 4. Selector de Fechas (Inicio & Fin)
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () async {
+                            final picked = await showDatePicker(
+                              context: modalContext,
+                              initialDate: startDate,
+                              firstDate: DateTime(2020),
+                              lastDate: DateTime.now(),
+                            );
+                            if (picked != null) {
+                              setModalState(() => startDate = picked);
+                            }
+                          },
+                          borderRadius: BorderRadius.circular(12),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+                            decoration: BoxDecoration(
+                              color: AppColors.surfaceElevated,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: AppColors.cardBorder),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(isEn ? 'Start Date' : 'Fecha Inicio', style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
+                                const SizedBox(height: 2),
+                                Text(
+                                  '${startDate.day}/${startDate.month}/${startDate.year}',
+                                  style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () async {
+                            final picked = await showDatePicker(
+                              context: modalContext,
+                              initialDate: endDate,
+                              firstDate: DateTime(2020),
+                              lastDate: DateTime.now().add(const Duration(days: 365)),
+                            );
+                            if (picked != null) {
+                              setModalState(() => endDate = picked);
+                            }
+                          },
+                          borderRadius: BorderRadius.circular(12),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+                            decoration: BoxDecoration(
+                              color: AppColors.surfaceElevated,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: AppColors.cardBorder),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(isEn ? 'End Date' : 'Fecha Fin', style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
+                                const SizedBox(height: 2),
+                                Text(
+                                  '${endDate.day}/${endDate.month}/${endDate.year}',
+                                  style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+
+                  // 5. Días Computados y Horas Totales
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: daysCtrl,
+                          keyboardType: TextInputType.number,
+                          onChanged: (_) => setModalState(() {}),
+                          decoration: InputDecoration(
+                            labelText: isEn ? 'Days to Count *' : 'Días a Computar *',
+                            hintText: '10',
+                            prefixIcon: const Icon(CupertinoIcons.calendar, size: 18),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          controller: hoursCtrl,
+                          keyboardType: TextInputType.number,
+                          onChanged: (_) => setModalState(() {}),
+                          decoration: InputDecoration(
+                            labelText: isEn ? 'Total Hours *' : 'Horas Totales *',
+                            hintText: '76',
+                            prefixIcon: const Icon(CupertinoIcons.clock, size: 18),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  if (days > 0 && hours > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: Text(
+                        isEn
+                            ? 'Average: ${avgHoursPerDay.toStringAsFixed(1)}h/day • Est. Gross: \$${estGross.toStringAsFixed(0)} AUD'
+                            : 'Media: ${avgHoursPerDay.toStringAsFixed(1)}h/día • Salario bruto est.: \$${estGross.toStringAsFixed(0)} AUD',
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
+                      ),
+                    ),
+                  const SizedBox(height: 14),
+
+                  // 6. PANEL INTELIGENTE DE DIAGNÓSTICO EN TIEMPO REAL
+                  if (blockingErrors.isNotEmpty)
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.statusClosed.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: AppColors.statusClosed.withValues(alpha: 0.35)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(CupertinoIcons.exclamationmark_triangle_fill, color: AppColors.statusClosed, size: 17),
+                              const SizedBox(width: 6),
+                              Text(
+                                isEn ? 'Blocking Validation Issues Detected:' : 'Errores que Home Affairs Rechazará:',
+                                style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12.5, color: AppColors.statusClosed),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          ...blockingErrors.map((err) => Padding(
+                            padding: const EdgeInsets.only(bottom: 3),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('• ', style: TextStyle(color: AppColors.statusClosed, fontWeight: FontWeight.bold)),
+                                Expanded(
+                                  child: Text(
+                                    err,
+                                    style: const TextStyle(fontSize: 11.5, color: AppColors.statusClosed, height: 1.3),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                        ],
+                      ),
+                    )
+                  else if (riskWarnings.isNotEmpty)
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: Colors.orange.withValues(alpha: 0.4)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(CupertinoIcons.exclamationmark_shield_fill, color: Colors.orange, size: 17),
+                              const SizedBox(width: 6),
+                              Text(
+                                isEn ? 'Immigration Audit Warning:' : 'Aviso de Riesgo ante Inmigración:',
+                                style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12.5, color: Colors.orange),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          ...riskWarnings.map((warn) => Text(
+                            warn,
+                            style: const TextStyle(fontSize: 11.5, color: Colors.brown, height: 1.3),
+                          )),
+                        ],
+                      ),
+                    )
+                  else
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.secondary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: AppColors.secondary.withValues(alpha: 0.35)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(CupertinoIcons.checkmark_seal_fill, color: AppColors.secondary, size: 18),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              isEn
+                                  ? '✓ Audit-Proof Entry: Verified LIN 22/050 code, 11-digit ABN, and full-time compliant shift (~${avgHoursPerDay.toStringAsFixed(1)}h/day).'
+                                  : '✓ Registro Blindado: Código regional LIN 22/050 conforme, ABN válido de 11 dígitos y ratio horario legal (~${avgHoursPerDay.toStringAsFixed(1)}h/día).',
+                              style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: AppColors.secondary, height: 1.3),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: 18),
+
+                  // 7. Botones Cancelar / Guardar Empleo
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () => Navigator.pop(ctx),
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 13),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                          ),
+                          child: Text(
+                            isEn ? 'Cancel' : 'Cancelar',
+                            style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.textSecondary),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        flex: 2,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: blockingErrors.isNotEmpty ? AppColors.textMuted : AppColors.secondary,
+                            padding: const EdgeInsets.symmetric(vertical: 13),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                            elevation: 0,
+                          ),
+                          onPressed: () {
+                            if (blockingErrors.isNotEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: AppColors.statusClosed,
+                                  content: Text(
+                                    blockingErrors.first,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
+                            if (!isPremium && (currentTotalDays + days > 10)) {
+                              Navigator.pop(ctx);
+                              showPhase2PaywallBottomSheet(
+                                context: context,
+                                featureTitle: isEn ? '10-Day Free Limit Reached' : 'Límite Gratuito de 10 Días',
+                                featureBenefit: isEn
+                                    ? 'Free tier includes tracking up to 10 days. Upgrade to Premium to log all ${_targetVisaYear == 2 ? 88 : 179} days and export Form 1263.'
+                                    : 'Superas los 10 días gratuitos. Pasa a Premium para registrar los ${_targetVisaYear == 2 ? 88 : 179} días completos y generar el Formulario 1263.',
+                              );
+                              return;
+                            }
+
+                            final entry = RegionalJobEntry(
+                              id: DateTime.now().millisecondsSinceEpoch.toString(),
+                              employerBusinessName: nameClean,
+                              employerAbn: abnCtrl.text.trim(),
+                              workSitePostcode: pCode,
+                              workSiteLocation: resolvedPostcode?.location ?? 'Regional Area',
+                              industry: selectedIndustry,
+                              startDate: startDate,
+                              endDate: endDate,
+                              totalDaysCounted: days,
+                              totalHours: hours,
+                              grossEarningsAud: estGross,
+                            );
+
+                            ref.read(regionalJobsProvider.notifier).addJob(entry);
+                            Navigator.pop(ctx);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: AppColors.secondary,
+                                content: Text(
+                                  isEn ? '✓ Regional job entry recorded and audit-verified!' : '✓ Empleo regional registrado y validado para auditoría!',
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            isEn ? 'Save & Audit Job' : 'Guardar y Validar Empleo',
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(isEn ? 'Cancel' : 'Cancelar', style: const TextStyle(color: AppColors.textSecondary)),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.secondary, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-            onPressed: () {
-              final days = int.tryParse(_daysController.text) ?? 1;
-              final hours = double.tryParse(_hoursController.text) ?? 38.0;
-
-              // Verificación de límite de 10 días para usuarios gratuitos
-              if (!isPremium && (currentTotalDays + days > 10)) {
-                Navigator.pop(ctx);
-                showPhase2PaywallBottomSheet(
-                  context: context,
-                  featureTitle: isEn ? '10-Day Free Limit Reached' : 'Límite Gratuito de 10 Días',
-                  featureBenefit: isEn
-                      ? 'Free tier includes tracking up to 10 days. Upgrade to Premium to log the complete ${_targetVisaYear == 2 ? 88 : 179} days and export official Form 1263 PDF dossiers.'
-                      : 'Has intentado superar los 10 días de la versión gratuita. Pasa a Premium para registrar los ${_targetVisaYear == 2 ? 88 : 179} días completos y generar el Formulario 1263 oficial.',
-                );
-                return;
-              }
-
-              if (_employerNameController.text.isNotEmpty) {
-                final entry = RegionalJobEntry(
-                  id: DateTime.now().millisecondsSinceEpoch.toString(),
-                  employerBusinessName: _employerNameController.text,
-                  employerAbn: _abnController.text.isNotEmpty ? _abnController.text : '12 345 678 901',
-                  workSitePostcode: _postcodeController.text,
-                  workSiteLocation: _searchResult?.location ?? 'Regional Area',
-                  industry: _selectedIndustry,
-                  startDate: DateTime.now().subtract(Duration(days: days)),
-                  endDate: DateTime.now(),
-                  totalDaysCounted: days,
-                  totalHours: hours,
-                  grossEarningsAud: hours * 33.05,
-                );
-
-                ref.read(regionalJobsProvider.notifier).addJob(entry);
-                Navigator.pop(ctx);
-                _employerNameController.clear();
-                _abnController.clear();
-                _daysController.clear();
-                _hoursController.clear();
-              }
-            },
-            child: Text(isEn ? 'Save' : 'Guardar', style: const TextStyle(fontWeight: FontWeight.bold)),
-          ),
-        ],
+            ),
+          );
+        },
       ),
     );
   }

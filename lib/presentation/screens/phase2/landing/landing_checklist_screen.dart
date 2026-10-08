@@ -45,22 +45,38 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
           final stages = [
             {
               'title': isEn ? '✈️ Pre-Flight' : '✈️ Pre-Vuelo',
+              'shortTitle': isEn ? 'Pre-Flight' : 'Pre-Vuelo',
               'subtitle': isEn ? 'Before boarding' : 'Antes de despegar',
+              'icon': '🛫',
+              'landmark': isEn ? 'Departure Gate' : 'Despegue',
+              'aussieTheme': isEn ? 'Passport, Visa & Akubra Hat' : 'Pasaporte, Visa & Sombrero Akubra',
               'tasks': preDepartureTasks,
             },
             {
               'title': isEn ? '🧳 Arrival' : '🧳 Llegada',
+              'shortTitle': isEn ? 'Arrival' : 'Llegada',
               'subtitle': isEn ? 'First 48h & week' : 'Primeros días',
+              'icon': '🏄',
+              'landmark': isEn ? 'Bondi Beach' : 'Sydney & Costa',
+              'aussieTheme': isEn ? 'TFN, SIM & Flat White' : 'TFN, SIM & Buen Flat White',
               'tasks': arrivalTasks,
             },
             {
               'title': isEn ? '🚜 88 Days' : '🚜 88 Días',
+              'shortTitle': isEn ? '88 Days' : '88 Días',
               'subtitle': isEn ? 'Regional & 2nd visa' : 'Renovación de visa',
+              'icon': '🚜',
+              'landmark': isEn ? 'Red Dirt Farm' : 'Outback & Granja',
+              'aussieTheme': isEn ? 'Red Dust & 88 Days Work Log' : 'Tierra Roja & Faena de 88 Días',
               'tasks': renewalTasks,
             },
             {
               'title': isEn ? '🛫 Departure' : '🛫 Salida',
+              'shortTitle': isEn ? 'Departure' : 'Salida',
               'subtitle': isEn ? 'Reclaim DASP & cash' : 'Recuperar dinero',
+              'icon': '🪸',
+              'landmark': isEn ? 'Reef & Departure' : 'Gran Barrera & Salida',
+              'aussieTheme': isEn ? 'DASP Super Reclaim & Tax Return' : 'Rescate Super (DASP) & Tax Return',
               'tasks': departureTasks,
             },
           ];
@@ -72,86 +88,17 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
           return ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             children: [
-              // 1. Tarjeta de progreso visual general
-              _buildProgressCard(completedCount, totalCount, progressPercent, isEn),
-              const SizedBox(height: 12),
-
-              // 2. Banner de Psicología Financiera: Dinero en Riesgo (Compacto)
-              _buildSavingsTeaserBanner(isEn),
-              const SizedBox(height: 14),
-
-              // 3. SELECTOR DE FASES SEGMENTADO (PILLS HORIZONTALES)
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.cardBorder),
-                ),
-                child: Row(
-                  children: List.generate(stages.length, (idx) {
-                    final stage = stages[idx];
-                    final stTasks = stage['tasks'] as List<LandingTask>;
-                    final stCompleted = stTasks.where((t) => t.isCompleted).length;
-                    final isSelected = _selectedStageIndex == idx;
-
-                    return Expanded(
-                      child: GestureDetector(
-                        onTap: () => setState(() => _selectedStageIndex = idx),
-                        behavior: HitTestBehavior.opaque,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          decoration: BoxDecoration(
-                            color: isSelected ? AppColors.primary : Colors.transparent,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: isSelected
-                                ? const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1))]
-                                : null,
-                          ),
-                          alignment: Alignment.center,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                stage['title'] as String,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 11.5,
-                                  fontWeight: FontWeight.w800,
-                                  color: isSelected ? Colors.white : AppColors.textPrimary,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? Colors.white.withValues(alpha: 0.22)
-                                      : AppColors.surface,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  '$stCompleted/${stTasks.length}',
-                                  style: TextStyle(
-                                    fontSize: 9.5,
-                                    fontWeight: FontWeight.bold,
-                                    color: isSelected ? Colors.white : AppColors.textMuted,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                ),
+              // 1. Camino Animado de Evolución Australiana (The Great Aussie Trail)
+              _buildAustralianJourneyTrail(
+                completedCount: completedCount,
+                totalCount: totalCount,
+                progressPercent: progressPercent,
+                stages: stages,
+                isEn: isEn,
               ),
               const SizedBox(height: 14),
 
-              // 4. MODO FOCO: Si hay tareas pendientes en la fase activa, destacar la próxima
+              // 2. MODO FOCO: Si hay tareas pendientes en la fase activa, destacar la próxima
               if (currentPendingTasks.isNotEmpty) ...[
                 Container(
                   padding: const EdgeInsets.all(12),
@@ -197,11 +144,18 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
     );
   }
 
-  Widget _buildProgressCard(int completed, int total, double percent, bool isEn) {
-    final isDone = completed == total && total > 0;
+  Widget _buildAustralianJourneyTrail({
+    required int completedCount,
+    required int totalCount,
+    required double progressPercent,
+    required List<Map<String, dynamic>> stages,
+    required bool isEn,
+  }) {
+    final isDone = completedCount == totalCount && totalCount > 0;
+    final currentStage = stages[_selectedStageIndex.clamp(0, stages.length - 1)];
 
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(22),
@@ -214,64 +168,330 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
           ),
         ],
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
-            alignment: Alignment.center,
+          // 1. Cabecera de la Ruta: Insignia Australiana + Contador Porcentual
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                width: 62,
-                height: 62,
-                child: CircularProgressIndicator(
-                  value: percent,
-                  strokeWidth: 6,
-                  backgroundColor: AppColors.surfaceElevated,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    isDone ? AppColors.secondary : AppColors.primary,
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Text('🦘', style: TextStyle(fontSize: 16)),
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        isEn ? 'THE GREAT AUSSIE TRAIL' : 'LA GRAN RUTA AUSTRALIANA',
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w900,
+                          color: AppColors.primary,
+                          letterSpacing: 0.7,
+                        ),
+                      ),
+                      const SizedBox(height: 1),
+                      Text(
+                        isEn ? 'Your Journey in Australia' : 'Tu Camino en Australia',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 14.5,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                decoration: BoxDecoration(
+                  color: isDone
+                      ? AppColors.secondary.withValues(alpha: 0.15)
+                      : AppColors.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: isDone
+                        ? AppColors.secondary.withValues(alpha: 0.4)
+                        : AppColors.primary.withValues(alpha: 0.3),
                   ),
                 ),
-              ),
-              Text(
-                '${(percent * 100).round()}%',
-                style: const TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 15,
-                  color: AppColors.textPrimary,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      isDone ? CupertinoIcons.checkmark_seal_fill : CupertinoIcons.flame_fill,
+                      size: 13,
+                      color: isDone ? AppColors.secondary : AppColors.primary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '$completedCount/$totalCount (${(progressPercent * 100).round()}%)',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w900,
+                        color: isDone ? AppColors.secondary : AppColors.primary,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
-          const SizedBox(width: 18),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+
+          const SizedBox(height: 10),
+
+          // 2. Micro-lore divertido y corporativo según el avance real
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceElevated,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.cardBorder),
+            ),
+            child: Row(
               children: [
-                Row(
+                const Text('🧭', style: TextStyle(fontSize: 13)),
+                const SizedBox(width: 7),
+                Expanded(
+                  child: Text(
+                    _getAussieLoreText(progressPercent, isEn),
+                    style: const TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textSecondary,
+                      height: 1.25,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // 3. El Camino Animado con los 4 Hitos y el Canguro Viajero
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final availableWidth = constraints.maxWidth;
+              const nodeWidth = 58.0;
+
+              return SizedBox(
+                height: 88,
+                child: Stack(
+                  clipBehavior: Clip.none,
                   children: [
-                    Flexible(
-                      child: Text(
-                        isEn ? 'Arrival Readiness' : 'Preparación de Llegada',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 16,
-                          color: AppColors.textPrimary,
+                    // A) Carretera Base (Outback Track)
+                    Positioned(
+                      top: 22,
+                      left: nodeWidth / 2,
+                      right: nodeWidth / 2,
+                      child: Container(
+                        height: 6,
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceElevated,
+                          borderRadius: BorderRadius.circular(3),
+                          border: Border.all(color: AppColors.cardBorder, width: 0.8),
                         ),
                       ),
                     ),
-                    if (isDone) ...[
-                      const SizedBox(width: 6),
-                      const Icon(CupertinoIcons.checkmark_seal_fill, color: AppColors.secondary, size: 18),
-                    ],
+
+                    // B) Tramo Recorrido Animado con Gradiente
+                    Positioned(
+                      top: 22,
+                      left: nodeWidth / 2,
+                      child: TweenAnimationBuilder<double>(
+                        tween: Tween<double>(begin: 0, end: progressPercent.clamp(0.0, 1.0)),
+                        duration: const Duration(milliseconds: 700),
+                        curve: Curves.easeInOutCubic,
+                        builder: (context, val, _) {
+                          final maxTrack = availableWidth - nodeWidth;
+                          return Container(
+                            height: 6,
+                            width: maxTrack * val,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [AppColors.primary, AppColors.secondary],
+                              ),
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+                    // C) Canguro Viajero Animado que Avanza por el Camino
+                    TweenAnimationBuilder<double>(
+                      tween: Tween<double>(begin: 0, end: progressPercent.clamp(0.0, 1.0)),
+                      duration: const Duration(milliseconds: 700),
+                      curve: Curves.easeInOutCubic,
+                      builder: (context, val, _) {
+                        final maxTrack = availableWidth - nodeWidth;
+                        final leftPos = (nodeWidth / 2) + (maxTrack * val) - 12;
+                        return Positioned(
+                          top: 7,
+                          left: leftPos.clamp(0.0, availableWidth - 24),
+                          child: Container(
+                            width: 24,
+                            height: 24,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: AppColors.surface,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: AppColors.primary, width: 1.5),
+                              boxShadow: const [
+                                BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
+                              ],
+                            ),
+                            child: const Text('🦘', style: TextStyle(fontSize: 13)),
+                          ),
+                        );
+                      },
+                    ),
+
+                    // D) Los 4 Hitos Interactivos
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(stages.length, (idx) {
+                        final st = stages[idx];
+                        final stTasks = st['tasks'] as List<LandingTask>;
+                        final stDone = stTasks.where((t) => t.isCompleted).length;
+                        final isStageDone = stTasks.isNotEmpty && stDone == stTasks.length;
+                        final isSelected = _selectedStageIndex == idx;
+
+                        return GestureDetector(
+                          onTap: () => setState(() => _selectedStageIndex = idx),
+                          behavior: HitTestBehavior.opaque,
+                          child: SizedBox(
+                            width: nodeWidth,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Nodo circular del hito
+                                AnimatedContainer(
+                                  duration: const Duration(milliseconds: 250),
+                                  width: 44,
+                                  height: 44,
+                                  decoration: BoxDecoration(
+                                    color: isStageDone
+                                        ? AppColors.secondary
+                                        : (isSelected ? AppColors.primary : AppColors.surface),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? (isStageDone ? AppColors.secondary : AppColors.primary)
+                                          : (isStageDone ? AppColors.secondary : AppColors.cardBorder),
+                                      width: isSelected ? 2.5 : 1.5,
+                                    ),
+                                    boxShadow: isSelected
+                                        ? [
+                                            BoxShadow(
+                                              color: (isStageDone ? AppColors.secondary : AppColors.primary).withValues(alpha: 0.35),
+                                              blurRadius: 8,
+                                              offset: const Offset(0, 3),
+                                            ),
+                                          ]
+                                        : null,
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: isStageDone
+                                      ? const Icon(CupertinoIcons.checkmark_alt, color: Colors.white, size: 20)
+                                      : Text(
+                                          st['icon'] as String,
+                                          style: const TextStyle(fontSize: 19),
+                                        ),
+                                ),
+                                const SizedBox(height: 5),
+                                // Nombre corto del hito
+                                Text(
+                                  st['shortTitle'] as String,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 10.5,
+                                    fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+                                    color: isSelected ? AppColors.primary : AppColors.textPrimary,
+                                  ),
+                                ),
+                                // Badge con gestiones listas
+                                Container(
+                                  margin: const EdgeInsets.only(top: 2),
+                                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? AppColors.primary.withValues(alpha: 0.12)
+                                        : AppColors.surfaceElevated,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    '$stDone/${stTasks.length}',
+                                    style: TextStyle(
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold,
+                                      color: isSelected ? AppColors.primary : AppColors.textMuted,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
                   ],
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  isEn
-                      ? '$completed of $total tasks completed'
-                      : '$completed de $total gestiones completadas',
-                  style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+              );
+            },
+          ),
+
+          const SizedBox(height: 10),
+
+          // 4. Parada Activa Seleccionada con Landmark y Temática
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceElevated,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.cardBorder),
+            ),
+            child: Row(
+              children: [
+                Text(currentStage['icon'] as String, style: const TextStyle(fontSize: 18)),
+                const SizedBox(width: 9),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${currentStage['title']} • ${currentStage['landmark']}',
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
+                      ),
+                      Text(
+                        currentStage['aussieTheme'] as String,
+                        style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    isEn ? 'Active Stop' : 'Parada Activa',
+                    style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w800, color: AppColors.primary),
+                  ),
                 ),
               ],
             ),
@@ -281,63 +501,32 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
     );
   }
 
-  Widget _buildSavingsTeaserBanner(bool isEn) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: AppColors.secondary.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.secondary.withValues(alpha: 0.35)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.secondary,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(CupertinoIcons.money_dollar, color: Colors.white, size: 20),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  isEn ? '⚠️ Lost Money Audit' : '⚠️ ¿Dinero en Riesgo en Australia?',
-                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: AppColors.textPrimary),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  isEn
-                      ? 'Reclaim up to \$3,850 AUD in tax deductions, DASP super and bond security.'
-                      : 'Descubre cómo salvar hasta \$3.850 AUD en impuestos, súper y fianza.',
-                  style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary, height: 1.3),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          ElevatedButton(
-            onPressed: () {
-              ref.read(phase2NavigationProvider.notifier).navigateToGuide('savings');
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.secondary,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              elevation: 0,
-            ),
-            child: Text(
-              isEn ? 'Audit ➔' : 'Calcular ➔',
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5),
-            ),
-          ),
-        ],
-      ),
-    );
+  String _getAussieLoreText(double percent, bool isEn) {
+    if (percent == 0.0) {
+      return isEn
+          ? '🎒 Packing your Akubra hat, visa & passport for Down Under!'
+          : '🎒 Empacando el sombrero Akubra, visa y pasaporte para Down Under!';
+    } else if (percent < 0.30) {
+      return isEn
+          ? '✈️ Crossing 14,000 km across oceans towards Australia!'
+          : '✈️ Cruzando 14.000 km sobre los océanos rumbo a Australia!';
+    } else if (percent < 0.60) {
+      return isEn
+          ? '🏄 Coastal landing: flat white in hand, SIM, TFN & bank account ready!'
+          : '🏄 Aterrizaje en la costa: flat white en mano, SIM, TFN y banco listos!';
+    } else if (percent < 0.90) {
+      return isEn
+          ? '🚜 Conquering the Red Dirt Outback: 88 days logged and counting!'
+          : '🚜 Conquistando la tierra roja del Outback: 88 días computando!';
+    } else if (percent < 1.0) {
+      return isEn
+          ? '🦘 True Aussie mate: renewal locked, Super & tax return prepared!'
+          : '🦘 Auténtico mate australiano: 2º año listo y tax return preparado!';
+    } else {
+      return isEn
+          ? '🏆 Down Under Legend! All checklist points complete, zero dollars lost!'
+          : '🏆 ¡Leyenda de Australia! Todo completado y ni un dólar perdido!';
+    }
   }
 
   Widget _buildSectionHeader(String title, String subtitle) {
