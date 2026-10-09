@@ -56,8 +56,18 @@ class AustraliaRegionalMapWidget extends StatelessWidget {
   });
 
   void _handleMapTap(Offset localOffset, Size size) {
-    final normX = (localOffset.dx / size.width).clamp(0.0, 1.0);
-    final normY = (localOffset.dy / size.height).clamp(0.0, 1.0);
+    const mapAspect = 1022.0 / 788.0;
+    double drawW = size.width;
+    double drawH = size.width / mapAspect;
+    if (drawH > size.height) {
+      drawH = size.height;
+      drawW = size.height * mapAspect;
+    }
+    final offX = (size.width - drawW) / 2.0;
+    final offY = (size.height - drawH) / 2.0;
+
+    final normX = ((localOffset.dx - offX) / drawW).clamp(0.0, 1.0);
+    final normY = ((localOffset.dy - offY) / drawH).clamp(0.0, 1.0);
 
     // 1. Verificar si tocó cerca de un hub regional específico (radio 0.09)
     for (final hub in kRegionalHubs) {
@@ -75,22 +85,22 @@ class AustraliaRegionalMapWidget extends StatelessWidget {
     String state;
     String samplePostcode;
 
-    if (normX <= 0.38) {
+    if (normX <= 0.385) {
       state = 'WA';
       samplePostcode = normY < 0.40 ? '6725' : '6280'; // Broome o Margaret River
-    } else if (normX > 0.38 && normX <= 0.58 && normY <= 0.52) {
+    } else if (normX > 0.385 && normX <= 0.582 && normY <= 0.525) {
       state = 'NT';
       samplePostcode = normY < 0.35 ? '0800' : '0870'; // Darwin o Alice Springs
-    } else if (normX > 0.38 && normX <= 0.64 && normY > 0.52 && normY <= 0.85) {
+    } else if (normX > 0.385 && normX <= 0.640 && normY > 0.525 && normY <= 0.85) {
       state = 'SA';
       samplePostcode = '5251'; // Adelaide Hills / Mount Barker
-    } else if (normX > 0.58 && normY <= 0.52) {
+    } else if (normX > 0.582 && normY <= 0.525) {
       state = 'QLD';
       samplePostcode = normY < 0.30 ? '4870' : '4670'; // Cairns o Bundaberg
-    } else if (normX > 0.64 && normY > 0.52 && normY <= 0.72) {
+    } else if (normX > 0.640 && normY > 0.525 && normY <= 0.725) {
       state = 'NSW';
       samplePostcode = '2481'; // Byron Bay
-    } else if (normX > 0.62 && normY > 0.72 && normY <= 0.88) {
+    } else if (normX > 0.640 && normY > 0.725 && normY <= 0.88) {
       state = 'VIC';
       samplePostcode = '3550'; // Bendigo
     } else if (normX >= 0.68 && normY > 0.88) {
@@ -295,116 +305,300 @@ class _RealisticAustraliaMapPainter extends CustomPainter {
     required this.isEn,
   });
 
+  static const List<Offset> _mainlandPts = [
+    Offset(0.7456, 0.8217),
+    Offset(0.7299, 0.8077),
+    Offset(0.7158, 0.8008),
+    Offset(0.7172, 0.7849),
+    Offset(0.7104, 0.7887),
+    Offset(0.6918, 0.8141),
+    Offset(0.6321, 0.7887),
+    Offset(0.6179, 0.7665),
+    Offset(0.6101, 0.7272),
+    Offset(0.5998, 0.7138),
+    Offset(0.5807, 0.7094),
+    Offset(0.5866, 0.6954),
+    Offset(0.5832, 0.6758),
+    Offset(0.5744, 0.6935),
+    Offset(0.5553, 0.6992),
+    Offset(0.5651, 0.6815),
+    Offset(0.568, 0.6624),
+    Offset(0.5758, 0.6485),
+    Offset(0.5744, 0.6288),
+    Offset(0.5621, 0.6497),
+    Offset(0.5475, 0.6637),
+    Offset(0.5406, 0.6865),
+    Offset(0.5382, 0.6872),
+    Offset(0.523, 0.6739),
+    Offset(0.523, 0.6574),
+    Offset(0.5122, 0.6371),
+    Offset(0.5005, 0.6244),
+    Offset(0.5029, 0.6161),
+    Offset(0.4804, 0.5996),
+    Offset(0.4648, 0.5984),
+    Offset(0.4472, 0.5844),
+    Offset(0.4129, 0.5857),
+    Offset(0.364, 0.6072),
+    Offset(0.3425, 0.606),
+    Offset(0.3229, 0.6212),
+    Offset(0.3063, 0.6275),
+    Offset(0.3028, 0.6421),
+    Offset(0.2945, 0.6567),
+    Offset(0.2632, 0.6605),
+    Offset(0.2456, 0.6542),
+    Offset(0.2192, 0.6593),
+    Offset(0.2074, 0.6758),
+    Offset(0.1996, 0.6758),
+    Offset(0.182, 0.6935),
+    Offset(0.1526, 0.6923),
+    Offset(0.1208, 0.665),
+    Offset(0.1208, 0.6472),
+    Offset(0.1336, 0.6371),
+    Offset(0.1345, 0.5901),
+    Offset(0.1228, 0.5558),
+    Offset(0.1199, 0.5406),
+    Offset(0.1208, 0.5216),
+    Offset(0.113, 0.5038),
+    Offset(0.112, 0.4937),
+    Offset(0.1032, 0.4822),
+    Offset(0.1013, 0.4607),
+    Offset(0.0866, 0.4251),
+    Offset(0.089, 0.4232),
+    Offset(0.0934, 0.4289),
+    Offset(0.09, 0.4093),
+    Offset(0.1042, 0.4226),
+    Offset(0.1042, 0.415),
+    Offset(0.0876, 0.3744),
+    Offset(0.0895, 0.3604),
+    Offset(0.0964, 0.3426),
+    Offset(0.0944, 0.3223),
+    Offset(0.1023, 0.302),
+    Offset(0.1052, 0.3008),
+    Offset(0.1067, 0.3166),
+    Offset(0.1145, 0.3014),
+    Offset(0.1292, 0.2938),
+    Offset(0.137, 0.2836),
+    Offset(0.1546, 0.2709),
+    Offset(0.1703, 0.2722),
+    Offset(0.1849, 0.2621),
+    Offset(0.1967, 0.2595),
+    Offset(0.2045, 0.2506),
+    Offset(0.2202, 0.2506),
+    Offset(0.2378, 0.243),
+    Offset(0.248, 0.231),
+    Offset(0.2529, 0.217),
+    Offset(0.2647, 0.203),
+    Offset(0.2657, 0.1789),
+    Offset(0.2784, 0.1574),
+    Offset(0.2823, 0.1561),
+    Offset(0.2896, 0.177),
+    Offset(0.2945, 0.1745),
+    Offset(0.2891, 0.1612),
+    Offset(0.295, 0.1485),
+    Offset(0.3048, 0.151),
+    Offset(0.3068, 0.1332),
+    Offset(0.3239, 0.1085),
+    Offset(0.3322, 0.1041),
+    Offset(0.3337, 0.0971),
+    Offset(0.3415, 0.0996),
+    Offset(0.3425, 0.0933),
+    Offset(0.362, 0.0857),
+    Offset(0.3757, 0.0971),
+    Offset(0.3875, 0.1136),
+    Offset(0.41, 0.1161),
+    Offset(0.4075, 0.1015),
+    Offset(0.4154, 0.0838),
+    Offset(0.4251, 0.0749),
+    Offset(0.4222, 0.0685),
+    Offset(0.4325, 0.0514),
+    Offset(0.4423, 0.0438),
+    Offset(0.456, 0.0463),
+    Offset(0.4702, 0.0406),
+    Offset(0.4702, 0.0305),
+    Offset(0.4555, 0.0216),
+    Offset(0.4638, 0.0159),
+    Offset(0.4795, 0.0209),
+    Offset(0.4922, 0.0336),
+    Offset(0.5049, 0.0387),
+    Offset(0.5127, 0.0362),
+    Offset(0.5254, 0.0451),
+    Offset(0.5362, 0.0374),
+    Offset(0.545, 0.0387),
+    Offset(0.5499, 0.0349),
+    Offset(0.5592, 0.0508),
+    Offset(0.5514, 0.0685),
+    Offset(0.546, 0.0755),
+    Offset(0.5406, 0.0761),
+    Offset(0.5426, 0.085),
+    Offset(0.5298, 0.1104),
+    Offset(0.5308, 0.118),
+    Offset(0.546, 0.1326),
+    Offset(0.5685, 0.1466),
+    Offset(0.5841, 0.1643),
+    Offset(0.6018, 0.172),
+    Offset(0.6067, 0.1821),
+    Offset(0.6243, 0.1897),
+    Offset(0.6365, 0.1802),
+    Offset(0.6443, 0.1536),
+    Offset(0.6522, 0.1206),
+    Offset(0.6482, 0.0863),
+    Offset(0.6502, 0.0673),
+    Offset(0.6541, 0.0596),
+    Offset(0.6522, 0.0482),
+    Offset(0.661, 0.014),
+    Offset(0.6693, 0.0032),
+    Offset(0.6766, 0.0178),
+    Offset(0.6776, 0.033),
+    Offset(0.6825, 0.0368),
+    Offset(0.6835, 0.0482),
+    Offset(0.6903, 0.0609),
+    Offset(0.6913, 0.0863),
+    Offset(0.6972, 0.1028),
+    Offset(0.6986, 0.1047),
+    Offset(0.7114, 0.0958),
+    Offset(0.7275, 0.118),
+    Offset(0.7255, 0.132),
+    Offset(0.7285, 0.1485),
+    Offset(0.7324, 0.165),
+    Offset(0.7392, 0.1739),
+    Offset(0.7432, 0.1916),
+    Offset(0.7412, 0.2069),
+    Offset(0.7471, 0.2234),
+    Offset(0.7691, 0.2379),
+    Offset(0.797, 0.264),
+    Offset(0.795, 0.2716),
+    Offset(0.8048, 0.2855),
+    Offset(0.8131, 0.3154),
+    Offset(0.82, 0.3103),
+    Offset(0.8278, 0.3217),
+    Offset(0.8341, 0.3185),
+    Offset(0.8371, 0.3477),
+    Offset(0.8625, 0.3782),
+    Offset(0.8772, 0.401),
+    Offset(0.8821, 0.4213),
+    Offset(0.8811, 0.4569),
+    Offset(0.8909, 0.481),
+    Offset(0.8899, 0.5076),
+    Offset(0.8811, 0.5444),
+    Offset(0.8782, 0.5838),
+    Offset(0.8694, 0.6129),
+    Offset(0.8537, 0.6294),
+    Offset(0.84, 0.6675),
+    Offset(0.8341, 0.6954),
+    Offset(0.8253, 0.7132),
+    Offset(0.8195, 0.7449),
+    Offset(0.8195, 0.7678),
+    Offset(0.8072, 0.7798),
+    Offset(0.7808, 0.7836),
+    Offset(0.7671, 0.7938),
+  ];
+
+  static const List<Offset> _tasmaniaPts = [
+    Offset(0.7564, 0.9791),
+    Offset(0.7397, 0.9765),
+    Offset(0.7334, 0.9632),
+    Offset(0.7255, 0.9416),
+    Offset(0.7236, 0.9213),
+    Offset(0.7118, 0.8909),
+    Offset(0.7143, 0.8737),
+    Offset(0.728, 0.8775),
+    Offset(0.7456, 0.889),
+    Offset(0.772, 0.8775),
+    Offset(0.7852, 0.8807),
+    Offset(0.7872, 0.9226),
+    Offset(0.7803, 0.934),
+    Offset(0.7784, 0.9632),
+    Offset(0.7701, 0.9562),
+  ];
+
   @override
   void paint(Canvas canvas, Size size) {
     final w = size.width;
     final h = size.height;
 
-    // 0. Halo oceánico y relieve de plataforma continental
+    // Preservar relación de aspecto exacta de la imagen vectorial (1022 x 788)
+    const mapAspect = 1022.0 / 788.0;
+    double drawW = w;
+    double drawH = w / mapAspect;
+    if (drawH > h) {
+      drawH = h;
+      drawW = h * mapAspect;
+    }
+    final offX = (w - drawW) / 2.0;
+    final offY = (h - drawH) / 2.0;
+
+    // 0. Construir el contorno exacto continental de Australia
+    final mainlandPath = Path();
+    mainlandPath.moveTo(offX + drawW * _mainlandPts[0].dx, offY + drawH * _mainlandPts[0].dy);
+    for (int i = 1; i < _mainlandPts.length; i++) {
+      mainlandPath.lineTo(offX + drawW * _mainlandPts[i].dx, offY + drawH * _mainlandPts[i].dy);
+    }
+    mainlandPath.close();
+
+    // Contorno exacto de Tasmania
+    final tasmaniaPath = Path();
+    tasmaniaPath.moveTo(offX + drawW * _tasmaniaPts[0].dx, offY + drawH * _tasmaniaPts[0].dy);
+    for (int i = 1; i < _tasmaniaPts.length; i++) {
+      tasmaniaPath.lineTo(offX + drawW * _tasmaniaPts[i].dx, offY + drawH * _tasmaniaPts[i].dy);
+    }
+    tasmaniaPath.close();
+
+    // 1. Estados federados ajustados a la silueta exacta mediante intersección geométrica
+    // WA (Western Australia): Todo el oeste hasta 129°E (x ~ 0.385)
+    final waBox = Path()
+      ..addRect(Rect.fromLTWH(offX - 10, offY - 10, drawW * 0.385 + 10, drawH + 20));
+    final waPath = Path.combine(PathOperation.intersect, mainlandPath, waBox);
+
+    // NT (Northern Territory): Centro-norte (x ~ 0.385 a 0.582, y <= 0.525)
+    final ntBox = Path()
+      ..addRect(Rect.fromLTWH(offX + drawW * 0.385, offY - 10, drawW * (0.582 - 0.385), drawH * 0.525 + 10));
+    final ntPath = Path.combine(PathOperation.intersect, mainlandPath, ntBox);
+
+    // SA (South Australia): Centro-sur (x ~ 0.385 a 0.640, y > 0.525)
+    final saBox = Path()
+      ..addRect(Rect.fromLTWH(offX + drawW * 0.385, offY + drawH * 0.525, drawW * (0.640 - 0.385), drawH * 0.475 + 10));
+    final saPath = Path.combine(PathOperation.intersect, mainlandPath, saBox);
+
+    // QLD (Queensland): Este tropical y noreste
+    final qldPoly = Path()
+      ..moveTo(offX + drawW * 0.582, offY - 10)
+      ..lineTo(offX + drawW + 10, offY - 10)
+      ..lineTo(offX + drawW + 10, offY + drawH * 0.525)
+      ..lineTo(offX + drawW * 0.640, offY + drawH * 0.525)
+      ..lineTo(offX + drawW * 0.640, offY + drawH * 0.525)
+      ..lineTo(offX + drawW * 0.582, offY + drawH * 0.525)
+      ..close();
+    final qldPath = Path.combine(PathOperation.intersect, mainlandPath, qldPoly);
+
+    // NSW (New South Wales): Este centro (y ~ 0.525 a 0.725)
+    final nswBox = Path()
+      ..addRect(Rect.fromLTWH(offX + drawW * 0.640, offY + drawH * 0.525, drawW * (1.0 - 0.640) + 10, drawH * (0.725 - 0.525)));
+    final nswPath = Path.combine(PathOperation.intersect, mainlandPath, nswBox);
+
+    // VIC (Victoria): Sureste continental (y > 0.725)
+    final vicBox = Path()
+      ..addRect(Rect.fromLTWH(offX + drawW * 0.640, offY + drawH * 0.725, drawW * (1.0 - 0.640) + 10, drawH * 0.275 + 10));
+    final vicPath = Path.combine(PathOperation.intersect, mainlandPath, vicBox);
+
+    // 2. Halo oceánico exterior
     final oceanHaloPaint = Paint()
       ..color = secondaryColor.withValues(alpha: 0.08)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6.0;
 
-    // 1. Western Australia (WA) - Relieve geográfico hiperrealista
-    final waPath = Path()
-      ..moveTo(w * 0.38, h * 0.19)
-      ..quadraticBezierTo(w * 0.32, h * 0.155, w * 0.27, h * 0.16) // Cambridge Gulf & Joseph Bonaparte
-      ..quadraticBezierTo(w * 0.21, h * 0.175, w * 0.17, h * 0.21) // Costa escarpada del Kimberley
-      ..quadraticBezierTo(w * 0.135, h * 0.25, w * 0.12, h * 0.29) // Eighty Mile Beach
-      ..quadraticBezierTo(w * 0.085, h * 0.305, w * 0.06, h * 0.345) // Dampier & Pilbara
-      ..quadraticBezierTo(w * 0.045, h * 0.375, w * 0.05, h * 0.41) // Cabo Noroeste (Exmouth Horn)
-      ..quadraticBezierTo(w * 0.07, h * 0.445, w * 0.065, h * 0.49) // Bahía Shark / Isla Dirk Hartog
-      ..quadraticBezierTo(w * 0.08, h * 0.55, w * 0.095, h * 0.62) // Geraldton
-      ..quadraticBezierTo(w * 0.105, h * 0.69, w * 0.115, h * 0.74) // Costa de Perth & Cabo Naturaliste
-      ..quadraticBezierTo(w * 0.125, h * 0.795, w * 0.16, h * 0.815) // Cabo Leeuwin
-      ..quadraticBezierTo(w * 0.22, h * 0.825, w * 0.30, h * 0.82) // Costa sur (Albany & Esperance)
-      ..lineTo(w * 0.38, h * 0.82)
-      ..lineTo(w * 0.38, h * 0.19)
-      ..close();
+    canvas.drawPath(mainlandPath, oceanHaloPaint);
+    canvas.drawPath(tasmaniaPath, oceanHaloPaint);
 
-    // 2. Northern Territory (NT) - Arnhem Land y Top End
-    final ntPath = Path()
-      ..moveTo(w * 0.38, h * 0.19)
-      ..quadraticBezierTo(w * 0.40, h * 0.165, w * 0.435, h * 0.15) // Darwin & Beagle Gulf
-      ..quadraticBezierTo(w * 0.46, h * 0.13, w * 0.48, h * 0.135) // Península Cobourg
-      ..quadraticBezierTo(w * 0.52, h * 0.14, w * 0.545, h * 0.175) // Arnhem Land
-      ..quadraticBezierTo(w * 0.565, h * 0.22, w * 0.58, h * 0.305) // Golfo de Carpentaria (costa occidental)
-      ..lineTo(w * 0.58, h * 0.52)
-      ..lineTo(w * 0.38, h * 0.52)
-      ..close();
+    // 3. Dibujar cada estado con relieve y sombreado corporativo
+    _drawState(canvas, name: 'WA', path: waPath, labelPoint: Offset(offX + drawW * 0.20, offY + drawH * 0.50));
+    _drawState(canvas, name: 'NT', path: ntPath, labelPoint: Offset(offX + drawW * 0.48, offY + drawH * 0.34));
+    _drawState(canvas, name: 'SA', path: saPath, labelPoint: Offset(offX + drawW * 0.50, offY + drawH * 0.66));
+    _drawState(canvas, name: 'QLD', path: qldPath, labelPoint: Offset(offX + drawW * 0.72, offY + drawH * 0.36));
+    _drawState(canvas, name: 'NSW', path: nswPath, labelPoint: Offset(offX + drawW * 0.74, offY + drawH * 0.63));
+    _drawState(canvas, name: 'VIC', path: vicPath, labelPoint: Offset(offX + drawW * 0.72, offY + drawH * 0.79));
+    _drawState(canvas, name: 'TAS', path: tasmaniaPath, labelPoint: Offset(offX + drawW * 0.75, offY + drawH * 0.93));
 
-    // 3. South Australia (SA) - Spencer Gulf y Eyre Peninsula
-    final saPath = Path()
-      ..moveTo(w * 0.38, h * 0.52)
-      ..lineTo(w * 0.64, h * 0.52)
-      ..lineTo(w * 0.64, h * 0.82)
-      ..quadraticBezierTo(w * 0.59, h * 0.805, w * 0.575, h * 0.845) // Encounter Bay / Adelaida
-      ..quadraticBezierTo(w * 0.56, h * 0.795, w * 0.545, h * 0.85) // Península Yorke & Golfo San Vicente
-      ..quadraticBezierTo(w * 0.525, h * 0.775, w * 0.495, h * 0.835) // Golfo de Spencer & Península Eyre
-      ..quadraticBezierTo(w * 0.44, h * 0.83, w * 0.38, h * 0.82) // Gran Bahía Australiana
-      ..close();
-
-    // 4. Queensland (QLD) - Península Cape York y costa Gran Barrera
-    final qldPath = Path()
-      ..moveTo(w * 0.58, h * 0.305)
-      ..quadraticBezierTo(w * 0.605, h * 0.21, w * 0.655, h * 0.055) // Costa oeste Península de Cape York
-      ..quadraticBezierTo(w * 0.665, h * 0.052, w * 0.675, h * 0.075) // Punta de Cape York (Estrecho de Torres)
-      ..quadraticBezierTo(w * 0.71, h * 0.16, w * 0.75, h * 0.255) // Cooktown, Cairns & Hinchinbrook
-      ..quadraticBezierTo(w * 0.79, h * 0.33, w * 0.83, h * 0.41) // Townsville & Whitsundays
-      ..quadraticBezierTo(w * 0.865, h * 0.48, w * 0.85, h * 0.555) // Bundaberg, Hervey Bay & Fraser Coast
-      ..lineTo(w * 0.64, h * 0.52)
-      ..lineTo(w * 0.58, h * 0.52)
-      ..lineTo(w * 0.58, h * 0.305)
-      ..close();
-
-    // 5. New South Wales (NSW) - Byron Bay y costa este
-    final nswPath = Path()
-      ..moveTo(w * 0.64, h * 0.52)
-      ..lineTo(w * 0.85, h * 0.555) // Byron Bay (punto más oriental)
-      ..quadraticBezierTo(w * 0.845, h * 0.615, w * 0.835, h * 0.67) // Coffs Harbour & Port Macquarie
-      ..quadraticBezierTo(w * 0.82, h * 0.72, w * 0.805, h * 0.76) // Newcastle, Sídney & Wollongong
-      ..lineTo(w * 0.64, h * 0.72) // Río Murray
-      ..lineTo(w * 0.64, h * 0.52)
-      ..close();
-
-    // 6. Victoria (VIC) - Wilsons Promontory y Port Phillip
-    final vicPath = Path()
-      ..moveTo(w * 0.64, h * 0.72)
-      ..lineTo(w * 0.805, h * 0.76) // Cabo Howe
-      ..quadraticBezierTo(w * 0.77, h * 0.81, w * 0.74, h * 0.865) // Wilsons Promontory (extremo sur continental)
-      ..quadraticBezierTo(w * 0.715, h * 0.82, w * 0.68, h * 0.855) // Port Phillip & Melbourne
-      ..lineTo(w * 0.64, h * 0.82)
-      ..close();
-
-    // 7. Tasmania (TAS) - Isla de Tasmania realista
-    final tasPath = Path()
-      ..moveTo(w * 0.715, h * 0.90)
-      ..quadraticBezierTo(w * 0.74, h * 0.89, w * 0.765, h * 0.905) // Costa norte (Estrecho de Bass)
-      ..quadraticBezierTo(w * 0.78, h * 0.94, w * 0.76, h * 0.98) // Costa este & Hobart
-      ..quadraticBezierTo(w * 0.74, h * 0.985, w * 0.72, h * 0.965) // Costa sur (South East Cape)
-      ..quadraticBezierTo(w * 0.705, h * 0.93, w * 0.715, h * 0.90) // Costa salvaje oeste
-      ..close();
-
-    // Dibujar halos oceánicos
-    canvas.drawPath(waPath, oceanHaloPaint);
-    canvas.drawPath(ntPath, oceanHaloPaint);
-    canvas.drawPath(saPath, oceanHaloPaint);
-    canvas.drawPath(qldPath, oceanHaloPaint);
-    canvas.drawPath(nswPath, oceanHaloPaint);
-    canvas.drawPath(vicPath, oceanHaloPaint);
-    canvas.drawPath(tasPath, oceanHaloPaint);
-
-    // Dibujar cada estado con relleno y frontera
-    _drawState(canvas, name: 'WA', path: waPath, labelPoint: Offset(w * 0.20, h * 0.50));
-    _drawState(canvas, name: 'NT', path: ntPath, labelPoint: Offset(w * 0.48, h * 0.34));
-    _drawState(canvas, name: 'SA', path: saPath, labelPoint: Offset(w * 0.50, h * 0.66));
-    _drawState(canvas, name: 'QLD', path: qldPath, labelPoint: Offset(w * 0.72, h * 0.36));
-    _drawState(canvas, name: 'NSW', path: nswPath, labelPoint: Offset(w * 0.74, h * 0.63));
-    _drawState(canvas, name: 'VIC', path: vicPath, labelPoint: Offset(w * 0.72, h * 0.79));
-    _drawState(canvas, name: 'TAS', path: tasPath, labelPoint: Offset(w * 0.74, h * 0.94));
-
-    // Relieve Geográfico Ejecutivo (Great Dividing Range)
+    // 4. Relieve Geográfico Ejecutivo (Great Dividing Range)
     final reliefPaint = Paint()
       ..color = const Color(0x221E293B)
       ..style = PaintingStyle.stroke
@@ -412,16 +606,16 @@ class _RealisticAustraliaMapPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     final gdrReliefPath = Path()
-      ..moveTo(w * 0.67, h * 0.09)
-      ..quadraticBezierTo(w * 0.73, h * 0.24, w * 0.78, h * 0.38)
-      ..quadraticBezierTo(w * 0.81, h * 0.50, w * 0.79, h * 0.62)
-      ..quadraticBezierTo(w * 0.76, h * 0.73, w * 0.72, h * 0.81);
+      ..moveTo(offX + drawW * 0.67, offY + drawH * 0.09)
+      ..quadraticBezierTo(offX + drawW * 0.73, offY + drawH * 0.24, offX + drawW * 0.78, offY + drawH * 0.38)
+      ..quadraticBezierTo(offX + drawW * 0.81, offY + drawH * 0.50, offX + drawW * 0.79, offY + drawH * 0.62)
+      ..quadraticBezierTo(offX + drawW * 0.76, offY + drawH * 0.73, offX + drawW * 0.72, offY + drawH * 0.81);
     canvas.drawPath(gdrReliefPath, reliefPaint);
 
-    // Dibujar Pines de Hitos Regionales Oficiales en el Mapa
+    // 5. Dibujar Pines de Hitos Regionales Oficiales en el Mapa
     for (final hub in kRegionalHubs) {
-      final pinX = hub.relX * w;
-      final pinY = hub.relY * h;
+      final pinX = offX + hub.relX * drawW;
+      final pinY = offY + hub.relY * drawH;
       final isHubActive = activeState == hub.state &&
           (activePostcode == hub.postcode || (activePostcode.isEmpty && activeState == hub.state));
 

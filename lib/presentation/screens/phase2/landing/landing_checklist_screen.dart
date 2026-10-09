@@ -256,6 +256,18 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
     required List<Map<String, dynamic>> stages,
     required bool isEn,
   }) {
+    final stage0Tasks = stages[0]['tasks'] as List<LandingTask>;
+    final stage0Done = stage0Tasks.where((t) => t.isCompleted).length;
+    final stage0Ratio = stage0Tasks.isNotEmpty ? (stage0Done / stage0Tasks.length) : 0.0;
+
+    final stage1Tasks = stages[1]['tasks'] as List<LandingTask>;
+    final stage1Done = stage1Tasks.where((t) => t.isCompleted).length;
+    final stage1Ratio = stage1Tasks.isNotEmpty ? (stage1Done / stage1Tasks.length) : 0.0;
+
+    final stage2Tasks = stages[2]['tasks'] as List<LandingTask>;
+    final stage2Done = stage2Tasks.where((t) => t.isCompleted).length;
+    final stage2Ratio = stage2Tasks.isNotEmpty ? (stage2Done / stage2Tasks.length) : 0.0;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final availableWidth = constraints.maxWidth;
@@ -285,6 +297,33 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
         final metric = path.computeMetrics().first;
         final totalLength = metric.length;
 
+        final subPathToW1 = Path()
+          ..moveTo(padX, y0)
+          ..lineTo(availableWidth - padX, y0);
+        final lenW1 = subPathToW1.computeMetrics().first.length;
+
+        final subPathToW2 = Path()
+          ..moveTo(padX, y0)
+          ..lineTo(availableWidth - padX, y0)
+          ..cubicTo(availableWidth - 2, y0, availableWidth - 2, y1, availableWidth - padX, y1)
+          ..lineTo(padX, y1);
+        final lenW2 = subPathToW2.computeMetrics().first.length;
+
+        final f1 = (lenW1 / totalLength).clamp(0.0, 1.0);
+        final f2 = (lenW2 / totalLength).clamp(0.0, 1.0);
+
+        // Progresión exacta: el canguro llega al icono de la siguiente fase cuando se completan todos los pasos de la fase anterior
+        double effectiveProgress = 0.0;
+        if (stage0Ratio < 1.0) {
+          effectiveProgress = f1 * stage0Ratio;
+        } else if (stage1Ratio < 1.0) {
+          effectiveProgress = f1 + (f2 - f1) * stage1Ratio;
+        } else if (stage2Ratio < 1.0) {
+          effectiveProgress = f2 + (1.0 - f2) * stage2Ratio;
+        } else {
+          effectiveProgress = 1.0;
+        }
+
         final waypoints = [
           const Offset(padX, y0),
           Offset(availableWidth - padX, y0),
@@ -295,7 +334,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
         return SizedBox(
           height: canvasHeight,
           child: TweenAnimationBuilder<double>(
-            tween: Tween<double>(begin: 0, end: progressPercent.clamp(0.0, 1.0)),
+            tween: Tween<double>(begin: 0, end: effectiveProgress.clamp(0.0, 1.0)),
             duration: const Duration(milliseconds: 700),
             curve: Curves.easeInOutCubic,
             builder: (context, animatedVal, _) {
@@ -319,45 +358,45 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                     ),
                   ),
 
-                  // Capa 3: Botones interactivos de las 4 etapas situados en las bahías de la S
-                  // Etapa 0 (Pre-Vuelo): Arriba a la izquierda
+                  // Capa 3: Botones interactivos con solo el icono/dibujo de las 4 etapas (sin texto en el camino)
+                  // Etapa 0 (Pre-Vuelo): situado exactamente en Waypoint 0
                   Positioned(
-                    top: 1,
-                    left: 2,
-                    child: _buildStagePill(
+                    left: padX - 17,
+                    top: y0 - 17,
+                    child: _buildStageIconNode(
                       index: 0,
                       stage: stages[0],
                       isSelected: _selectedStageIndex == 0,
                     ),
                   ),
 
-                  // Etapa 1 (Llegada): Arriba a la derecha
+                  // Etapa 1 (Llegada): situado exactamente en Waypoint 1
                   Positioned(
-                    top: 1,
-                    right: 2,
-                    child: _buildStagePill(
+                    left: availableWidth - padX - 17,
+                    top: y0 - 17,
+                    child: _buildStageIconNode(
                       index: 1,
                       stage: stages[1],
                       isSelected: _selectedStageIndex == 1,
                     ),
                   ),
 
-                  // Etapa 2 (88 Días): Centro a la izquierda
+                  // Etapa 2 (88 Días): situado exactamente en Waypoint 2
                   Positioned(
-                    top: 50,
-                    left: 2,
-                    child: _buildStagePill(
+                    left: padX - 17,
+                    top: y1 - 17,
+                    child: _buildStageIconNode(
                       index: 2,
                       stage: stages[2],
                       isSelected: _selectedStageIndex == 2,
                     ),
                   ),
 
-                  // Etapa 3 (Salida): Abajo a la derecha
+                  // Etapa 3 (Salida): situado exactamente en Waypoint 3
                   Positioned(
-                    top: 99,
-                    right: 2,
-                    child: _buildStagePill(
+                    left: availableWidth - padX - 17,
+                    top: y2 - 17,
+                    child: _buildStageIconNode(
                       index: 3,
                       stage: stages[3],
                       isSelected: _selectedStageIndex == 3,
@@ -366,25 +405,25 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
 
                   // Capa 4: CANGURO VIAJERO (EN LA CAPA SUPERIOR, NUNCA TAPADO POR NADA)
                   Positioned(
-                    left: (kPos.dx - 14).clamp(0.0, availableWidth - 28),
-                    top: (kPos.dy - 14).clamp(0.0, canvasHeight - 28),
+                    left: (kPos.dx - 15).clamp(0.0, availableWidth - 30),
+                    top: (kPos.dy - 15).clamp(0.0, canvasHeight - 30),
                     child: Container(
-                      width: 28,
-                      height: 28,
+                      width: 30,
+                      height: 30,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: AppColors.surface,
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.primary, width: 2.0),
+                        border: Border.all(color: AppColors.primary, width: 2.2),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.35),
-                            blurRadius: 6,
+                            color: AppColors.primary.withValues(alpha: 0.4),
+                            blurRadius: 7,
                             offset: const Offset(0, 2),
                           ),
                         ],
                       ),
-                      child: const Text('🦘', style: TextStyle(fontSize: 15)),
+                      child: const Text('🦘', style: TextStyle(fontSize: 16)),
                     ),
                   ),
                 ],
@@ -396,7 +435,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
     );
   }
 
-  Widget _buildStagePill({
+  Widget _buildStageIconNode({
     required int index,
     required Map<String, dynamic> stage,
     required bool isSelected,
@@ -410,68 +449,53 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+        width: 34,
+        height: 34,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
+          shape: BoxShape.circle,
           color: isSelected
               ? (isDone ? AppColors.secondary : AppColors.primary)
-              : AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
+              : (isDone ? AppColors.secondary.withValues(alpha: 0.15) : AppColors.surface),
           border: Border.all(
             color: isSelected
-                ? (isDone ? AppColors.secondary : AppColors.primary)
-                : (isDone ? AppColors.secondary.withValues(alpha: 0.6) : AppColors.cardBorder),
-            width: isSelected ? 2.0 : 1.2,
+                ? Colors.white
+                : (isDone ? AppColors.secondary : AppColors.cardBorder),
+            width: isSelected ? 2.4 : 1.5,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: (isDone ? AppColors.secondary : AppColors.primary).withValues(alpha: 0.35),
-                    blurRadius: 7,
+                    color: (isDone ? AppColors.secondary : AppColors.primary).withValues(alpha: 0.4),
+                    blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
                 ]
               : const [
-                  BoxShadow(color: Colors.black12, blurRadius: 3, offset: Offset(0, 1)),
+                  BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1)),
                 ],
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
+        child: Stack(
+          alignment: Alignment.center,
+          clipBehavior: Clip.none,
           children: [
             Text(
               stage['icon'] as String,
-              style: const TextStyle(fontSize: 13),
+              style: const TextStyle(fontSize: 16),
             ),
-            const SizedBox(width: 5),
-            Text(
-              stage['shortTitle'] as String,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: isSelected ? FontWeight.w900 : FontWeight.w700,
-                color: isSelected
-                    ? Colors.white
-                    : (isDone ? AppColors.secondary : AppColors.textPrimary),
-              ),
-            ),
-            const SizedBox(width: 5),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? Colors.white.withValues(alpha: 0.25)
-                    : (isDone ? AppColors.secondary.withValues(alpha: 0.12) : AppColors.surfaceElevated),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                '$doneCount/${tasks.length}',
-                style: TextStyle(
-                  fontSize: 9.5,
-                  fontWeight: FontWeight.w900,
-                  color: isSelected
-                      ? Colors.white
-                      : (isDone ? AppColors.secondary : AppColors.textMuted),
+            if (isDone && !isSelected)
+              Positioned(
+                bottom: -2,
+                right: -2,
+                child: Container(
+                  padding: const EdgeInsets.all(1.5),
+                  decoration: const BoxDecoration(
+                    color: AppColors.secondary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(CupertinoIcons.checkmark, size: 8, color: Colors.white),
                 ),
               ),
-            ),
           ],
         ),
       ),

@@ -40,9 +40,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    // Búsqueda inicial por defecto
+    // Búsqueda inicial por defecto sin snackbar molesto
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _executePostcodeSearch('4870');
+      _executePostcodeSearch('4870', showFeedback: false);
     });
   }
 
@@ -57,12 +57,92 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     super.dispose();
   }
 
-  void _executePostcodeSearch(String code) {
+  void _executePostcodeSearch(String code, {bool showFeedback = true}) {
+    final clean = code.trim().replaceAll(RegExp(r'\s+'), '');
+    if (clean.isEmpty) return;
+    FocusScope.of(context).unfocus();
     final repo = ref.read(postcodeRepositoryProvider);
-    final result = repo.findPostcode(code);
+    final result = repo.findPostcode(clean);
     setState(() {
       _searchResult = result;
     });
+
+    if (showFeedback && mounted) {
+      final isRegional = result != null && result.zone != 'metro' && result.zone != 'unknown';
+      final isEn = ref.read(localeProvider)?.languageCode == 'en';
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+      if (result != null && isRegional) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(CupertinoIcons.checkmark_seal_fill, color: Colors.white, size: 20),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    isEn
+                        ? 'Searched: CP $clean • ${result.location} (Eligible Regional Zone)'
+                        : 'Búsqueda: CP $clean • ${result.location} (Zona Regional Oficial)',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: AppColors.secondary,
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 3),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        );
+      } else if (result != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(CupertinoIcons.exclamationmark_triangle_fill, color: Colors.white, size: 20),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    isEn
+                        ? 'Searched: CP $clean • ${result.location} (Metro / Ineligible)'
+                        : 'Búsqueda: CP $clean • ${result.location} (Zona Metro / No Elegible)',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: const Color(0xFFD9534F),
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 3),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(CupertinoIcons.info_circle_fill, color: Colors.white, size: 20),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    isEn
+                        ? 'Searched: $clean (Format invalid, must be 4 digits)'
+                        : 'Búsqueda: $clean (Formato no válido, debe tener 4 dígitos)',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: const Color(0xFF64748B),
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 3),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        );
+      }
+    }
   }
 
   String _deduceStateFromPostcode(String code) {
@@ -303,6 +383,10 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             ),
           ],
         ),
+        const SizedBox(height: 12),
+
+        // TARJETA DE RESULTADO DE BÚSQUEDA DESTACADA (Feedback visual inmediato)
+        _buildSearchFeedbackCard(isEn, subclass, _searchResult),
         const SizedBox(height: 14),
 
         // MAPA REGIONAL DE AUSTRALIA
@@ -328,8 +412,219 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     );
   }
 
+  Widget _buildSearchFeedbackCard(bool isEn, String subclass, PostcodeInfo? result) {
+    if (result == null) {
+      return Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.cardBorder),
+        ),
+        child: Row(
+          children: [
+            const Icon(CupertinoIcons.search, size: 18, color: AppColors.textMuted),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                isEn
+                    ? 'Enter any 4-digit postcode or tap the map to check LIN 22/050 rules.'
+                    : 'Introduce un código postal o pulsa en el mapa para validar la normativa.',
+                style: const TextStyle(fontSize: 11.5, color: AppColors.textMuted),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final isRegional = result.zone != 'metro' && result.zone != 'unknown';
+    final isNorthern = result.zone == 'northern';
+    final isRemote = result.zone == 'remote';
+    final agriValid = result.isEligible(subclass, 'agriculture');
+    final constValid = result.isEligible(subclass, 'construction');
+    final hospValid = result.isEligible(subclass, 'tourism_hospitality');
+
+    final primaryThemeColor = isRegional ? AppColors.secondary : const Color(0xFFD9534F);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: primaryThemeColor.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: primaryThemeColor.withValues(alpha: 0.4), width: 1.5),
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2))],
+      ),
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: primaryThemeColor.withValues(alpha: 0.15),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  isRegional ? CupertinoIcons.checkmark_seal_fill : CupertinoIcons.exclamationmark_triangle_fill,
+                  size: 20,
+                  color: primaryThemeColor,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'CP ${result.code} — ${result.location}',
+                      style: const TextStyle(
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '${_getStateFullName(result.state, isEn)} • Zona: ${isNorthern ? (isEn ? 'Northern Australia' : 'Norte de Australia') : isRemote ? (isEn ? 'Remote Zone (LIN 22/050)' : 'Zona Remota (LIN 22/050)') : isRegional ? (isEn ? 'Regional Australia' : 'Australia Regional') : (isEn ? 'Metropolitan Area' : 'Área Metropolitana')}',
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w700,
+                        color: primaryThemeColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                decoration: BoxDecoration(
+                  color: primaryThemeColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  isRegional
+                      ? (isEn ? '✓ REGIONAL' : '✓ REGIONAL VÁLIDO')
+                      : (isEn ? '✕ METRO' : '✕ METRO NO VÁLIDO'),
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          const Divider(height: 1, thickness: 0.8),
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: [
+              _buildSearchChip(
+                icon: '🌾',
+                label: isEn ? 'Agriculture' : 'Agricultura',
+                isValid: agriValid,
+              ),
+              _buildSearchChip(
+                icon: '🏗️',
+                label: isEn ? 'Construction' : 'Construcción',
+                isValid: constValid,
+              ),
+              _buildSearchChip(
+                icon: '☕',
+                label: isEn ? 'Hospitality' : 'Hostelería',
+                isValid: hospValid,
+                note: subclass == '417' ? (isEn ? '417: No' : '417: No') : (!isNorthern && !isRemote ? (isEn ? 'North/Remote only' : 'Solo Norte/Remoto') : null),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            isRegional
+                ? (isEn
+                    ? 'Eligible regional postcode under LIN 22/050 for renewing your visa.'
+                    : 'Código postal regional oficial según LIN 22/050. Los días trabajados aquí computan para tus 88 o 179 días.')
+                : (isEn
+                    ? 'Metropolitan area: work performed here DOES NOT count towards 88/179 day visa renewal.'
+                    : 'Zona metropolitana: los días trabajados aquí NO computan para renovar tu visado bajo la ley LIN 22/050.'),
+            style: TextStyle(
+              fontSize: 11,
+              color: isRegional ? AppColors.textSecondary : const Color(0xFFC0392B),
+              fontWeight: isRegional ? FontWeight.normal : FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchChip({
+    required String icon,
+    required String label,
+    required bool isValid,
+    String? note,
+  }) {
+    final color = isValid ? AppColors.secondary : AppColors.statusClosed;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(icon, style: const TextStyle(fontSize: 12)),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+          ),
+          const SizedBox(width: 4),
+          Icon(
+            isValid ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.xmark_circle_fill,
+            size: 12,
+            color: color,
+          ),
+          if (note != null) ...[
+            const SizedBox(width: 3),
+            Text('($note)', style: TextStyle(fontSize: 9.5, color: color, fontWeight: FontWeight.w600)),
+          ],
+        ],
+      ),
+    );
+  }
+
+  String _getStateFullName(String code, bool isEn) {
+    switch (code.toUpperCase()) {
+      case 'QLD':
+        return 'Queensland (QLD)';
+      case 'NSW':
+        return isEn ? 'New South Wales (NSW)' : 'Nueva Gales del Sur (NSW)';
+      case 'VIC':
+        return 'Victoria (VIC)';
+      case 'WA':
+        return isEn ? 'Western Australia (WA)' : 'Australia Occidental (WA)';
+      case 'SA':
+        return isEn ? 'South Australia (SA)' : 'Australia Meridional (SA)';
+      case 'TAS':
+        return 'Tasmania (TAS)';
+      case 'NT':
+        return isEn ? 'Northern Territory (NT)' : 'Territorio del Norte (NT)';
+      case 'ACT':
+        return isEn ? 'Australian Capital Territory (ACT)' : 'Territorio Capital (ACT)';
+      default:
+        return code;
+    }
+  }
+
   List<Map<String, dynamic>> _getIndustriesList(bool isEn, String subclass, PostcodeInfo? postcode) {
-    final isNorthern = postcode != null && (postcode.zone == 'northern' || postcode.zone == 'remote');
     final isRegional = postcode != null && postcode.zone != 'metro' && postcode.zone != 'unknown';
 
     return [
@@ -378,12 +673,12 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
         'desc': isEn
             ? 'Coal mining, mineral extraction, exploration, FIFO site operations.'
             : 'Extracción mineral, sondeos, explotación de canteras y operaciones FIFO.',
-        'eligible': subclass == '417' ? isRegional : isNorthern,
+        'eligible': postcode != null && postcode.isEligible(subclass, 'mining'),
         'legalTip': subclass == '462'
-            ? (isNorthern
+            ? (postcode?.isEligible(subclass, 'mining') == true
                 ? (isEn ? 'ELIGIBLE: Approved for Subclass 462 in Northern Australia.' : 'VÁLIDO: Aprobado para Subclase 462 en Norte de Australia.')
                 : (isEn ? 'INELIGIBLE: Under 462, mining only qualifies in Northern Australia.' : 'NO VÁLIDO: Para 462, minería sólo califica en Norte de Australia.'))
-            : (isRegional
+            : (postcode?.isEligible(subclass, 'mining') == true
                 ? (isEn ? 'ELIGIBLE: Approved for Subclass 417 in regional areas.' : 'VÁLIDO: Aprobado para Subclase 417 en zonas regionales.')
                 : (isEn ? 'INELIGIBLE: In metropolitan areas.' : 'NO VÁLIDO: En áreas metropolitanas.')),
       },
@@ -394,12 +689,12 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
         'desc': isEn
             ? 'Planting, maintaining, felling trees in plantations and sawmills.'
             : 'Plantación, tala y procesado de madera en serrerías regionales.',
-        'eligible': subclass == '417' ? isRegional : isNorthern,
+        'eligible': postcode != null && postcode.isEligible(subclass, 'forestry'),
         'legalTip': subclass == '462'
-            ? (isNorthern
+            ? (postcode?.isEligible(subclass, 'forestry') == true
                 ? (isEn ? 'ELIGIBLE: Tree farming approved in Northern Australia for 462.' : 'VÁLIDO: Silvicultura aprobada en Norte de Australia para 462.')
                 : (isEn ? 'INELIGIBLE: Under 462, forestry requires Northern Australia location.' : 'NO VÁLIDO: En 462 requiere ubicación en Norte de Australia.'))
-            : (isRegional
+            : (postcode?.isEligible(subclass, 'forestry') == true
                 ? (isEn ? 'ELIGIBLE: Tree farming approved across regional postcodes for 417.' : 'VÁLIDO: Aprobado en códigos regionales para 417.')
                 : (isEn ? 'INELIGIBLE: Metropolitan areas.' : 'NO VÁLIDO: En áreas metropolitanas.')),
       },
@@ -410,12 +705,12 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
         'desc': isEn
             ? 'Commercial fishing, pearling operations, hatchery maintenance.'
             : 'Pesca comercial marítima, criaderos y extracción de perlas.',
-        'eligible': subclass == '417' ? isRegional : isNorthern,
+        'eligible': postcode != null && postcode.isEligible(subclass, 'fishing'),
         'legalTip': subclass == '462'
-            ? (isNorthern
+            ? (postcode?.isEligible(subclass, 'fishing') == true
                 ? (isEn ? 'ELIGIBLE: Fishing/pearling approved in Northern Australia for 462.' : 'VÁLIDO: Pesca/perlas aprobada en Norte de Australia para 462.')
                 : (isEn ? 'INELIGIBLE: Under 462, fishing requires Northern Australia location.' : 'NO VÁLIDO: En 462 requiere ubicación en Norte de Australia.'))
-            : (isRegional
+            : (postcode?.isEligible(subclass, 'fishing') == true
                 ? (isEn ? 'ELIGIBLE: Fishing/pearling approved across regional postcodes for 417.' : 'VÁLIDO: Aprobado en códigos regionales para 417.')
                 : (isEn ? 'INELIGIBLE: Metropolitan areas.' : 'NO VÁLIDO: En áreas metropolitanas.')),
       },
@@ -547,19 +842,15 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              icon: const Icon(CupertinoIcons.square_list_fill, size: 16),
-              label: Flexible(
-                child: Text(
-                  isEn ? 'View 8 Industries Rules (LIN 22/050)' : 'Normativa de 8 Industrias (LIN 22/050)',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                ),
+              icon: const Icon(CupertinoIcons.doc_text_search, size: 16),
+              label: Text(
+                isEn ? 'Official Legislation (LIN 22/050)' : 'Ver Normativa Oficial (LIN 22/050)',
+                style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 elevation: 0,
               ),

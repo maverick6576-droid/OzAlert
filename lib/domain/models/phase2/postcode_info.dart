@@ -34,10 +34,11 @@ class PostcodeInfo {
   }
 
   bool isEligible(String subclass, String industry) {
-    if (subclass == '462') {
-      return subclass462[industry] ?? false;
-    } else {
-      return subclass417[industry] ?? false;
+    final map = subclass == '462' ? subclass462 : subclass417;
+    if (map[industry] != null) return map[industry]!;
+    if (industry == 'forestry' || industry == 'fishing') {
+      return map['forestry_fishing'] ?? false;
     }
+    return false;
   }
 }
