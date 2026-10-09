@@ -82,14 +82,10 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
             },
           ];
 
-          final currentStage = stages[_selectedStageIndex.clamp(0, stages.length - 1)];
-          final currentStageTasks = currentStage['tasks'] as List<LandingTask>;
-          final currentPendingTasks = currentStageTasks.where((t) => !t.isCompleted).toList();
-
           return ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             children: [
-              // 1. Camino Animado de Evolución Australiana (The Great Aussie Trail)
+              // 1. Camino Animado de Evolución Australiana (The Great Aussie S-Trail)
               _buildAustralianJourneyTrail(
                 completedCount: completedCount,
                 totalCount: totalCount,
@@ -97,43 +93,29 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                 stages: stages,
                 isEn: isEn,
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 16),
 
-              // 2. MODO FOCO: Si hay tareas pendientes en la fase activa, destacar la próxima
-              if (currentPendingTasks.isNotEmpty) ...[
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: AppColors.secondary.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppColors.secondary.withValues(alpha: 0.25)),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(CupertinoIcons.flame_fill, size: 16, color: AppColors.secondary),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          isEn
-                              ? 'Next up: Complete this step first to avoid delays.'
-                              : 'Prioridad: Completa esta gestión primero para no retrasarte.',
-                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-                        ),
-                      ),
-                    ],
-                  ),
+              // 2. TODAS LAS FASES SIEMPRE VISIBLES EN FORMATO DESPLEGABLE / ACCORDION
+              for (int stageIdx = 0; stageIdx < stages.length; stageIdx++) ...[
+                _buildStageAccordionSection(
+                  context: context,
+                  ref: ref,
+                  stageIndex: stageIdx,
+                  stage: stages[stageIdx],
+                  isExpanded: _selectedStageIndex == stageIdx,
+                  isEn: isEn,
+                  onHeaderTap: () {
+                    setState(() {
+                      if (_selectedStageIndex == stageIdx) {
+                        _selectedStageIndex = -1;
+                      } else {
+                        _selectedStageIndex = stageIdx;
+                      }
+                    });
+                  },
                 ),
+                const SizedBox(height: 10),
               ],
-
-              // 5. TÍTULO DE LA FASE ACTIVA
-              _buildSectionHeader(
-                currentStage['title'] as String,
-                currentStage['subtitle'] as String,
-              ),
-
-              // 6. TAREAS DE LA FASE SELECCIONADA (SOLO 3 A 7 TAREAS EN PANTALLA)
-              ...currentStageTasks.map((t) => _buildTaskTile(context, ref, t, isEn)),
 
               const SizedBox(height: 36),
             ],
@@ -277,11 +259,11 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
     return LayoutBuilder(
       builder: (context, constraints) {
         final availableWidth = constraints.maxWidth;
-        const canvasHeight = 224.0;
-        const padX = 42.0;
-        const y0 = 38.0;
-        const y1 = 118.0;
-        const y2 = 188.0;
+        const canvasHeight = 146.0;
+        const padX = 36.0;
+        const y0 = 24.0;
+        const y1 = 73.0;
+        const y2 = 122.0;
 
         // Trayectoria en 'S' continua, elegante y fluida
         final path = Path();
@@ -337,11 +319,11 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                     ),
                   ),
 
-                  // Capa 3: Botones interactivos de las 4 etapas situados en las bahías abiertas de la S
-                  // Etapa 0 (Pre-Vuelo): Arriba a la izquierda (sobre el carril 1)
+                  // Capa 3: Botones interactivos de las 4 etapas situados en las bahías de la S
+                  // Etapa 0 (Pre-Vuelo): Arriba a la izquierda
                   Positioned(
-                    top: 2,
-                    left: 4,
+                    top: 1,
+                    left: 2,
                     child: _buildStagePill(
                       index: 0,
                       stage: stages[0],
@@ -349,10 +331,10 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                     ),
                   ),
 
-                  // Etapa 1 (Llegada): Arriba a la derecha (sobre el carril 1)
+                  // Etapa 1 (Llegada): Arriba a la derecha
                   Positioned(
-                    top: 2,
-                    right: 4,
+                    top: 1,
+                    right: 2,
                     child: _buildStagePill(
                       index: 1,
                       stage: stages[1],
@@ -360,10 +342,10 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                     ),
                   ),
 
-                  // Etapa 2 (88 Días): Centro a la izquierda (en la bahía abierta entre carril 1 y carril 2)
+                  // Etapa 2 (88 Días): Centro a la izquierda
                   Positioned(
-                    top: 80,
-                    left: 4,
+                    top: 50,
+                    left: 2,
                     child: _buildStagePill(
                       index: 2,
                       stage: stages[2],
@@ -371,10 +353,10 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                     ),
                   ),
 
-                  // Etapa 3 (Salida): Abajo a la derecha (en la bahía abierta entre carril 2 y carril 3)
+                  // Etapa 3 (Salida): Abajo a la derecha
                   Positioned(
-                    top: 148,
-                    right: 4,
+                    top: 99,
+                    right: 2,
                     child: _buildStagePill(
                       index: 3,
                       stage: stages[3],
@@ -384,11 +366,11 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
 
                   // Capa 4: CANGURO VIAJERO (EN LA CAPA SUPERIOR, NUNCA TAPADO POR NADA)
                   Positioned(
-                    left: (kPos.dx - 15).clamp(0.0, availableWidth - 30),
-                    top: (kPos.dy - 15).clamp(0.0, canvasHeight - 30),
+                    left: (kPos.dx - 14).clamp(0.0, availableWidth - 28),
+                    top: (kPos.dy - 14).clamp(0.0, canvasHeight - 28),
                     child: Container(
-                      width: 30,
-                      height: 30,
+                      width: 28,
+                      height: 28,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: AppColors.surface,
@@ -397,12 +379,12 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                         boxShadow: [
                           BoxShadow(
                             color: AppColors.primary.withValues(alpha: 0.35),
-                            blurRadius: 8,
-                            offset: const Offset(0, 3),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
-                      child: const Text('🦘', style: TextStyle(fontSize: 16)),
+                      child: const Text('🦘', style: TextStyle(fontSize: 15)),
                     ),
                   ),
                 ],
@@ -496,29 +478,166 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
     );
   }
 
-  Widget _buildSectionHeader(String title, String subtitle) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 4, right: 4, bottom: 8),
+  Widget _buildStageAccordionSection({
+    required BuildContext context,
+    required WidgetRef ref,
+    required int stageIndex,
+    required Map<String, dynamic> stage,
+    required bool isExpanded,
+    required bool isEn,
+    required VoidCallback onHeaderTap,
+  }) {
+    final tasks = stage['tasks'] as List<LandingTask>;
+    final doneCount = tasks.where((t) => t.isCompleted).length;
+    final isDone = tasks.isNotEmpty && doneCount == tasks.length;
+    final pendingTasks = tasks.where((t) => !t.isCompleted).toList();
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeInOut,
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: isExpanded
+              ? (isDone ? AppColors.secondary : AppColors.primary)
+              : (isDone ? AppColors.secondary.withValues(alpha: 0.45) : AppColors.cardBorder),
+          width: isExpanded ? 1.6 : 1.0,
+        ),
+        boxShadow: isExpanded
+            ? [
+                BoxShadow(
+                  color: (isDone ? AppColors.secondary : AppColors.primary).withValues(alpha: 0.12),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ]
+            : const [
+                BoxShadow(color: Colors.black12, blurRadius: 3, offset: Offset(0, 1)),
+              ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w800,
-              color: AppColors.primary,
-              letterSpacing: -0.2,
+          // Cabecera interactiva del Accordion
+          InkWell(
+            onTap: onHeaderTap,
+            borderRadius: BorderRadius.circular(18),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(7),
+                    decoration: BoxDecoration(
+                      color: isDone
+                          ? AppColors.secondary.withValues(alpha: 0.15)
+                          : (isExpanded ? AppColors.primary.withValues(alpha: 0.12) : AppColors.surfaceElevated),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(stage['icon'] as String, style: const TextStyle(fontSize: 16)),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          stage['title'] as String,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            color: isExpanded ? AppColors.primary : AppColors.textPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          stage['subtitle'] as String,
+                          style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: isDone
+                          ? AppColors.secondary.withValues(alpha: 0.15)
+                          : (isExpanded ? AppColors.primary.withValues(alpha: 0.1) : AppColors.surfaceElevated),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: isDone
+                            ? AppColors.secondary.withValues(alpha: 0.4)
+                            : (isExpanded ? AppColors.primary.withValues(alpha: 0.3) : AppColors.cardBorder),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (isDone)
+                          const Icon(CupertinoIcons.checkmark_circle_fill, size: 12, color: AppColors.secondary)
+                        else
+                          Text(
+                            '$doneCount/${tasks.length}',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w900,
+                              color: isExpanded ? AppColors.primary : AppColors.textMuted,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Icon(
+                    isExpanded ? CupertinoIcons.chevron_up : CupertinoIcons.chevron_down,
+                    size: 15,
+                    color: isExpanded ? AppColors.primary : AppColors.textMuted,
+                  ),
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: 2),
-          Text(
-            subtitle,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.textMuted,
+
+          // Contenido desplegable (Tareas de la fase)
+          if (isExpanded) ...[
+            const Divider(height: 1, color: AppColors.cardBorder),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (pendingTasks.isNotEmpty) ...[
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                      margin: const EdgeInsets.only(bottom: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.secondary.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: AppColors.secondary.withValues(alpha: 0.25)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(CupertinoIcons.flame_fill, size: 14, color: AppColors.secondary),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              isEn
+                                  ? 'Priority: Complete pending tasks below.'
+                                  : 'Prioridad: Completa estas tareas para avanzar de fase.',
+                              style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                  ...tasks.map((t) => _buildTaskTile(context, ref, t, isEn)),
+                ],
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );
@@ -654,7 +773,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
   String _getTaskActionLabel(String target, bool isEn) {
     switch (target) {
       case 'employment':
-        return isEn ? 'Pro Resume & Document Suite 📄' : 'Generador CV Pro & Documentos 📄';
+        return isEn ? 'Resume & Document Suite 📄' : 'Generador CV & Documentos 📄';
       case 'fair_work':
         return isEn ? 'Fair Work Pay Calculator 💰' : 'Calcular Sueldo Fair Work 💰';
       case '88days':

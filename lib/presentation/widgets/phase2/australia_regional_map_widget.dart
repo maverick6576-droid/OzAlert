@@ -108,8 +108,6 @@ class AustraliaRegionalMapWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final stateTitle = _getStateFullName(activeState);
-    final zoneDescription = _getZoneDescription(activeState, activeZone);
-    final currentPostcode = activePostcode ?? '4870';
 
     return Container(
       decoration: BoxDecoration(
@@ -198,18 +196,18 @@ class AustraliaRegionalMapWidget extends StatelessWidget {
                           isEn: isEn,
                         ),
                       ),
-                      // Indicador flotante sutil en esquina
+                      // Indicador flotante sutil en esquina superior derecha (océano libre, nunca tapa Tasmania)
                       Positioned(
-                        bottom: 4,
-                        right: 4,
+                        top: 6,
+                        right: 8,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                           decoration: BoxDecoration(
-                            color: Colors.black45,
-                            borderRadius: BorderRadius.circular(6),
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            isEn ? '👆 Tap to inspect' : '👆 Toca para explorar',
+                            isEn ? '👆 Tap to explore' : '👆 Toca para explorar',
                             style: const TextStyle(color: Colors.white, fontSize: 9.5, fontWeight: FontWeight.w600),
                           ),
                         ),
@@ -220,134 +218,37 @@ class AustraliaRegionalMapWidget extends StatelessWidget {
               );
             },
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
 
-          // Selector de Hitos Regionales Oficiales Más Frecuentes
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: kRegionalHubs.map((hub) {
-                final isSelected = activeState.toUpperCase() == hub.state &&
-                    (activePostcode == hub.postcode || (activePostcode == null && activeState == hub.state));
-
-                return Padding(
-                  padding: const EdgeInsets.only(right: 6),
-                  child: GestureDetector(
-                    onTap: () {
-                      onRegionSelected?.call(hub.postcode, hub.state);
-                      onStateTap?.call(hub.state);
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: isSelected ? AppColors.primary : AppColors.surfaceElevated,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: isSelected ? AppColors.primary : AppColors.cardBorder,
-                          width: isSelected ? 1.5 : 1.0,
-                        ),
-                        boxShadow: isSelected
-                            ? [BoxShadow(color: AppColors.primary.withValues(alpha: 0.25), blurRadius: 4, offset: const Offset(0, 2))]
-                            : null,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(hub.icon, style: const TextStyle(fontSize: 12)),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${hub.name} (${hub.postcode})',
-                            style: TextStyle(
-                              fontSize: 10.5,
-                              fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
-                              color: isSelected ? Colors.white : AppColors.textPrimary,
-                            ),
-                          ),
-                        ],
-                      ),
+          // Etiqueta minimalista: Únicamente la zona seleccionada
+          Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceElevated,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.cardBorder),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(CupertinoIcons.location_solid, size: 14, color: AppColors.primary),
+                  const SizedBox(width: 6),
+                  Text(
+                    stateTitle,
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.textPrimary,
                     ),
                   ),
-                );
-              }).toList(),
-            ),
-          ),
-          const SizedBox(height: 12),
-
-          // Tarjeta Informativa de la Zona Activa
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceElevated,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppColors.cardBorder),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: 14,
-                  backgroundColor: _isZoneEligible(activeZone)
-                      ? AppColors.secondary.withValues(alpha: 0.15)
-                      : AppColors.statusClosed.withValues(alpha: 0.15),
-                  child: Icon(
-                    _isZoneEligible(activeZone) ? CupertinoIcons.check_mark_circled_solid : CupertinoIcons.xmark_circle_fill,
-                    size: 16,
-                    color: _isZoneEligible(activeZone) ? AppColors.secondary : AppColors.statusClosed,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              activeLocation != null
-                                  ? '$activeLocation (CP: $currentPostcode)'
-                                  : '$stateTitle (CP: $currentPostcode)',
-                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: AppColors.textPrimary),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
-                            decoration: BoxDecoration(
-                              color: _isZoneEligible(activeZone)
-                                  ? AppColors.secondary.withValues(alpha: 0.12)
-                                  : AppColors.statusClosed.withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              _isZoneEligible(activeZone) ? (isEn ? 'ELIGIBLE' : 'ELEGIBLE') : (isEn ? 'METRO' : 'NO VÁLIDO'),
-                              style: TextStyle(
-                                fontSize: 9.5,
-                                fontWeight: FontWeight.w900,
-                                color: _isZoneEligible(activeZone) ? AppColors.secondary : AppColors.statusClosed,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        zoneDescription,
-                        style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary, height: 1.35),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
       ),
     );
-  }
-
-  bool _isZoneEligible(String zone) {
-    return zone != 'metro' && zone != 'unknown';
   }
 
   String _getStateFullName(String code) {
@@ -371,28 +272,6 @@ class AustraliaRegionalMapWidget extends StatelessWidget {
       default:
         return isEn ? 'Queensland (QLD)' : 'Queensland (QLD)';
     }
-  }
-
-  String _getZoneDescription(String state, String zone) {
-    final st = state.toUpperCase();
-    if (zone == 'northern' || st == 'NT' || (st == 'QLD' && (zone.contains('north') || activePostcode?.startsWith('48') == true))) {
-      return isEn
-          ? 'Northern Australia Tropical Zone: Eligible for Hospitality & Tourism under Subclass 462, plus Agriculture and Construction.'
-          : 'Zona Norte Tropical: Aprobada para Hostelería y Turismo en Subclase 462, además de Campo y Obras.';
-    }
-    if (st == 'SA' || st == 'TAS') {
-      return isEn
-          ? 'Entire state is classified regional by Home Affairs. Agriculture & Construction eligible statewide.'
-          : 'El 100% del estado califica como área regional oficial según Inmigración (Agricultura y Obras).';
-    }
-    if (zone == 'metro') {
-      return isEn
-          ? 'Metropolitan Capital Area: Ineligible for 88 days visa extension specified work.'
-          : 'Área Metropolitana: No válida para renovar visado de los 88 días bajo LIN 22/050.';
-    }
-    return isEn
-        ? 'Regional Postcode Zone (LIN 22/050): Plant & animal cultivation and construction approved.'
-        : 'Zona Regional Aprobada (LIN 22/050): Agricultura, ganadería y construcción válidas.';
   }
 }
 
@@ -420,63 +299,70 @@ class _RealisticAustraliaMapPainter extends CustomPainter {
     final w = size.width;
     final h = size.height;
 
-    // 0. Halo oceánico de la costa de Australia (Great Barrier Reef & Ocean)
+    // 0. Halo oceánico y relieve de plataforma continental
     final oceanHaloPaint = Paint()
       ..color = secondaryColor.withValues(alpha: 0.08)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 7.0;
+      ..strokeWidth = 6.0;
 
-    // 1. Western Australia (WA) - Contorno curvo y auténtico
+    // 1. Western Australia (WA) - Relieve geográfico hiperrealista
     final waPath = Path()
-      ..moveTo(w * 0.38, h * 0.20)
-      ..quadraticBezierTo(w * 0.29, h * 0.16, w * 0.23, h * 0.20) // Kimberley
-      ..quadraticBezierTo(w * 0.18, h * 0.23, w * 0.14, h * 0.29) // Dampier / Pilbara
-      ..quadraticBezierTo(w * 0.06, h * 0.33, w * 0.05, h * 0.42) // Exmouth & Ningaloo
-      ..quadraticBezierTo(w * 0.07, h * 0.50, w * 0.09, h * 0.60) // Shark Bay & Geraldton
-      ..quadraticBezierTo(w * 0.11, h * 0.70, w * 0.13, h * 0.78) // Perth & Cape Leeuwin
-      ..quadraticBezierTo(w * 0.22, h * 0.81, w * 0.30, h * 0.82) // Costa sur (Albany/Esperance)
+      ..moveTo(w * 0.38, h * 0.19)
+      ..quadraticBezierTo(w * 0.32, h * 0.155, w * 0.27, h * 0.16) // Cambridge Gulf & Joseph Bonaparte
+      ..quadraticBezierTo(w * 0.21, h * 0.175, w * 0.17, h * 0.21) // Costa escarpada del Kimberley
+      ..quadraticBezierTo(w * 0.135, h * 0.25, w * 0.12, h * 0.29) // Eighty Mile Beach
+      ..quadraticBezierTo(w * 0.085, h * 0.305, w * 0.06, h * 0.345) // Dampier & Pilbara
+      ..quadraticBezierTo(w * 0.045, h * 0.375, w * 0.05, h * 0.41) // Cabo Noroeste (Exmouth Horn)
+      ..quadraticBezierTo(w * 0.07, h * 0.445, w * 0.065, h * 0.49) // Bahía Shark / Isla Dirk Hartog
+      ..quadraticBezierTo(w * 0.08, h * 0.55, w * 0.095, h * 0.62) // Geraldton
+      ..quadraticBezierTo(w * 0.105, h * 0.69, w * 0.115, h * 0.74) // Costa de Perth & Cabo Naturaliste
+      ..quadraticBezierTo(w * 0.125, h * 0.795, w * 0.16, h * 0.815) // Cabo Leeuwin
+      ..quadraticBezierTo(w * 0.22, h * 0.825, w * 0.30, h * 0.82) // Costa sur (Albany & Esperance)
       ..lineTo(w * 0.38, h * 0.82)
-      ..lineTo(w * 0.38, h * 0.20)
+      ..lineTo(w * 0.38, h * 0.19)
       ..close();
 
     // 2. Northern Territory (NT) - Arnhem Land y Top End
     final ntPath = Path()
-      ..moveTo(w * 0.38, h * 0.20)
-      ..quadraticBezierTo(w * 0.40, h * 0.17, w * 0.44, h * 0.16) // Darwin & Van Diemen
-      ..quadraticBezierTo(w * 0.50, h * 0.15, w * 0.53, h * 0.19) // Arnhem Land
-      ..quadraticBezierTo(w * 0.56, h * 0.24, w * 0.58, h * 0.30) // Golfo de Carpentaria
+      ..moveTo(w * 0.38, h * 0.19)
+      ..quadraticBezierTo(w * 0.40, h * 0.165, w * 0.435, h * 0.15) // Darwin & Beagle Gulf
+      ..quadraticBezierTo(w * 0.46, h * 0.13, w * 0.48, h * 0.135) // Península Cobourg
+      ..quadraticBezierTo(w * 0.52, h * 0.14, w * 0.545, h * 0.175) // Arnhem Land
+      ..quadraticBezierTo(w * 0.565, h * 0.22, w * 0.58, h * 0.305) // Golfo de Carpentaria (costa occidental)
       ..lineTo(w * 0.58, h * 0.52)
       ..lineTo(w * 0.38, h * 0.52)
       ..close();
 
-    // 3. South Australia (SA) - Spencer Gulf y Yorke Peninsula
+    // 3. South Australia (SA) - Spencer Gulf y Eyre Peninsula
     final saPath = Path()
       ..moveTo(w * 0.38, h * 0.52)
       ..lineTo(w * 0.64, h * 0.52)
       ..lineTo(w * 0.64, h * 0.82)
-      ..quadraticBezierTo(w * 0.58, h * 0.80, w * 0.56, h * 0.84) // Golfo San Vicente / Adelaide
-      ..quadraticBezierTo(w * 0.54, h * 0.78, w * 0.51, h * 0.85) // Golfo de Spencer & Península Eyre
-      ..quadraticBezierTo(w * 0.45, h * 0.83, w * 0.38, h * 0.82) // Gran Bahía Australiana
+      ..quadraticBezierTo(w * 0.59, h * 0.805, w * 0.575, h * 0.845) // Encounter Bay / Adelaida
+      ..quadraticBezierTo(w * 0.56, h * 0.795, w * 0.545, h * 0.85) // Península Yorke & Golfo San Vicente
+      ..quadraticBezierTo(w * 0.525, h * 0.775, w * 0.495, h * 0.835) // Golfo de Spencer & Península Eyre
+      ..quadraticBezierTo(w * 0.44, h * 0.83, w * 0.38, h * 0.82) // Gran Bahía Australiana
       ..close();
 
     // 4. Queensland (QLD) - Península Cape York y costa Gran Barrera
     final qldPath = Path()
-      ..moveTo(w * 0.58, h * 0.30)
-      ..quadraticBezierTo(w * 0.61, h * 0.22, w * 0.66, h * 0.07) // Península de Cape York
-      ..quadraticBezierTo(w * 0.70, h * 0.15, w * 0.74, h * 0.24) // Cooktown & Cairns
-      ..quadraticBezierTo(w * 0.80, h * 0.34, w * 0.85, h * 0.43) // Townsville, Mackay & Bundaberg
-      ..quadraticBezierTo(w * 0.88, h * 0.50, w * 0.85, h * 0.57) // Brisbane & Gold Coast
+      ..moveTo(w * 0.58, h * 0.305)
+      ..quadraticBezierTo(w * 0.605, h * 0.21, w * 0.655, h * 0.055) // Costa oeste Península de Cape York
+      ..quadraticBezierTo(w * 0.665, h * 0.052, w * 0.675, h * 0.075) // Punta de Cape York (Estrecho de Torres)
+      ..quadraticBezierTo(w * 0.71, h * 0.16, w * 0.75, h * 0.255) // Cooktown, Cairns & Hinchinbrook
+      ..quadraticBezierTo(w * 0.79, h * 0.33, w * 0.83, h * 0.41) // Townsville & Whitsundays
+      ..quadraticBezierTo(w * 0.865, h * 0.48, w * 0.85, h * 0.555) // Bundaberg, Hervey Bay & Fraser Coast
       ..lineTo(w * 0.64, h * 0.52)
       ..lineTo(w * 0.58, h * 0.52)
-      ..lineTo(w * 0.58, h * 0.30)
+      ..lineTo(w * 0.58, h * 0.305)
       ..close();
 
     // 5. New South Wales (NSW) - Byron Bay y costa este
     final nswPath = Path()
       ..moveTo(w * 0.64, h * 0.52)
-      ..lineTo(w * 0.85, h * 0.57) // Tweed Heads / Byron Bay
-      ..quadraticBezierTo(w * 0.84, h * 0.64, w * 0.83, h * 0.70) // Newcastle & Sydney
-      ..quadraticBezierTo(w * 0.81, h * 0.74, w * 0.80, h * 0.77) // Wollongong & Cape Howe
+      ..lineTo(w * 0.85, h * 0.555) // Byron Bay (punto más oriental)
+      ..quadraticBezierTo(w * 0.845, h * 0.615, w * 0.835, h * 0.67) // Coffs Harbour & Port Macquarie
+      ..quadraticBezierTo(w * 0.82, h * 0.72, w * 0.805, h * 0.76) // Newcastle, Sídney & Wollongong
       ..lineTo(w * 0.64, h * 0.72) // Río Murray
       ..lineTo(w * 0.64, h * 0.52)
       ..close();
@@ -484,18 +370,19 @@ class _RealisticAustraliaMapPainter extends CustomPainter {
     // 6. Victoria (VIC) - Wilsons Promontory y Port Phillip
     final vicPath = Path()
       ..moveTo(w * 0.64, h * 0.72)
-      ..lineTo(w * 0.80, h * 0.77)
-      ..quadraticBezierTo(w * 0.77, h * 0.82, w * 0.74, h * 0.86) // Wilsons Promontory (punto más al sur)
-      ..quadraticBezierTo(w * 0.71, h * 0.82, w * 0.68, h * 0.85) // Port Phillip & Melbourne
+      ..lineTo(w * 0.805, h * 0.76) // Cabo Howe
+      ..quadraticBezierTo(w * 0.77, h * 0.81, w * 0.74, h * 0.865) // Wilsons Promontory (extremo sur continental)
+      ..quadraticBezierTo(w * 0.715, h * 0.82, w * 0.68, h * 0.855) // Port Phillip & Melbourne
       ..lineTo(w * 0.64, h * 0.82)
       ..close();
 
     // 7. Tasmania (TAS) - Isla de Tasmania realista
     final tasPath = Path()
-      ..moveTo(w * 0.71, h * 0.90)
-      ..quadraticBezierTo(w * 0.74, h * 0.89, w * 0.77, h * 0.90) // Costa norte
-      ..quadraticBezierTo(w * 0.78, h * 0.94, w * 0.75, h * 0.98) // Costa este & Hobart
-      ..quadraticBezierTo(w * 0.70, h * 0.96, w * 0.71, h * 0.90) // Costa oeste
+      ..moveTo(w * 0.715, h * 0.90)
+      ..quadraticBezierTo(w * 0.74, h * 0.89, w * 0.765, h * 0.905) // Costa norte (Estrecho de Bass)
+      ..quadraticBezierTo(w * 0.78, h * 0.94, w * 0.76, h * 0.98) // Costa este & Hobart
+      ..quadraticBezierTo(w * 0.74, h * 0.985, w * 0.72, h * 0.965) // Costa sur (South East Cape)
+      ..quadraticBezierTo(w * 0.705, h * 0.93, w * 0.715, h * 0.90) // Costa salvaje oeste
       ..close();
 
     // Dibujar halos oceánicos
@@ -513,8 +400,22 @@ class _RealisticAustraliaMapPainter extends CustomPainter {
     _drawState(canvas, name: 'SA', path: saPath, labelPoint: Offset(w * 0.50, h * 0.66));
     _drawState(canvas, name: 'QLD', path: qldPath, labelPoint: Offset(w * 0.72, h * 0.36));
     _drawState(canvas, name: 'NSW', path: nswPath, labelPoint: Offset(w * 0.74, h * 0.63));
-    _drawState(canvas, name: 'VIC', path: vicPath, labelPoint: Offset(w * 0.72, h * 0.80));
+    _drawState(canvas, name: 'VIC', path: vicPath, labelPoint: Offset(w * 0.72, h * 0.79));
     _drawState(canvas, name: 'TAS', path: tasPath, labelPoint: Offset(w * 0.74, h * 0.94));
+
+    // Relieve Geográfico Ejecutivo (Great Dividing Range)
+    final reliefPaint = Paint()
+      ..color = const Color(0x221E293B)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.6
+      ..strokeCap = StrokeCap.round;
+
+    final gdrReliefPath = Path()
+      ..moveTo(w * 0.67, h * 0.09)
+      ..quadraticBezierTo(w * 0.73, h * 0.24, w * 0.78, h * 0.38)
+      ..quadraticBezierTo(w * 0.81, h * 0.50, w * 0.79, h * 0.62)
+      ..quadraticBezierTo(w * 0.76, h * 0.73, w * 0.72, h * 0.81);
+    canvas.drawPath(gdrReliefPath, reliefPaint);
 
     // Dibujar Pines de Hitos Regionales Oficiales en el Mapa
     for (final hub in kRegionalHubs) {

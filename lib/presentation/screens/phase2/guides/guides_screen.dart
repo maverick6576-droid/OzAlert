@@ -109,7 +109,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: Phase2AppBar(
-        title: isEn ? 'Guides & Reviews' : 'Guías & Comparativas',
+        title: isEn ? 'Guides' : 'Guías',
         isEn: isEn,
         infoTopic: _selectedCategory,
       ),
@@ -255,48 +255,18 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
                   ),
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 6),
-          InkWell(
-            onTap: () {
-              showOfficialSourcesModal(context, isEn: isEn, initialTopic: _selectedCategory);
-            },
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6.5),
-              decoration: BoxDecoration(
-                color: AppColors.secondary.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppColors.secondary.withValues(alpha: 0.3)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(CupertinoIcons.info_circle_fill, size: 13, color: AppColors.secondary),
-                  const SizedBox(width: 4),
-                  Text(
-                    isEn ? 'Official' : 'Oficial',
-                    style: const TextStyle(
-                      fontSize: 11.5,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.secondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 8),
           InkWell(
             onTap: () => _showGuidesCatalogModal(context, isEn),
             borderRadius: BorderRadius.circular(10),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6.5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
               decoration: BoxDecoration(
                 color: AppColors.surfaceElevated,
                 borderRadius: BorderRadius.circular(10),
@@ -305,18 +275,18 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(CupertinoIcons.square_grid_2x2_fill, size: 13, color: AppColors.textPrimary),
-                  const SizedBox(width: 4),
+                  const Icon(CupertinoIcons.square_grid_2x2_fill, size: 13, color: AppColors.primary),
+                  const SizedBox(width: 5),
                   Text(
                     isEn ? 'All (9)' : 'Ver todas',
                     style: const TextStyle(
-                      fontSize: 11.5,
+                      fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  const SizedBox(width: 2),
-                  const Icon(CupertinoIcons.chevron_down, size: 10, color: AppColors.textMuted),
+                  const SizedBox(width: 3),
+                  const Icon(CupertinoIcons.chevron_down, size: 11, color: AppColors.textMuted),
                 ],
               ),
             ),

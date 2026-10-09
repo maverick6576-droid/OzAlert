@@ -125,11 +125,18 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     final locale = ref.watch(localeProvider);
     final isEn = locale?.languageCode == 'en';
     final profile = ref.watch(userProfileProvider).value;
-    final userEmail = ref.watch(authStateProvider).value?.email ?? 'Applicant';
+    final authUser = ref.watch(authStateProvider).value;
+    final userEmail = authUser?.email ?? 'Applicant';
+    final uid = authUser?.uid;
     final subclass = profile?.visaSubclass ?? '462';
     final isPremium = profile?.isPremium ?? false;
 
-    final jobs = ref.watch(regionalJobsProvider);
+    if (isPremium && uid != null) {
+      ref.read(regionalJobsProvider.notifier).loadForUser(uid: uid, isPremium: isPremium);
+    }
+
+    final allJobs = ref.watch(regionalJobsProvider);
+    final jobs = allJobs.where((j) => j.targetVisaYear == _targetVisaYear).toList();
     final totalDays = jobs.fold<int>(0, (sum, j) => sum + j.totalDaysCounted);
 
     return Scaffold(
@@ -151,8 +158,8 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
               text: !isPremium
                   ? (isEn ? '🗓️ 88 Days ($totalDays/10)' : '🗓️ 88 Días ($totalDays/10)')
                   : (isEn
-                      ? '🗓️ 88 Days ($totalDays/${_targetVisaYear == 2 ? 88 : 179})'
-                      : '🗓️ 88 Días ($totalDays/${_targetVisaYear == 2 ? 88 : 179})'),
+                      ? (_targetVisaYear == 2 ? '🗓️ 88 Days ($totalDays/88)' : '🗓️ 3rd Year ($totalDays/179)')
+                      : (_targetVisaYear == 2 ? '🗓️ 88 Días ($totalDays/88)' : '🗓️ 3r Año ($totalDays/179)')),
             ),
           ],
         ),
@@ -164,7 +171,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
           _buildPostcodeValidatorTab(isEn, subclass),
 
           // SUBMÓDULO 2: TRACKER DE DÍAS Y EXPORTACIÓN FORMULARIO 1263
-          _buildWorkLogTab(isEn, isPremium, jobs, totalDays, userEmail, subclass),
+          _buildWorkLogTab(isEn, isPremium, jobs, totalDays, userEmail, subclass, uid: uid),
         ],
       ),
     );
@@ -178,6 +185,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       children: [
         // Selector / Banner de Subclase con acceso directo a normativa
+        // Cabecera Explicativa Oficial: Finalidad del Validador de Códigos y Zonas
         Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
@@ -190,9 +198,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
-                radius: 16,
+                radius: 17,
                 backgroundColor: AppColors.primary.withValues(alpha: 0.12),
-                child: const Icon(CupertinoIcons.shield_lefthalf_fill, color: AppColors.primary, size: 20),
+                child: const Icon(CupertinoIcons.checkmark_seal_fill, color: AppColors.primary, size: 20),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -203,7 +211,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                       children: [
                         Expanded(
                           child: Text(
-                            isEn ? 'Visa Subclass: $subclass' : 'Subclase Activa: $subclass',
+                            isEn ? 'Postcode & Industry Eligibility' : 'Validador Oficial de Códigos y Zonas',
                             style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.textPrimary),
                           ),
                         ),
@@ -215,11 +223,11 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(CupertinoIcons.info_circle_fill, size: 15, color: AppColors.secondary),
-                                const SizedBox(width: 4),
+                                const Icon(CupertinoIcons.info_circle_fill, size: 14, color: AppColors.secondary),
+                                const SizedBox(width: 3),
                                 Text(
-                                  isEn ? 'Rules' : 'Norma',
-                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.secondary),
+                                  isEn ? 'Rules' : 'Normativa',
+                                  style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: AppColors.secondary),
                                 ),
                               ],
                             ),
@@ -227,16 +235,30 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                         ),
                       ],
                     ),
-                    const SizedBox(height: 3),
+                    const SizedBox(height: 4),
                     Text(
-                      subclass == '462'
-                          ? (isEn
-                              ? 'Under 462, Tourism/Hospitality counts ONLY in Northern Australia or Remote areas.'
-                              : 'Para 462, hostelería cuenta SOLO en Norte de Australia o Zonas Remotas.')
-                          : (isEn
-                              ? 'Under 417, Hospitality does not qualify (Farming/Construction only).'
-                              : 'Para 417, hostelería no computa (sólo campo o construcción).'),
+                      isEn
+                          ? 'Verify if any Australian postcode and industry meet legal criteria to renew your visa (88 days for 2nd year or 179 days for 3rd year) under immigration instrument LIN 22/050.'
+                          : 'Comprueba al instante si tu código postal e industria cumplen los requisitos legales para renovar tu visado (88 días para 2º año o 179 días para 3º) según la normativa oficial LIN 22/050 de Inmigración.',
                       style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.35),
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        subclass == '462'
+                            ? (isEn
+                                ? 'Subclass 462: Tourism/Hospitality counts ONLY in Northern or Remote Australia.'
+                                : 'Subclase 462: Hostelería y Turismo computan SOLO en Norte o Zonas Remotas.')
+                            : (isEn
+                                ? 'Subclass 417: Hospitality does NOT qualify (Farming/Construction only).'
+                                : 'Subclase 417: Hostelería NO computa (únicamente campo o construcción).'),
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.primary),
+                      ),
                     ),
                   ],
                 ),
@@ -307,6 +329,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
   }
 
   List<Map<String, dynamic>> _getIndustriesList(bool isEn, String subclass, PostcodeInfo? postcode) {
+    final isNorthern = postcode != null && (postcode.zone == 'northern' || postcode.zone == 'remote');
+    final isRegional = postcode != null && postcode.zone != 'metro' && postcode.zone != 'unknown';
+
     return [
       {
         'id': 'agriculture',
@@ -347,16 +372,36 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             : (isEn ? 'INELIGIBLE: Subclass 417 does not include hospitality under current legislation.' : 'NO VÁLIDO: La Subclase 417 no admite hostelería según la ley vigente.'),
       },
       {
+        'id': 'mining',
+        'icon': '⛏️',
+        'name': isEn ? 'Mining & Resources' : 'Minería & Recursos',
+        'desc': isEn
+            ? 'Coal mining, mineral extraction, exploration, FIFO site operations.'
+            : 'Extracción mineral, sondeos, explotación de canteras y operaciones FIFO.',
+        'eligible': subclass == '417' ? isRegional : isNorthern,
+        'legalTip': subclass == '462'
+            ? (isNorthern
+                ? (isEn ? 'ELIGIBLE: Approved for Subclass 462 in Northern Australia.' : 'VÁLIDO: Aprobado para Subclase 462 en Norte de Australia.')
+                : (isEn ? 'INELIGIBLE: Under 462, mining only qualifies in Northern Australia.' : 'NO VÁLIDO: Para 462, minería sólo califica en Norte de Australia.'))
+            : (isRegional
+                ? (isEn ? 'ELIGIBLE: Approved for Subclass 417 in regional areas.' : 'VÁLIDO: Aprobado para Subclase 417 en zonas regionales.')
+                : (isEn ? 'INELIGIBLE: In metropolitan areas.' : 'NO VÁLIDO: En áreas metropolitanas.')),
+      },
+      {
         'id': 'forestry',
         'icon': '🌲',
         'name': isEn ? 'Tree Farming & Forestry' : 'Silvicultura & Tala',
         'desc': isEn
             ? 'Planting, maintaining, felling trees in plantations and sawmills.'
             : 'Plantación, tala y procesado de madera en serrerías regionales.',
-        'eligible': postcode != null && postcode.isEligible(subclass, 'forestry_fishing'),
-        'legalTip': isEn
-            ? 'Eligible across approved regional postcodes.'
-            : 'Válido en todos los códigos regionales aprobados.',
+        'eligible': subclass == '417' ? isRegional : isNorthern,
+        'legalTip': subclass == '462'
+            ? (isNorthern
+                ? (isEn ? 'ELIGIBLE: Tree farming approved in Northern Australia for 462.' : 'VÁLIDO: Silvicultura aprobada en Norte de Australia para 462.')
+                : (isEn ? 'INELIGIBLE: Under 462, forestry requires Northern Australia location.' : 'NO VÁLIDO: En 462 requiere ubicación en Norte de Australia.'))
+            : (isRegional
+                ? (isEn ? 'ELIGIBLE: Tree farming approved across regional postcodes for 417.' : 'VÁLIDO: Aprobado en códigos regionales para 417.')
+                : (isEn ? 'INELIGIBLE: Metropolitan areas.' : 'NO VÁLIDO: En áreas metropolitanas.')),
       },
       {
         'id': 'fishing',
@@ -365,22 +410,38 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
         'desc': isEn
             ? 'Commercial fishing, pearling operations, hatchery maintenance.'
             : 'Pesca comercial marítima, criaderos y extracción de perlas.',
-        'eligible': postcode != null && postcode.isEligible(subclass, 'forestry_fishing'),
-        'legalTip': isEn
-            ? 'Eligible in regional maritime operations.'
-            : 'Válido en explotaciones marítimas regionales.',
+        'eligible': subclass == '417' ? isRegional : isNorthern,
+        'legalTip': subclass == '462'
+            ? (isNorthern
+                ? (isEn ? 'ELIGIBLE: Fishing/pearling approved in Northern Australia for 462.' : 'VÁLIDO: Pesca/perlas aprobada en Norte de Australia para 462.')
+                : (isEn ? 'INELIGIBLE: Under 462, fishing requires Northern Australia location.' : 'NO VÁLIDO: En 462 requiere ubicación en Norte de Australia.'))
+            : (isRegional
+                ? (isEn ? 'ELIGIBLE: Fishing/pearling approved across regional postcodes for 417.' : 'VÁLIDO: Aprobado en códigos regionales para 417.')
+                : (isEn ? 'INELIGIBLE: Metropolitan areas.' : 'NO VÁLIDO: En áreas metropolitanas.')),
       },
       {
-        'id': 'recovery',
-        'icon': '🚒',
-        'name': isEn ? 'Bushfire & Flood Recovery' : 'Recuperación de Desastres',
+        'id': 'bushfire_recovery',
+        'icon': '🔥',
+        'name': isEn ? 'Bushfire Recovery' : 'Recuperación de Incendios',
         'desc': isEn
-            ? 'Reconstruction and recovery work in declared natural disaster zones.'
-            : 'Reconstrucción en áreas declaradas de incendio o inundación.',
-        'eligible': postcode != null && (postcode.zone == 'northern' || postcode.zone.contains('regional') || postcode.zone == 'remote'),
+            ? 'Construction, land remediation and recovery in declared bushfire disaster zones.'
+            : 'Construcción, saneamiento y recuperación en áreas declaradas de incendio.',
+        'eligible': isRegional,
         'legalTip': isEn
-            ? 'Eligible in disaster-declared government postcodes.'
-            : 'Elegible en zonas declaradas de catástrofe por el gobierno.',
+            ? 'Eligible in government-declared bushfire disaster postcodes (post-31 July 2019).'
+            : 'Elegible en códigos declarados zona catastrófica por incendios forestales.',
+      },
+      {
+        'id': 'flood_recovery',
+        'icon': '🌊',
+        'name': isEn ? 'Flood Recovery' : 'Recuperación de Inundaciones',
+        'desc': isEn
+            ? 'Cleaning, structural repair and volunteer support in declared flood zones.'
+            : 'Limpieza, reconstrucción estructural y apoyo en zonas de inundación declaradas.',
+        'eligible': isRegional,
+        'legalTip': isEn
+            ? 'Eligible in government-declared flood disaster postcodes (post-31 Dec 2021).'
+            : 'Elegible en códigos declarados zona catastrófica por inundaciones oficiales.',
       },
     ];
   }
@@ -487,14 +548,18 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             width: double.infinity,
             child: ElevatedButton.icon(
               icon: const Icon(CupertinoIcons.square_list_fill, size: 16),
-              label: Text(
-                isEn ? 'View Full Rules for All 8 Industries' : 'Ver Normativa de las 8 Industrias (LIN 22/050)',
-                style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold),
+              label: Flexible(
+                child: Text(
+                  isEn ? 'View 8 Industries Rules (LIN 22/050)' : 'Normativa de 8 Industrias (LIN 22/050)',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                ),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 elevation: 0,
               ),
@@ -842,7 +907,15 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     );
   }
 
-  Widget _buildWorkLogTab(bool isEn, bool isPremium, List<RegionalJobEntry> jobs, int totalDays, String applicantEmail, String visaSubclass) {
+  Widget _buildWorkLogTab(
+    bool isEn,
+    bool isPremium,
+    List<RegionalJobEntry> jobs,
+    int totalDays,
+    String applicantEmail,
+    String visaSubclass, {
+    String? uid,
+  }) {
     final targetRequirement = _targetVisaYear == 2 ? 88 : 179;
     final maxTarget = isPremium ? targetRequirement : 10;
     final progress = (totalDays / maxTarget.toDouble()).clamp(0.0, 1.0);
@@ -1072,7 +1145,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 );
                 return;
               }
-              _showAddJobDialog(isEn, isPremium, totalDays, visaSubclass);
+              _showAddJobDialog(isEn, isPremium, totalDays, visaSubclass, uid: uid);
             },
           ),
         ),
@@ -1176,7 +1249,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 ),
                 trailing: IconButton(
                   icon: const Icon(CupertinoIcons.trash, color: AppColors.statusClosed, size: 18),
-                  onPressed: () => ref.read(regionalJobsProvider.notifier).removeJob(job.id),
+                  onPressed: () => ref.read(regionalJobsProvider.notifier).removeJob(job.id, uid: uid, isPremium: isPremium),
                 ),
               ),
             );
@@ -1271,7 +1344,13 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     );
   }
 
-  void _showAddJobDialog(bool isEn, bool isPremium, int currentTotalDays, String visaSubclass) {
+  void _showAddJobDialog(
+    bool isEn,
+    bool isPremium,
+    int currentTotalDays,
+    String visaSubclass, {
+    String? uid,
+  }) {
     String selectedIndustry = 'agriculture';
     DateTime startDate = DateTime.now().subtract(const Duration(days: 14));
     DateTime endDate = DateTime.now();
@@ -1967,6 +2046,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                             final userGross = double.tryParse(grossPayCtrl.text.trim()) ?? estGross;
                             final entry = RegionalJobEntry(
                               id: DateTime.now().millisecondsSinceEpoch.toString(),
+                              targetVisaYear: _targetVisaYear,
                               employerBusinessName: nameClean,
                               employerAbn: abnClean,
                               workSitePostcode: pCode,
@@ -1989,7 +2069,11 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                                   : null,
                             );
 
-                            ref.read(regionalJobsProvider.notifier).addJob(entry);
+                            ref.read(regionalJobsProvider.notifier).addJob(
+                              entry,
+                              uid: uid,
+                              isPremium: isPremium,
+                            );
                             Navigator.pop(ctx);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(

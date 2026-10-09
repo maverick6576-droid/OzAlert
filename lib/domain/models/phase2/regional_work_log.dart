@@ -14,6 +14,7 @@ class RegionalJobEntry {
   final bool isFullTimeWeekly; // If true (5 days >= 35h), counts as 7 days towards visa
   final bool hasPieceworkAgreement;
   final String? payslipFileRef;
+  final int targetVisaYear; // 2 for 2nd year (88 days), 3 for 3rd year (179 days)
 
   const RegionalJobEntry({
     required this.id,
@@ -31,6 +32,7 @@ class RegionalJobEntry {
     this.isFullTimeWeekly = false,
     this.hasPieceworkAgreement = false,
     this.payslipFileRef,
+    this.targetVisaYear = 2,
   });
 
   Map<String, dynamic> toJson() => {
@@ -49,6 +51,7 @@ class RegionalJobEntry {
     'isFullTimeWeekly': isFullTimeWeekly,
     'hasPieceworkAgreement': hasPieceworkAgreement,
     if (payslipFileRef != null) 'payslipFileRef': payslipFileRef,
+    'targetVisaYear': targetVisaYear,
   };
 
   factory RegionalJobEntry.fromJson(Map<String, dynamic> json) => RegionalJobEntry(
@@ -67,5 +70,6 @@ class RegionalJobEntry {
     isFullTimeWeekly: json['isFullTimeWeekly'] as bool? ?? false,
     hasPieceworkAgreement: json['hasPieceworkAgreement'] as bool? ?? false,
     payslipFileRef: json['payslipFileRef'] as String?,
+    targetVisaYear: (json['targetVisaYear'] as num?)?.toInt() ?? 2,
   );
 }

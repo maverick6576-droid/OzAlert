@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../domain/models/phase2/affiliate_partner.dart';
 import '../../../domain/models/phase2/landing_task.dart';
 import '../../../domain/models/phase2/regional_work_log.dart';
@@ -119,23 +120,86 @@ final phase2NavigationProvider = StateNotifierProvider<Phase2NavigationNotifier,
   return Phase2NavigationNotifier();
 });
 
-/// Tracker de empleos regionales (88 Días)
+/// Tracker de empleos regionales (88 Días y 3r Año) con sincronización Cloud Firestore para Premium
 class RegionalJobsNotifier extends StateNotifier<List<RegionalJobEntry>> {
-  RegionalJobsNotifier() : super([]);
+  final FirebaseFirestore? _firestore;
+  String? _syncedUid;
 
-  void addJob(RegionalJobEntry job) {
-    state = [...state, job];
+  RegionalJobsNotifier({FirebaseFirestore? firestore})
+      : _firestore = firestore,
+        super([]);
+
+  Future<void> loadForUser({required String? uid, required bool isPremium}) async {
+    if (uid == null || uid.isEmpty || !isPremium) return;
+    if (_syncedUid == uid) return;
+    _syncedUid = uid;
+
+    try {
+      final fs = _firestore ?? FirebaseFirestore.instance;
+      final snapshot = await fs
+          .collection('users')
+          .doc(uid)
+          .collection('regional_work_logs')
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        final loaded = snapshot.docs
+            .map((doc) => RegionalJobEntry.fromJson(doc.data()))
+            .toList();
+        state = loaded;
+      }
+    } catch (_) {
+      // Offline fallback
+    }
   }
 
-  void removeJob(String id) {
+  Future<void> addJob(RegionalJobEntry job, {String? uid, bool isPremium = false}) async {
+    state = [...state, job];
+
+    if (isPremium && uid != null && uid.isNotEmpty) {
+      try {
+        final fs = _firestore ?? FirebaseFirestore.instance;
+        await fs
+            .collection('users')
+            .doc(uid)
+            .collection('regional_work_logs')
+            .doc(job.id)
+            .set(job.toJson());
+      } catch (_) {}
+    }
+  }
+
+  Future<void> removeJob(String id, {String? uid, bool isPremium = false}) async {
     state = state.where((j) => j.id != id).toList();
+
+    if (isPremium && uid != null && uid.isNotEmpty) {
+      try {
+        final fs = _firestore ?? FirebaseFirestore.instance;
+        await fs
+            .collection('users')
+            .doc(uid)
+            .collection('regional_work_logs')
+            .doc(id)
+            .delete();
+      } catch (_) {}
+    }
   }
 
   int get totalDaysAccumulated {
     return state.fold(0, (sum, j) => sum + j.totalDaysCounted);
   }
+
+  int daysAccumulatedForYear(int targetYear) {
+    return state
+        .where((j) => j.targetVisaYear == targetYear)
+        .fold(0, (sum, j) => sum + j.totalDaysCounted);
+  }
 }
 
 final regionalJobsProvider = StateNotifierProvider<RegionalJobsNotifier, List<RegionalJobEntry>>((ref) {
-  return RegionalJobsNotifier();
+  FirebaseFirestore? fs;
+  try {
+    fs = FirebaseFirestore.instance;
+  } catch (_) {}
+  return RegionalJobsNotifier(firestore: fs);
 });

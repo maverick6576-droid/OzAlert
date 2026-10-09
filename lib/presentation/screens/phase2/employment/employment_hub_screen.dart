@@ -267,11 +267,11 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
           docId: 'resume',
           icon: CupertinoIcons.doc_text_fill,
           iconColor: AppColors.primary,
-          title: isEn ? 'Australian Pro Resume (ATS)' : 'Currículum Australiano Pro (ATS)',
+          title: isEn ? 'Australian Resume (ATS)' : 'Currículum Australiano (ATS)',
           subtitle: isEn
               ? 'A4 format with native bullet points, 1-tap presets (Mining, Hospitality, Construction) and recruiter audit.'
               : 'Formato A4 sin foto con viñetas nativas de alto impacto, preajustes en 1 toque (Minas, Hostelería, Obra) y auditoría.',
-          tags: [isEn ? 'ATS-Optimized' : 'Filtro ATS', isEn ? '1-Tap Roles' : 'Auto-rellenado', 'Free + Pro'],
+          tags: [isEn ? 'ATS-Optimized' : 'Filtro ATS', isEn ? '1-Tap Roles' : 'Auto-rellenado', isEn ? 'Official' : 'Oficial'],
           isPro: false,
           isEn: isEn,
           isPremium: isPremium,
@@ -547,7 +547,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
   String _getDocTitle(String docId, bool isEn) {
     switch (docId) {
       case 'resume':
-        return isEn ? 'Australian Pro Resume (ATS)' : 'Currículum Australiano Pro (ATS)';
+        return isEn ? 'Australian Resume (ATS)' : 'Currículum Australiano (ATS)';
       case 'cover_letter':
         return isEn ? 'Australian Cover Letter' : 'Cover Letter Australiana';
       case 'rental_bio':
@@ -580,8 +580,8 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
       {
         'id': 'resume',
         'icon': CupertinoIcons.doc_text_fill,
-        'label': '📄 CV Pro',
-        'labelEn': '📄 Pro Resume',
+        'label': '📄 CV Australiano',
+        'labelEn': '📄 Resume ATS',
         'isPro': false,
       },
       {
@@ -874,7 +874,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
           child: ElevatedButton.icon(
             icon: const Icon(CupertinoIcons.arrow_down_doc_fill, size: 20),
             label: Text(
-              isEn ? 'Download Australian Pro Resume (PDF)' : 'Generar CV Oficial Australiano (PDF)',
+              isEn ? 'Download Australian Resume (PDF)' : 'Generar CV Oficial Australiano (PDF)',
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5),
             ),
             style: ElevatedButton.styleFrom(
@@ -1919,7 +1919,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
     if (!isPremium) {
       showPhase2PaywallBottomSheet(
         context: context,
-        featureTitle: isEn ? 'Pro Australian Resume' : 'Generador de CV Australiano',
+        featureTitle: isEn ? 'Australian Resume Generator' : 'Generador de CV Australiano',
         featureBenefit: isEn
             ? 'Download official recruiter-ready PDF resumes tailored to Australian hiring laws with no watermarks.'
             : 'Descarga currículums oficiales en PDF adaptados a la ley laboral australiana listos para entregar a empresas.',
