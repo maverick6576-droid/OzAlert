@@ -108,6 +108,7 @@ class AustraliaRegionalMapWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final stateTitle = _getStateFullName(activeState);
+    final currentPostcode = activePostcode ?? '4870';
 
     return Container(
       decoration: BoxDecoration(

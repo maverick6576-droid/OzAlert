@@ -186,13 +186,13 @@ class RegionalJobsNotifier extends StateNotifier<List<RegionalJobEntry>> {
   }
 
   int get totalDaysAccumulated {
-    return state.fold(0, (sum, j) => sum + j.totalDaysCounted);
+    return state.fold(0, (total, j) => total + j.totalDaysCounted);
   }
 
   int daysAccumulatedForYear(int targetYear) {
     return state
         .where((j) => j.targetVisaYear == targetYear)
-        .fold(0, (sum, j) => sum + j.totalDaysCounted);
+        .fold(0, (total, j) => total + j.totalDaysCounted);
   }
 }
 
