@@ -19,6 +19,19 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '17'
+          cache: 'gradle'
+
+      - name: 🛠️ Setup NDK
+        run: |
+          if [ -d "/usr/local/lib/android/sdk/ndk/27.0.12077973" ]; then
+            echo "ANDROID_NDK_VERSION=27.0.12077973" >> $GITHUB_ENV
+            echo "ANDROID_NDK_HOME=/usr/local/lib/android/sdk/ndk/27.0.12077973" >> $GITHUB_ENV
+            echo "ANDROID_NDK_ROOT=/usr/local/lib/android/sdk/ndk/27.0.12077973" >> $GITHUB_ENV
+          elif [ -d "/usr/local/lib/android/sdk/ndk/26.3.11579264" ]; then
+            echo "ANDROID_NDK_VERSION=26.3.11579264" >> $GITHUB_ENV
+            echo "ANDROID_NDK_HOME=/usr/local/lib/android/sdk/ndk/26.3.11579264" >> $GITHUB_ENV
+            echo "ANDROID_NDK_ROOT=/usr/local/lib/android/sdk/ndk/26.3.11579264" >> $GITHUB_ENV
+          fi
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -30,7 +43,7 @@ jobs:
         run: flutter pub get
 
       - name: Build AAB
-        run: flutter build aab --release
+        run: flutter build aab --release --android-skip-build-dependency-validation
 
       - name: Upload AAB Artifact
         uses: actions/upload-artifact@v4

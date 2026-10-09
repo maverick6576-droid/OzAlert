@@ -9,7 +9,7 @@ plugins {
 android {
     namespace = "com.ozvisa.alert"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = System.getenv("ANDROID_NDK_VERSION") ?: "27.0.12077973"
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
