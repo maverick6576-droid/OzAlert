@@ -266,9 +266,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       children: [
-        // Cabecera Explicativa Oficial: Actualizada con Specified Subclass 462 Work (Home Affairs)
+        // Etiqueta superior sintética: Por qué es necesario comprobar el código postal
         Container(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(18),
@@ -279,9 +279,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
-                radius: 17,
+                radius: 16,
                 backgroundColor: AppColors.primary.withValues(alpha: 0.12),
-                child: const Icon(CupertinoIcons.checkmark_seal_fill, color: AppColors.primary, size: 20),
+                child: const Icon(CupertinoIcons.checkmark_seal_fill, color: AppColors.primary, size: 18),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -293,9 +293,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                         Expanded(
                           child: Text(
                             isEn
-                                ? 'Official Home Affairs Postcode & Industry Validator'
-                                : 'Validador Oficial de Códigos y Zonas (Home Affairs)',
-                            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.textPrimary),
+                                ? 'Why check the postcode?'
+                                : '¿Por qué comprobar el código postal?',
+                            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: AppColors.textPrimary),
                           ),
                         ),
                         InkWell(
@@ -321,27 +321,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     const SizedBox(height: 4),
                     Text(
                       isEn
-                          ? 'Updated with official Specified Subclass 462 Work tables (Tables 1 to 6, including 5 April 2025 disaster recovery updates): check any postcode for Tourism & Hospitality (North/Remote), Agriculture & Construction (Regional), Fishing & Forestry (North), Bushfire/Flood Recovery and Healthcare.'
-                          : 'Actualizado con las Tablas 1 a 6 de Specified Subclass 462 Work del Department of Home Affairs (incluyendo la reforma del 5 de abril de 2025): comprueba al instante cualquier código postal para Turismo/Hostelería (Norte y Remoto), Agricultura/Construcción (Regional), Pesca/Silvicultura (Norte), Recuperación de Incendios/Inundaciones y Salud.',
-                      style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.35),
-                    ),
-                    const SizedBox(height: 6),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        subclass == '462'
-                            ? (isEn
-                                ? 'Subclass 462: 8 approved industries • Tourism/Hospitality counts in Northern & Remote/Very Remote Australia (Tables 1, 2 & 3). Mining is 417 only.'
-                                : 'Subclase 462: 8 sectores oficiales • Hostelería/Turismo computa en el Norte y Zonas Remotas/Muy Remotas (Tablas 1, 2 y 3). Minería es exclusiva de 417.')
-                            : (isEn
-                                ? 'Subclass 417: Agriculture, Construction, Mining, Fishing & Forestry in Regional Australia.'
-                                : 'Subclase 417: Agricultura, Construcción, Minería, Pesca y Silvicultura en Australia Regional.'),
-                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.primary, height: 1.3),
-                      ),
+                          ? 'Not all jobs in Australia count to renew your visa. Check the postcode before accepting a job to make sure that area and industry count towards your 88 days.'
+                          : 'No todos los trabajos en Australia sirven para renovar el visado. Comprueba el código postal antes de aceptar un empleo para asegurarte de que esa zona y sector cuentan para tus 88 días.',
+                      style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.35),
                     ),
                   ],
                 ),
@@ -349,7 +331,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
 
         // Campo de búsqueda de Código Postal
         Row(

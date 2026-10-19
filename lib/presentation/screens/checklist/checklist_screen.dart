@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../../../core/services/url_launcher_service.dart';
 import '../../../../domain/models/checklist_item.dart';
 import '../../providers/checklist_provider.dart';
 import '../../providers/locale_provider.dart';
+import '../../providers/user_provider.dart';
 import '../settings/settings_screen.dart';
 
 class ChecklistScreen extends ConsumerStatefulWidget {
@@ -107,6 +109,64 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
     });
   }
 
+  void _showSwitchToPhase2Dialog(BuildContext context, bool isEn) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: Row(
+          children: [
+            const Icon(Icons.flight_takeoff_rounded, color: AppColors.secondary),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                isEn ? 'Switch to Phase 2! 🎉' : '¡Pasar a la Fase 2! 🎉',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          isEn
+              ? 'By switching to Phase 2, you will unlock the Australia Arrival Checklist, Step-by-Step Guides, 88-Day Regional Validator, Fair Work Pay Calculator, and Aussie CV Maker. Quota push alerts will be turned off.'
+              : 'Al pasar a la Fase 2, accederás al Checklist de Aterrizaje en Australia, Guías paso a paso, Validador de los 88 días, Calculadora de Sueldo Fair Work y generador de CV australiano. Además, apagaremos las alarmas push de apertura de cupos.',
+          style: const TextStyle(fontSize: 14, height: 1.4),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              isEn ? 'Cancel' : 'Cancelar',
+              style: const TextStyle(color: AppColors.textMuted),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.secondary,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            onPressed: () async {
+              Navigator.pop(ctx);
+              final item = ref.read(checklistProvider).where((i) => i.id == 'switch_to_phase2').firstOrNull;
+              if (item != null && !item.isChecked) {
+                ref.read(checklistProvider.notifier).toggleItem('switch_to_phase2');
+              }
+              final profile = ref.read(userProfileProvider).value;
+              if (profile != null) {
+                await ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(currentPhase: 2));
+              }
+              NotificationService().syncPassportSubscriptions([]);
+            },
+            child: Text(
+              isEn ? 'Enter Phase 2' : 'Entrar a la Fase 2',
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final checklist = ref.watch(checklistProvider);
@@ -119,11 +179,12 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
+        toolbarHeight: 48,
         title: Row(
           children: [
             Container(
-              width: 34,
-              height: 34,
+              width: 32,
+              height: 32,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(9),
                 image: const DecorationImage(
@@ -142,7 +203,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                   style: const TextStyle(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w900,
-                    fontSize: 20,
+                    fontSize: 19,
                     letterSpacing: -0.3,
                   ),
                 ),
@@ -153,12 +214,12 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
         actions: [
           IconButton(
             tooltip: isEn ? 'Official Home Affairs Sources' : 'Fuentes Oficiales Home Affairs',
-            icon: const Icon(CupertinoIcons.info_circle, color: AppColors.textPrimary, size: 22),
+            icon: const Icon(CupertinoIcons.info_circle, color: AppColors.textPrimary, size: 21),
             onPressed: () => _showOfficialVisaSourcesModal(context, isEn),
           ),
           IconButton(
             tooltip: isEn ? 'Settings' : 'Ajustes',
-            icon: const Icon(CupertinoIcons.gear, color: AppColors.textPrimary, size: 22),
+            icon: const Icon(CupertinoIcons.gear, color: AppColors.textPrimary, size: 21),
             onPressed: () {
               Navigator.of(context).push(
                 CupertinoPageRoute(builder: (_) => const SettingsScreen()),
@@ -172,12 +233,12 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
         children: [
           // Selector Superior Uniforme (Parte 1: Checklist de Visado | Parte 2: Guías de Solicitud)
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+            padding: const EdgeInsets.fromLTRB(16, 2, 16, 4),
             child: Container(
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(
                 color: AppColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(14),
                 border: Border.all(color: AppColors.cardBorder),
               ),
               child: Row(
@@ -190,12 +251,12 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                       }),
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                        padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 8),
                         decoration: BoxDecoration(
                           color: _activeMainTab == 0 ? AppColors.primary : Colors.transparent,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(11),
                           boxShadow: _activeMainTab == 0
-                              ? const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))]
+                              ? const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1))]
                               : null,
                         ),
                         child: Row(
@@ -203,7 +264,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                           children: [
                             Icon(
                               CupertinoIcons.checkmark_shield_fill,
-                              size: 16,
+                              size: 15,
                               color: _activeMainTab == 0 ? Colors.white : AppColors.textSecondary,
                             ),
                             const SizedBox(width: 6),
@@ -213,7 +274,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w800,
-                                  fontSize: 13,
+                                  fontSize: 12.5,
                                   color: _activeMainTab == 0 ? Colors.white : AppColors.textSecondary,
                                 ),
                               ),
@@ -228,12 +289,12 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                       onTap: () => setState(() => _activeMainTab = 1),
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                        padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 8),
                         decoration: BoxDecoration(
                           color: _activeMainTab == 1 ? AppColors.primary : Colors.transparent,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(11),
                           boxShadow: _activeMainTab == 1
-                              ? const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))]
+                              ? const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1))]
                               : null,
                         ),
                         child: Row(
@@ -241,7 +302,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                           children: [
                             Icon(
                               CupertinoIcons.book_fill,
-                              size: 16,
+                              size: 15,
                               color: _activeMainTab == 1 ? Colors.white : AppColors.textSecondary,
                             ),
                             const SizedBox(width: 6),
@@ -251,7 +312,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w800,
-                                  fontSize: 13,
+                                  fontSize: 12.5,
                                   color: _activeMainTab == 1 ? Colors.white : AppColors.textSecondary,
                                 ),
                               ),
@@ -312,6 +373,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
       findOrFallback('getting_help', 'Formulario 956 / 956A (Solo si usas Agente)', 'Solo si autorizas a un agente migratorio o tercero.'),
       findOrFallback('immiaccount_draft', 'Dejar borrador de solicitud listo en ImmiAccount', 'Guardar las páginas del formulario antes de la apertura.'),
       findOrFallback('visa_payment_submit', 'Tarjeta preparada para tasa (\$650 AUD) y Envío', 'Tener tarjeta / Wise lista para pagar \$650 AUD al aplicar.'),
+      findOrFallback('switch_to_phase2', 'Pasar a la Fase 2 de la app (¡Visado Concedido!)', 'Activar la Fase 2 para acceder a Aterrizaje, Guías en Australia, 88 Días, Sueldo y CV.'),
     ];
 
     final allItems = [...stage0Items, ...stage1Items, ...stage2Items, ...stage3Items];
@@ -321,26 +383,26 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
 
     final stages = [
       {
-        'title': isEn ? '🛂 1. Identity & ImmiAccount' : '🛂 1. Identidad & ImmiAccount',
+        'title': isEn ? '1. Identity & ImmiAccount' : '1. Identidad & ImmiAccount',
         'subtitle': isEn ? 'Account, passport & birth certificate' : 'Cuenta oficial, pasaporte y nacimiento',
         'icon': '🛂',
         'tasks': stage0Items,
       },
       {
-        'title': isEn ? '🎓 2. English & Education' : '🎓 2. Inglés & Estudios',
+        'title': isEn ? '2. English & Education' : '2. Inglés & Estudios',
         'subtitle': isEn ? 'Accepted language tests & degrees' : 'Exámenes oficiales y títulos',
         'icon': '🎓',
         'tasks': stage1Items,
       },
       {
-        'title': isEn ? '🏦 3. Funds & Background' : '🏦 3. Fondos & Antecedentes',
+        'title': isEn ? '3. Funds & Background' : '3. Fondos & Antecedentes',
         'subtitle': isEn ? '\$5,000 AUD bank proof, police & health' : '\$5.000 AUD, penales y salud',
         'icon': '🏦',
         'tasks': stage2Items,
       },
       {
-        'title': isEn ? '🚀 4. Translations & Submit' : '🚀 4. Traducción & Envío',
-        'subtitle': isEn ? 'Certified translations, draft & \$650 AUD fee' : 'Traducciones, borrador y pago \$650 AUD',
+        'title': isEn ? '4. Translations, Submit & Phase 2' : '4. Traducción, Envío y Fase 2',
+        'subtitle': isEn ? 'Translations, \$650 AUD fee & enter Phase 2' : 'Traducciones, pago \$650 AUD y pasar a Fase 2',
         'icon': '🚀',
         'tasks': stage3Items,
       },
@@ -977,6 +1039,15 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
           'guideCategory': 'immiaccount_apply',
           'actionLabel': isEn ? 'See how to pre-fill the application' : 'Ver cómo rellenar el formulario paso a paso',
         };
+      case 'switch_to_phase2':
+        return {
+          'title': isEn ? 'Switch to Phase 2 of the app (Visa Granted!)' : 'Pasar a la Fase 2 de la app (¡Visado Concedido!)',
+          'desc': isEn
+              ? 'Once your visa is granted, activate Phase 2 to unlock your Australia Arrival Checklist, Step-by-Step Guides, 88-Day Validator, Pay Calculator & Aussie CV.'
+              : 'Cuando te concedan el visado, pasa a la Fase 2 para activar el Checklist de Aterrizaje, Guías en Australia, Validador de 88 Días, Sueldo y CV.',
+          'guideCategory': 'switch_phase2_action',
+          'actionLabel': isEn ? '✈️ Tap here to enter Phase 2 now' : '✈️ Pulsar aquí para pasar a la Fase 2',
+        };
       case 'visa_payment_submit':
       default:
         return {
@@ -992,18 +1063,23 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
 
   Widget _buildVisaChecklistTaskTile(BuildContext context, ChecklistItem item, bool isEn) {
     final meta = _getTaskLocalizedMeta(context, item, isEn);
+    final isPhase2Step = item.id == 'switch_to_phase2';
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 5),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
         side: BorderSide(
-          color: item.isChecked ? AppColors.secondary.withValues(alpha: 0.35) : AppColors.cardBorder,
-          width: item.isChecked ? 1.5 : 1.0,
+          color: isPhase2Step
+              ? AppColors.secondary.withValues(alpha: 0.65)
+              : (item.isChecked ? AppColors.secondary.withValues(alpha: 0.35) : AppColors.cardBorder),
+          width: isPhase2Step || item.isChecked ? 1.5 : 1.0,
         ),
       ),
       elevation: 0,
-      color: item.isChecked ? AppColors.surfaceElevated.withValues(alpha: 0.5) : AppColors.surface,
+      color: item.isChecked
+          ? AppColors.surfaceElevated.withValues(alpha: 0.5)
+          : (isPhase2Step ? AppColors.secondary.withValues(alpha: 0.06) : AppColors.surface),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         child: Row(
@@ -1017,7 +1093,11 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                 side: const BorderSide(color: AppColors.textMuted, width: 1.5),
                 onChanged: (_) {
-                  ref.read(checklistProvider.notifier).toggleItem(item.id);
+                  if (isPhase2Step && !item.isChecked) {
+                    _showSwitchToPhase2Dialog(context, isEn);
+                  } else {
+                    ref.read(checklistProvider.notifier).toggleItem(item.id);
+                  }
                 },
               ),
             ),
@@ -1047,27 +1127,39 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                   ),
                   const SizedBox(height: 10),
                   InkWell(
-                    onTap: () => _openGuideFromChecklist(meta['guideCategory']!),
+                    onTap: () {
+                      if (isPhase2Step) {
+                        _showSwitchToPhase2Dialog(context, isEn);
+                      } else {
+                        _openGuideFromChecklist(meta['guideCategory']!);
+                      }
+                    },
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
-                        color: AppColors.secondary.withValues(alpha: 0.1),
+                        color: isPhase2Step ? AppColors.secondary : AppColors.secondary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: AppColors.secondary.withValues(alpha: 0.3)),
+                        border: Border.all(
+                          color: isPhase2Step ? AppColors.secondary : AppColors.secondary.withValues(alpha: 0.3),
+                        ),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(CupertinoIcons.arrow_right_circle_fill, size: 14, color: AppColors.secondary),
+                          Icon(
+                            isPhase2Step ? Icons.flight_takeoff_rounded : CupertinoIcons.arrow_right_circle_fill,
+                            size: 14,
+                            color: isPhase2Step ? Colors.white : AppColors.secondary,
+                          ),
                           const SizedBox(width: 6),
                           Flexible(
                             child: Text(
                               meta['actionLabel']!,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
-                                color: AppColors.secondary,
+                                color: isPhase2Step ? Colors.white : AppColors.secondary,
                               ),
                             ),
                           ),
@@ -1098,33 +1190,33 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
 
     return Column(
       children: [
-        // Banner de retorno al Checklist si venimos de un Smart Link
+        // Banner compacto de retorno al Checklist si venimos de un Smart Link
         if (_cameFromChecklistSmartLink)
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
             child: InkWell(
               onTap: () => setState(() {
                 _activeMainTab = 0;
                 _cameFromChecklistSmartLink = false;
               }),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: AppColors.secondary.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: AppColors.secondary.withValues(alpha: 0.4)),
                 ),
                 child: Row(
                   children: [
-                    const Icon(CupertinoIcons.arrow_left, size: 16, color: AppColors.secondary),
-                    const SizedBox(width: 8),
+                    const Icon(CupertinoIcons.arrow_left, size: 14, color: AppColors.secondary),
+                    const SizedBox(width: 6),
                     Expanded(
                       child: Text(
                         isEn
                             ? 'Return to Visa Checklist to mark step done'
                             : 'Volver al Checklist de Visado para marcar la tarea',
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.secondary),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.secondary),
                       ),
                     ),
                   ],
@@ -1133,17 +1225,17 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
             ),
           ),
 
-        // 1. Tarjeta Ejecutiva de Contexto (Igual que en Guías de Fase 2)
+        // 1. Tarjeta Ejecutiva Compacta de Contexto (Igual formato que Fase 2 pero optimizada en altura)
         _buildActiveGuideHeaderCard(context, isEn, currentTheme, currentCategoryItem),
 
-        // 2. Sub-tabs segmentadas (📘 Pasos | ⚖️ Comparar | 🏛️ Enlaces Oficiales)
+        // 2. Sub-tabs segmentadas compactas (📘 Pasos | ⚖️ Comparar | 🏛️ Webs Oficiales)
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
           child: Container(
-            padding: const EdgeInsets.all(3),
+            padding: const EdgeInsets.all(2.5),
             decoration: BoxDecoration(
               color: AppColors.surfaceElevated,
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColors.cardBorder),
             ),
             child: Row(
@@ -1155,9 +1247,9 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 2),
 
-        // 3. Contenido dinámico de la guía seleccionada
+        // 3. Contenido dinámico de la guía seleccionada (ocupa la mayor parte de la pantalla)
         Expanded(
           child: _selectedGuideSubTab == 0
               ? _buildGuideStepsView(guideData, isEn)
@@ -1179,14 +1271,14 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
     final categoryLabel = isEn ? currentCategoryItem['labelEn']! : currentCategoryItem['label']!;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(color: AppColors.cardBorder),
         boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1)),
+          BoxShadow(color: Colors.black12, blurRadius: 3, offset: Offset(0, 1)),
         ],
       ),
       child: Row(
@@ -1198,18 +1290,20 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
               children: [
                 Text(
                   (isEn ? 'STAGE: ' : 'ETAPA: ') + themeLabel.toUpperCase(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 10,
+                    fontSize: 9,
                     fontWeight: FontWeight.w800,
-                    letterSpacing: 0.6,
+                    letterSpacing: 0.4,
                     color: AppColors.primary,
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 1),
                 Text(
                   categoryLabel,
                   style: const TextStyle(
-                    fontSize: 15,
+                    fontSize: 13.5,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
                   ),
@@ -1220,29 +1314,29 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
           const SizedBox(width: 8),
           InkWell(
             onTap: () => _showVisaGuidesCatalogModal(context, isEn),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(9),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
               decoration: BoxDecoration(
                 color: AppColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(9),
                 border: Border.all(color: AppColors.cardBorder),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(CupertinoIcons.square_grid_2x2_fill, size: 13, color: AppColors.primary),
-                  const SizedBox(width: 5),
+                  const Icon(CupertinoIcons.square_grid_2x2_fill, size: 12, color: AppColors.primary),
+                  const SizedBox(width: 4),
                   Text(
                     isEn ? 'All (7)' : 'Ver todas (7)',
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 11,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  const SizedBox(width: 3),
-                  const Icon(CupertinoIcons.chevron_down, size: 11, color: AppColors.textMuted),
+                  const SizedBox(width: 2),
+                  const Icon(CupertinoIcons.chevron_down, size: 10, color: AppColors.textMuted),
                 ],
               ),
             ),
@@ -1259,12 +1353,12 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
         onTap: () => setState(() => _selectedGuideSubTab = index),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
           decoration: BoxDecoration(
             color: isSelected ? AppColors.surface : Colors.transparent,
-            borderRadius: BorderRadius.circular(11),
+            borderRadius: BorderRadius.circular(9),
             boxShadow: isSelected
-                ? const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 1))]
+                ? const [BoxShadow(color: Colors.black12, blurRadius: 3, offset: Offset(0, 1))]
                 : null,
           ),
           child: Text(
@@ -1272,7 +1366,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.w800,
-              fontSize: 12,
+              fontSize: 11.5,
               color: isSelected ? AppColors.primary : AppColors.textSecondary,
             ),
           ),
@@ -1441,73 +1535,45 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
 
     return ListView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       children: [
-        // Cabecera resumen de la guía con enlace oficial directo al Gobierno de Australia
+        // Cabecera compacta de enlace oficial (deja mucho más espacio en pantalla para los pasos de la guía)
         Container(
-          padding: const EdgeInsets.all(16),
-          margin: const EdgeInsets.only(bottom: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+          margin: const EdgeInsets.only(bottom: 8),
           decoration: BoxDecoration(
             color: AppColors.surface,
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(14),
             border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      isEn ? 'OFFICIAL HOME AFFAIRS GUIDE' : 'GUÍA OFICIAL HOME AFFAIRS',
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.primary,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                guideData['title'] as String,
-                style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 4),
               Text(
                 guideData['subtitle'] as String,
                 style: const TextStyle(
-                  fontSize: 13,
+                  fontSize: 12,
                   color: AppColors.textSecondary,
-                  height: 1.35,
+                  height: 1.3,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 7),
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   onPressed: () => UrlLauncherService.openUrl(context, officialUrl),
-                  icon: const Icon(CupertinoIcons.globe, size: 15, color: AppColors.primary),
+                  icon: const Icon(CupertinoIcons.globe, size: 14, color: AppColors.primary),
                   label: Text(
                     officialLabel,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primary),
+                    style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: AppColors.primary),
                   ),
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: AppColors.primary.withValues(alpha: 0.5)),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                 ),
               ),

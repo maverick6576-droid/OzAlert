@@ -1,266 +1,311 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ozvisa_alert/l10n/app_localizations.dart';
+import 'package:ozvisa_alert/presentation/widgets/phase2/official_sources_modal.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../providers/auth_provider.dart';
-import '../../../providers/user_provider.dart';
 import '../../../providers/locale_provider.dart';
+import '../../../providers/news_notifications_provider.dart';
+import '../../../providers/user_provider.dart';
 import '../../../widgets/phase2/visa_dates_survey_dialog.dart';
-import 'package:ozvisa_alert/presentation/widgets/phase2/official_sources_modal.dart';
 
 class Phase2SettingsScreen extends ConsumerWidget {
   const Phase2SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(localeProvider) ?? Localizations.localeOf(context);
+    final isEn = currentLocale.languageCode == 'en';
+    final l10n = AppLocalizations.of(context)!;
     final profile = ref.watch(userProfileProvider).value;
-    final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode == 'en';
-    final user = ref.watch(authStateProvider).value;
+    final currentSubclass = profile?.visaSubclass ?? '462';
 
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(CupertinoIcons.back, color: AppColors.textPrimary, size: 22),
-          onPressed: () => Navigator.of(context).maybePop(),
-        ),
+        leading: const BackButton(color: AppColors.textPrimary),
         title: Text(
-          isEn ? 'Settings' : 'Ajustes',
-          style: const TextStyle(fontWeight: FontWeight.w900, color: AppColors.textPrimary, fontSize: 20),
-        ),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            tooltip: isEn ? 'Official Legal Sources' : 'Fuentes Oficiales y Marco Legal',
-            icon: const Icon(CupertinoIcons.info_circle, color: AppColors.textPrimary, size: 22),
-            onPressed: () => showOfficialSourcesModal(context, isEn: isEn),
+          l10n.settingsTitle,
+          style: const TextStyle(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.bold,
           ),
-          const SizedBox(width: 8),
-        ],
+        ),
       ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.all(24),
         children: [
-          // Tarjeta de Perfil & Estado
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.cardBorder),
-              boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2))],
-            ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 28,
-                  backgroundColor: AppColors.primary.withValues(alpha: 0.12),
-                  child: const Icon(CupertinoIcons.person_fill, color: AppColors.primary, size: 30),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        user?.email ?? 'Usuario OzAlert',
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: (profile?.isPremium ?? false) ? AppColors.secondary.withValues(alpha: 0.15) : AppColors.surfaceElevated,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              (profile?.isPremium ?? false) ? 'PRO ACTIVE' : 'FREE TIER',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                color: (profile?.isPremium ?? false) ? AppColors.secondary : AppColors.textSecondary,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Subclass ${profile?.visaSubclass ?? "462"}',
-                            style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-
-          // Sección de Preferencias
-          _buildSectionTitle(isEn ? 'PREFERENCES' : 'PREFERENCIAS'),
-          Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: AppColors.cardBorder)),
-            elevation: 0,
-            color: AppColors.surface,
-            child: Column(
-              children: [
-                // Idioma
-                ListTile(
-                  leading: const Icon(CupertinoIcons.globe, color: AppColors.secondary),
-                  title: Text(isEn ? 'Language' : 'Idioma de la App'),
-                  subtitle: Text(isEn ? 'English' : 'Español'),
-                  trailing: SegmentedButton<String>(
-                    segments: const [
-                      ButtonSegment(value: 'es', label: Text('ES', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))),
-                      ButtonSegment(value: 'en', label: Text('EN', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))),
-                    ],
-                    selected: {locale?.languageCode ?? 'es'},
-                    onSelectionChanged: (set) {
-                      ref.read(localeProvider.notifier).setLocale(Locale(set.first));
-                    },
-                    style: SegmentedButton.styleFrom(
-                      selectedBackgroundColor: AppColors.primary,
-                      selectedForegroundColor: Colors.white,
-                      visualDensity: VisualDensity.compact,
-                    ),
-                  ),
-                ),
-                const Divider(height: 1),
-
-                // Subclase de Visado
-                ListTile(
-                  leading: const Icon(CupertinoIcons.tag, color: AppColors.secondary),
-                  title: Text(isEn ? 'Visa Subclass' : 'Subclase de Visado'),
-                  subtitle: Text(
-                    (profile?.visaSubclass ?? '462') == '462'
-                        ? (isEn ? 'Work and Holiday (Subclass 462)' : 'Work and Holiday (Subclase 462)')
-                        : (isEn ? 'Working Holiday (Subclass 417)' : 'Working Holiday (Subclase 417)'),
-                  ),
-                  trailing: DropdownButton<String>(
-                    value: profile?.visaSubclass ?? '462',
-                    underline: const SizedBox(),
-                    items: const [
-                      DropdownMenuItem(value: '462', child: Text('Subclase 462', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                      DropdownMenuItem(value: '417', child: Text('Subclase 417', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                    ],
-                    onChanged: (val) {
-                      if (val != null && profile != null) {
-                        ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(visaSubclass: val));
-                        ref.invalidate(userProfileProvider);
-                      }
-                    },
-                  ),
-                ),
-              ],
+          const SizedBox(height: 16),
+          // 1. Idioma de la aplicación
+          Text(
+            l10n.settingsLanguage,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 16),
+          _SelectableSettingsTile(
+            title: l10n.settingsLanguageSpanish,
+            isSelected: currentLocale.languageCode == 'es',
+            onTap: () {
+              ref.read(localeProvider.notifier).setLocale(const Locale('es'));
+            },
+          ),
+          const SizedBox(height: 8),
+          _SelectableSettingsTile(
+            title: l10n.settingsLanguageEnglish,
+            isSelected: currentLocale.languageCode == 'en',
+            onTap: () {
+              ref.read(localeProvider.notifier).setLocale(const Locale('en'));
+            },
+          ),
 
-          // Fuentes Oficiales & Marco Legal
-          _buildSectionTitle(isEn ? 'LEGAL TRANSPARENCY' : 'TRANSPARENCIA LEGAL'),
-          Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: AppColors.cardBorder)),
-            elevation: 0,
-            color: AppColors.surface,
-            child: ListTile(
-              leading: const Icon(CupertinoIcons.info_circle_fill, color: AppColors.secondary),
+          const SizedBox(height: 32),
+          // 2. Subclase de Visado (Específico de Fase 2)
+          Text(
+            isEn ? 'Visa Subclass' : 'Subclase de Visado',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          _SelectableSettingsTile(
+            title: isEn ? 'Work and Holiday (Subclass 462)' : 'Work and Holiday (Subclase 462)',
+            isSelected: currentSubclass == '462',
+            onTap: () {
+              if (profile != null && currentSubclass != '462') {
+                ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(visaSubclass: '462'));
+                ref.invalidate(userProfileProvider);
+              }
+            },
+          ),
+          const SizedBox(height: 8),
+          _SelectableSettingsTile(
+            title: isEn ? 'Working Holiday (Subclass 417)' : 'Working Holiday (Subclase 417)',
+            isSelected: currentSubclass == '417',
+            onTap: () {
+              if (profile != null && currentSubclass != '417') {
+                ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(visaSubclass: '417'));
+                ref.invalidate(userProfileProvider);
+              }
+            },
+          ),
+
+          const SizedBox(height: 32),
+          // 3. Notificaciones
+          Text(
+            l10n.settingsNotifications,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Consumer(
+            builder: (context, ref, child) {
+              final newsEnabled = ref.watch(newsNotificationsProvider);
+              return SwitchListTile.adaptive(
+                title: Text(l10n.settingsNewsNotifs),
+                value: newsEnabled,
+                activeTrackColor: AppColors.primary,
+                tileColor: AppColors.surface,
+                onChanged: (bool value) {
+                  ref.read(newsNotificationsProvider.notifier).toggle(value);
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: AppColors.cardBorder),
+                ),
+              );
+            },
+          ),
+
+          const SizedBox(height: 32),
+          // 4. Fase de la aplicación y Colaboración
+          Text(
+            isEn ? 'App Phase' : 'Fase de la aplicación',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          ListTile(
+            tileColor: AppColors.surface,
+            title: Text(
+              isEn ? 'Return to Phase 1 (Visa Radar)' : 'Volver a Fase 1 (Radar de Visados)',
+              style: const TextStyle(color: AppColors.textPrimary),
+            ),
+            subtitle: Text(
+              isEn
+                  ? 'Check open quota spots and visa application guides'
+                  : 'Consultar el radar de cupos y las guías de solicitud del visado',
+              style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
+            ),
+            trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
+            onTap: () => _confirmReturnToPhase1(context, ref, profile, isEn),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: AppColors.cardBorder),
+            ),
+          ),
+          if (!(profile?.datesSurveyCompleted ?? false)) ...[
+            const SizedBox(height: 8),
+            ListTile(
+              tileColor: AppColors.surface,
               title: Text(
-                isEn ? 'Official Government Sources' : 'Fuentes Oficiales del Gobierno',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                isEn ? 'Record your Visa Dates' : 'Registrar fechas de tu visado',
+                style: const TextStyle(color: AppColors.textPrimary),
               ),
               subtitle: Text(
-                isEn ? 'Fair Work Ombudsman, Home Affairs & ATO' : 'Fair Work Ombudsman, Inmigración y ATO',
-                style: const TextStyle(fontSize: 12),
+                isEn
+                    ? 'Share wait times anonymously to help other applicants'
+                    : 'Comparte anónimamente cuánto tardaron en concedértela',
+                style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
               ),
-              trailing: const Icon(CupertinoIcons.chevron_right, size: 16),
-              onTap: () => showOfficialSourcesModal(context, isEn: isEn),
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Encuesta de fechas de visado (si no la completó)
-          if (!(profile?.datesSurveyCompleted ?? false)) ...[
-            _buildSectionTitle(isEn ? 'COMMUNITY CONTRIBUTION' : 'COLABORACIÓN COMUNITARIA'),
-            Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: AppColors.secondary.withValues(alpha: 0.5))),
-              color: AppColors.secondary.withValues(alpha: 0.06),
-              child: ListTile(
-                leading: const Icon(Icons.celebration_rounded, color: AppColors.secondary),
-                title: Text(
-                  isEn ? 'Record your Visa Dates' : 'Registra tus Fechas de Visado',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                ),
-                subtitle: Text(
-                  isEn ? 'Share wait times anonymously to help Phase 1 applicants.' : 'Comparte anónimamente cuánto tardaron en dártela para ayudar a los demás.',
-                  style: const TextStyle(fontSize: 12),
-                ),
-                trailing: const Icon(CupertinoIcons.chevron_right, size: 16),
-                onTap: () => showVisaDatesSurveyDialogIfNeeded(context, ref),
+              trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
+              onTap: () => showVisaDatesSurveyDialogIfNeeded(context, ref),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: const BorderSide(color: AppColors.cardBorder),
               ),
             ),
-            const SizedBox(height: 16),
           ],
 
-          // BOTÓN DE RETORNO A FASE 1
-          _buildSectionTitle(isEn ? 'PHASE SWITCHER' : 'CAMBIO DE FASE'),
-          Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: AppColors.cardBorder)),
-            elevation: 0,
-            color: AppColors.surface,
-            child: ListTile(
-              leading: const Icon(CupertinoIcons.compass, color: AppColors.primary),
-              title: Text(
-                isEn ? 'Return to Phase 1 (Visa Radar)' : 'Volver a Fase 1 (Buscador de Visa)',
-                style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary),
-              ),
-              subtitle: Text(
-                isEn ? 'Monitor open quota spots and push alarms again.' : 'Reactivar el radar de cupos y alertas para familiares o acompañantes.',
-                style: const TextStyle(fontSize: 12),
-              ),
-              trailing: const Icon(CupertinoIcons.arrow_2_squarepath, color: AppColors.primary),
-              onTap: () => _confirmReturnToPhase1(context, ref, profile, isEn),
+          const SizedBox(height: 32),
+          // 5. Legal (Obligatorio por ley + Fuentes Oficiales)
+          Text(
+            l10n.settingsLegal,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 16),
+          ListTile(
+            tileColor: AppColors.surface,
+            title: Text(l10n.settingsPrivacyPolicy),
+            trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
+            onTap: () => _launchUrl('https://ozvisa-alert-prod.web.app/privacy.html'),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: AppColors.cardBorder),
+            ),
+          ),
+          const SizedBox(height: 8),
+          ListTile(
+            tileColor: AppColors.surface,
+            title: Text(l10n.settingsTerms),
+            trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
+            onTap: () => _launchUrl('https://ozvisa-alert-prod.web.app/terms.html'),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: AppColors.cardBorder),
+            ),
+          ),
+          const SizedBox(height: 8),
+          ListTile(
+            tileColor: AppColors.surface,
+            title: Text(isEn ? 'Official Government Sources' : 'Fuentes Oficiales del Gobierno'),
+            trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
+            onTap: () => showOfficialSourcesModal(context, isEn: isEn),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: AppColors.cardBorder),
+            ),
+          ),
 
-          // Cierre de Sesión
-          Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: AppColors.cardBorder)),
-            elevation: 0,
-            color: AppColors.surface,
-            child: ListTile(
-              leading: const Icon(Icons.logout, color: AppColors.statusClosed),
-              title: Text(
-                isEn ? 'Log Out' : 'Cerrar Sesión',
-                style: const TextStyle(color: AppColors.statusClosed, fontWeight: FontWeight.bold),
-              ),
-              onTap: () async {
-              await ref.read(authRepositoryProvider).signOut();
+          const SizedBox(height: 48),
+          // 6. Cerrar sesión
+          ElevatedButton(
+            onPressed: () async {
+              await ref.read(authControllerProvider.notifier).signOut();
               ref.invalidate(userProfileProvider);
               if (context.mounted) {
                 Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
               }
             },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.surfaceElevated,
+              foregroundColor: AppColors.textPrimary,
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: const BorderSide(color: AppColors.cardBorder),
+              ),
+            ),
+            child: Text(
+              l10n.settingsLogout,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 16),
+          // 7. Eliminar cuenta (Obligatorio por ley en App Store / Google Play)
+          ElevatedButton(
+            onPressed: () {
+              showCupertinoDialog(
+                context: context,
+                builder: (BuildContext dialogContext) {
+                  return CupertinoAlertDialog(
+                    title: Text(l10n.settingsDeleteAccountConfirmTitle),
+                    content: Text(l10n.settingsDeleteAccountConfirmMessage),
+                    actions: [
+                      CupertinoDialogAction(
+                        child: Text(l10n.settingsDeleteAccountCancelButton),
+                        onPressed: () {
+                          Navigator.of(dialogContext).pop();
+                        },
+                      ),
+                      CupertinoDialogAction(
+                        isDestructiveAction: true,
+                        onPressed: () async {
+                          Navigator.of(dialogContext).pop();
+                          try {
+                            await ref.read(authControllerProvider.notifier).deleteAccount();
+                            ref.invalidate(userProfileProvider);
+                            if (context.mounted) {
+                              Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
+                            }
+                          } catch (e) {
+                            debugPrint('Error borrando cuenta: $e');
+                          }
+                        },
+                        child: Text(l10n.settingsDeleteAccountConfirmButton),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.surfaceElevated,
+              foregroundColor: Colors.redAccent,
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(color: Colors.redAccent.withValues(alpha: 0.3)),
+              ),
+            ),
+            child: Text(
+              l10n.settingsDeleteAccount,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(height: 24),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: 8),
-      child: Text(
-        title,
-        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textMuted, letterSpacing: 0.8),
       ),
     );
   }
@@ -274,7 +319,7 @@ class Phase2SettingsScreen extends ConsumerWidget {
         content: Text(
           isEn
               ? 'Your interface will switch back to Phase 1 (Quota Radar). You can return to Phase 2 at any time.'
-              : 'Tu pantalla volverá al Radar de cupos de la Fase 1. Podrás volver a la Fase 2 en cualquier momento desde los ajustes.',
+              : 'Tu pantalla volverá al Radar de cupos de la Fase 1. Podrás volver a la Fase 2 en cualquier momento.',
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: Text(isEn ? 'Cancel' : 'Cancelar')),
@@ -287,10 +332,57 @@ class Phase2SettingsScreen extends ConsumerWidget {
                 await ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(currentPhase: 1));
               }
             },
-            child: Text(isEn ? 'Switch to Phase 1' : 'Cambiar a Fase 1'),
+            child: Text(
+              isEn ? 'Switch to Phase 1' : 'Cambiar a Fase 1',
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _launchUrl(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    if (!await launchUrl(url)) {
+      debugPrint('Could not launch $url');
+    }
+  }
+}
+
+class _SelectableSettingsTile extends StatelessWidget {
+  final String title;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _SelectableSettingsTile({
+    required this.title,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: onTap,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: isSelected ? AppColors.primary : AppColors.cardBorder,
+          width: isSelected ? 2 : 1,
+        ),
+      ),
+      tileColor: isSelected ? AppColors.primary.withValues(alpha: 0.1) : AppColors.surface,
+      title: Text(
+        title,
+        style: TextStyle(
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          color: AppColors.textPrimary,
+        ),
+      ),
+      trailing: isSelected
+          ? const Icon(CupertinoIcons.checkmark_alt, color: AppColors.primary)
+          : null,
     );
   }
 }

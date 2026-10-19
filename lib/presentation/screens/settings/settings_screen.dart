@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/news_notifications_provider.dart';
@@ -15,7 +16,9 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentLocale = ref.watch(localeProvider) ?? Localizations.localeOf(context);
+    final isEn = currentLocale.languageCode == 'en';
     final l10n = AppLocalizations.of(context)!;
+    final profile = ref.watch(userProfileProvider).value;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -76,6 +79,7 @@ class SettingsScreen extends ConsumerWidget {
                 title: Text(l10n.settingsNewsNotifs),
                 value: newsEnabled,
                 activeColor: AppColors.primary,
+                tileColor: AppColors.surface,
                 onChanged: (bool value) {
                   ref.read(newsNotificationsProvider.notifier).toggle(value);
                 },
@@ -88,6 +92,35 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 32),
           Text(
+            isEn ? 'App Phase' : 'Fase de la aplicación',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          ListTile(
+            tileColor: AppColors.surface,
+            title: Text(
+              isEn ? 'Switch to Phase 2 (I got my visa!)' : 'Pasar a la Fase 2 (¡Ya tengo mi visado!)',
+              style: const TextStyle(color: AppColors.textPrimary),
+            ),
+            subtitle: Text(
+              isEn
+                  ? 'Unlock Arrival Checklist, Guides, 88-Day Validator, Pay Calculator & Aussie CV'
+                  : 'Desbloquea Checklist de Aterrizaje, Guías en Australia, 88 Días, Sueldo y CV',
+              style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
+            ),
+            trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
+            onTap: () => _confirmSwitchToPhase2(context, ref, profile, isEn),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: AppColors.cardBorder),
+            ),
+          ),
+          const SizedBox(height: 32),
+          Text(
             l10n.settingsLegal,
             style: const TextStyle(
               fontSize: 18,
@@ -97,6 +130,7 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           ListTile(
+            tileColor: AppColors.surface,
             title: Text(l10n.settingsPrivacyPolicy),
             trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
             onTap: () => _launchUrl('https://ozvisa-alert-prod.web.app/privacy.html'),
@@ -107,6 +141,7 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           ListTile(
+            tileColor: AppColors.surface,
             title: Text(l10n.settingsTerms),
             trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
             onTap: () => _launchUrl('https://ozvisa-alert-prod.web.app/terms.html'),
@@ -144,7 +179,7 @@ class SettingsScreen extends ConsumerWidget {
             onPressed: () {
               showCupertinoDialog(
                 context: context,
-                builder: (BuildContext context) {
+                builder: (BuildContext dialogContext) {
                   return CupertinoAlertDialog(
                     title: Text(l10n.settingsDeleteAccountConfirmTitle),
                     content: Text(l10n.settingsDeleteAccountConfirmMessage),
@@ -152,17 +187,18 @@ class SettingsScreen extends ConsumerWidget {
                       CupertinoDialogAction(
                         child: Text(l10n.settingsDeleteAccountCancelButton),
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          Navigator.of(dialogContext).pop();
                         },
                       ),
                       CupertinoDialogAction(
                         isDestructiveAction: true,
                         onPressed: () async {
-                          Navigator.of(context).pop(); // Cierra el dialog
+                          Navigator.of(dialogContext).pop(); // Cierra el dialog
                           try {
                             await ref.read(authControllerProvider.notifier).deleteAccount();
+                            ref.invalidate(userProfileProvider);
                             if (context.mounted) {
-                              Navigator.of(context).pop(); // Vuelve al inicio
+                              Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
                             }
                           } catch (e) {
                             debugPrint('Error borrando cuenta: $e');
@@ -188,6 +224,39 @@ class SettingsScreen extends ConsumerWidget {
             child: Text(
               l10n.settingsDeleteAccount,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmSwitchToPhase2(BuildContext context, WidgetRef ref, dynamic profile, bool isEn) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(isEn ? 'Switch to Phase 2?' : '¿Pasar a la Fase 2?'),
+        content: Text(
+          isEn
+              ? 'You will access the Australia mode (Arrival Checklist, Guides, 88-Day Validator, Pay Calculator & Aussie CV). You can return to Phase 1 anytime.'
+              : 'Activarás el modo Australia (Checklist de Aterrizaje, Guías, Validador de 88 Días, Sueldo y CV). Podrás volver a la Fase 1 en cualquier momento.',
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(isEn ? 'Cancel' : 'Cancelar')),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.secondary),
+            onPressed: () async {
+              if (ctx.mounted) Navigator.pop(ctx);
+              if (context.mounted) Navigator.of(context).maybePop();
+              if (profile != null) {
+                await ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(currentPhase: 2));
+              }
+              NotificationService().syncPassportSubscriptions([]);
+            },
+            child: Text(
+              isEn ? 'Enter Phase 2' : 'Entrar a Fase 2',
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
         ],

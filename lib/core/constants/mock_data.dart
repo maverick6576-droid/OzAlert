@@ -88,6 +88,13 @@ class MockData {
           'Asegurar límite de pago online internacional (Wise, Revolut o banco) para abonar los \$650 AUD de tasa oficial en ImmiAccount.',
       isChecked: false,
     ),
+    ChecklistItem(
+      id: 'switch_to_phase2',
+      title: 'Pasar a la Fase 2 de la app (¡Visado Concedido!)',
+      description:
+          'Cuando recibas tu Visa Grant Notification, activa la Fase 2 de OzAlert para desbloquear el Checklist de Aterrizaje, Guías en Australia, 88 Días, Sueldo y CV.',
+      isChecked: false,
+    ),
   ];
 
   // Noticias oficiales, Guías y Alertas de la Comunidad precargadas
