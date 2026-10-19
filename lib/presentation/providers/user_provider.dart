@@ -43,6 +43,7 @@ final userProfileProvider = StreamProvider<UserProfile?>((ref) async* {
             ).code;
           }).toList();
           // CRÍTICO PARA EL NEGOCIO: Solo suscribir si ha pagado y está en Fase 1 (búsqueda de visado).
+          NotificationService().setPremiumStatus(profile.isPremium);
           if (profile.isPremium && profile.currentPhase == 1) {
             NotificationService().syncPassportSubscriptions(countryCodes);
           } else {

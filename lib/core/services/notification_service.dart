@@ -87,6 +87,7 @@ class NotificationService {
       // Suscribirse a las noticias globales (si no están desactivadas)
       final prefs = await SharedPreferences.getInstance();
       final newsEnabled = prefs.getBool('news_notifications_enabled') ?? true;
+      _isPremiumActive = prefs.getBool('is_premium_active') ?? false;
       if (newsEnabled) {
         await messaging.subscribeToTopic('all_users');
         debugPrint('Suscrito a tópico FCM: all_users');
@@ -97,6 +98,10 @@ class NotificationService {
         debugPrint('FCM Foreground: ${message.messageId}');
         if (message.notification != null) {
           final isVisaAlert = message.from != null && message.from!.contains('visa_');
+          if (isVisaAlert && !_isPremiumActive) {
+            debugPrint('Alerta de visado ignorada en primer plano: usuario no es Premium');
+            return;
+          }
           _showLocalNotification(
             title: message.notification!.title ?? 'OzAlert',
             body: message.notification!.body ?? '',
@@ -109,6 +114,16 @@ class NotificationService {
     }
 
     _isInitialized = true;
+  }
+
+  bool _isPremiumActive = false;
+
+  Future<void> setPremiumStatus(bool isPremium) async {
+    _isPremiumActive = isPremium;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('is_premium_active', isPremium);
+    } catch (_) {}
   }
 
   /// Botón "Probar Alerta" - Simula una notificación Push
@@ -206,6 +221,7 @@ class NotificationService {
 
   /// Suscripción al tópico de Firebase Cloud Messaging (/topics/visa_ES, etc.)
   Future<void> subscribeToCountryTopic(String countryCode) async {
+    if (!_isPremiumActive) return;
     try {
       await FirebaseMessaging.instance.subscribeToTopic(
         'visa_$countryCode',
@@ -215,27 +231,32 @@ class NotificationService {
       debugPrint('FCM subscribeToTopic ignorado en modo offline/mock: $e');
     }
   }
+
   /// Sincroniza las suscripciones: se suscribe a los códigos activos y se desuscribe del resto en paralelo
   Future<void> syncPassportSubscriptions(List<String> activeCountryCodes) async {
     if (!_isInitialized) await init();
     try {
       final futures = <Future<void>>[];
 
-      // Suscribirse a los seleccionados
+      // Suscribirse a los seleccionados (únicamente si hay códigos activos para usuario Premium en Fase 1)
       for (final code in activeCountryCodes) {
         futures.add(
           FirebaseMessaging.instance.subscribeToTopic('visa_$code').then((_) {
             debugPrint('Sincronizado: Suscrito a visa_$code');
+          }).catchError((e) {
+            debugPrint('Error suscribiendo a visa_$code: $e');
           }),
         );
       }
 
-      // Desuscribirse de los no seleccionados
+      // Desuscribirse de los no seleccionados (o de todos cuando deja de pagar / cambia a Fase 2)
       for (final country in AppConstants.supportedCountries) {
         if (!activeCountryCodes.contains(country.code)) {
           futures.add(
             FirebaseMessaging.instance.unsubscribeFromTopic('visa_${country.code}').then((_) {
               debugPrint('Sincronizado: Desuscrito de visa_${country.code}');
+            }).catchError((e) {
+              debugPrint('Error desuscribiendo de visa_${country.code}: $e');
             }),
           );
         }

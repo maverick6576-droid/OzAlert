@@ -130,8 +130,8 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
                       ),
                       Text(
                         isEn
-                            ? 'Unlimited PDF CVs, payslip audits & Form 1263'
-                            : 'CVs ilimitados en PDF, auditoría de nóminas y Formulario 1263',
+                            ? '24/7 Visa Open Alerts, unlimited PDF CVs, payslip checks & Form 1263'
+                            : 'Alertas 24/7 de Visado Abierto, CVs en PDF, comprobar nóminas y Form 1263',
                         style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
                       ),
                     ],

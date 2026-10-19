@@ -7,18 +7,45 @@ import 'presentation/navigation/phase2_navigation_screen.dart';
 import 'presentation/screens/auth/login_screen.dart';
 import 'presentation/screens/onboarding/welcome_screen.dart';
 import 'presentation/screens/onboarding/referral_source_screen.dart';
-import 'presentation/screens/paywall/paywall_screen.dart';
 import 'presentation/providers/auth_provider.dart';
+import 'presentation/providers/paywall_provider.dart';
 import 'presentation/providers/user_provider.dart';
 import 'presentation/providers/locale_provider.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
-class OzVisaAlertApp extends ConsumerWidget {
+
+class OzVisaAlertApp extends ConsumerStatefulWidget {
   const OzVisaAlertApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<OzVisaAlertApp> createState() => _OzVisaAlertAppState();
+}
+
+class _OzVisaAlertAppState extends ConsumerState<OzVisaAlertApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Al volver a la app, verificar si el usuario se ha suscrito o ha dejado de pagar para sincronizar el canal FCM
+      ref.read(paywallProvider.notifier).checkSubscriptionStatus();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
     final userProfileState = ref.watch(userProfileProvider);
+    ref.watch(paywallProvider);
 
     return MaterialApp(
       title: 'OzVisa Alert (3 Pantallas)',
@@ -65,11 +92,8 @@ class OzVisaAlertApp extends ConsumerWidget {
               } else if (profile.currentPhase == 2) {
                 // FASE 2: Experiencia dedicada en Australia (Llegada, Empleo, Guías y 88 Días)
                 return const Phase2NavigationScreen();
-              } else if (!profile.isPremium) {
-                // Perfil completo, pero NO ha pagado -> Paywall (Fase 1)
-                return const PaywallScreen();
               } else {
-                // Perfil completo y PAGADO -> Dashboard Principal (Fase 1)
+                // FASE 1 GRATUITA: Acceso completo al Radar, Equipo y Bitácora (Notificación de apertura bloqueada para PRO)
                 return const MainNavigationScreen();
               }
             },

@@ -4,7 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/passport_provider.dart';
+import '../../providers/paywall_provider.dart';
+import '../../providers/user_provider.dart';
 import '../../../../domain/models/country_config.dart';
+import '../phase2/paywall_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
@@ -30,9 +33,25 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
     });
   }
 
+  void _openProPaywall(BuildContext context, bool isEn) {
+    showPhase2PaywallBottomSheet(
+      context: context,
+      featureTitle: isEn
+          ? 'Instant Visa Open Notification 🔔'
+          : 'Notificación de Visado Abierto 🔔',
+      featureBenefit: isEn
+          ? 'Subscribe to OzAlert Pro to unlock the 24/7 emergency notification channel with sound alarm the exact second Immigration opens quota spots for your passport.'
+          : 'Suscríbete a OzAlert Pro para activar el canal de notificaciones 24/7 con alarma sonora en el segundo exacto en que Inmigración abra plazas para tu pasaporte.',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final statusAsync = ref.watch(visaStatusStreamProvider(widget.country.code));
+    final isPaywallSubscribed = ref.watch(paywallProvider);
+    final userProfile = ref.watch(userProfileProvider).value;
+    final isPremium = isPaywallSubscribed || (userProfile?.isPremium ?? false);
+    final isEn = Localizations.localeOf(context).languageCode == 'en';
 
     final status = statusAsync.when(
       data: (val) => val,
@@ -79,7 +98,7 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
             height: 250,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: _isScanning ? Colors.white30 : AppColors.statusOpen.withOpacity(0.5), width: 2),
+              border: Border.all(color: _isScanning ? Colors.white30 : AppColors.statusOpen.withValues(alpha: 0.5), width: 2),
             ),
           ).animate(onPlay: (c) => c.repeat()).scaleXY(begin: 0.9, end: 1.10, duration: 1500.ms).fadeOut(duration: 1500.ms),
           Container(
@@ -87,7 +106,7 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
             height: 250,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: _isScanning ? Colors.white24 : AppColors.statusOpen.withOpacity(0.3), width: 1),
+              border: Border.all(color: _isScanning ? Colors.white24 : AppColors.statusOpen.withValues(alpha: 0.3), width: 1),
             ),
           ).animate(onPlay: (c) => c.repeat()).scaleXY(begin: 1.0, end: 1.20, duration: 1500.ms).fadeOut(duration: 1500.ms),
         ],
@@ -104,6 +123,8 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                   );
                 }
               }
+            } else if (!isPremium) {
+              _openProPaywall(context, isEn);
             }
           },
           child: Container(
@@ -113,12 +134,12 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
               gradient: getGradient(),
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: getStatusColor().withOpacity(0.6),
+                color: getStatusColor().withValues(alpha: 0.6),
                 width: 2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: getStatusColor().withOpacity(0.3),
+                  color: getStatusColor().withValues(alpha: 0.3),
                   blurRadius: 30,
                   spreadRadius: 2,
                   offset: const Offset(0, 10),
@@ -132,32 +153,34 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        final uri = Uri.parse('https://immi.homeaffairs.gov.au/what-we-do/whm-program/status-of-country-caps?utm_source=chatgpt.com');
-                        if (!await launchUrl(uri)) {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(AppLocalizations.of(context)!.errorOpeningLink)),
-                            );
+                    Flexible(
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          final uri = Uri.parse('https://immi.homeaffairs.gov.au/what-we-do/whm-program/status-of-country-caps?utm_source=chatgpt.com');
+                          if (!await launchUrl(uri)) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(AppLocalizations.of(context)!.errorOpeningLink)),
+                              );
+                            }
                           }
-                        }
-                      },
-                      icon: const Icon(CupertinoIcons.barcode_viewfinder, size: 20),
-                      label: Text(
-                        AppLocalizations.of(context)!.visaSourceButton,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.15),
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: BorderSide(color: Colors.white.withOpacity(0.3)),
+                        },
+                        icon: const Icon(CupertinoIcons.barcode_viewfinder, size: 20),
+                        label: Text(
+                          AppLocalizations.of(context)!.visaSourceButton,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white.withValues(alpha: 0.15),
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
+                          ),
                         ),
                       ),
                     ),
@@ -180,24 +203,67 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                 ),
                 const SizedBox(height: 24),
 
-                // 3. TITLE (ABIERTA/PAUSADA/CERRADA)
-                Text(
-                  getTitle(),
-                  style: TextStyle(
-                    fontSize: 42,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                    letterSpacing: -0.5,
-                    shadows: [
-                      Shadow(
-                        color: getStatusColor().withOpacity(0.6),
-                        blurRadius: 15,
+                // 3. TITLE (ABIERTA/PAUSADA/CERRADA) + Candado en versión gratuita
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        getTitle(),
+                        style: TextStyle(
+                          fontSize: 42,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                          letterSpacing: -0.5,
+                          shadows: [
+                            Shadow(
+                              color: getStatusColor().withValues(alpha: 0.6),
+                              blurRadius: 15,
+                            ),
+                          ],
+                        ),
+                      )
+                          .animate(target: isOpen ? 1 : 0)
+                          .shimmer(duration: 1500.ms, color: AppColors.statusOpen),
+                    ),
+                    if (!isPremium) ...[
+                      const SizedBox(width: 12),
+                      GestureDetector(
+                        onTap: () => _openProPaywall(context, isEn),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.28),
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                              color: Colors.amberAccent.withValues(alpha: 0.8),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                CupertinoIcons.lock_fill,
+                                color: Colors.amberAccent,
+                                size: 16,
+                              ),
+                              SizedBox(width: 4),
+                              Text(
+                                'PRO',
+                                style: TextStyle(
+                                  color: Colors.amberAccent,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
-                  ),
-                )
-                    .animate(target: isOpen ? 1 : 0)
-                    .shimmer(duration: 1500.ms, color: AppColors.statusOpen),
+                  ],
+                ),
                 const SizedBox(height: 8),
 
                 // 4. SUBTITLE
@@ -216,23 +282,163 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.2),
+                    color: Colors.black.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        '${widget.country.flagEmoji} Ruta: ${widget.country.getLocalizedName(context)} (Subclase ${widget.country.visaSubclass})',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
+                      Flexible(
+                        child: Text(
+                          '${widget.country.flagEmoji} Ruta: ${widget.country.getLocalizedName(context)} (Subclase ${widget.country.visaSubclass})',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
+                const SizedBox(height: 12),
+
+                // 6. ETIQUETA DE NOTIFICACIÓN DE VISADO ABIERTO (Con candado en parte gratuita para suscribirse a PRO)
+                if (!isPremium)
+                  GestureDetector(
+                    onTap: () => _openProPaywall(context, isEn),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.30),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: Colors.amberAccent.withValues(alpha: 0.8),
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.amber.withValues(alpha: 0.22),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              CupertinoIcons.lock_fill,
+                              color: Colors.amberAccent,
+                              size: 16,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  isEn
+                                      ? 'Visa Open Notification'
+                                      : 'Notificación de Visado Abierto',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  isEn
+                                      ? 'Subscribe to PRO to receive instant alert when visa opens'
+                                      : 'Suscríbete como PRO para recibir la notificación al abrirse',
+                                  style: TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.88),
+                                    fontSize: 11.5,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: Colors.amberAccent,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(CupertinoIcons.lock_fill, color: Colors.black87, size: 11),
+                                SizedBox(width: 4),
+                                Text(
+                                  'PRO',
+                                  style: TextStyle(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                else
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.22),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.35),
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          CupertinoIcons.bell_fill,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            isEn
+                                ? 'Visa Open Notification Active (24/7 Channel)'
+                                : 'Notificación de Visado Abierto Activa (Canal 24/7)',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.22),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Text(
+                            'PRO ✓',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 10.5,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ).animate(target: _isScanning ? 1 : 0).fade(end: 0.7, duration: 400.ms).shimmer(duration: 1500.ms, color: Colors.white30),

@@ -4,7 +4,26 @@ import '../../domain/repositories/paywall_repository.dart';
 import '../../core/constants/app_constants.dart';
 
 class PaywallRepositoryImpl implements PaywallRepository {
+  static final PaywallRepositoryImpl _instance = PaywallRepositoryImpl._internal();
+  factory PaywallRepositoryImpl() => _instance;
+  PaywallRepositoryImpl._internal();
+
   bool _isDemoSubscribed = false;
+  final List<void Function(bool isSubscribed)> _listeners = [];
+  bool _rcListenerRegistered = false;
+
+  @override
+  void addSubscriptionStatusListener(void Function(bool isSubscribed) listener) {
+    if (!_listeners.contains(listener)) {
+      _listeners.add(listener);
+    }
+  }
+
+  void _notifyListeners(bool isSubscribed) {
+    for (final listener in List<void Function(bool)>.from(_listeners)) {
+      listener(isSubscribed);
+    }
+  }
 
   @override
   Future<void> initRevenueCat(String apiKey) async {
@@ -14,6 +33,16 @@ class PaywallRepositoryImpl implements PaywallRepository {
         return;
       }
       await Purchases.configure(PurchasesConfiguration(apiKey));
+      if (!_rcListenerRegistered) {
+        _rcListenerRegistered = true;
+        Purchases.addCustomerInfoUpdateListener((customerInfo) {
+          final entitlement =
+              customerInfo.entitlements.all[AppConstants.rcEntitlementId];
+          final isActive = entitlement != null && entitlement.isActive;
+          debugPrint('RevenueCat CustomerInfo actualizado: isPremium=$isActive');
+          _notifyListeners(isActive);
+        });
+      }
       debugPrint('RevenueCat SDK configurado exitosamente.');
     } catch (e) {
       debugPrint('Error en la configuración de RevenueCat: $e');
