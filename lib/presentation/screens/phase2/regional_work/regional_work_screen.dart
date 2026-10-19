@@ -266,8 +266,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       children: [
-        // Selector / Banner de Subclase con acceso directo a normativa
-        // Cabecera Explicativa Oficial: Finalidad del Validador de Códigos y Zonas
+        // Cabecera Explicativa Oficial: Actualizada con Specified Subclass 462 Work (Home Affairs)
         Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
@@ -293,7 +292,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                       children: [
                         Expanded(
                           child: Text(
-                            isEn ? 'Postcode & Industry Eligibility' : 'Validador Oficial de Códigos y Zonas',
+                            isEn
+                                ? 'Official Home Affairs Postcode & Industry Validator'
+                                : 'Validador Oficial de Códigos y Zonas (Home Affairs)',
                             style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.textPrimary),
                           ),
                         ),
@@ -320,13 +321,13 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     const SizedBox(height: 4),
                     Text(
                       isEn
-                          ? 'Verify if any Australian postcode and industry meet legal criteria to renew your visa (88 days for 2nd year or 179 days for 3rd year) under immigration instrument LIN 22/050.'
-                          : 'Comprueba al instante si tu código postal e industria cumplen los requisitos legales para renovar tu visado (88 días para 2º año o 179 días para 3º) según la normativa oficial LIN 22/050 de Inmigración.',
+                          ? 'Updated with official Specified Subclass 462 Work tables (Tables 1 to 6, including 5 April 2025 disaster recovery updates): check any postcode for Tourism & Hospitality (North/Remote), Agriculture & Construction (Regional), Fishing & Forestry (North), Bushfire/Flood Recovery and Healthcare.'
+                          : 'Actualizado con las Tablas 1 a 6 de Specified Subclass 462 Work del Department of Home Affairs (incluyendo la reforma del 5 de abril de 2025): comprueba al instante cualquier código postal para Turismo/Hostelería (Norte y Remoto), Agricultura/Construcción (Regional), Pesca/Silvicultura (Norte), Recuperación de Incendios/Inundaciones y Salud.',
                       style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.35),
                     ),
                     const SizedBox(height: 6),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(8),
@@ -334,12 +335,12 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                       child: Text(
                         subclass == '462'
                             ? (isEn
-                                ? 'Subclass 462: Tourism/Hospitality counts ONLY in Northern or Remote Australia.'
-                                : 'Subclase 462: Hostelería y Turismo computan SOLO en Norte o Zonas Remotas.')
+                                ? 'Subclass 462: 8 approved industries • Tourism/Hospitality counts in Northern & Remote/Very Remote Australia (Tables 1, 2 & 3). Mining is 417 only.'
+                                : 'Subclase 462: 8 sectores oficiales • Hostelería/Turismo computa en el Norte y Zonas Remotas/Muy Remotas (Tablas 1, 2 y 3). Minería es exclusiva de 417.')
                             : (isEn
-                                ? 'Subclass 417: Hospitality does NOT qualify (Farming/Construction only).'
-                                : 'Subclase 417: Hostelería NO computa (únicamente campo o construcción).'),
-                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.primary),
+                                ? 'Subclass 417: Agriculture, Construction, Mining, Fishing & Forestry in Regional Australia.'
+                                : 'Subclase 417: Agricultura, Construcción, Minería, Pesca y Silvicultura en Australia Regional.'),
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.primary, height: 1.3),
                       ),
                     ),
                   ],
@@ -406,7 +407,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
         ),
         const SizedBox(height: 18),
 
-        // RESUMEN EJECUTIVO DE ELEGIBILIDAD POR INDUSTRIA (LIN 22/050)
+        // RESUMEN EJECUTIVO DE ELEGIBILIDAD POR INDUSTRIA (Home Affairs Specified Work)
         _buildCompactIndustrySummaryCard(isEn, subclass, _searchResult),
 
         const SizedBox(height: 36),
@@ -430,8 +431,8 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             Expanded(
               child: Text(
                 isEn
-                    ? 'Enter any 4-digit postcode or tap the map to check LIN 22/050 rules.'
-                    : 'Introduce un código postal o pulsa en el mapa para validar la normativa.',
+                    ? 'Enter any 4-digit postcode or tap the map to check official Home Affairs rules.'
+                    : 'Introduce un código postal de 4 dígitos o pulsa en el mapa para validar la normativa de Home Affairs.',
                 style: const TextStyle(fontSize: 11.5, color: AppColors.textMuted),
               ),
             ),
@@ -446,6 +447,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     final agriValid = result.isEligible(subclass, 'agriculture');
     final constValid = result.isEligible(subclass, 'construction');
     final hospValid = result.isEligible(subclass, 'tourism_hospitality');
+    final fishForestValid = result.isEligible(subclass, 'fishing');
+    final bushfireValid = result.isEligible(subclass, 'bushfire_recovery');
+    final floodValid = result.isEligible(subclass, 'flood_recovery');
 
     final primaryThemeColor = isRegional ? AppColors.secondary : const Color(0xFFD9534F);
 
@@ -490,7 +494,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '${_getStateFullName(result.state, isEn)} • Zona: ${isNorthern ? (isEn ? 'Northern Australia' : 'Norte de Australia') : isRemote ? (isEn ? 'Remote Zone (LIN 22/050)' : 'Zona Remota (LIN 22/050)') : isRegional ? (isEn ? 'Regional Australia' : 'Australia Regional') : (isEn ? 'Metropolitan Area' : 'Área Metropolitana')}',
+                      '${_getStateFullName(result.state, isEn)} • Zona: ${isNorthern ? (isEn ? 'Northern Australia (Table 3)' : 'Norte de Australia (Tabla 3)') : isRemote ? (isEn ? 'Remote / Very Remote (Tables 1 & 2)' : 'Remota / Muy Remota (Tablas 1 y 2)') : isRegional ? (isEn ? 'Regional Australia (Table 4)' : 'Australia Regional (Tabla 4)') : (isEn ? 'Metropolitan / Non-Regional' : 'Área Metropolitana / No Regional')}',
                       style: TextStyle(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w700,
@@ -509,7 +513,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 child: Text(
                   isRegional
                       ? (isEn ? '✓ REGIONAL' : '✓ REGIONAL VÁLIDO')
-                      : (isEn ? '✕ METRO' : '✕ METRO NO VÁLIDO'),
+                      : (isEn ? '✕ METRO' : '✕ METRO'),
                   style: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w900,
@@ -539,25 +543,48 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
               ),
               _buildSearchChip(
                 icon: '☕',
-                label: isEn ? 'Hospitality' : 'Hostelería',
+                label: isEn ? 'Hospitality & Tourism' : 'Hostelería y Turismo',
                 isValid: hospValid,
-                note: subclass == '417' ? (isEn ? '417: No' : '417: No') : (!isNorthern && !isRemote ? (isEn ? 'North/Remote only' : 'Solo Norte/Remoto') : null),
+                note: subclass == '417' ? (isEn ? '462 only' : 'Solo 462') : (!isNorthern && !isRemote ? (isEn ? 'North/Remote only' : 'Solo Norte/Remoto') : null),
               ),
+              _buildSearchChip(
+                icon: '🎣',
+                label: isEn ? 'Fishing & Forestry' : 'Pesca y Silvicultura',
+                isValid: fishForestValid,
+                note: subclass == '462' && !isNorthern ? (isEn ? 'North only' : 'Solo Norte') : null,
+              ),
+              if (bushfireValid)
+                _buildSearchChip(
+                  icon: '🔥',
+                  label: isEn ? 'Bushfire (Table 5)' : 'Incendios (Tabla 5)',
+                  isValid: true,
+                ),
+              if (floodValid)
+                _buildSearchChip(
+                  icon: '🌊',
+                  label: isEn ? 'Flood/Disaster (Table 6)' : 'Inundaciones (Tabla 6)',
+                  isValid: true,
+                ),
             ],
           ),
           const SizedBox(height: 8),
           Text(
             isRegional
                 ? (isEn
-                    ? 'Eligible regional postcode under LIN 22/050 for renewing your visa.'
-                    : 'Código postal regional oficial según LIN 22/050. Los días trabajados aquí computan para tus 88 o 179 días.')
-                : (isEn
-                    ? 'Metropolitan area: work performed here DOES NOT count towards 88/179 day visa renewal.'
-                    : 'Zona metropolitana: los días trabajados aquí NO computan para renovar tu visado bajo la ley LIN 22/050.'),
+                    ? 'Official eligible regional postcode under Home Affairs Specified Work tables. Days worked in valid industries count towards your 88 or 179 days.'
+                    : 'Código postal regional oficial de Home Affairs. Los días trabajados en las industrias marcadas en verde computan para tus 88 o 179 días.')
+                : ((bushfireValid || floodValid)
+                    ? (isEn
+                        ? 'Metropolitan postcode: regular farming/hospitality/construction DOES NOT count here, EXCEPT declared Disaster/Bushfire Recovery (Tables 5/6) or COVID-19 Healthcare.'
+                        : 'Código metropolitano: agricultura, obra u hostelería ordinaria NO computan aquí, EXCEPTO recuperación oficial de desastres/incendios (Tablas 5/6) o salud COVID-19.')
+                    : (isEn
+                        ? 'Metropolitan area: standard work performed here DOES NOT count towards 88/179 day visa renewal (only critical COVID-19 medical work applies nationwide).'
+                        : 'Zona metropolitana: el trabajo ordinario aquí NO computa para renovar tus 88/179 días (únicamente salud crítica COVID-19 aplica en todo el país).')),
             style: TextStyle(
               fontSize: 11,
               color: isRegional ? AppColors.textSecondary : const Color(0xFFC0392B),
               fontWeight: isRegional ? FontWeight.normal : FontWeight.w600,
+              height: 1.35,
             ),
           ),
         ],
@@ -584,9 +611,11 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
         children: [
           Text(icon, style: const TextStyle(fontSize: 12)),
           const SizedBox(width: 4),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+          Flexible(
+            child: Text(
+              label,
+              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+            ),
           ),
           const SizedBox(width: 4),
           Icon(
@@ -596,7 +625,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
           ),
           if (note != null) ...[
             const SizedBox(width: 3),
-            Text('($note)', style: TextStyle(fontSize: 9.5, color: color, fontWeight: FontWeight.w600)),
+            Flexible(
+              child: Text('($note)', style: TextStyle(fontSize: 9.5, color: color, fontWeight: FontWeight.w600)),
+            ),
           ],
         ],
       ),
@@ -627,119 +658,188 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
   }
 
   List<Map<String, dynamic>> _getIndustriesList(bool isEn, String subclass, PostcodeInfo? postcode) {
-    final isRegional = postcode != null && postcode.zone != 'metro' && postcode.zone != 'unknown';
-
     return [
+      {
+        'id': 'tourism_hospitality',
+        'icon': '☕',
+        'name': isEn ? 'Tourism & Hospitality' : 'Turismo y Hostelería',
+        'tableRef': isEn ? 'Tables 1, 2 & 3 (Northern & Remote/Very Remote)' : 'Tablas 1, 2 y 3 (Norte y Zonas Remotas / Muy Remotas)',
+        'desc': isEn
+            ? '• Accommodation: hotels, motels, B&Bs, backpacker hostels, caravan parks, camping grounds, commercial housekeeping, boarding houses & reception centres.\n• Food & Beverage: cafes, restaurants, takeaway food services, catering, pubs, taverns, bars and hospitality clubs.\n• Tourist Services: tour guides/operators, outdoor adventure or dive instructors, tourist transport/bus drivers, gallery/museum workers, travel agencies & event/entertainment venues.'
+            : '• Alojamiento: hoteles, moteles, B&B, hostels de mochileros, caravan parks, campings, housekeeping comercial y centros de recepción.\n• Comida y Bebida: cafeterías, restaurantes, comida para llevar, catering, pubs, tabernas, bares y clubes de hostelería.\n• Servicios Turísticos: guías y operadores de tours, instructores de buceo o aventura, transporte/autobuses turísticos, museos/galerías, agencias de viajes y eventos.',
+        'exclusions': isEn
+            ? 'Does NOT include: wineries/breweries/distilleries that do not predominantly provide tourist services; general cleaning, retail, transport or security companies not primarily serving tourists; schools/student residences.'
+            : 'NO incluye: bodegas, cervecerías o destilerías que no presten principalmente servicios turísticos (ej. cata/cellar door); empresas generales de limpieza, tiendas, transporte o seguridad; residencias estudiantiles.',
+        'eligible': postcode != null && postcode.isEligible(subclass, 'tourism_hospitality'),
+        'legalTip': subclass == '462'
+            ? (postcode?.isEligible(subclass, 'tourism_hospitality') == true
+                ? (isEn
+                    ? 'ELIGIBLE: Postcode is in Northern Australia (Table 3) or Remote / Very Remote Australia (Tables 1 & 2).'
+                    : 'VÁLIDO: El código postal pertenece al Norte de Australia (Tabla 3) o a Australia Remota / Muy Remota (Tablas 1 y 2).')
+                : (isEn
+                    ? 'INELIGIBLE HERE: For Subclass 462, tourism & hospitality ONLY qualifies in Northern Australia (Table 3) or Remote & Very Remote Australia (Tables 1 & 2).'
+                    : 'NO VÁLIDO AQUÍ: En la Subclase 462, turismo y hostelería SOLO computa en el Norte de Australia (Tabla 3) o en áreas Remotas y Muy Remotas (Tablas 1 y 2).'))
+            : (isEn
+                ? 'NOTE (417): Verify Northern/Remote postcode eligibility under your subclass.'
+                : 'NOTA (417): En nuestro filtro diferenciamos la ventaja clave de la Subclase 462 en Norte y Zonas Remotas.'),
+      },
       {
         'id': 'agriculture',
         'icon': '🌾',
-        'name': isEn ? 'Plant & Animal Cultivation' : 'Agricultura & Ganadería',
+        'name': isEn ? 'Plant & Animal Cultivation' : 'Cultivo de Plantas y Ganadería',
+        'tableRef': isEn ? 'Tables 3 & 4 (Northern & Regional Australia)' : 'Tablas 3 y 4 (Norte de Australia y Australia Regional)',
         'desc': isEn
-            ? 'Fruit picking, packing shed, harvesting, pruning, cattle, shearing.'
-            : 'Recolección, empaquetado, siembra, poda, cuidado de ganado y esquileo.',
+            ? '• Harvesting and/or packing fruit and vegetable crops.\n• Pruning and trimming vines and trees (must be commercial horticultural activities and your primary task).\n• General crop maintenance, cultivating/propagating plants or fungi.\n• Maintaining animals for commercial sale or bodily produce, horse breeding/stud farming, cattle herding & feedlots.\n• Immediate processing of animal products (shearing, butchery, packing, tanning) and manufacturing dairy products from raw material.\n• Conservation, environmental reforestation and zoo plant/animal cultivation.'
+            : '• Cosecha (picking) y/o empaquetado (packing) de frutas y verduras.\n• Poda y recorte de viñedos y árboles (debe ser horticultura comercial y tu tarea principal, no jardinería doméstica).\n• Mantenimiento general de cultivos, propagación de plantas u hongos.\n• Cría de animales para venta comercial o sus productos, cría de caballos, pastoreo de ganado (cattle herding) y feedlots.\n• Procesamiento inmediato de productos animales (esquila, carnicería primaria, empaquetado, curtido) y fabricación de lácteos desde materia prima.\n• Conservación ambiental, reforestación y cuidado de fauna/flora en zoológicos.',
+        'exclusions': isEn
+            ? 'Does NOT include: secondary processing (winemaking, brewing, distillation, milling, manufacturing small goods, or retail of dairy/butchery products) or domestic garden maintenance.'
+            : 'NO incluye: procesamiento secundario (elaboración de vino, cerveza, destilación, molienda, embutidos o venta minorista de lácteos/carnicería) ni jardinería doméstica.',
         'eligible': postcode != null && postcode.isEligible(subclass, 'agriculture'),
-        'legalTip': isEn
-            ? 'Fully eligible in regional postcodes for both Subclass 462 and 417.'
-            : '100% elegible en códigos regionales para subclases 462 y 417.',
+        'legalTip': postcode?.isEligible(subclass, 'agriculture') == true
+            ? (isEn
+                ? 'ELIGIBLE: Postcode is approved in Northern Australia (Table 3) or Regional Australia (Table 4) for both 462 and 417.'
+                : 'VÁLIDO: Código postal aprobado en Norte de Australia (Tabla 3) o Australia Regional (Tabla 4) para subclases 462 y 417.')
+            : (isEn
+                ? 'INELIGIBLE HERE: Metropolitan postcode outside Table 3 and Table 4.'
+                : 'NO VÁLIDO AQUÍ: Código postal metropolitano fuera de las Tablas 3 y 4.'),
       },
       {
         'id': 'construction',
         'icon': '🏗️',
-        'name': isEn ? 'Construction & Building' : 'Construcción & Obras',
+        'name': isEn ? 'Construction' : 'Construcción y Obras',
+        'tableRef': isEn ? 'Tables 3 & 4 (Northern & Regional Australia)' : 'Tablas 3 y 4 (Norte de Australia y Australia Regional)',
         'desc': isEn
-            ? 'Residential, commercial building, structural trades with White Card.'
-            : 'Obra residencial, comercial, reformas, pintura y peón con White Card.',
+            ? '• Residential and non-residential building construction.\n• Heavy and civil engineering construction.\n• Land development and site preparation services.\n• Building structure, installation and completion services: landscaping on construction sites, painting new buildings, erecting fences on construction sites, scaffolding, and site support/cleaning services.'
+            : '• Construcción de edificios residenciales y no residenciales.\n• Ingeniería civil y construcción pesada.\n• Urbanización de terrenos y preparación de solares.\n• Estructura, instalación y acabado de obra: paisajismo en solares en construcción, pintura de obra nueva, vallado de obras, andamiaje (scaffolding) y servicios de apoyo/limpieza de obra.',
+        'exclusions': isEn
+            ? 'Does NOT include: ship or boat building; manufacturing materials used in construction (such as steel or concrete manufacturing); mining operations.'
+            : 'NO incluye: construcción naval o de barcos; fabricación en planta de materiales de construcción (como acero u hormigón); ni operaciones mineras.',
         'eligible': postcode != null && postcode.isEligible(subclass, 'construction'),
-        'legalTip': isEn
-            ? 'Eligible in designated regional areas under LIN 22/050.'
-            : 'Válido en áreas regionales designadas bajo el instrumento LIN 22/050.',
-      },
-      {
-        'id': 'tourism_hospitality',
-        'icon': '☕',
-        'name': isEn ? 'Tourism & Hospitality' : 'Hostelería & Turismo',
-        'desc': isEn
-            ? 'Cafes, bars, hotels, tour guides, restaurant all-rounder.'
-            : 'Cafeterías, bares, hoteles, guías turísticos, camareros y cocina.',
-        'eligible': postcode != null && postcode.isEligible(subclass, 'tourism_hospitality'),
-        'legalTip': subclass == '462'
-            ? (postcode?.isEligible(subclass, 'tourism_hospitality') == true
-                ? (isEn ? 'ELIGIBLE: Located in Northern/Remote Australia zone.' : 'VÁLIDO: Ubicado en la Zona Norte / Remota aprobada.')
-                : (isEn ? 'INELIGIBLE: Under 462, hospitality ONLY qualifies in Northern/Remote Australia.' : 'NO VÁLIDO: En 462 la hostelería SOLO cuenta en el Norte o Zonas Remotas.'))
-            : (isEn ? 'INELIGIBLE: Subclass 417 does not include hospitality under current legislation.' : 'NO VÁLIDO: La Subclase 417 no admite hostelería según la ley vigente.'),
-      },
-      {
-        'id': 'mining',
-        'icon': '⛏️',
-        'name': isEn ? 'Mining & Resources' : 'Minería & Recursos',
-        'desc': isEn
-            ? 'Coal mining, mineral extraction, exploration, FIFO site operations.'
-            : 'Extracción mineral, sondeos, explotación de canteras y operaciones FIFO.',
-        'eligible': postcode != null && postcode.isEligible(subclass, 'mining'),
-        'legalTip': subclass == '462'
-            ? (postcode?.isEligible(subclass, 'mining') == true
-                ? (isEn ? 'ELIGIBLE: Approved for Subclass 462 in Northern Australia.' : 'VÁLIDO: Aprobado para Subclase 462 en Norte de Australia.')
-                : (isEn ? 'INELIGIBLE: Under 462, mining only qualifies in Northern Australia.' : 'NO VÁLIDO: Para 462, minería sólo califica en Norte de Australia.'))
-            : (postcode?.isEligible(subclass, 'mining') == true
-                ? (isEn ? 'ELIGIBLE: Approved for Subclass 417 in regional areas.' : 'VÁLIDO: Aprobado para Subclase 417 en zonas regionales.')
-                : (isEn ? 'INELIGIBLE: In metropolitan areas.' : 'NO VÁLIDO: En áreas metropolitanas.')),
-      },
-      {
-        'id': 'forestry',
-        'icon': '🌲',
-        'name': isEn ? 'Tree Farming & Forestry' : 'Silvicultura & Tala',
-        'desc': isEn
-            ? 'Planting, maintaining, felling trees in plantations and sawmills.'
-            : 'Plantación, tala y procesado de madera en serrerías regionales.',
-        'eligible': postcode != null && postcode.isEligible(subclass, 'forestry'),
-        'legalTip': subclass == '462'
-            ? (postcode?.isEligible(subclass, 'forestry') == true
-                ? (isEn ? 'ELIGIBLE: Tree farming approved in Northern Australia for 462.' : 'VÁLIDO: Silvicultura aprobada en Norte de Australia para 462.')
-                : (isEn ? 'INELIGIBLE: Under 462, forestry requires Northern Australia location.' : 'NO VÁLIDO: En 462 requiere ubicación en Norte de Australia.'))
-            : (postcode?.isEligible(subclass, 'forestry') == true
-                ? (isEn ? 'ELIGIBLE: Tree farming approved across regional postcodes for 417.' : 'VÁLIDO: Aprobado en códigos regionales para 417.')
-                : (isEn ? 'INELIGIBLE: Metropolitan areas.' : 'NO VÁLIDO: En áreas metropolitanas.')),
+        'legalTip': postcode?.isEligible(subclass, 'construction') == true
+            ? (isEn
+                ? 'ELIGIBLE: Approved in Northern Australia (Table 3) and Regional Australia (Table 4).'
+                : 'VÁLIDO: Aprobado en Norte de Australia (Tabla 3) y Australia Regional (Tabla 4).')
+            : (isEn
+                ? 'INELIGIBLE HERE: Metropolitan postcode outside Table 3 and Table 4.'
+                : 'NO VÁLIDO AQUÍ: Código postal metropolitano fuera de las Tablas 3 y 4.'),
       },
       {
         'id': 'fishing',
         'icon': '🎣',
-        'name': isEn ? 'Fishing & Pearling' : 'Pesca & Extracción de Perlas',
+        'name': isEn ? 'Fishing & Pearling' : 'Pesca y Perlas',
+        'tableRef': subclass == '462'
+            ? (isEn ? 'Table 3 ONLY (Northern Australia)' : 'SOLO Tabla 3 (Norte de Australia)')
+            : (isEn ? 'Tables 3 & 4 (Regional Australia)' : 'Tablas 3 y 4 (Australia Regional)'),
         'desc': isEn
-            ? 'Commercial fishing, pearling operations, hatchery maintenance.'
-            : 'Pesca comercial marítima, criaderos y extracción de perlas.',
+            ? '• Conducting operations relating directly to taking or catching fish and other aquatic species.\n• Taking or culturing pearls or pearl shell.'
+            : '• Operaciones directamente relacionadas con la captura o pesca comercial de peces y otras especies acuáticas.\n• Extracción o cultivo de perlas y nácar (pearling).',
+        'exclusions': isEn
+            ? 'For Subclass 462, Fishing & Pearling is strictly restricted to Northern Australia (Table 3: all of NT, plus approved northern postcodes in QLD and WA).'
+            : 'Para la Subclase 462, la pesca y cultivo de perlas solo es válida en el Norte de Australia (Tabla 3: todo NT y códigos del norte de QLD y WA).',
         'eligible': postcode != null && postcode.isEligible(subclass, 'fishing'),
         'legalTip': subclass == '462'
             ? (postcode?.isEligible(subclass, 'fishing') == true
-                ? (isEn ? 'ELIGIBLE: Fishing/pearling approved in Northern Australia for 462.' : 'VÁLIDO: Pesca/perlas aprobada en Norte de Australia para 462.')
-                : (isEn ? 'INELIGIBLE: Under 462, fishing requires Northern Australia location.' : 'NO VÁLIDO: En 462 requiere ubicación en Norte de Australia.'))
+                ? (isEn ? 'ELIGIBLE: Located in Northern Australia (Table 3).' : 'VÁLIDO: Ubicado en el Norte de Australia (Tabla 3).')
+                : (isEn ? 'INELIGIBLE HERE: Under Subclass 462, fishing & pearling ONLY counts in Northern Australia (Table 3).' : 'NO VÁLIDO AQUÍ: En la Subclase 462, pesca y perlas SOLO computa en el Norte de Australia (Tabla 3).'))
             : (postcode?.isEligible(subclass, 'fishing') == true
-                ? (isEn ? 'ELIGIBLE: Fishing/pearling approved across regional postcodes for 417.' : 'VÁLIDO: Aprobado en códigos regionales para 417.')
-                : (isEn ? 'INELIGIBLE: Metropolitan areas.' : 'NO VÁLIDO: En áreas metropolitanas.')),
+                ? (isEn ? 'ELIGIBLE: Approved across Regional Australia for Subclass 417.' : 'VÁLIDO: Aprobado en Australia Regional para Subclase 417.')
+                : (isEn ? 'INELIGIBLE HERE: Metropolitan area.' : 'NO VÁLIDO AQUÍ: Área metropolitana.')),
+      },
+      {
+        'id': 'forestry',
+        'icon': '🌲',
+        'name': isEn ? 'Tree Farming & Felling' : 'Silvicultura y Tala',
+        'tableRef': subclass == '462'
+            ? (isEn ? 'Table 3 ONLY (Northern Australia)' : 'SOLO Tabla 3 (Norte de Australia)')
+            : (isEn ? 'Tables 3 & 4 (Regional Australia)' : 'Tablas 3 y 4 (Australia Regional)'),
+        'desc': isEn
+            ? '• Planting or tending trees in a plantation or forest that are intended to be felled.\n• Felling trees in a plantation or forest.\n• Transporting felled trees or parts of trees from the plantation/forest to where they are first milled or processed.'
+            : '• Plantación o cuidado de árboles en plantaciones o bosques destinados a la tala.\n• Tala de árboles en plantaciones o bosques.\n• Transporte de troncos talados desde el bosque hasta su primera serrería o planta de procesado.',
+        'exclusions': isEn
+            ? 'For Subclass 462, Tree Farming & Felling is strictly restricted to Northern Australia (Table 3).'
+            : 'Para la Subclase 462, la silvicultura y tala de árboles solo es válida en el Norte de Australia (Tabla 3).',
+        'eligible': postcode != null && postcode.isEligible(subclass, 'forestry'),
+        'legalTip': subclass == '462'
+            ? (postcode?.isEligible(subclass, 'forestry') == true
+                ? (isEn ? 'ELIGIBLE: Located in Northern Australia (Table 3).' : 'VÁLIDO: Ubicado en el Norte de Australia (Tabla 3).')
+                : (isEn ? 'INELIGIBLE HERE: Under Subclass 462, tree farming & felling ONLY counts in Northern Australia (Table 3).' : 'NO VÁLIDO AQUÍ: En la Subclase 462, silvicultura y tala SOLO computa en el Norte de Australia (Tabla 3).'))
+            : (postcode?.isEligible(subclass, 'forestry') == true
+                ? (isEn ? 'ELIGIBLE: Approved across Regional Australia for Subclass 417.' : 'VÁLIDO: Aprobado en Australia Regional para Subclase 417.')
+                : (isEn ? 'INELIGIBLE HERE: Metropolitan area.' : 'NO VÁLIDO AQUÍ: Área metropolitana.')),
       },
       {
         'id': 'bushfire_recovery',
         'icon': '🔥',
         'name': isEn ? 'Bushfire Recovery' : 'Recuperación de Incendios',
+        'tableRef': isEn ? 'Table 5 (Bushfire Declared Areas - post 31 Jul 2019)' : 'Tabla 5 (Áreas Declaradas de Incendio - desde 31 jul 2019)',
         'desc': isEn
-            ? 'Construction, land remediation and recovery in declared bushfire disaster zones.'
-            : 'Construcción, saneamiento y recuperación en áreas declaradas de incendio.',
-        'eligible': isRegional,
-        'legalTip': isEn
-            ? 'Eligible in government-declared bushfire disaster postcodes (post-31 July 2019).'
-            : 'Elegible en códigos declarados zona catastrófica por incendios forestales.',
+            ? '• Paid or volunteer recovery work carried out after 31 July 2019 in Table 5 declared areas (updated 5 April 2025).\n• Construction, farming, or any work in association with restitution/restoration of land, property, farm animals or wildlife.\n• Providing support services or assistance to people living, working or volunteering in affected areas.'
+            : '• Trabajo remunerado o voluntario realizado tras el 31 de julio de 2019 en las zonas declaradas de la Tabla 5 (actualizada el 5 de abril de 2025).\n• Construcción, agricultura o cualquier labor de restitución y restauración de tierras, propiedades, ganado o fauna silvestre.\n• Servicios de apoyo y asistencia a personas que viven, trabajan o son voluntarias en las zonas afectadas.',
+        'exclusions': isEn
+            ? 'Does NOT include: hospitality, cleaning or administrative work for a business that is not directly affected by a bushfire or where work is not a direct consequence of bushfire damage.'
+            : 'NO incluye: trabajo de hostelería, limpieza o administración para negocios que no hayan sido afectados directamente por el incendio forestal.',
+        'eligible': postcode != null && postcode.isEligible(subclass, 'bushfire_recovery'),
+        'legalTip': postcode?.isEligible(subclass, 'bushfire_recovery') == true
+            ? (isEn
+                ? 'ELIGIBLE (Table 5): This postcode is an official Bushfire Declared Area.'
+                : 'VÁLIDO (Tabla 5): Este código postal está incluido en la Tabla 5 oficial de zonas declaradas de incendio.')
+            : (isEn
+                ? 'INELIGIBLE HERE: Postcode is not listed in Table 5 (Bushfire declared areas).'
+                : 'NO VÁLIDO AQUÍ: Este código postal no figura en la Tabla 5 de zonas declaradas por incendio.'),
       },
       {
         'id': 'flood_recovery',
         'icon': '🌊',
-        'name': isEn ? 'Flood Recovery' : 'Recuperación de Inundaciones',
+        'name': isEn ? 'Flood & Disaster Recovery' : 'Inundaciones y Desastres',
+        'tableRef': isEn ? 'Table 6 (Natural Disaster Declared Areas - post 31 Dec 2021)' : 'Tabla 6 (Zonas de Desastre Natural - desde 31 dic 2021)',
         'desc': isEn
-            ? 'Cleaning, structural repair and volunteer support in declared flood zones.'
-            : 'Limpieza, reconstrucción estructural y apoyo en zonas de inundación declaradas.',
-        'eligible': isRegional,
-        'legalTip': isEn
-            ? 'Eligible in government-declared flood disaster postcodes (post-31 Dec 2021).'
-            : 'Elegible en códigos declarados zona catastrófica por inundaciones oficiales.',
+            ? '• Paid or volunteer recovery work from 31 Dec 2021 in areas affected by flood, cyclone or severe weather (Table 6, effective 5 April 2025).\n• Clean-up, rubbish transport, building demolition, trench digging, tree removal and earth moving.\n• Construction/repair of buildings, roads, footpaths, bridges, utilities and fences.\n• Charity, administrative, call-centre, customer service, coordination & delivery support for affected communities.\n• Caring for, transporting and rehabilitating affected animals.\n• In ImmiAccount select "flood recovery - paid" or "flood recovery - volunteer".'
+            : '• Trabajo remunerado o voluntario desde el 31 de diciembre de 2021 en zonas afectadas por inundaciones, ciclones o clima severo (Tabla 6, vigente desde el 5 de abril de 2025).\n• Limpieza general, retirada de escombros, demolición, excavación de zanjas, retirada de árboles y movimiento de tierras.\n• Reparación o reconstrucción de viviendas, carreteras, puentes, suministros y vallas.\n• Apoyo caritativo, administrativo, call-centre, atención al afectado, coordinación y entregas en comunidades damnificadas, así como rescate de animales.\n• En ImmiAccount debes seleccionar "flood recovery - paid" o "flood recovery - volunteer".',
+        'exclusions': isEn
+            ? 'Does NOT include: hospitality, cleaning or administrative work for a business not affected by a natural disaster.'
+            : 'NO incluye: hostelería, limpieza o administración en empresas que no hayan sido afectadas por el desastre natural.',
+        'eligible': postcode != null && postcode.isEligible(subclass, 'flood_recovery'),
+        'legalTip': postcode?.isEligible(subclass, 'flood_recovery') == true
+            ? (isEn
+                ? 'ELIGIBLE (Table 6): This postcode is an official Natural Disaster Declared Area.'
+                : 'VÁLIDO (Tabla 6): Este código postal está incluido en la Tabla 6 oficial de zonas declaradas por desastre natural / inundación.')
+            : (isEn
+                ? 'INELIGIBLE HERE: Postcode is not listed in Table 6 (Natural disaster declared areas).'
+                : 'NO VÁLIDO AQUÍ: Este código postal no figura en la Tabla 6 de desastres naturales.'),
       },
+      {
+        'id': 'healthcare_covid',
+        'icon': '🏥',
+        'name': isEn ? 'COVID-19 Healthcare & Medical' : 'Salud y Sector Médico COVID-19',
+        'tableRef': isEn ? 'Anywhere in Australia (All Postcodes - post 31 Jan 2020)' : 'En toda Australia (Todos los CP - desde 31 ene 2020)',
+        'desc': isEn
+            ? '• Medical treatment, nursing, contact tracing, testing and research directly involved in the response to COVID-19.\n• Support services such as cleaning of medical and healthcare facilities and equipment directly involved in responding to COVID-19.'
+            : '• Tratamiento médico, enfermería, rastreo de contactos, pruebas diagnósticas e investigación en respuesta directa al COVID-19.\n• Servicios de soporte como limpieza de centros médicos, hospitales y equipamiento sanitario vinculados a la respuesta COVID-19.',
+        'exclusions': isEn
+            ? 'Does NOT include: General Allied Health (physiotherapy, speech pathology, chiropractic), mental health not related to COVID-19, aged/disability care not responding to a COVID-19 outbreak, medical/vet manufacturing, medical reception/admin, or cleaning non-medical facilities.'
+            : 'NO incluye: fisioterapia, logopedia, quiropráctica, cuidado de mayores/discapacidad sin brote de COVID-19, fabricación farmacéutica, recepción/administración médica ni limpieza de centros no médicos.',
+        'eligible': true,
+        'legalTip': isEn
+            ? 'ELIGIBLE NATIONWIDE: Critical COVID-19 medical and healthcare work qualifies anywhere in Australia (including metropolitan cities).'
+            : 'VÁLIDO EN TODA AUSTRALIA: El trabajo sanitario crítico COVID-19 computa en cualquier código postal de Australia (incluidas capitales metropolitanas).',
+      },
+      if (subclass == '417')
+        {
+          'id': 'mining',
+          'icon': '⛏️',
+          'name': isEn ? 'Mining (Subclass 417 Only)' : 'Minería (Solo Subclase 417)',
+          'tableRef': isEn ? 'Tables 3 & 4 (Regional Australia - 417 Only)' : 'Tablas 3 y 4 (Australia Regional - Exclusivo 417)',
+          'desc': isEn
+              ? '• Coal mining, oil and gas extraction, metal ore mining, construction material mining, exploración and mining support services.'
+              : '• Extracción de carbón, petróleo y gas, minerales metálicos, canteras, exploración y servicios de soporte minero.',
+          'exclusions': isEn
+              ? 'IMPORTANT: Mining is ONLY approved for Working Holiday Subclass 417. It is NOT an eligible industry for Work and Holiday Subclass 462.'
+              : 'IMPORTANTE: La minería está aprobada ÚNICAMENTE para la Subclase 417. NO es una industria válida para la Subclase 462 según Home Affairs.',
+          'eligible': postcode != null && postcode.isEligible(subclass, 'mining'),
+          'legalTip': postcode?.isEligible(subclass, 'mining') == true
+              ? (isEn ? 'ELIGIBLE: Approved for Subclass 417 in Regional Australia.' : 'VÁLIDO: Aprobado para la Subclase 417 en Australia Regional.')
+              : (isEn ? 'INELIGIBLE: Metropolitan area.' : 'NO VÁLIDO: En áreas metropolitanas.'),
+        },
     ];
   }
 
@@ -761,16 +861,21 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  const Text('🏛️', style: TextStyle(fontSize: 18)),
-                  const SizedBox(width: 8),
-                  Text(
-                    isEn ? 'Industry Eligibility (LIN 22/050)' : 'Elegibilidad por Industria',
-                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: AppColors.textPrimary),
-                  ),
-                ],
+              Expanded(
+                child: Row(
+                  children: [
+                    const Text('🏛️', style: TextStyle(fontSize: 18)),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        isEn ? 'Official Industry Eligibility (Home Affairs)' : 'Elegibilidad por Industria (Home Affairs)',
+                        style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: AppColors.textPrimary),
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
                 decoration: BoxDecoration(
@@ -791,9 +896,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
           const SizedBox(height: 10),
           Text(
             isEn
-                ? 'Quick overview for postcode ${_postcodeController.text} under Visa Subclass $subclass:'
-                : 'Resumen rápido para CP ${_postcodeController.text} bajo Subclase $subclass:',
-            style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                ? 'Approved industries for postcode ${_postcodeController.text} under Visa Subclass $subclass (tap any sector in the guide below for full role lists and exclusions):'
+                : 'Sectores aprobados para el CP ${_postcodeController.text} bajo la Subclase $subclass (incluye las 8 industrias oficiales de Specified Subclass 462 Work):',
+            style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.35),
           ),
           const SizedBox(height: 10),
           Wrap(
@@ -802,43 +907,73 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             children: industries.map((ind) {
               final isEligible = ind['eligible'] as bool;
               final icon = ind['icon'] as String;
-              final shortName = (ind['name'] as String).split('&').first.trim();
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: isEligible
-                      ? AppColors.secondary.withValues(alpha: 0.1)
-                      : AppColors.statusClosed.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
+              final fullName = ind['name'] as String;
+              return InkWell(
+                onTap: () => _showIndustryDetailsModal(context, ind, isEn, isEligible, subclass),
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                  decoration: BoxDecoration(
                     color: isEligible
-                        ? AppColors.secondary.withValues(alpha: 0.3)
-                        : AppColors.statusClosed.withValues(alpha: 0.2),
+                        ? AppColors.secondary.withValues(alpha: 0.1)
+                        : AppColors.statusClosed.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: isEligible
+                          ? AppColors.secondary.withValues(alpha: 0.3)
+                          : AppColors.statusClosed.withValues(alpha: 0.2),
+                    ),
                   ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(icon, style: const TextStyle(fontSize: 12)),
-                    const SizedBox(width: 4),
-                    Text(
-                      shortName,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: isEligible ? AppColors.textPrimary : AppColors.textMuted,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(icon, style: const TextStyle(fontSize: 12)),
+                      const SizedBox(width: 5),
+                      Flexible(
+                        child: Text(
+                          fullName,
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: isEligible ? AppColors.textPrimary : AppColors.textMuted,
+                          ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(
-                      isEligible ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.xmark_circle_fill,
-                      size: 11,
-                      color: isEligible ? AppColors.secondary : AppColors.statusClosed,
-                    ),
-                  ],
+                      const SizedBox(width: 4),
+                      Icon(
+                        isEligible ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.xmark_circle_fill,
+                        size: 12,
+                        color: isEligible ? AppColors.secondary : AppColors.statusClosed,
+                      ),
+                    ],
+                  ),
                 ),
               );
             }).toList(),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceElevated,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.cardBorder),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(CupertinoIcons.sparkles, size: 15, color: AppColors.secondary),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    isEn
+                        ? 'Home Affairs Flexibility Rule: Work supporting the ongoing operations of a specified industry (such as administrative or cleaning support services at an eligible farm, hotel or construction site) in an eligible postcode may be accepted.'
+                        : 'Criterio de Flexibilidad de Home Affairs: El trabajo de apoyo a las operaciones de una industria elegible (como soporte administrativo o limpieza dentro de una granja, hotel u obra en un código postal válido) también puede ser aceptado.',
+                    style: const TextStyle(fontSize: 11, color: AppColors.textSecondary, height: 1.35),
+                  ),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 14),
           SizedBox(
@@ -846,7 +981,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             child: ElevatedButton.icon(
               icon: const Icon(CupertinoIcons.doc_text_search, size: 16),
               label: Text(
-                isEn ? 'Official Legislation (LIN 22/050)' : 'Ver Normativa Oficial (LIN 22/050)',
+                isEn
+                    ? 'View All Industries, Tables 1–6 & Official Rules'
+                    : 'Ver Detalle de Industrias, Tablas 1–6 y Normativa',
                 style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold),
               ),
               style: ElevatedButton.styleFrom(
@@ -871,7 +1008,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
       backgroundColor: Colors.transparent,
       builder: (ctx) {
         return Container(
-          height: MediaQuery.of(context).size.height * 0.88,
+          height: MediaQuery.of(context).size.height * 0.90,
           decoration: const BoxDecoration(
             color: AppColors.background,
             borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
@@ -897,13 +1034,13 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            isEn ? 'Industry Matrix (LIN 22/050)' : 'Matriz de Industrias (LIN 22/050)',
+                            isEn ? 'Specified Subclass 462 Work (Home Affairs)' : 'Trabajo Especificado Subclase 462 (Home Affairs)',
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
                           ),
                           Text(
                             isEn
-                                ? 'Postcode ${_postcodeController.text} • Visa Subclass $subclass'
-                                : 'Código Postal ${_postcodeController.text} • Subclase $subclass',
+                                ? 'Postcode ${_postcodeController.text} • Visa Subclass $subclass • Tables 1 to 6'
+                                : 'Código Postal ${_postcodeController.text} • Subclase $subclass • Tablas 1 a 6',
                             style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
                           ),
                         ],
@@ -921,24 +1058,57 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildIndustryEligibilityMatrix(isEn, subclass, postcode),
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: AppColors.cardBorder),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              isEn
+                                  ? '📋 Key Official Rules (Specified Subclass 462 Work)'
+                                  : '📋 Resumen Oficial de Requisitos (Home Affairs)',
+                              style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: AppColors.textPrimary),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              isEn
+                                  ? '• 2nd Visa: Minimum 3 months (88 calendar days) of specified work.\n• 3rd Visa: Minimum 6 months (179 calendar days) of specified work on or after 1 July 2019.\n• Full-time equivalent: Working the standard full-time days/hours for that industry in a week (e.g. 5 days / 35–38h) counts as 7 calendar days.\n• Paid work & payslips: All specified work must be paid in accordance with Australian workplace law (except approved Bushfire/Flood recovery volunteer work).\n• Mining Note: Mining is ONLY eligible for Subclass 417, NOT Subclass 462.'
+                                  : '• 2º Visado: Mínimo 3 meses (88 días naturales) de trabajo especificado.\n• 3r Visado: Mínimo 6 meses (179 días naturales) de trabajo especificado.\n• Regla de Semana Completa: Si trabajas la jornada semanal completa estándar de la industria (ej. 5 días / 35–38h), computan los 7 días de la semana.\n• Trabajo Remunerado: Debe pagarse según la ley australiana con nóminas/payslips (solo se admite voluntariado en recuperación oficial de incendios o inundaciones).\n• Nota sobre Minería: La minería SOLO computa para la Subclase 417, NO para la Subclase 462.',
+                              style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.45),
+                            ),
+                          ],
+                        ),
+                      ),
                       const SizedBox(height: 16),
                       SizedBox(
                         width: double.infinity,
                         child: OutlinedButton.icon(
                           icon: const Icon(CupertinoIcons.link, size: 15, color: AppColors.primary),
                           label: Text(
-                            isEn ? 'Consult LIN 22/050 Official Legislation' : 'Consultar Normativa Oficial LIN 22/050',
+                            isEn
+                                ? 'Open Official Home Affairs Specified 462 Work Page'
+                                : 'Abrir Web Oficial de Home Affairs (Specified 462 Work)',
                             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: AppColors.primary),
                           ),
                           style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                             side: BorderSide(color: AppColors.primary.withValues(alpha: 0.35)),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                           ),
                           onPressed: () {
-                            UrlLauncherService.openUrl(context, 'https://www.legislation.gov.au/Details/F2022L00445');
+                            UrlLauncherService.openUrl(
+                              context,
+                              'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462/specified-462-work',
+                            );
                           },
                         ),
                       ),
@@ -965,7 +1135,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
         crossAxisCount: 2,
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
-        childAspectRatio: 1.4,
+        childAspectRatio: 1.22,
       ),
       itemBuilder: (context, index) {
         final ind = industries[index];
@@ -1031,8 +1201,6 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 ),
                 Text(
                   name,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: 12,
@@ -1044,9 +1212,11 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                   children: [
                     const Icon(CupertinoIcons.info_circle, size: 11, color: AppColors.textMuted),
                     const SizedBox(width: 4),
-                    Text(
-                      isEn ? 'Tap for rules' : 'Toca para norma',
-                      style: const TextStyle(fontSize: 10, color: AppColors.textMuted, fontWeight: FontWeight.w500),
+                    Expanded(
+                      child: Text(
+                        isEn ? 'Tap for rules & roles' : 'Toca para ver puestos',
+                        style: const TextStyle(fontSize: 10, color: AppColors.textMuted, fontWeight: FontWeight.w500),
+                      ),
                     ),
                   ],
                 ),
@@ -1061,140 +1231,194 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
   void _showIndustryDetailsModal(BuildContext context, Map<String, dynamic> ind, bool isEn, bool isEligible, String subclass) {
     final icon = ind['icon'] as String;
     final name = ind['name'] as String;
+    final tableRef = (ind['tableRef'] as String?) ?? '';
     final desc = ind['desc'] as String;
+    final exclusions = (ind['exclusions'] as String?) ?? '';
     final tip = ind['legalTip'] as String;
 
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      builder: (ctx) => Padding(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 16),
-                decoration: BoxDecoration(
-                  color: AppColors.cardBorder,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
-            Row(
+      builder: (ctx) => SafeArea(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.86,
+          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(icon, style: const TextStyle(fontSize: 26)),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    name,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      color: AppColors.cardBorder,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: isEligible
-                        ? AppColors.secondary.withValues(alpha: 0.15)
-                        : AppColors.statusClosed.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    isEligible ? (isEn ? '✓ ELIGIBLE (LIN 22/050)' : '✓ VÁLIDO (LIN 22/050)') : (isEn ? '✗ INELIGIBLE' : '✗ NO VÁLIDO'),
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w900,
-                      color: isEligible ? AppColors.secondary : AppColors.statusClosed,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(icon, style: const TextStyle(fontSize: 26)),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
+                          ),
+                          if (tableRef.isNotEmpty) ...[
+                            const SizedBox(height: 2),
+                            Text(
+                              tableRef,
+                              style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: AppColors.primary),
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: isEligible
+                            ? AppColors.secondary.withValues(alpha: 0.15)
+                            : AppColors.statusClosed.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        isEligible ? (isEn ? '✓ ELIGIBLE' : '✓ VÁLIDO') : (isEn ? '✗ INELIGIBLE' : '✗ NO VÁLIDO'),
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w900,
+                          color: isEligible ? AppColors.secondary : AppColors.statusClosed,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  isEn ? 'Approved Roles & Activities (Home Affairs):' : 'Puestos y Actividades Aprobadas (Home Affairs):',
+                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12.5, color: AppColors.textPrimary),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  desc,
+                  style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.45),
+                ),
+                if (exclusions.isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(11),
+                    decoration: BoxDecoration(
+                      color: AppColors.statusClosed.withValues(alpha: 0.06),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.statusClosed.withValues(alpha: 0.25)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          isEn ? '⚠️ Official Exclusions (Does Not Count):' : '⚠️ Exclusiones Oficiales (No Computa):',
+                          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 11.5, color: AppColors.statusClosed),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          exclusions,
+                          style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary, height: 1.4),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceElevated,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: isEligible
+                          ? AppColors.secondary.withValues(alpha: 0.3)
+                          : AppColors.statusClosed.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        isEligible ? CupertinoIcons.shield_fill : CupertinoIcons.exclamationmark_shield_fill,
+                        size: 16,
+                        color: isEligible ? AppColors.secondary : AppColors.statusClosed,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          tip,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: isEligible ? AppColors.secondary : AppColors.statusClosed,
+                            height: 1.35,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 14),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    icon: const Icon(CupertinoIcons.link, size: 15, color: AppColors.primary),
+                    label: Text(
+                      isEn
+                          ? 'Verify on Official Home Affairs Website'
+                          : 'Consultar Web Oficial de Home Affairs (Specified 462 Work)',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: AppColors.primary),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+                      side: BorderSide(color: AppColors.primary.withValues(alpha: 0.35)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    ),
+                    onPressed: () {
+                      UrlLauncherService.openUrl(
+                        context,
+                        'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462/specified-462-work',
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      elevation: 0,
+                    ),
+                    onPressed: () => Navigator.pop(ctx),
+                    child: Text(isEn ? 'Got It' : 'Entendido', style: const TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            Text(
-              isEn ? 'Roles & Activities Included:' : 'Puestos y tareas comprendidas:',
-              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5, color: AppColors.textSecondary),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              desc,
-              style: const TextStyle(fontSize: 13, color: AppColors.textPrimary, height: 1.4),
-            ),
-            const SizedBox(height: 14),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceElevated,
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(
-                  color: isEligible
-                      ? AppColors.secondary.withValues(alpha: 0.3)
-                      : AppColors.statusClosed.withValues(alpha: 0.3),
-                ),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    isEligible ? CupertinoIcons.shield_fill : CupertinoIcons.exclamationmark_shield_fill,
-                    size: 16,
-                    color: isEligible ? AppColors.secondary : AppColors.statusClosed,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      tip,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: isEligible ? AppColors.secondary : AppColors.statusClosed,
-                        height: 1.35,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 14),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                icon: const Icon(CupertinoIcons.link, size: 15, color: AppColors.primary),
-                label: Text(
-                  isEn ? 'Consult LIN 22/050 Official Legislation' : 'Consultar Normativa Oficial LIN 22/050',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: AppColors.primary),
-                ),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 11),
-                  side: BorderSide(color: AppColors.primary.withValues(alpha: 0.35)),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                ),
-                onPressed: () {
-                  UrlLauncherService.openUrl(context, 'https://www.legislation.gov.au/Details/F2022L00445');
-                },
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  elevation: 0,
-                ),
-                onPressed: () => Navigator.pop(ctx),
-                child: Text(isEn ? 'Got It' : 'Entendido', style: const TextStyle(fontWeight: FontWeight.bold)),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -1763,11 +1987,15 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
           final estGross = hours * 33.05;
 
           final industryOptions = [
-            {'id': 'agriculture', 'label': isEn ? '🌱 Agriculture & Fruit' : '🌱 Agricultura & Fruta'},
-            {'id': 'tourism_hospitality', 'label': isEn ? '☕ Hospitality & Tourism' : '☕ Hostelería & Turismo'},
-            {'id': 'construction', 'label': isEn ? '🔨 Construction' : '🔨 Construcción'},
-            {'id': 'mining', 'label': isEn ? '⛏️ Mining' : '⛏️ Minería'},
-            {'id': 'forestry_fishing', 'label': isEn ? '🐟 Fishing & Forestry' : '🐟 Pesca & Silvicultura'},
+            {'id': 'agriculture', 'label': isEn ? '🌾 Plant & Animal Cultivation' : '🌾 Cultivo de Plantas y Ganadería'},
+            {'id': 'tourism_hospitality', 'label': isEn ? '☕ Hospitality & Tourism' : '☕ Hostelería y Turismo'},
+            {'id': 'construction', 'label': isEn ? '🏗️ Construction' : '🏗️ Construcción y Obras'},
+            {'id': 'forestry_fishing', 'label': isEn ? '🎣 Fishing, Pearling & Forestry' : '🎣 Pesca, Perlas y Silvicultura'},
+            {'id': 'bushfire_recovery', 'label': isEn ? '🔥 Bushfire Recovery (Table 5)' : '🔥 Recuperación de Incendios (Tabla 5)'},
+            {'id': 'flood_recovery', 'label': isEn ? '🌊 Flood & Disaster Recovery (Table 6)' : '🌊 Inundaciones y Desastres (Tabla 6)'},
+            {'id': 'healthcare_covid', 'label': isEn ? '🏥 COVID-19 Healthcare & Medical' : '🏥 Salud y Sector Médico COVID-19'},
+            if (visaSubclass == '417')
+              {'id': 'mining', 'label': isEn ? '⛏️ Mining (417 Only)' : '⛏️ Minería (Solo 417)'},
           ];
 
           return Padding(

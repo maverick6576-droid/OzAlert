@@ -48,15 +48,17 @@ class Phase2AppBar extends StatelessWidget implements PreferredSizeWidget {
             const SizedBox(width: 10),
           ],
           Flexible(
-            child: Text(
-              title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.w900,
-                fontSize: 20,
-                letterSpacing: -0.2,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                title,
+                style: const TextStyle(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 20,
+                  letterSpacing: -0.2,
+                ),
               ),
             ),
           ),

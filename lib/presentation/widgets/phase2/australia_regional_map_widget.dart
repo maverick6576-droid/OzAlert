@@ -652,7 +652,15 @@ class _RealisticAustraliaMapPainter extends CustomPainter {
         );
         final tp = TextPainter(text: textSpan, textDirection: TextDirection.ltr);
         tp.layout();
-        tp.paint(canvas, Offset(pinX + 5, pinY - tp.height / 2));
+        double labelX = pinX + 5;
+        if (labelX + tp.width > w - 4) {
+          labelX = pinX - tp.width - 5;
+        }
+        if (labelX < 4) {
+          labelX = 4;
+        }
+        final double labelY = (pinY - tp.height / 2).clamp(2.0, h - tp.height - 2.0);
+        tp.paint(canvas, Offset(labelX, labelY));
       }
     }
   }

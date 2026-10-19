@@ -156,9 +156,11 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
           // 1. Cabecera de la Ruta: Insignia Australiana + Contador Porcentual
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       padding: const EdgeInsets.all(6),
@@ -175,23 +177,19 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                         children: [
                           Text(
                             isEn ? 'THE GREAT AUSSIE TRAIL' : 'LA GRAN RUTA AUSTRALIANA',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                              fontSize: 10,
+                              fontSize: 9.5,
                               fontWeight: FontWeight.w900,
                               color: AppColors.primary,
-                              letterSpacing: 0.7,
+                              letterSpacing: 0.4,
                             ),
                           ),
                           const SizedBox(height: 1),
                           Text(
                             isEn ? 'Your Journey in Australia' : 'Tu Camino en Australia',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               fontWeight: FontWeight.w800,
-                              fontSize: 14.5,
+                              fontSize: 14,
                               color: AppColors.textPrimary,
                             ),
                           ),
@@ -754,8 +752,6 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                             Flexible(
                               child: Text(
                                 _getTaskActionLabel(task.targetGuideCategory!, isEn),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,

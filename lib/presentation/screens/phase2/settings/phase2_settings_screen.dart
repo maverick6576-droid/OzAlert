@@ -67,8 +67,6 @@ class Phase2SettingsScreen extends ConsumerWidget {
                     children: [
                       Text(
                         user?.email ?? 'Usuario OzAlert',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
                       ),
                       const SizedBox(height: 4),
@@ -242,7 +240,13 @@ class Phase2SettingsScreen extends ConsumerWidget {
                 isEn ? 'Log Out' : 'Cerrar Sesión',
                 style: const TextStyle(color: AppColors.statusClosed, fontWeight: FontWeight.bold),
               ),
-              onTap: () => ref.read(authRepositoryProvider).signOut(),
+              onTap: () async {
+              await ref.read(authRepositoryProvider).signOut();
+              ref.invalidate(userProfileProvider);
+              if (context.mounted) {
+                Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
+              }
+            },
             ),
           ),
           const SizedBox(height: 40),

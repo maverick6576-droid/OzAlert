@@ -536,8 +536,6 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                             child: Text(
                               title,
                               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           IconButton(
@@ -1569,37 +1567,33 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
             ],
           ),
           const Divider(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  isEn ? 'Availability Status:' : 'Disponibilidad Declarada:',
-                  style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
-                ),
+          Text(
+            isEn ? 'Availability Status:' : 'Disponibilidad Declarada:',
+            style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+          ),
+          const SizedBox(height: 2),
+          DropdownButton<String>(
+            value: _availability,
+            isExpanded: true,
+            underline: const SizedBox(),
+            isDense: true,
+            items: [
+              DropdownMenuItem(
+                value: 'Immediate Start | Flexible 7 Days & Weekends | 6-Month Commitment',
+                child: Text(isEn ? 'Immediate (7 Days & Weekends)' : 'Inmediata (7 Días & Fines de Semana)', style: const TextStyle(fontSize: 12)),
               ),
-              DropdownButton<String>(
-                value: _availability,
-                underline: const SizedBox(),
-                isDense: true,
-                items: [
-                  DropdownMenuItem(
-                    value: 'Immediate Start | Flexible 7 Days & Weekends | 6-Month Commitment',
-                    child: Text(isEn ? 'Immediate (7 Days & Weekends)' : 'Inmediata (7 Días & Fines de Semana)', style: const TextStyle(fontSize: 12)),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Immediate Start | Morning Shifts & Weekends Available',
-                    child: Text(isEn ? 'Mornings & Weekends' : 'Mañanas & Fines de Semana', style: const TextStyle(fontSize: 12)),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Immediate Start | Evening & Night Shifts Ready',
-                    child: Text(isEn ? 'Evenings & Nights' : 'Tardes y Noches', style: const TextStyle(fontSize: 12)),
-                  ),
-                ],
-                onChanged: (val) {
-                  if (val != null) _syncState(() => _availability = val);
-                },
+              DropdownMenuItem(
+                value: 'Immediate Start | Morning Shifts & Weekends Available',
+                child: Text(isEn ? 'Mornings & Weekends' : 'Mañanas & Fines de Semana', style: const TextStyle(fontSize: 12)),
+              ),
+              DropdownMenuItem(
+                value: 'Immediate Start | Evening & Night Shifts Ready',
+                child: Text(isEn ? 'Evenings & Nights' : 'Tardes y Noches', style: const TextStyle(fontSize: 12)),
               ),
             ],
+            onChanged: (val) {
+              if (val != null) _syncState(() => _availability = val);
+            },
           ),
         ],
       ),
@@ -1758,7 +1752,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
             onTap: () => _syncState(() => _themeColorHex = hex),
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 4),
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
               decoration: BoxDecoration(
                 color: isSelected ? colorObj.withValues(alpha: 0.12) : AppColors.surface,
                 borderRadius: BorderRadius.circular(14),
@@ -1773,8 +1767,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                   const SizedBox(height: 4),
                   Text(
                     name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 10.5,
                       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -2141,8 +2134,6 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                         children: [
                           Text(
                             isEn ? 'Full-Time Base' : 'Salario Base FT',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary, fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(height: 2),
@@ -2168,8 +2159,6 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                         children: [
                           Text(
                             'Casual (+25%)',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize: 11.5, color: AppColors.primary, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 2),
@@ -2208,7 +2197,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                 child: GestureDetector(
                   onTap: () => setState(() => _isCasualContract = true),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
                     decoration: BoxDecoration(
                       color: _isCasualContract ? AppColors.primary : Colors.transparent,
                       borderRadius: BorderRadius.circular(12),
@@ -2216,8 +2205,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                     alignment: Alignment.center,
                     child: Text(
                       'Casual (+25%)',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: _isCasualContract ? Colors.white : AppColors.textSecondary,
                         fontWeight: FontWeight.bold,
@@ -2231,7 +2219,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                 child: GestureDetector(
                   onTap: () => setState(() => _isCasualContract = false),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
                     decoration: BoxDecoration(
                       color: !_isCasualContract ? AppColors.primary : Colors.transparent,
                       borderRadius: BorderRadius.circular(12),
@@ -2239,8 +2227,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                     alignment: Alignment.center,
                     child: Text(
                       isEn ? 'Full / Part-Time' : 'Completa / Media',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: !_isCasualContract ? Colors.white : AppColors.textSecondary,
                         fontWeight: FontWeight.bold,

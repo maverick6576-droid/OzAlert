@@ -1,6 +1,6 @@
 {
-  "version": "2026.1",
-  "disclaimer": "Información extraída de los instrumentos legislativos oficiales del Department of Home Affairs (LIN 22/050 y LIN 21/043).",
+  "version": "2026.2",
+  "disclaimer": "Información oficial del Department of Home Affairs (Specified Subclass 462 Work / LIN 22/050).",
   "postcodes": [
     {
       "code": "4870",
@@ -82,7 +82,7 @@
       "code": "0870",
       "location": "Alice Springs, NT",
       "state": "NT",
-      "zone": "remote",
+      "zone": "northern",
       "subclass462": {
         "agriculture": true,
         "tourism_hospitality": true,
@@ -139,11 +139,11 @@
       "code": "4670",
       "location": "Bundaberg, QLD",
       "state": "QLD",
-      "zone": "regional_south",
+      "zone": "regional_qld",
       "subclass462": {
         "agriculture": true,
         "tourism_hospitality": false,
-        "construction": false,
+        "construction": true,
         "forestry_fishing": false
       },
       "subclass417": {
@@ -162,7 +162,7 @@
       "subclass462": {
         "agriculture": true,
         "tourism_hospitality": false,
-        "construction": false,
+        "construction": true,
         "forestry_fishing": false
       },
       "subclass417": {
@@ -181,7 +181,7 @@
       "subclass462": {
         "agriculture": true,
         "tourism_hospitality": false,
-        "construction": false,
+        "construction": true,
         "forestry_fishing": false
       },
       "subclass417": {
@@ -200,7 +200,7 @@
       "subclass462": {
         "agriculture": true,
         "tourism_hospitality": false,
-        "construction": false,
+        "construction": true,
         "forestry_fishing": false
       },
       "subclass417": {
@@ -219,7 +219,7 @@
       "subclass462": {
         "agriculture": true,
         "tourism_hospitality": false,
-        "construction": false,
+        "construction": true,
         "forestry_fishing": false
       },
       "subclass417": {
@@ -238,7 +238,7 @@
       "subclass462": {
         "agriculture": true,
         "tourism_hospitality": false,
-        "construction": false,
+        "construction": true,
         "forestry_fishing": false
       },
       "subclass417": {
@@ -253,11 +253,11 @@
       "code": "7000",
       "location": "Hobart, TAS",
       "state": "TAS",
-      "zone": "tasmania_all",
+      "zone": "regional_tas",
       "subclass462": {
         "agriculture": true,
         "tourism_hospitality": false,
-        "construction": false,
+        "construction": true,
         "forestry_fishing": false
       },
       "subclass417": {

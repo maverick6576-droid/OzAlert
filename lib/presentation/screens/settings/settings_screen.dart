@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/news_notifications_provider.dart';
+import '../../providers/user_provider.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -116,9 +117,12 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 48),
           ElevatedButton(
-            onPressed: () {
-              ref.read(authControllerProvider.notifier).signOut();
-              Navigator.of(context).pop();
+            onPressed: () async {
+              await ref.read(authControllerProvider.notifier).signOut();
+              ref.invalidate(userProfileProvider);
+              if (context.mounted) {
+                Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.surfaceElevated,

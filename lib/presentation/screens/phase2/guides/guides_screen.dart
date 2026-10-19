@@ -138,8 +138,6 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                       Expanded(
                         child: Text(
                           isEn ? 'Return to checklist to mark step done' : 'Volver al checklist para marcar la tarea',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.secondary),
                         ),
                       ),
@@ -257,8 +255,6 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
@@ -600,14 +596,10 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 Text(
                   isEn ? 'Money at Risk in Australia' : 'Dinero en juego en Australia',
                   style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12, color: AppColors.textPrimary),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   isEn ? 'Super, Bond, Taxes & Medicare' : 'Super, Fianza, Tax y Medicare',
                   style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
@@ -669,9 +661,11 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          isEn ? 'Money Audit & Simulator' : 'Auditoría & Simulador de Dinero',
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
+                        Expanded(
+                          child: Text(
+                            isEn ? 'Money Audit & Simulator' : 'Auditoría & Simulador de Dinero',
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
+                          ),
                         ),
                         IconButton(
                           icon: const Icon(CupertinoIcons.xmark_circle_fill, color: AppColors.textMuted),
@@ -738,8 +732,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 15, color: AppColors.secondary),
                   label: Text(
                     isEn ? 'Consult Official Legal Regulations' : 'Consultar Normativa Oficial y Fuentes Legales',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: AppColors.secondary),
                   ),
                   style: OutlinedButton.styleFrom(
@@ -973,14 +966,13 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
               icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 14, color: AppColors.primary),
               label: Text(
                 isEn ? 'Consult Official Sources (ATO & Home Affairs)' : 'Consultar Fuentes Oficiales (ATO e Inmigración)',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.primary),
               ),
               style: OutlinedButton.styleFrom(
                 side: BorderSide(color: AppColors.primary.withValues(alpha: 0.35)),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
               ),
               onPressed: () {
                 showOfficialSourcesModal(context, isEn: isEn, initialTopic: 'tax');
@@ -1154,9 +1146,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                       label: Text(
                         (isEn ? step.officialUrlLabelEn : step.officialUrlLabel) ??
                             (isEn ? 'Consult Official Source' : 'Consultar Fuente Oficial'),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, height: 1.3),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
@@ -1376,14 +1367,13 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   label: Text(
                     (isEn ? item.officialUrlLabelEn : item.officialUrlLabel) ??
                         (isEn ? 'Consult Official Website' : 'Consultar Web Oficial'),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, height: 1.3),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                     elevation: 0,
                   ),
@@ -1504,13 +1494,12 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   partner.promoCode != null && partner.promoCode!.isNotEmpty
                       ? (isEn ? 'Apply Code & Open Site' : 'Aplicar Código & Abrir Web')
                       : (isEn ? 'Open Official Link' : 'Ir a la Web Oficial'),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, height: 1.3),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                   elevation: 0,
                 ),
@@ -1577,8 +1566,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     icon: const Icon(CupertinoIcons.sparkles, size: 14),
                     label: Text(
                       isEn ? 'Savings Guide' : 'Guía de Ahorro',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                     style: ElevatedButton.styleFrom(
@@ -1602,8 +1590,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 14, color: AppColors.primary),
                     label: Text(
                       isEn ? 'Official ATO Web' : 'Web Oficial ATO',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primary),
                     ),
                     style: OutlinedButton.styleFrom(
