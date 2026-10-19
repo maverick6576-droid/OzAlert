@@ -5,59 +5,87 @@ class MockData {
   // Lista inicial de verificación de requisitos Work and Holiday (Subclase 417 y 462)
   static const List<ChecklistItem> initialChecklist = [
     ChecklistItem(
+      id: 'immiaccount_setup',
+      title: 'Crear y verificar cuenta ImmiAccount',
+      description:
+          'Registrarse en el portal oficial del Department of Home Affairs (online.immi.gov.au) y configurar la verificación en 2 pasos (2FA).',
+      isChecked: false,
+    ),
+    ChecklistItem(
       id: 'identity_documents',
-      title: 'Documentos de identidad',
+      title: 'Documentos de identidad y Pasaporte',
       description:
-          'Páginas de tu pasaporte (foto, datos, fechas). Certificado de nacimiento con nombres de padres. Prueba de cambio de nombre (si aplica).',
-      isChecked: false,
-    ),
-    ChecklistItem(
-      id: 'education',
-      title: 'Educación',
-      description:
-          'Evidencia de tus calificaciones educativas (título universitario, años cursados o equivalente, dependiendo de las exigencias para tu país).',
-      isChecked: false,
-    ),
-    ChecklistItem(
-      id: 'english_language',
-      title: 'Nivel de inglés',
-      description:
-          'Evidencia de estudios en inglés, o examen aprobado en los últimos 12 meses (IELTS 4.5, PTE 30, Cambridge C1 147, o TOEFL iBT 32).',
+          'Páginas de tu pasaporte a color (mín. 12 meses de validez recomendada), certificado de nacimiento con nombres de ambos padres y foto tamaño pasaporte.',
       isChecked: false,
     ),
     ChecklistItem(
       id: 'government_support',
-      title: 'Apoyo del Gobierno',
+      title: 'Apoyo del Gobierno (Solo ciertos países)',
       description:
-          'Carta de apoyo de tu gobierno (solo para ciertos países como Perú, Ecuador, etc. No requerida para España, Argentina, Chile, etc.).',
+          'Carta de apoyo gubernamental únicamente si tu país lo exige (ej. Perú, Ecuador). NO requerida para España, Argentina, Chile, Uruguay, etc.',
+      isChecked: false,
+    ),
+    ChecklistItem(
+      id: 'english_language',
+      title: 'Certificado oficial de Nivel de Inglés',
+      description:
+          'Examen aprobado en los últimos 12 meses (PTE Academic ≥ 30, IELTS ≥ 4.5, Cambridge C1 CAE ≥ 147, o TOEFL iBT ≥ 32) o evidencia de estudios en inglés.',
+      isChecked: false,
+    ),
+    ChecklistItem(
+      id: 'education',
+      title: 'Título o Expediente de Educación Superior',
+      description:
+          'Evidencia de tus calificaciones educativas para Subclase 462 (título universitario, grado superior o 2 años universitarios aprobados según tu país).',
       isChecked: false,
     ),
     ChecklistItem(
       id: 'enough_money',
-      title: 'Fondos suficientes para tu estancia y salida',
+      title: 'Fondos suficientes (\$5.000 AUD + Vuelo)',
       description:
-          'Evidencia de dinero para tu estancia (normalmente \$5.000 AUD) y dinero para un billete de salida de Australia (o el billete ya comprado).',
+          'Extracto bancario oficial reciente a tu nombre con al menos \$5.000 AUD (~3.100 €) más fondos para un billete de salida de Australia.',
       isChecked: false,
     ),
     ChecklistItem(
       id: 'character_documents',
-      title: 'Documentos de carácter (Antecedentes)',
+      title: 'Certificado de Antecedentes Penales',
       description:
-          'Certificados de policía de cada país donde hayas pasado 12+ meses en los últimos 10 años (desde los 16 años), y registro militar si aplica.',
+          'Certificado policial de cada país donde hayas residido 12+ meses en los últimos 10 años (desde los 16 años) y registro militar si aplica.',
       isChecked: false,
     ),
     ChecklistItem(
-      id: 'getting_help',
-      title: 'Notificar si recibes ayuda (Agentes)',
+      id: 'health_exams',
+      title: 'Exámenes médicos y radiografía (Si aplica)',
       description:
-          'Formulario 956A o 956 si usas un agente migratorio o autorizas a alguien para recibir tus documentos.',
+          'Comprobar si tu país de residencia o profesión (sanidad/educación) requiere revisión médica con médico autorizado (Panel Physician y HAP ID).',
       isChecked: false,
     ),
     ChecklistItem(
       id: 'prepare_documents',
-      title: 'Preparar tus documentos',
+      title: 'Traducciones oficiales y escaneo a color',
       description:
-          'Traducir al inglés todos los documentos por un traductor cualificado y escanear/fotografiar todos los originales y traducciones a color.',
+          'Traducir al inglés todo documento no redactado en inglés (Traductor Jurado / NAATI) y escanear originales y traducciones a color en PDF (<5 MB).',
+      isChecked: false,
+    ),
+    ChecklistItem(
+      id: 'getting_help',
+      title: 'Formulario 956 / 956A (Solo si usas Agente)',
+      description:
+          'Incluir únicamente si contratas un agente migratorio registrado (MARA) o autorizas a un tercero a recibir correspondencia en tu nombre.',
+      isChecked: false,
+    ),
+    ChecklistItem(
+      id: 'immiaccount_draft',
+      title: 'Dejar borrador de solicitud listo en ImmiAccount',
+      description:
+          'Rellenar y guardar las páginas del formulario Work & Holiday (462 / 417) con antelación para adjuntar documentos y enviar en minutos al abrir cupos.',
+      isChecked: false,
+    ),
+    ChecklistItem(
+      id: 'visa_payment_submit',
+      title: 'Tarjeta preparada para tasa (\$650 AUD) y Envío',
+      description:
+          'Asegurar límite de pago online internacional (Wise, Revolut o banco) para abonar los \$650 AUD de tasa oficial en ImmiAccount.',
       isChecked: false,
     ),
   ];

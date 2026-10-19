@@ -27,7 +27,11 @@ class SharedPrefsService {
 
     try {
       final List<dynamic> decoded = jsonDecode(jsonString);
-      return decoded.map((e) => ChecklistItem.fromMap(e)).toList();
+      final savedItems = decoded.map((e) => ChecklistItem.fromMap(e)).toList();
+      final savedMap = {for (final item in savedItems) item.id: item.isChecked};
+      return MockData.initialChecklist
+          .map((item) => item.copyWith(isChecked: savedMap[item.id] ?? item.isChecked))
+          .toList();
     } catch (e) {
       return MockData.initialChecklist;
     }
