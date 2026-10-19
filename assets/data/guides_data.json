@@ -1333,6 +1333,341 @@
           "officialUrlLabelEn": "ATO - Early Tax Refund Official Procedure"
         }
       ]
+    },
+    "international_license": {
+      "id": "international_license",
+      "title": "Carnet de Conducir Internacional & Traducción NAATI",
+      "titleEn": "International Driving Permit (IDP) & NAATI Translation",
+      "subtitle": "Cómo tramitar el Permiso Internacional en la DGT antes de viajar o traducir tu carnet con sello oficial NAATI para conducir desde el primer día.",
+      "subtitleEn": "How to obtain your International Driving Permit before flying or get an official NAATI-certified translation to drive legally from day one.",
+      "steps": [
+        {
+          "number": 1,
+          "title": "¿Por qué no basta solo con el carnet de tu país en español?",
+          "titleEn": "Why your non-English home driver licence is not enough on its own",
+          "description": "En todos los estados y territorios de Australia es obligatorio que cualquier permiso de conducir redactado en un idioma distinto del inglés vaya acompañado siempre de un Permiso Internacional de Conducir (IDP - Convenio de Ginebra de 1949) en vigor O de una traducción oficial al inglés acreditada por NAATI. Conducir solo con tu carnet en español sin traducción ni IDP se considera conducir sin licencia válida y conlleva multas de hasta $900 AUD e invalida el seguro del vehículo.",
+          "descriptionEn": "Across all Australian states and territories, any foreign driver licence not written in English must be accompanied at all times by either a valid International Driving Permit (1949 Convention IDP) OR an official NAATI-accredited English translation. Driving without one carries heavy fines up to $900 AUD and voids vehicle insurance.",
+          "tip": "Consejo Vital: El Permiso Internacional NO sustituye a tu carnet físico original. Debes llevar siempre AMBOS documentos encima cuando conduzcas.",
+          "tipEn": "Critical Tip: The IDP is a translation booklet, NOT a standalone licence. You must carry BOTH your physical home licence and the IDP whenever driving.",
+          "officialUrl": "https://www.austroads.com.au/drivers-and-vehicles/overseas-drivers/visiting-drivers",
+          "officialUrlLabel": "Austroads - Normativa Oficial para Conductores Extranjeros",
+          "officialUrlLabelEn": "Austroads - Official Visiting Overseas Drivers Rules"
+        },
+        {
+          "number": 2,
+          "title": "Cómo solicitar el Permiso Internacional en la DGT (España) en 5 minutos",
+          "titleEn": "How to apply for the International Permit at DGT (Spain) online",
+          "description": "En España el trámite cuesta 10,51 € y se solicita por internet a través de la Sede Electrónica de la DGT con Cl@ve o Certificado Digital. Solo tienes que pagar la tasa 4.5, elegir la Jefatura de Tráfico de tu provincia y, tras 48 horas hábiles, acudir a recoger tu libreta gris presentando tu DNI/Pasaporte y una fotografía actual tamaño carnet (32x26 mm) en color. En la mayoría de jefaturas la recogida de trámites ya pagados online no requiere cita previa.",
+          "descriptionEn": "In Spain, the permit costs €10.51 and is requested online via the DGT Electronic Office using Cl@ve or Digital Certificate. Pay fee 4.5, select your provincial traffic office, and after 2 business days pick up the physical grey booklet bringing your ID and a 32x26 mm passport photo.",
+          "tip": "Consejo: Solicítalo entre 1 y 3 semanas antes de tu vuelo para aprovechar al máximo sus 12 meses de validez en Australia.",
+          "tipEn": "Tip: Apply 1 to 3 weeks before your flight so you maximize its 12-month validity period in Australia.",
+          "officialUrl": "https://sede.dgt.gob.es/es/permisos-de-conducir/permiso-internacional/",
+          "officialUrlLabel": "Sede Electrónica DGT - Solicitud Oficial Permiso Internacional",
+          "officialUrlLabelEn": "DGT Spain - Official International Driving Permit Portal"
+        },
+        {
+          "number": 3,
+          "title": "Tramitación en Latinoamérica (Chile, Argentina, México, Colombia, Perú y Uruguay)",
+          "titleEn": "Applying in Latin America (Chile, Argentina, Mexico, Colombia, Peru & Uruguay)",
+          "description": "Si viajas desde Latinoamérica, el Permiso Internacional de Conducir (Libreta FIA / Convención de 1949) se emite antes de volar a través del Automóvil Club oficial de tu país: Automóvil Club de Chile (ACCHI), Automóvil Club Argentino (ACA), ANA/AMA en México, Touring y Automóvil Club en Colombia (ACC) y Perú (TACP), o Automóvil Club del Uruguay (ACU). Necesitas presentar tu licencia nacional vigente, documento de identidad y dos fotos carnet.",
+          "descriptionEn": "If flying from Latin America, the International Driving Permit (1949 Convention booklet) is issued in person before departure by your national FIA-affiliated automobile club (Automóvil Club de Chile, ACA Argentina, ACC Colombia, TACP Peru, ACU Uruguay).",
+          "tip": "Consejo: Desconfía de anuncios en internet que venden 'licencias internacionales digitales'; las autoridades australianas solo aceptan la libreta oficial en papel o traducción NAATI.",
+          "tipEn": "Tip: Beware of fake online 'digital international licences'; Australian police only accept official government/FIA paper booklets or NAATI translations.",
+          "officialUrl": "https://internationaldrivingpermit.org/",
+          "officialUrlLabel": "FIA - Directorio Mundial Oficial de Emisores del Permiso Internacional",
+          "officialUrlLabelEn": "FIA - Official Global International Driving Permit Directory"
+        },
+        {
+          "number": 4,
+          "title": "¿Ya estás en Australia sin él o te ha caducado? Haz una Traducción NAATI",
+          "titleEn": "Already in Australia without an IDP or it expired? Get a NAATI Translation",
+          "description": "El Permiso Internacional solo se puede emitir en tu país de origen y caduca al año. Si ya estás en Australia o prefieres un documento que no caduque al año, solicita online una traducción oficial al inglés realizada por un traductor certificado por NAATI (National Accreditation Authority for Translators and Interpreters). En 24-48 horas recibes el PDF con sello oficial NAATI listo para imprimir, válido para alquilar coches, comprar vehículos y conducir.",
+          "descriptionEn": "An IDP can only be issued in your home country and expires after 1 year. If you are already in Australia or your IDP expired, order an official English translation from a NAATI-certified translator. Within 24-48 hours you receive a stamped PDF ready to print, valid for car rentals, vehicle purchase and road use.",
+          "tip": "Nota para Sídney (NSW): Si vas a canjear tu carnet en una oficina de Service NSW, exigen la traducción emitida por Multicultural NSW o el Permiso Internacional acompañado de tu carnet.",
+          "tipEn": "NSW Note: If converting your licence at Service NSW, they specifically require a Multicultural NSW translation.",
+          "officialUrl": "https://www.naati.com.au/online-directory/",
+          "officialUrlLabel": "NAATI - Buscador Oficial de Traductores Acreditados en Australia",
+          "officialUrlLabelEn": "NAATI - Official Accredited Translators Directory"
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "idp_dgt_fia",
+          "name": "Permiso Internacional de Conducir (DGT / Automóvil Club)",
+          "tagline": "La opción más económica si aún estás en tu país antes de volar",
+          "taglineEn": "The most affordable option while still in your home country before departure",
+          "format": "Libreta física impresa oficial (Convenio 1949)",
+          "formatEn": "Official printed physical booklet (1949 Convention)",
+          "cost": "10,51 € en España (DGT) / $35-$70 USD en Latam",
+          "costEn": "€10.51 in Spain (DGT) / $35-$70 USD in Latam",
+          "pros": [
+            "Reconocido instantáneamente por la policía australiana y todas las empresas de alquiler de coches y campers",
+            "Trámite oficial muy barato en España a través de la DGT (10,51 €)",
+            "Válido también para tus escalas o viajes por Asia y Nueva Zelanda"
+          ],
+          "prosEn": [
+            "Instantly recognized by Australian police and all car/campervan rental agencies",
+            "Very inexpensive official government fee in Spain (€10.51)",
+            "Also valid for stopovers and road trips in Asia and New Zealand"
+          ],
+          "cons": [
+            "Caduca estrictamente a los 12 meses y no se puede renovar a distancia desde Australia",
+            "No sirve para canjear tu licencia por el carnet australiano (para el canje piden traducción oficial)"
+          ],
+          "consEn": [
+            "Expires strictly after 12 months and cannot be renewed remotely from Australia",
+            "Not accepted for state licence conversion (conversion requires an official translation)"
+          ],
+          "verdict": "Sácalo siempre antes de subir al avión: por solo 10,51 € te permite alquilar y conducir desde el minuto uno al aterrizar.",
+          "verdictEn": "Always get it before boarding your flight: for pennies you can rent cars and drive legally the moment you land.",
+          "officialUrl": "https://sede.dgt.gob.es/es/permisos-de-conducir/permiso-internacional/",
+          "officialUrlLabel": "Sede Electrónica DGT - Solicitar Permiso Internacional",
+          "officialUrlLabelEn": "DGT Spain - Apply for International Driving Permit"
+        },
+        {
+          "id": "naati_official_translation",
+          "name": "Traducción Oficial Certificada NAATI",
+          "tagline": "Tramitable 100% online desde Australia en 24h y sin caducidad anual",
+          "taglineEn": "100% online from anywhere in Australia in 24h with no 1-year expiry",
+          "format": "Documento PDF con sello y firma oficial NAATI (Imprimible)",
+          "formatEn": "Stamped official NAATI PDF document + optional hard copy",
+          "cost": "$40 - $65 AUD",
+          "costEn": "$40 - $65 AUD",
+          "pros": [
+            "Se solicita por internet con una foto de tu carnet sin moverte de casa",
+            "No caduca al año: dura tantos años como sea válido tu carnet de conducir original",
+            "Imprescindible para convalidar y obtener el carnet australiano en VIC, QLD, WA, SA, TAS y NT"
+          ],
+          "prosEn": [
+            "Ordered 100% online by uploading a photo of your licence",
+            "Does not expire after 1 year: remains valid as long as your home licence is current",
+            "Accepted for official state licence conversion in VIC, QLD, WA, SA, TAS and NT"
+          ],
+          "cons": [
+            "En Nueva Gales del Sur (Service NSW), para trámites de canje de licencia exigen traducción de Multicultural NSW"
+          ],
+          "consEn": [
+            "In New South Wales (Service NSW), licence conversion specifically requires a Multicultural NSW translation"
+          ],
+          "verdict": "La mejor solución si ya estás en Australia, si vas a quedarte un 2º o 3er año, o si vas a sacar el carnet australiano en VIC/QLD/WA.",
+          "verdictEn": "The best solution if you are already in Australia, staying for a 2nd/3rd year, or converting your licence in VIC/QLD/WA.",
+          "officialUrl": "https://www.naati.com.au/online-directory/",
+          "officialUrlLabel": "NAATI - Directorio Oficial de Traductores Certificados",
+          "officialUrlLabelEn": "NAATI - Official Certified Translators Directory"
+        },
+        {
+          "id": "multicultural_nsw_translation",
+          "name": "Traducción Oficial Multicultural NSW (Gobierno de NSW)",
+          "tagline": "La única traducción aceptada por Service NSW para canjear el carnet en Sídney",
+          "taglineEn": "The sole translation accepted by Service NSW to convert your licence in Sydney/NSW",
+          "format": "Traducción oficial del Gobierno de Nueva Gales del Sur",
+          "formatEn": "Official New South Wales Government certified translation",
+          "cost": "Desde $91 AUD (plazo estándar 7-10 días)",
+          "costEn": "From $91 AUD (standard 7-10 business days turnaround)",
+          "pros": [
+            "Aceptada al 100% en cualquier oficina de Service NSW para obtener el carnet de conducir de NSW",
+            "Respaldo gubernamental directo de Transport for NSW"
+          ],
+          "prosEn": [
+            "100% accepted at all Service NSW branches for overseas driver licence conversion",
+            "Direct NSW Government authority backing"
+          ],
+          "cons": [
+            "Más cara y lenta que una traducción NAATI estándar si estás en otro estado"
+          ],
+          "consEn": [
+            "More expensive and slower than a standard NAATI translation if you live outside NSW"
+          ],
+          "verdict": "Elige esta opción únicamente si vives en Sídney o NSW y vas a convertir tu permiso extranjero al carnet de NSW.",
+          "verdictEn": "Choose this option specifically if you live in Sydney/NSW and plan to convert your overseas licence at Service NSW.",
+          "officialUrl": "https://multicultural.nsw.gov.au/language-services/document-translation/",
+          "officialUrlLabel": "Multicultural NSW - Portal Oficial de Traducción de Documentos",
+          "officialUrlLabelEn": "Multicultural NSW - Official Document Translation Portal"
+        }
+      ]
+    },
+    "australian_license": {
+      "id": "australian_license",
+      "title": "Carnet de Conducir Australiano & Conversión Estatal",
+      "titleEn": "Australian Driver Licence & State Conversion",
+      "subtitle": "Cómo canjear tu carnet por la licencia oficial australiana en cada estado (Service NSW, VicRoads, TMR QLD, DoT WA) para tener ID local y conducir sin límites.",
+      "subtitleEn": "How to convert your overseas licence into an official Australian state driver licence (NSW, VIC, QLD, WA, SA) for local ID and unrestricted driving.",
+      "steps": [
+        {
+          "number": 1,
+          "title": "Ventajas clave y la regla obligatoria de los 3 / 6 meses",
+          "titleEn": "Key benefits and the mandatory 3 / 6-month conversion rule",
+          "description": "Sacar el carnet de conducir australiano tiene dos ventajas enormes: 1) Es el documento de identidad principal en Australia (100 Points of ID), por lo que podrás dejar tu pasaporte a salvo en casa al salir de fiesta a bares/discotecas, volar en vuelos domésticos o abrir contratos; 2) Cumples la ley vial: estados como Victoria (tras 6 meses de residencia), NSW (tras 3-6 meses según normativa vigente) y Queensland obligan a convertir el carnet extranjero para seguir conduciendo legalmente.",
+          "descriptionEn": "Getting an Australian driver licence gives you two huge advantages: 1) It serves as Australia's #1 primary photo ID (100 Points of ID), letting you leave your passport safely locked away when going to bars, clubs, or taking domestic flights; 2) Legal road compliance: states like Victoria (after 6 months) and NSW/QLD require converting overseas licences after an initial period.",
+          "tip": "Consejo: Además, tener licencia australiana reduce hasta un 35% el precio del seguro de tu coche o campervan y facilita transferir la Rego online.",
+          "tipEn": "Tip: Holding an Australian licence cuts car/campervan insurance premiums by up to 35% and unlocks instant online Rego transfers.",
+          "officialUrl": "https://www.austroads.com.au/drivers-and-vehicles/overseas-drivers/applying-for-a-licence",
+          "officialUrlLabel": "Austroads - Normativa Estatal de Conversión de Licencias",
+          "officialUrlLabelEn": "Austroads - Official State Licence Conversion Rules"
+        },
+        {
+          "number": 2,
+          "title": "Canje Directo SIN Examen (España y UE) vs Países con Test",
+          "titleEn": "Direct Exchange WITHOUT Tests (Spain & EU) vs Test Pathway",
+          "description": "Australia clasifica los países en dos listas oficiales: 1) 'Recognised Countries' (incluye ESPAÑA, Italia, Alemania, Francia, Reino Unido, EE.UU., Canadá): si tienes el carnet B completo en vigor, puedes canjearlo DIRECTAMENTE en ventanilla por el carnet australiano equivalente SIN hacer examen teórico ni práctico; 2) Países no incluidos en canje directo (Chile, Argentina, Colombia, México, Perú, Uruguay): para obtener el carnet de conducir australiano deberás aprobar el test teórico en ordenador (DKT) y el examen práctico de conducción.",
+          "descriptionEn": "Australia classifies countries into two lists: 1) 'Recognised Countries' (includes SPAIN, Italy, UK, Germany, France, USA, Canada): holders of a current full licence can convert DIRECTLY at the counter WITHOUT taking any theory or practical driving test; 2) Non-recognised countries (Chile, Argentina, Colombia, Mexico, Peru, Uruguay): converting requires passing the computer Driver Knowledge Test (DKT) and practical driving test.",
+          "tip": "Alternativa si solo quieres ID para no llevar el pasaporte: Solicita en la misma oficina la 'Photo Card' o 'Proof of Age Card' (+18), que no exige examen y vale como DNI oficial en toda Australia.",
+          "tipEn": "Alternative if you just want local ID without exams: apply for the state 'Photo Card' / 'Proof of Age Card' (+18) at the same office.",
+          "officialUrl": "https://www.nsw.gov.au/driving-boating-and-transport/driver-and-rider-licences/visiting-or-moving-to-nsw/moving-to-nsw-overseas-licence/recognised-countries",
+          "officialUrlLabel": "Transport for NSW - Lista Oficial de Países con Canje Directo",
+          "officialUrlLabelEn": "Transport for NSW - Official Recognised Countries List"
+        },
+        {
+          "number": 3,
+          "title": "Documentación exacta a presentar en ventanilla (100 Points of ID)",
+          "titleEn": "Exact documents required at the counter (100 Points of ID)",
+          "description": "Acude a la oficina de tráfico de tu estado (Service NSW, VicRoads, TMR en QLD, DoT en WA o Service SA) con: 1) Tu Pasaporte original + copia impresa de tu Visa Grant Notice; 2) Tu carnet de conducir físico original en vigor (nunca caducado); 3) Traducción oficial al inglés (NAATI en VIC/QLD/WA/SA o Multicultural NSW si estás en NSW; ¡ojo: la libreta del Permiso Internacional NO sirve para el canje!); 4) Tarjeta bancaria australiana + Bank Statement con tu dirección local para demostrar domicilio.",
+          "descriptionEn": "Visit your state transport centre (Service NSW, VicRoads, TMR QLD, DoT WA, or Service SA) bringing: 1) Original Passport + Visa Grant Notice; 2) Original physical overseas driver licence; 3) Official English translation (NAATI in VIC/QLD/WA/SA or Multicultural NSW in NSW—note that an IDP booklet is NOT accepted for conversion); 4) Australian bank card + Bank Statement showing your local residential address.",
+          "tip": "Consejo: En el mostrador te harán una prueba visual rápida leyendo letras en un panel y te tomarán la foto en el acto. Si usas gafas o lentillas para conducir, llévalas puestas.",
+          "tipEn": "Tip: They will perform a quick 30-second eyesight chart check and take your licence photo on the spot. Bring your glasses or contacts if you use them.",
+          "officialUrl": "https://www.service.nsw.gov.au/transaction/transfer-an-overseas-driver-licence",
+          "officialUrlLabel": "Service NSW - Requisitos Oficiales para Transferir Licencia",
+          "officialUrlLabelEn": "Service NSW - Official Overseas Licence Transfer Requirements"
+        },
+        {
+          "number": 4,
+          "title": "Licencia Digital en el móvil y conservación de tu carnet original",
+          "titleEn": "Digital Driver Licence on your phone & keeping your original card",
+          "description": "Al finalizar el trámite y abonar la tasa estatal (puedes elegir validez de 1, 3 o 5 años; unos $68-$95 AUD por 1 año), te devolverán tu carnet original de tu país (en algunos estados le ponen una pequeña pegatina o registro indicando que ya tienes licencia local) y te entregarán un resguardo temporal inmediato. En 7-10 días hábiles recibirás la tarjeta física en tu buzón y podrás activar la Licencia Digital oficial en la app de tu estado (Service NSW, myVicRoads, QLD Digital Licence).",
+          "descriptionEn": "Once processed and the state fee is paid (~$68-$95 AUD for 1 year), they return your original home licence, hand you an immediate temporary driving receipt, and mail the physical card within 7-10 business days. You can also activate your official Digital Driver Licence on your phone via the state app (Service NSW, myVicRoads, QLD Digital Licence).",
+          "tip": "Consejo: Si tienes menos de 3 años de antigüedad en tu carnet original, te darán el carnet provisional australiano (P1 Roja o P2 Verde) con límite de alcohol 0.00%.",
+          "tipEn": "Tip: If you have held your overseas licence for less than 3 years, you will be issued an Australian Provisional licence (Red P1 or Green P2) with a 0.00% BAC limit.",
+          "officialUrl": "https://www.vicroads.vic.gov.au/licences/new-to-victoria/convert-your-overseas-licence",
+          "officialUrlLabel": "VicRoads Victoria - Guía Oficial de Conversión y Licencia Digital",
+          "officialUrlLabelEn": "VicRoads Victoria - Official Licence Conversion & Digital ID"
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "service_nsw_conversion",
+          "name": "New South Wales — Service NSW (Sídney, Byron Bay, Newcastle)",
+          "tagline": "Canje presencial en cualquier centro Service NSW con app digital inmediata",
+          "taglineEn": "In-person conversion at any Service NSW centre with instant digital app ID",
+          "format": "Presencial sin cita previa + App Digital Service NSW",
+          "formatEn": "Walk-in at Service NSW + Digital Licence App",
+          "cost": "~$70 AUD (1 año) / ~$166 AUD (3 años)",
+          "costEn": "~$70 AUD (1 year) / ~$166 AUD (3 years)",
+          "pros": [
+            "Licencia digital legal en el móvil a través de la app oficial Service NSW",
+            "Canje directo sin examen para carnet B de España y países reconocidos",
+            "Permite transferir la Rego de vehículos 100% online desde el móvil"
+          ],
+          "prosEn": [
+            "Official Digital Driver Licence on your phone via the Service NSW app",
+            "Direct test-free exchange for Spain and recognised countries",
+            "Unlocks 100% online vehicle Rego transfers on your smartphone"
+          ],
+          "cons": [
+            "Exige obligatoriamente traducción emitida por Multicultural NSW (no acepta NAATI privadas para el canje)"
+          ],
+          "consEn": [
+            "Strictly requires a Multicultural NSW translation (does not accept private NAATI translations for conversion)"
+          ],
+          "verdict": "Imprescindible si vives en NSW más de 3-6 meses o planeas comprar coche con matrícula de NSW.",
+          "verdictEn": "Essential if living in NSW for 3-6+ months or buying a NSW-registered vehicle.",
+          "officialUrl": "https://www.service.nsw.gov.au/transaction/transfer-an-overseas-driver-licence",
+          "officialUrlLabel": "Service NSW - Transferir Licencia de Conducir Extranjera",
+          "officialUrlLabelEn": "Service NSW - Transfer an Overseas Driver Licence"
+        },
+        {
+          "id": "vicroads_conversion",
+          "name": "Victoria — VicRoads (Melbourne, Geelong, Torquay)",
+          "tagline": "Obligatorio a los 6 meses de residir en Victoria y acepta traducción NAATI",
+          "taglineEn": "Mandatory after 6 months in Victoria and accepts standard NAATI translations",
+          "format": "Cita previa en VicRoads + App myVicRoads",
+          "formatEn": "Booked appointment at VicRoads + myVicRoads App",
+          "cost": "~$92 AUD (3 años)",
+          "costEn": "~$92 AUD (3 years)",
+          "pros": [
+            "Acepta cualquier traducción oficial con sello NAATI ($40-$60 AUD)",
+            "Excelente relación calidad-precio en la emisión por 3 años (~$92 AUD)",
+            "Incluye carnet digital oficial en la app myVicRoads"
+          ],
+          "prosEn": [
+            "Accepts any standard NAATI-certified translation ($40-$60 AUD)",
+            "Great value 3-year licence fee (~$92 AUD)",
+            "Includes official Digital Driver Licence inside the myVicRoads app"
+          ],
+          "cons": [
+            "Requiere pedir cita previa (appointment) online en un centro de VicRoads"
+          ],
+          "consEn": [
+            "Requires booking an in-person appointment online at a VicRoads Customer Service Centre"
+          ],
+          "verdict": "Muy sencillo y económico para quienes hacen base en Melbourne o compran coche en Victoria.",
+          "verdictEn": "Very smooth and cost-effective for WHV holders based in Melbourne or buying a VIC car.",
+          "officialUrl": "https://www.vicroads.vic.gov.au/licences/new-to-victoria/convert-your-overseas-licence",
+          "officialUrlLabel": "VicRoads - Convertir Licencia Extranjera en Victoria",
+          "officialUrlLabelEn": "VicRoads - Convert Your Overseas Licence in Victoria"
+        },
+        {
+          "id": "tmr_qld_conversion",
+          "name": "Queensland — TMR (Brisbane, Gold Coast, Sunshine Coast, Cairns)",
+          "tagline": "Ideal para comprar campervan/4WD en QLD y conseguir tu Customer Reference Number (CRN)",
+          "taglineEn": "Ideal for buying a campervan/4WD in QLD and obtaining your CRN",
+          "format": "Presencial en centro TMR + QLD Digital Licence App",
+          "formatEn": "In-person at TMR Centre + QLD Digital Licence App",
+          "cost": "~$88 AUD (1 año)",
+          "costEn": "~$88 AUD (1 year)",
+          "pros": [
+            "Acepta traducción oficial NAATI y canje directo para España y países reconocidos",
+            "Te asigna al instante el CRN (Customer Reference Number) necesario para poner un vehículo de QLD a tu nombre",
+            "Cuenta con la nueva app Queensland Digital Licence para llevar el carnet en el móvil"
+          ],
+          "prosEn": [
+            "Accepts standard NAATI translations and test-free exchange for Spain/recognised countries",
+            "Immediately issues the TMR Customer Reference Number (CRN) required to register a QLD vehicle",
+            "Supports the official Queensland Digital Licence smartphone app"
+          ],
+          "cons": [
+            "Exige presentar comprobante de dirección en Queensland (Bank Statement actualizado)"
+          ],
+          "consEn": [
+            "Requires showing proof of a Queensland residential address (updated Bank Statement)"
+          ],
+          "verdict": "Altamente recomendado en Brisbane, Gold Coast o Cairns, especialmente antes de comprar un vehículo en QLD.",
+          "verdictEn": "Highly recommended in Brisbane, Gold Coast or Cairns, especially before purchasing a QLD vehicle.",
+          "officialUrl": "https://www.qld.gov.au/transport/licensing/driver-licensing/overseas/transfer",
+          "officialUrlLabel": "TMR Queensland - Transferir Licencia de Conducir Extranjera",
+          "officialUrlLabelEn": "TMR Queensland - Transfer Overseas Driver Licence"
+        },
+        {
+          "id": "dot_wa_sa_conversion",
+          "name": "Western Australia (DoT WA) & South Australia (Service SA)",
+          "tagline": "El estado favorito para registrar furgonetas y 4WD por su facilidad de trámites",
+          "taglineEn": "The favorite state for 4WD & campervan ownership thanks to simple online Rego",
+          "format": "Presencial en DoT Driver and Vehicle Services (Perth / Regional WA)",
+          "formatEn": "In-person at DoT Driver and Vehicle Services (Perth / Regional WA)",
+          "cost": "~$46.85 AUD (1 año) + tasa de solicitud",
+          "costEn": "~$46.85 AUD (1 year) + application fee",
+          "pros": [
+            "Acepta traducción oficial NAATI sin complicaciones",
+            "Tener licencia de WA te permite abrir cuenta en DoTDirect y gestionar la Rego más fácil de toda Australia",
+            "Canje directo sin examen para mayores de 25 años de países reconocidos (España y UE)"
+          ],
+          "prosEn": [
+            "Accepts standard NAATI translations seamlessly",
+            "Holding a WA licence unlocks DoTDirect for the easiest online Rego management in Australia",
+            "Direct test-free conversion for recognised country licence holders"
+          ],
+          "cons": [
+            "La tarjeta física tarda unos 7-14 días en llegar por correo postal"
+          ],
+          "consEn": [
+            "Physical card takes 7-14 days to arrive by post"
+          ],
+          "verdict": "La mejor jugada maestra si aterrizas en Perth o vas a recorrer la costa oeste en 4WD.",
+          "verdictEn": "A masterstroke if landing in Perth or planning a West Coast 4WD road trip.",
+          "officialUrl": "https://www.transport.wa.gov.au/licensing/transferring-your-overseas-licence.asp",
+          "officialUrlLabel": "DoT Western Australia - Transferencia Oficial de Licencia",
+          "officialUrlLabelEn": "DoT Western Australia - Official Overseas Licence Transfer"
+        }
+      ]
     }
   }
 }

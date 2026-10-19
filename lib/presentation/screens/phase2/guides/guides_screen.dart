@@ -56,6 +56,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
         {'id': 'telecom', 'label': '📱 SIM & Red', 'labelEn': '📱 Mobile & SIM'},
         {'id': 'insurance', 'label': '🏥 Medicare & Salud', 'labelEn': '🏥 Healthcare'},
         {'id': 'housing', 'label': '🏠 Alquiler & Fianza', 'labelEn': '🏠 Housing & Bond'},
+        {'id': 'international_license', 'label': '🪪 Carnet Internacional', 'labelEn': '🪪 International Permit'},
+        {'id': 'australian_license', 'label': '🚗 Carnet Australiano', 'labelEn': '🚗 Aussie Driver Licence'},
       ]
     },
     {
@@ -278,7 +280,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   const Icon(CupertinoIcons.square_grid_2x2_fill, size: 13, color: AppColors.primary),
                   const SizedBox(width: 5),
                   Text(
-                    isEn ? 'All (9)' : 'Ver todas',
+                    isEn ? 'All (11)' : 'Ver todas',
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -335,8 +337,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                           ),
                           Text(
                             isEn
-                                ? '9 essential topics organized by your journey stage'
-                                : '9 temas esenciales ordenados por etapa de tu estancia',
+                                ? '11 essential topics organized by your journey stage'
+                                : '11 temas esenciales ordenados por etapa de tu estancia',
                             style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
                           ),
                         ],
@@ -493,6 +495,14 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
         return isEn
             ? 'Finding rooms on Flatmates, lease agreements and official state bond lodgement.'
             : 'Buscar habitación en Flatmates, contratos e ingreso oficial de fianza.';
+      case 'international_license':
+        return isEn
+            ? 'How to get your DGT/FIA International Driving Permit before flying or an official NAATI translation.'
+            : 'Permiso Internacional en la DGT antes de viajar y traducción oficial acreditada NAATI.';
+      case 'australian_license':
+        return isEn
+            ? 'Direct state licence conversion (Service NSW, VicRoads, TMR, DoT) for local +18 ID and driving.'
+            : 'Canje por el carnet australiano en cada estado (NSW, VIC, QLD, WA) para tener ID local y conducir.';
       case 'tax':
         return isEn
             ? 'TFN & ABN registration, tax withholding rates and statutory 12% super.'

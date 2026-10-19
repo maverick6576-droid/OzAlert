@@ -298,6 +298,58 @@
       "descriptionEn": "Certified cleaners providing an official bond guarantee receipt to prevent agency deductions.",
       "isActive": true,
       "priority": 3
+    },
+    {
+      "id": "dgt_permiso_internacional",
+      "name": "Sede Electrónica DGT (Permiso Internacional)",
+      "category": "international_license",
+      "affiliateUrl": "https://sede.dgt.gob.es/es/permisos-de-conducir/permiso-internacional/",
+      "promoCode": null,
+      "badgeText": "Trámite Oficial Gobierno de España (10,51 €)",
+      "badgeTextEn": "Official Spain DGT Portal (€10.51)",
+      "description": "Solicita online tu Permiso Internacional de Conducir antes de volar y recógelo en tu Jefatura de Tráfico con una foto carnet.",
+      "descriptionEn": "Apply online for your International Driving Permit before departure and pick up the physical booklet at your local DGT office.",
+      "isActive": true,
+      "priority": 1
+    },
+    {
+      "id": "naati_official_directory",
+      "name": "Directorio Oficial de Traductores NAATI",
+      "category": "international_license",
+      "affiliateUrl": "https://www.naati.com.au/online-directory/",
+      "promoCode": null,
+      "badgeText": "Traducción Oficial sin Caducidad Anual",
+      "badgeTextEn": "Official Accredited Translation (No 1-Yr Expiry)",
+      "description": "Encuentra un traductor oficial acreditado por el gobierno australiano para traducir tu carnet de conducir en 24 horas desde cualquier estado.",
+      "descriptionEn": "Find an official Australian government-accredited NAATI translator to certify your driver licence online within 24 hours.",
+      "isActive": true,
+      "priority": 2
+    },
+    {
+      "id": "service_nsw_licence_transfer",
+      "name": "Service NSW (Canje Oficial en Nueva Gales del Sur)",
+      "category": "australian_license",
+      "affiliateUrl": "https://www.service.nsw.gov.au/transaction/transfer-an-overseas-driver-licence",
+      "promoCode": null,
+      "badgeText": "Portal Oficial Gobierno de NSW",
+      "badgeTextEn": "Official NSW Government Portal",
+      "description": "Consulta los requisitos de canje directo sin examen, los 100 puntos de identificación y la app Service NSW con licencia digital.",
+      "descriptionEn": "Check direct test-free conversion rules, 100 points of ID requirements and the official Service NSW Digital Driver Licence.",
+      "isActive": true,
+      "priority": 1
+    },
+    {
+      "id": "vicroads_tmr_dot_official",
+      "name": "Austroads (VicRoads VIC, TMR QLD, DoT WA & Service SA)",
+      "category": "australian_license",
+      "affiliateUrl": "https://www.austroads.com.au/drivers-and-vehicles/overseas-drivers/applying-for-a-licence",
+      "promoCode": null,
+      "badgeText": "Directorio Oficial de Tráfico por Estados",
+      "badgeTextEn": "Official All-States Transport Directory",
+      "description": "Acceso directo a los organismos viales de Victoria, Queensland, Western Australia, South Australia y Tasmania para obtener tu carnet o Photo Card (+18).",
+      "descriptionEn": "Direct access to state road authorities in VIC, QLD, WA, SA and TAS to convert your licence or obtain an official +18 Photo Card.",
+      "isActive": true,
+      "priority": 2
     }
   ]
 }

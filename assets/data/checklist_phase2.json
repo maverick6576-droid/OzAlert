@@ -31,13 +31,23 @@
       "targetGuideCategory": "housing"
     },
     {
+      "id": "get_international_driving_permit",
+      "title": "Conseguir carnet de conducir internacional",
+      "titleEn": "Get International Driving Permit (IDP)",
+      "subtitle": "Tramítalo en la DGT (o en tu país) o prepara tu traducción oficial NAATI antes de volar.",
+      "subtitleEn": "Obtain your IDP from your traffic authority or arrange an official NAATI translation before flying.",
+      "phase": "pre_departure",
+      "priority": 4,
+      "targetGuideCategory": "international_license"
+    },
+    {
       "id": "buy_sim_card",
       "title": "Comprar SIM o activar eSIM con número australiano",
       "titleEn": "Get SIM or eSIM with Australian Number",
       "subtitle": "Necesitarás un número +61 para el banco, tu CV y la solicitud del TFN.",
       "subtitleEn": "You will need an active +61 phone number for your bank, CV and TFN application.",
       "phase": "first_48h",
-      "priority": 4,
+      "priority": 5,
       "targetGuideCategory": "telecom"
     },
     {
@@ -47,7 +57,7 @@
       "subtitle": "Acude con tu pasaporte a cualquier sucursal del banco para recibir tu tarjeta de débito.",
       "subtitleEn": "Visit any branch with your passport to complete ID check and collect your debit card.",
       "phase": "first_48h",
-      "priority": 5,
+      "priority": 6,
       "targetGuideCategory": "banking"
     },
     {
@@ -57,8 +67,18 @@
       "subtitle": "Trámite 100% gratuito online una vez estés físicamente dentro de Australia.",
       "subtitleEn": "100% free online application once you have physically arrived in Australia.",
       "phase": "first_week",
-      "priority": 6,
+      "priority": 7,
       "targetGuideCategory": "tax"
+    },
+    {
+      "id": "get_australian_driver_license",
+      "title": "Conseguir carnet de conducir australiano",
+      "titleEn": "Get Australian Driver Licence",
+      "subtitle": "Canjea tu permiso en Service NSW, VicRoads o TMR para tener ID local (+18) y conducir sin restricciones.",
+      "subtitleEn": "Convert your licence at Service NSW, VicRoads or TMR for official local ID and unrestricted driving.",
+      "phase": "first_week",
+      "priority": 8,
+      "targetGuideCategory": "australian_license"
     },
     {
       "id": "prepare_australian_cv",
@@ -67,7 +87,7 @@
       "subtitle": "Adapta tu currículum a los estándares locales para empezar a aplicar a trabajos.",
       "subtitleEn": "Format your resume to local Australian standards to start applying for jobs.",
       "phase": "first_week",
-      "priority": 7,
+      "priority": 9,
       "targetGuideCategory": "employment"
     },
     {
@@ -77,7 +97,7 @@
       "subtitle": "RSA para servir alcohol en hostelería, White Card para entrar en obras de construcción.",
       "subtitleEn": "RSA to serve alcohol in hospitality, White Card to access any construction site.",
       "phase": "first_week",
-      "priority": 8,
+      "priority": 10,
       "targetGuideCategory": "certifications"
     },
     {
@@ -87,7 +107,7 @@
       "subtitle": "Elige un fondo líder (Hostplus/AustralianSuper) para que tus empleadores aporten tu 12%.",
       "subtitleEn": "Select an industry fund (Hostplus/AustralianSuper) for your 12% mandatory employer super.",
       "phase": "first_week",
-      "priority": 9,
+      "priority": 11,
       "targetGuideCategory": "tax"
     },
     {
@@ -97,7 +117,7 @@
       "subtitle": "Verifica códigos postales válidos en el mapa oficial y registra tus días para renovar el visado.",
       "subtitleEn": "Verify eligible postcodes on the official regional map and log your days to extend your visa.",
       "phase": "first_month",
-      "priority": 10,
+      "priority": 12,
       "targetGuideCategory": "88days"
     },
     {
@@ -107,7 +127,7 @@
       "subtitle": "Comprueba que tu contrato cumple el salario legal ($24.97 base o $31.21 casual) y no sufres penalizaciones.",
       "subtitleEn": "Ensure your hourly rate meets legal standards ($24.97 base or $31.21 casual) with no illegal deductions.",
       "phase": "first_month",
-      "priority": 11,
+      "priority": 13,
       "targetGuideCategory": "fair_work"
     },
     {
@@ -117,7 +137,7 @@
       "subtitle": "Aprende cómo recuperar hasta $3,500 AUD en deducciones del ATO, devolución de Super y fianza protegida.",
       "subtitleEn": "Learn how to reclaim up to $3,500 AUD in ATO tax deductions, Super refund and secured rental bonds.",
       "phase": "first_month",
-      "priority": 12,
+      "priority": 14,
       "targetGuideCategory": "savings"
     },
     {
@@ -127,7 +147,7 @@
       "subtitle": "Crea tu Cover Letter en inglés australiano, perfil de Flatmate con solvencia y cartas formales.",
       "subtitleEn": "Create your Australian Cover Letter, Flatmate Rental Profile with bond proof, and formal letters.",
       "phase": "first_month",
-      "priority": 13,
+      "priority": 15,
       "targetGuideCategory": "employment"
     },
     {
@@ -137,7 +157,7 @@
       "subtitle": "Cruza tus nóminas, ABNs y extractos bancarios oficiales antes de pagar los $650 AUD de tasa.",
       "subtitleEn": "Cross-check payslips, ABNs and bank statements before paying the $650 AUD visa fee.",
       "phase": "visa_renewal",
-      "priority": 14,
+      "priority": 16,
       "targetGuideCategory": "visa_renewal"
     },
     {
@@ -147,7 +167,7 @@
       "subtitle": "Preséntala antes de que venza tu visado para recibir la Bridging Visa A y no dejar de trabajar.",
       "subtitleEn": "Apply before your visa expires to obtain Bridging Visa A and maintain full work rights.",
       "phase": "visa_renewal",
-      "priority": 15,
+      "priority": 17,
       "targetGuideCategory": "visa_renewal"
     },
     {
@@ -157,7 +177,7 @@
       "subtitle": "Planifica el trabajo regional antes del mes 5 de tu 2º año para no quedarte sin tiempo.",
       "subtitleEn": "Plan regional work before month 5 of year 2 to avoid running out of time.",
       "phase": "visa_renewal",
-      "priority": 16,
+      "priority": 18,
       "targetGuideCategory": "visa_renewal"
     },
     {
@@ -167,7 +187,7 @@
       "subtitle": "Pide el reembolso tú mismo en la web estatal (RBO/RTBA/RTA) el día de entrega de llaves.",
       "subtitleEn": "Lodge your refund yourself on the official state portal on key handover day.",
       "phase": "departure_exit",
-      "priority": 17,
+      "priority": 19,
       "targetGuideCategory": "departure"
     },
     {
@@ -177,7 +197,7 @@
       "subtitle": "Pasa la inspección técnica con semanas de antelación y transfiere la Rego para no asumir multas.",
       "subtitleEn": "Obtain Roadworthy Certificate in advance and transfer Rego online to avoid fines.",
       "phase": "departure_exit",
-      "priority": 18,
+      "priority": 20,
       "targetGuideCategory": "departure"
     },
     {
@@ -187,7 +207,7 @@
       "subtitle": "No esperes a julio: si te vas del país puedes reclamar tus retenciones de impuestos de inmediato.",
       "subtitleEn": "Do not wait until July: claim back tax deductions and withholding refunds immediately.",
       "phase": "departure_exit",
-      "priority": 19,
+      "priority": 21,
       "targetGuideCategory": "departure"
     },
     {
@@ -197,7 +217,7 @@
       "subtitle": "Reclama el 12% aportado por empleadores a través de la ATO tras despegar de Australia.",
       "subtitleEn": "Claim your 12% employer super refund via ATO once physically departed from Australia.",
       "phase": "departure_exit",
-      "priority": 20,
+      "priority": 22,
       "targetGuideCategory": "departure"
     },
     {
@@ -207,7 +227,7 @@
       "subtitle": "Si te vas antes de que caduque tu visa, cancélala en ImmiAccount para que la ATO libere tu dinero.",
       "subtitleEn": "If leaving before visa expiry, cancel it via ImmiAccount so ATO unlocks your DASP payout.",
       "phase": "departure_exit",
-      "priority": 21,
+      "priority": 23,
       "targetGuideCategory": "departure"
     },
     {
@@ -217,7 +237,7 @@
       "subtitle": "Evita perder un 4% en el banco tradicional usando cambio real (Wise) tras recibir DASP.",
       "subtitleEn": "Avoid losing 4% markup at traditional banks by using mid-market exchange after DASP clears.",
       "phase": "departure_exit",
-      "priority": 22,
+      "priority": 24,
       "targetGuideCategory": "departure"
     },
     {
@@ -227,7 +247,7 @@
       "subtitle": "Asegura cartas de recomendación en inglés para tu CV y futuras visas de patrocinio.",
       "subtitleEn": "Secure signed employer references and work service statements for future visa options.",
       "phase": "departure_exit",
-      "priority": 23,
+      "priority": 25,
       "targetGuideCategory": "departure"
     }
   ]

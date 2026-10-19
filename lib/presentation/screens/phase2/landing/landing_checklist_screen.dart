@@ -807,6 +807,10 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
         return isEn ? 'Pro Money & Tax Hacks 💵' : 'Hacks Pro de Ahorro Masivo 💵';
       case 'visa_renewal':
         return isEn ? '2nd & 3rd Visa Guide 🦘' : 'Guía 2ª y 3ª Visa 🦘';
+      case 'international_license':
+        return isEn ? 'International Permit & NAATI Guide 🪪' : 'Guía Carnet Internacional & NAATI 🪪';
+      case 'australian_license':
+        return isEn ? 'Australian Driver Licence Guide 🚗' : 'Guía Carnet Australiano 🚗';
       case 'departure':
         return isEn ? 'Exit Protocol & Reclaim Cash 🛫' : 'Protocolo Salida & Recuperar Dinero 🛫';
       default:

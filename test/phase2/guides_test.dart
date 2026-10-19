@@ -19,6 +19,8 @@ void main() {
         'telecom',
         'insurance',
         'housing',
+        'international_license',
+        'australian_license',
         'tax',
         'certifications',
         'savings',
@@ -51,7 +53,7 @@ void main() {
       }
     });
 
-    test('All 6 categories have default B2B / official partner options in b2b_partners_default.json', () {
+    test('All categories have default B2B / official partner options in b2b_partners_default.json', () {
       final file = File('assets/data/b2b_partners_default.json');
       expect(file.existsSync(), isTrue);
 
@@ -66,6 +68,8 @@ void main() {
         'telecom',
         'insurance',
         'housing',
+        'international_license',
+        'australian_license',
         'tax',
         'certifications',
         'visa_renewal',

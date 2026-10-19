@@ -225,6 +225,23 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
                   icon: CupertinoIcons.building_2_fill,
                   isHighlighted: initialTopic == 'housing' || initialTopic == 'departure',
                 ),
+                const SizedBox(height: 14),
+
+                // 8. Austroads, NAATI & State Road Authorities
+                _buildSourceCard(
+                  context,
+                  title: 'Austroads, NAATI & State Road Authorities',
+                  subtitle: isEn
+                      ? 'Service NSW, VicRoads, TMR QLD, DoT WA & DGT'
+                      : 'Permiso Internacional, Traducción NAATI y Canje Estatal',
+                  description: isEn
+                      ? 'Governs overseas driver rules, mandatory NAATI translations, and direct licence conversion across Australian states.'
+                      : 'Regula el uso del Permiso Internacional (IDP), traducciones oficiales NAATI y el canje por el carnet de conducir australiano en cada estado.',
+                  url: 'https://www.austroads.com.au/drivers-and-vehicles/overseas-drivers',
+                  urlLabel: 'austroads.com.au',
+                  icon: CupertinoIcons.car_detailed,
+                  isHighlighted: initialTopic == 'international_license' || initialTopic == 'australian_license',
+                ),
                 const SizedBox(height: 30),
               ],
             ),
