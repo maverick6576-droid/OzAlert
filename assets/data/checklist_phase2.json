@@ -34,8 +34,8 @@
       "id": "get_international_driving_permit",
       "title": "Conseguir carnet de conducir internacional",
       "titleEn": "Get International Driving Permit (IDP)",
-      "subtitle": "Tramítalo en la DGT (o en tu país) o prepara tu traducción oficial NAATI antes de volar.",
-      "subtitleEn": "Obtain your IDP from your traffic authority or arrange an official NAATI translation before flying.",
+      "subtitle": "Tramítalo en la entidad oficial de tu país (Visas 462 y 417) o prepara tu traducción oficial NAATI antes de volar.",
+      "subtitleEn": "Obtain your 1949 IDP from your home country's official authority (462 & 417) or arrange a NAATI translation.",
       "phase": "pre_departure",
       "priority": 4,
       "targetGuideCategory": "international_license"

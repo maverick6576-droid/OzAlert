@@ -497,8 +497,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             : 'Buscar habitación en Flatmates, contratos e ingreso oficial de fianza.';
       case 'international_license':
         return isEn
-            ? 'How to get your DGT/FIA International Driving Permit before flying or an official NAATI translation.'
-            : 'Permiso Internacional en la DGT antes de viajar y traducción oficial acreditada NAATI.';
+            ? 'Country-by-country guide (462 & 417) to get your International Driving Permit (IDP) or NAATI translation.'
+            : 'Guía para todos los países (462 y 417): cómo sacar el Permiso Internacional (IDP) o traducción NAATI.';
       case 'australian_license':
         return isEn
             ? 'Direct state licence conversion (Service NSW, VicRoads, TMR, DoT) for local +18 ID and driving.'
