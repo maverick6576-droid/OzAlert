@@ -14,6 +14,9 @@ import '../../../widgets/phase2/paywall_bottom_sheet.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/phase2_app_bar.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/official_sources_modal.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/australia_regional_map_widget.dart';
+import '../../../../core/services/abr_service.dart';
+import '../../../../domain/models/abn_details.dart';
+import '../../../providers/phase2/abr_provider.dart';
 
 class RegionalWorkScreen extends ConsumerStatefulWidget {
   const RegionalWorkScreen({super.key});
@@ -1666,14 +1669,15 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             final avgHours = job.totalDaysCounted > 0 ? (job.totalHours / job.totalDaysCounted) : 0.0;
             final isHoursRisk = avgHours < 7.0;
             final isHoursExcess = avgHours > 16.0;
-            final isAbnValid = job.employerAbn.replaceAll(RegExp(r'\s+'), '').length == 11;
+            final cleanAbn = AbrService.cleanAbn(job.employerAbn);
+            final isAbnChecksumValid = cleanAbn.length == 11 && AbrService.isValidAbnChecksum(cleanAbn);
 
             return Card(
               margin: const EdgeInsets.only(bottom: 10),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
                 side: BorderSide(
-                  color: (isHoursRisk || !isAbnValid || isHoursExcess)
+                  color: (isHoursRisk || !isAbnChecksumValid || isHoursExcess)
                       ? Colors.amber.withValues(alpha: 0.5)
                       : AppColors.cardBorder,
                 ),
@@ -1701,7 +1705,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.orange),
                         ),
                       )
-                    else if (!isAbnValid)
+                    else if (!isAbnChecksumValid)
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
@@ -1709,7 +1713,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          isEn ? '⚠️ ABN issue' : '⚠️ ABN irregular',
+                          isEn ? '⚠️ ABN issue' : '⚠️ ABN irregular ATO',
                           style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.statusClosed),
                         ),
                       )
@@ -1721,7 +1725,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          isEn ? '✓ Compliant' : '✓ Conforme',
+                          isEn ? '✓ ATO Verified' : '✓ ABN Verificado ATO',
                           style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.secondary),
                         ),
                       ),
@@ -1735,11 +1739,45 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                       '${job.jobRole} • ${job.workSiteLocation} (${job.workSitePostcode})',
                       style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      '${job.totalDaysCounted} días • ${job.totalHours.toStringAsFixed(1)}h (${avgHours.toStringAsFixed(1)}h/día) • ABN: ${job.employerAbn}',
-                      style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
+                    const SizedBox(height: 3),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '${job.totalDaysCounted} días • ${job.totalHours.toStringAsFixed(1)}h (${avgHours.toStringAsFixed(1)}h/día)',
+                            style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            if (cleanAbn.length == 11) {
+                              UrlLauncherService.openUrl(context, AbrService.getOfficialAbnUrl(cleanAbn));
+                            }
+                          },
+                          borderRadius: BorderRadius.circular(6),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: AppColors.surfaceElevated,
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(color: AppColors.cardBorder),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'ABN: ${job.employerAbn}',
+                                  style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: AppColors.primary),
+                                ),
+                                const SizedBox(width: 3),
+                                const Icon(CupertinoIcons.arrow_up_right, size: 9, color: AppColors.primary),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+                    const SizedBox(height: 2),
                     Text(
                       'Bruto: \$${job.grossEarningsAud.toStringAsFixed(0)} AUD${job.isFullTimeWeekly ? ' • Full-Time (7d)' : ''}${job.hasPieceworkAgreement ? ' • Destajo/Piecework' : ''}${job.payslipFileRef != null && job.payslipFileRef!.isNotEmpty ? ' • Ref: ${job.payslipFileRef}' : ''}',
                       style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
@@ -1869,6 +1907,10 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     bool isFullTimeWeekly = false;
     bool hasPieceworkAgreement = false;
 
+    AbnDetails? abnDetails;
+    bool isVerifyingAbn = false;
+    String? lastQueriedAbn;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -1878,6 +1920,42 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
       ),
       builder: (ctx) => StatefulBuilder(
         builder: (modalContext, setModalState) {
+          Future<void> performAbnLookup(String abn) async {
+            if (isVerifyingAbn || abn == lastQueriedAbn) return;
+            lastQueriedAbn = abn;
+            setModalState(() {
+              isVerifyingAbn = true;
+            });
+
+            try {
+              final service = ref.read(abrServiceProvider);
+              final details = await service.lookupAbn(abn);
+              if (!modalContext.mounted) return;
+              setModalState(() {
+                abnDetails = details;
+                isVerifyingAbn = false;
+                // Auto-rellenar nombre de empresa si aún está vacío
+                if (nameCtrl.text.trim().isEmpty && details.preferredName.isNotEmpty) {
+                  nameCtrl.text = details.preferredName;
+                }
+                // Auto-rellenar código postal si está vacío o por defecto
+                if ((postcodeCtrl.text.trim().isEmpty || postcodeCtrl.text.trim() == '4870') && details.postcode.isNotEmpty) {
+                  postcodeCtrl.text = details.postcode;
+                  final repo = ref.read(postcodeRepositoryProvider);
+                  final found = repo.findPostcode(details.postcode);
+                  if (found != null && (locationCtrl.text.isEmpty || locationCtrl.text == 'Cairns Regional Area')) {
+                    locationCtrl.text = '${found.location}, ${found.state}';
+                  }
+                }
+              });
+            } catch (_) {
+              if (!modalContext.mounted) return;
+              setModalState(() {
+                isVerifyingAbn = false;
+              });
+            }
+          }
+
           // --- VALIDADOR EN TIEMPO REAL ---
           final List<String> blockingErrors = [];
           final List<String> riskWarnings = [];
@@ -1888,12 +1966,21 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             blockingErrors.add(isEn ? 'Employer / Business Name is required.' : 'El nombre de la empresa es obligatorio.');
           }
 
-          // 2. ABN (11 dígitos numéricos)
-          final abnClean = abnCtrl.text.replaceAll(RegExp(r'\s+'), '');
+          // 2. ABN (11 dígitos numéricos + Algoritmo ATO + Registro ABR)
+          final abnClean = AbrService.cleanAbn(abnCtrl.text);
+          final isChecksumValid = abnClean.length == 11 && AbrService.isValidAbnChecksum(abnClean);
           if (abnClean.isEmpty) {
             blockingErrors.add(isEn ? 'ABN is required for Form 1263 verification.' : 'El ABN es obligatorio para el Formulario 1263.');
-          } else if (abnClean.length != 11 || int.tryParse(abnClean) == null) {
+          } else if (abnClean.length != 11) {
             blockingErrors.add(isEn ? 'ABN must contain exactly 11 digits (e.g., 51 824 753 556).' : 'El ABN debe tener exactamente 11 dígitos numéricos (ej: 51 824 753 556).');
+          } else if (!isChecksumValid) {
+            blockingErrors.add(isEn
+                ? 'Invalid ABN: Fails official ATO checksum algorithm (fictitious or mistyped number).'
+                : 'ABN Inválido: No cumple el algoritmo matemático de la ATO (ficticio o erróneo).');
+          } else if (abnDetails != null && abnDetails!.isCancelled) {
+            blockingErrors.add(isEn
+                ? 'ABN Cancelled: Employer is inactive on official registry. Home Affairs will reject these days.'
+                : 'ABN Cancelado: El empleador está inactivo en el registro de la ATO. Inmigración denegará tu visa.');
           }
 
           // 3. Código Postal & LIN 22/050
@@ -2059,11 +2146,41 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                         child: TextField(
                           controller: abnCtrl,
                           keyboardType: TextInputType.number,
-                          onChanged: (_) => setModalState(() {}),
+                          onChanged: (val) {
+                            final clean = AbrService.cleanAbn(val);
+                            if (clean.length == 11 && AbrService.isValidAbnChecksum(clean)) {
+                              performAbnLookup(clean);
+                            } else {
+                              if (abnDetails != null) {
+                                setModalState(() {
+                                  abnDetails = null;
+                                  lastQueriedAbn = null;
+                                });
+                              } else {
+                                setModalState(() {});
+                              }
+                            }
+                          },
                           decoration: InputDecoration(
                             labelText: isEn ? 'ABN (11 digits) *' : 'ABN (11 dígitos) *',
                             hintText: '51 824 753 556',
                             prefixIcon: const Icon(CupertinoIcons.number, size: 18),
+                            suffixIcon: isVerifyingAbn
+                                ? const Padding(
+                                    padding: EdgeInsets.all(12),
+                                    child: SizedBox(
+                                      width: 14,
+                                      height: 14,
+                                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.secondary),
+                                    ),
+                                  )
+                                : (abnClean.length == 11
+                                    ? Icon(
+                                        isChecksumValid ? CupertinoIcons.checkmark_seal_fill : CupertinoIcons.xmark_circle_fill,
+                                        size: 18,
+                                        color: isChecksumValid ? AppColors.secondary : AppColors.statusClosed,
+                                      )
+                                    : null),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
                             contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                           ),
@@ -2096,6 +2213,203 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                       ),
                     ],
                   ),
+
+                  // Insignia / Banner de Verificación Oficial ABN
+                  if (isVerifyingAbn) ...[
+                    const SizedBox(height: 6),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: Row(
+                        children: [
+                          const SizedBox(
+                            width: 12,
+                            height: 12,
+                            child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.secondary),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            isEn ? 'Connecting to abr.business.gov.au...' : 'Consultando abr.business.gov.au...',
+                            style: const TextStyle(fontSize: 11, fontStyle: FontStyle.italic, color: AppColors.textSecondary),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ] else if (abnClean.length == 11 && !isChecksumValid) ...[
+                    const SizedBox(height: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: AppColors.statusClosed.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: AppColors.statusClosed.withValues(alpha: 0.3)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(CupertinoIcons.xmark_circle_fill, color: AppColors.statusClosed, size: 15),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              isEn
+                                  ? 'ABN fails official ATO Modulo-89 check (fake/mistyped).'
+                                  : 'ABN no supera el algoritmo ATO (ficticio o mal escrito).',
+                              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.statusClosed),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ] else if (abnDetails != null) ...[
+                    const SizedBox(height: 6),
+                    if (abnDetails!.isCancelled)
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: AppColors.statusClosed.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: AppColors.statusClosed.withValues(alpha: 0.4)),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(CupertinoIcons.exclamationmark_octagon_fill, color: AppColors.statusClosed, size: 18),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    isEn ? '🚨 ABN CANCELLED in Official Registry' : '🚨 ABN CANCELADO en Registro Oficial',
+                                    style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: AppColors.statusClosed),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    isEn
+                                        ? '${abnDetails!.preferredName} is CANCELLED. Immigration will reject your days.'
+                                        : '${abnDetails!.preferredName} figura CANCELADO. Inmigración denegará tus 88 días.',
+                                    style: const TextStyle(fontSize: 10.5, color: AppColors.statusClosed),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () => UrlLauncherService.openUrl(modalContext, AbrService.getOfficialAbnUrl(abnClean)),
+                              borderRadius: BorderRadius.circular(6),
+                              child: const Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Icon(CupertinoIcons.arrow_up_right_square, size: 16, color: AppColors.statusClosed),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    else if (abnDetails!.errorMessage == 'NO_GUID')
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: AppColors.secondary.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: AppColors.secondary.withValues(alpha: 0.3)),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(CupertinoIcons.checkmark_seal_fill, color: AppColors.secondary, size: 16),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                isEn ? '✓ ATO Checksum Valid (11 digits)' : '✓ Checksum Oficial ATO Válido',
+                                style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: AppColors.secondary),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () => UrlLauncherService.openUrl(modalContext, AbrService.getOfficialAbnUrl(abnClean)),
+                              borderRadius: BorderRadius.circular(8),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      isEn ? 'Verify ABR' : 'Verificar ABR',
+                                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary),
+                                    ),
+                                    const SizedBox(width: 3),
+                                    const Icon(CupertinoIcons.arrow_up_right, size: 10, color: AppColors.primary),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    else ...[
+                      // Verificado con API en vivo de ABR
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: AppColors.secondary.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: AppColors.secondary.withValues(alpha: 0.4)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(CupertinoIcons.checkmark_seal_fill, color: AppColors.secondary, size: 16),
+                                const SizedBox(width: 6),
+                                Expanded(
+                                  child: Text(
+                                    isEn ? '✓ Verified by ABR Government API' : '✓ Verificado en Registro Oficial ABR',
+                                    style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: AppColors.secondary),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () => UrlLauncherService.openUrl(modalContext, AbrService.getOfficialAbnUrl(abnClean)),
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primary.withValues(alpha: 0.12),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          isEn ? 'Official File' : 'Ficha Oficial',
+                                          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary),
+                                        ),
+                                        const SizedBox(width: 3),
+                                        const Icon(CupertinoIcons.arrow_up_right, size: 10, color: AppColors.primary),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (abnDetails!.preferredName.isNotEmpty) ...[
+                              const SizedBox(height: 3),
+                              Text(
+                                '🏢 ${abnDetails!.preferredName}${abnDetails!.entityTypeName.isNotEmpty ? ' (${abnDetails!.entityTypeName})' : ''}',
+                                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+                              ),
+                            ],
+                            if (abnDetails!.postcode.isNotEmpty || abnDetails!.state.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 2),
+                                child: Text(
+                                  '📍 ${abnDetails!.postcode} ${abnDetails!.state} • Estado: Activo ${abnDetails!.statusEffectiveDate != null ? '(${abnDetails!.statusEffectiveDate!.day}/${abnDetails!.statusEffectiveDate!.month}/${abnDetails!.statusEffectiveDate!.year})' : ''}',
+                                  style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
                   const SizedBox(height: 12),
 
                   // 3. Localidad / Granja y Puesto Desempeñado (Editables por el usuario)

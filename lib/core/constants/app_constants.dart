@@ -226,4 +226,8 @@ class AppConstants {
   static const String rcMonthlyPlanId = 'ozvisa_monthly_199';
   static const String rcAnnualPlanId = 'ozvisa_annual_1499';
   static const String rcEntitlementId = 'ozvisa_pro_access';
+
+  // Australian Business Register (ABR) ABN Lookup Web Services GUID
+  // Se obtiene de forma 100% gratuita en https://abr.business.gov.au/Tools/WebServicesAgreement
+  static const String abrAuthenticationGuid = '';
 }
