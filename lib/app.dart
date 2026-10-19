@@ -7,6 +7,7 @@ import 'presentation/navigation/phase2_navigation_screen.dart';
 import 'presentation/screens/auth/login_screen.dart';
 import 'presentation/screens/onboarding/welcome_screen.dart';
 import 'presentation/screens/onboarding/referral_source_screen.dart';
+import 'presentation/screens/onboarding/phase_selection_screen.dart';
 import 'presentation/providers/auth_provider.dart';
 import 'presentation/providers/paywall_provider.dart';
 import 'presentation/providers/user_provider.dart';
@@ -89,6 +90,9 @@ class _OzVisaAlertAppState extends ConsumerState<OzVisaAlertApp> with WidgetsBin
               } else if (profile.referralSource == null) {
                 // Completó onboarding pero no ha dicho de dónde viene -> Referral Screen
                 return ReferralSourceScreen(onCompleted: () {});
+              } else if (!profile.initialPhaseSelected) {
+                // Paso final del onboarding: Pregunta en qué momento se encuentra (Fase 1 o Fase 2)
+                return const PhaseSelectionScreen();
               } else if (profile.currentPhase == 2) {
                 // FASE 2: Experiencia dedicada en Australia (Llegada, Empleo, Guías y 88 Días)
                 return const Phase2NavigationScreen();

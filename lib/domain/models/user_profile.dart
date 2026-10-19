@@ -6,6 +6,7 @@ class UserProfile {
   final bool isPremium;
   final String? referralSource;
   final int currentPhase; // 1 = Buscando Visa, 2 = En Australia
+  final bool initialPhaseSelected;
   final String visaSubclass; // '462' o '417'
   final DateTime? visaLodgementDate;
   final DateTime? visaGrantDate;
@@ -20,6 +21,7 @@ class UserProfile {
     this.isPremium = false,
     this.referralSource,
     this.currentPhase = 1,
+    this.initialPhaseSelected = false,
     this.visaSubclass = '462',
     this.visaLodgementDate,
     this.visaGrantDate,
@@ -35,6 +37,7 @@ class UserProfile {
     bool? isPremium,
     String? referralSource,
     int? currentPhase,
+    bool? initialPhaseSelected,
     String? visaSubclass,
     DateTime? visaLodgementDate,
     DateTime? visaGrantDate,
@@ -49,6 +52,7 @@ class UserProfile {
       isPremium: isPremium ?? this.isPremium,
       referralSource: referralSource ?? this.referralSource,
       currentPhase: currentPhase ?? this.currentPhase,
+      initialPhaseSelected: initialPhaseSelected ?? this.initialPhaseSelected,
       visaSubclass: visaSubclass ?? this.visaSubclass,
       visaLodgementDate: visaLodgementDate ?? this.visaLodgementDate,
       visaGrantDate: visaGrantDate ?? this.visaGrantDate,
@@ -66,6 +70,7 @@ class UserProfile {
       'isPremium': isPremium,
       if (referralSource != null) 'referralSource': referralSource,
       'currentPhase': currentPhase,
+      'initialPhaseSelected': initialPhaseSelected,
       'visaSubclass': visaSubclass,
       if (visaLodgementDate != null) 'visaLodgementDate': visaLodgementDate!.toIso8601String(),
       if (visaGrantDate != null) 'visaGrantDate': visaGrantDate!.toIso8601String(),
@@ -89,6 +94,7 @@ class UserProfile {
       isPremium: map['isPremium'] ?? false,
       referralSource: map['referralSource'],
       currentPhase: map['currentPhase'] ?? 1,
+      initialPhaseSelected: map['initialPhaseSelected'] ?? (map['onboardingCompleted'] == true && map['referralSource'] != null),
       visaSubclass: map['visaSubclass'] ?? '462',
       visaLodgementDate: parseDate(map['visaLodgementDate']),
       visaGrantDate: parseDate(map['visaGrantDate']),

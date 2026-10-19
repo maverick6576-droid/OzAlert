@@ -71,6 +71,7 @@ class OnboardingController extends AutoDisposeAsyncNotifier<void> {
         language: language,
         passports: passports,
         onboardingCompleted: true,
+        initialPhaseSelected: false,
       );
 
       await ref.read(userRepositoryProvider).saveUserProfile(profile);
@@ -98,4 +99,25 @@ class ReferralController extends AutoDisposeAsyncNotifier<void> {
 
 final referralControllerProvider = AutoDisposeAsyncNotifierProvider<ReferralController, void>(() {
   return ReferralController();
+});
+
+class PhaseSelectionController extends AutoDisposeAsyncNotifier<void> {
+  @override
+  FutureOr<void> build() {}
+
+  Future<void> selectInitialPhase(int phase) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final user = ref.read(authStateProvider).value;
+      if (user == null) throw Exception('Usuario no autenticado');
+      await ref.read(userRepositoryProvider).updateUserProfileData(user.uid, {
+        'currentPhase': phase,
+        'initialPhaseSelected': true,
+      });
+    });
+  }
+}
+
+final phaseSelectionControllerProvider = AutoDisposeAsyncNotifierProvider<PhaseSelectionController, void>(() {
+  return PhaseSelectionController();
 });
