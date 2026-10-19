@@ -95,30 +95,53 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
   String _dayType = 'weekday';
   final _grossPaidController = TextEditingController(text: '1255.90');
 
+  bool _hasSyncedAuthIdentity = false;
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _loadPreset('hospitality');
 
-    // Inicializar nombre o email desde Firebase si existe
+    // Inicializar nombre y email dinámicamente desde la sesión de Firebase de cada usuario
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final user = ref.read(authStateProvider).value;
-      if (user != null) {
-        if (user.displayName != null && user.displayName!.isNotEmpty) {
-          _nameController.text = user.displayName!;
-        }
-        if (user.email != null && user.email!.isNotEmpty) {
-          _emailController.text = user.email!;
-        }
+      _syncAuthenticatedUserIdentity();
+    });
+  }
+
+  void _syncAuthenticatedUserIdentity() {
+    final user = ref.read(authStateProvider).value;
+    if (user != null && !_hasSyncedAuthIdentity) {
+      _hasSyncedAuthIdentity = true;
+      String resolvedName = '';
+      if (user.displayName != null && user.displayName!.trim().isNotEmpty) {
+        resolvedName = user.displayName!.trim();
+      } else if (user.email != null && user.email!.contains('@')) {
+        // Si el usuario se registró por email sin displayName, derivar su nombre limpio del correo
+        final prefix = user.email!.split('@').first;
+        resolvedName = prefix
+            .split(RegExp(r'[._\-]+'))
+            .where((part) => part.isNotEmpty)
+            .map((part) => part[0].toUpperCase() + part.substring(1).toLowerCase())
+            .join(' ');
       }
-      final profile = ref.read(userProfileProvider).value;
-      if (profile != null) {
+      if (mounted) {
         setState(() {
-          _visaSubclass = profile.visaSubclass;
+          if (resolvedName.isNotEmpty) {
+            _nameController.text = resolvedName;
+          }
+          if (user.email != null && user.email!.trim().isNotEmpty) {
+            _emailController.text = user.email!.trim();
+          }
         });
       }
-    });
+    }
+    final profile = ref.read(userProfileProvider).value;
+    if (profile != null && mounted && _visaSubclass != profile.visaSubclass) {
+      setState(() {
+        _visaSubclass = profile.visaSubclass;
+      });
+    }
   }
 
   StateSetter? _activeModalSetState;
@@ -179,6 +202,13 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
     final isEn = locale?.languageCode == 'en';
     final profile = ref.watch(userProfileProvider).value;
     final isPremium = profile?.isPremium ?? false;
+    final authUser = ref.watch(authStateProvider).value;
+
+    if (authUser != null && !_hasSyncedAuthIdentity) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _syncAuthenticatedUserIdentity();
+      });
+    }
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -194,7 +224,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
           indicatorWeight: 3,
           labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5),
           tabs: [
-            Tab(text: isEn ? '📄 Smart Resume' : '📄 Generador CV Pro'),
+            Tab(text: isEn ? '📄 Smart Resume' : '📄 Generador CV'),
             Tab(text: isEn ? '💰 Fair Work Pay' : '💰 Calculadora Sueldo'),
           ],
         ),
@@ -287,8 +317,8 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
           subtitle: isEn
               ? 'Formal introductory letter tailored to job ads on Seek/Indeed, highlighting your visa rights and immediate start.'
               : 'Carta formal adaptada a ofertas de Seek e Indeed. Destaca permiso de trabajo legal, disponibilidad y flexibilidad.',
-          tags: [isEn ? 'Recruiter Ready' : 'Seek & Indeed', isEn ? 'Visa Highlights' : 'Visado Legal', 'PRO'],
-          isPro: true,
+          tags: [isEn ? 'Recruiter Ready' : 'Seek & Indeed', isEn ? 'Visa Highlights' : 'Visado Legal', isEn ? 'Official' : 'Oficial'],
+          isPro: false,
           isEn: isEn,
           isPremium: isPremium,
         ),
@@ -303,8 +333,8 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
           subtitle: isEn
               ? 'Stand out in tight rental markets with verified proof of income, bond readiness, and clean living etiquette.'
               : 'Destaca ante caseros y compañeros con solvencia acreditada, fianza lista y normas de convivencia impecables.',
-          tags: [isEn ? 'Fast Approval' : 'Aprobación Rápida', isEn ? 'Bond Ready' : 'Fianza Lista', 'PRO'],
-          isPro: true,
+          tags: [isEn ? 'Fast Approval' : 'Aprobación Rápida', isEn ? 'Bond Ready' : 'Fianza Lista', isEn ? 'Verified' : 'Solvencia'],
+          isPro: false,
           isEn: isEn,
           isPremium: isPremium,
         ),
@@ -319,8 +349,8 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
           subtitle: isEn
               ? 'Legally drafted formal notice under Fair Work Act 2009 demanding backpay, 25% casual loading or unpaid super.'
               : 'Requerimiento formal bajo la Fair Work Act 2009 exigiendo salarios impagados, 25% casual loading o Superannuation.',
-          tags: [isEn ? 'Fair Work Act 2009' : 'Ley Fair Work 2009', isEn ? 'Backpay Demand' : 'Reclamar Dinero', 'PRO'],
-          isPro: true,
+          tags: [isEn ? 'Fair Work Act 2009' : 'Ley Fair Work 2009', isEn ? 'Backpay Demand' : 'Reclamar Dinero'],
+          isPro: false,
           isEn: isEn,
           isPremium: isPremium,
         ),
@@ -335,8 +365,8 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
           subtitle: isEn
               ? 'Standard Australian 14-day notice guaranteeing your final payslip calculation and positive employer reference.'
               : 'Preaviso estándar de 14 días para asegurar el finiquito íntegro y una referencia laboral impecable.',
-          tags: [isEn ? '14-Day Notice' : 'Preaviso 14 Días', isEn ? 'Guaranteed Reference' : 'Referencia Segura', 'PRO'],
-          isPro: true,
+          tags: [isEn ? '14-Day Notice' : 'Preaviso 14 Días', isEn ? 'Guaranteed Reference' : 'Referencia Segura'],
+          isPro: false,
           isEn: isEn,
           isPremium: isPremium,
         ),
@@ -397,18 +427,6 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                                   style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.textPrimary),
                                 ),
                               ),
-                              if (isPro)
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
-                                  decoration: BoxDecoration(
-                                    color: isPremium ? AppColors.secondary : AppColors.primary,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
-                                    isPremium ? 'PRO UNLOCKED' : 'PRO',
-                                    style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w900, color: Colors.white),
-                                  ),
-                                ),
                             ],
                           ),
                           const SizedBox(height: 5),
@@ -484,56 +502,66 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
           builder: (ctx, setModalState) {
             _activeModalSetState = setModalState;
             final title = _getDocTitle(_selectedDocType, isEn);
-            return Container(
-              height: MediaQuery.of(modalContext).size.height * 0.92,
-              decoration: const BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 10, bottom: 6),
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: AppColors.cardBorder,
-                      borderRadius: BorderRadius.circular(2),
+            final keyboardInset = MediaQuery.of(ctx).viewInsets.bottom;
+            return AnimatedPadding(
+              duration: const Duration(milliseconds: 100),
+              curve: Curves.easeOut,
+              padding: EdgeInsets.only(bottom: keyboardInset),
+              child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(ctx).size.height * 0.92,
+                ),
+                decoration: const BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 10, bottom: 6),
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.cardBorder,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            title,
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(CupertinoIcons.xmark_circle_fill, color: AppColors.textMuted),
-                          onPressed: () => Navigator.pop(modalContext),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Divider(height: 1, color: AppColors.cardBorder),
-                  // Selector rápido de documento dentro del modal
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: _buildDocumentTypeSelector(isEn),
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
+                    Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: _buildSelectedDocForm(isEn, isPremium),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              title,
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(CupertinoIcons.xmark_circle_fill, color: AppColors.textMuted),
+                            onPressed: () => Navigator.pop(modalContext),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    const Divider(height: 1, color: AppColors.cardBorder),
+                    // Selector rápido de documento dentro del modal
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: _buildDocumentTypeSelector(isEn),
+                    ),
+                    Flexible(
+                      child: SingleChildScrollView(
+                        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+                        child: _buildSelectedDocForm(isEn, isPremium),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           },
@@ -582,35 +610,30 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
         'icon': CupertinoIcons.doc_text_fill,
         'label': '📄 CV Australiano',
         'labelEn': '📄 Resume ATS',
-        'isPro': false,
       },
       {
         'id': 'cover_letter',
         'icon': CupertinoIcons.mail_solid,
         'label': '✉️ Cover Letter',
         'labelEn': '✉️ Cover Letter',
-        'isPro': true,
       },
       {
         'id': 'rental_bio',
         'icon': CupertinoIcons.house_fill,
         'label': '🏠 Perfil Alquiler',
         'labelEn': '🏠 Rental Bio',
-        'isPro': true,
       },
       {
         'id': 'fair_work_claim',
         'icon': CupertinoIcons.shield_fill,
         'label': '⚖️ Reclamo Fair Work',
         'labelEn': '⚖️ Wage Claim',
-        'isPro': true,
       },
       {
         'id': 'resignation',
         'icon': CupertinoIcons.hand_raised_fill,
         'label': '🤝 Renuncia 2 Sem.',
         'labelEn': '🤝 2-Wk Resign',
-        'isPro': true,
       },
     ];
 
@@ -620,34 +643,10 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
         children: docs.map((doc) {
           final id = doc['id'] as String;
           final isSelected = _selectedDocType == id;
-          final isPro = doc['isPro'] as bool;
           return Padding(
             padding: const EdgeInsets.only(right: 8),
             child: ChoiceChip(
-              label: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(isEn ? (doc['labelEn'] as String) : (doc['label'] as String)),
-                  if (isPro) ...[
-                    const SizedBox(width: 5),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 1.5),
-                      decoration: BoxDecoration(
-                        color: isSelected ? Colors.white : AppColors.secondary,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Text(
-                        'PRO',
-                        style: TextStyle(
-                          fontSize: 8.5,
-                          fontWeight: FontWeight.w900,
-                          color: isSelected ? AppColors.primary : Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
+              label: Text(isEn ? (doc['labelEn'] as String) : (doc['label'] as String)),
               selected: isSelected,
               selectedColor: AppColors.primary,
               backgroundColor: AppColors.surface,
@@ -2344,7 +2343,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  isEn ? 'Auditor: Paste your gross payslip' : 'Auditor: Comprueba tu Nómina',
+                  isEn ? 'Payslip Checker: Enter your gross pay' : 'Comprobar Nómina',
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
                 ),
                 const SizedBox(height: 8),
@@ -2386,7 +2385,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                       backgroundColor: AppColors.primary,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: Text(isEn ? 'Audit Payslip' : 'Auditar Nómina'),
+                    child: Text(isEn ? 'Check Payslip' : 'Comprobar Nómina'),
                   ),
                 ),
               ],
@@ -2423,9 +2422,11 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
     return TextField(
       controller: controller,
       maxLines: maxLines,
+      scrollPadding: EdgeInsets.only(bottom: maxLines > 1 ? 240 : 140),
       style: const TextStyle(fontSize: 13.5),
       decoration: InputDecoration(
         labelText: label,
+        alignLabelWithHint: maxLines > 1,
         labelStyle: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
         filled: true,
         fillColor: AppColors.surfaceElevated,

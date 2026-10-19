@@ -211,8 +211,10 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     final subclass = profile?.visaSubclass ?? '462';
     final isPremium = profile?.isPremium ?? false;
 
-    if (isPremium && uid != null) {
-      ref.read(regionalJobsProvider.notifier).loadForUser(uid: uid, isPremium: isPremium);
+    if (uid != null && uid.isNotEmpty) {
+      Future.microtask(() {
+        ref.read(regionalJobsProvider.notifier).loadForUser(uid: uid, isPremium: isPremium);
+      });
     }
 
     final allJobs = ref.watch(regionalJobsProvider);

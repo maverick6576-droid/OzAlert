@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../domain/models/phase2/affiliate_partner.dart';
 import '../../../domain/models/phase2/landing_task.dart';
 import '../../../domain/models/phase2/regional_work_log.dart';
@@ -120,48 +122,154 @@ final phase2NavigationProvider = StateNotifierProvider<Phase2NavigationNotifier,
   return Phase2NavigationNotifier();
 });
 
-/// Tracker de empleos regionales (88 Días y 3r Año) con sincronización Cloud Firestore para Premium
+/// Tracker de empleos regionales (88 Días y 3r Año) con sincronización Cloud Firestore y persistencia local
 class RegionalJobsNotifier extends StateNotifier<List<RegionalJobEntry>> {
   final FirebaseFirestore? _firestore;
   String? _syncedUid;
+  bool _isLoading = false;
+  final Set<String> _deletedIds = {};
 
   RegionalJobsNotifier({FirebaseFirestore? firestore})
       : _firestore = firestore,
         super([]);
 
-  Future<void> loadForUser({required String? uid, required bool isPremium}) async {
-    if (uid == null || uid.isEmpty || !isPremium) return;
-    if (_syncedUid == uid) return;
-    _syncedUid = uid;
+  String _prefsKey(String? uid) => 'regional_work_logs_${uid != null && uid.isNotEmpty ? uid : "local"}';
+
+  Future<void> _saveToLocal(String? uid, List<RegionalJobEntry> entries) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final encoded = jsonEncode(entries.map((e) => e.toJson()).toList());
+      await prefs.setString(_prefsKey(uid), encoded);
+    } catch (_) {}
+  }
+
+  Future<List<RegionalJobEntry>> _loadFromLocal(String? uid) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final raw = prefs.getString(_prefsKey(uid));
+      if (raw != null && raw.isNotEmpty) {
+        final decoded = jsonDecode(raw) as List<dynamic>;
+        return decoded
+            .whereType<Map<String, dynamic>>()
+            .map(RegionalJobEntry.fromJson)
+            .toList();
+      }
+    } catch (_) {}
+    return [];
+  }
+
+  List<RegionalJobEntry> _mergeEntries(
+    List<RegionalJobEntry> current,
+    List<RegionalJobEntry> incoming,
+  ) {
+    final map = <String, RegionalJobEntry>{};
+    for (final item in incoming) {
+      if (item.id.isNotEmpty && !_deletedIds.contains(item.id)) {
+        map[item.id] = item;
+      }
+    }
+    for (final item in current) {
+      if (item.id.isNotEmpty && !_deletedIds.contains(item.id)) {
+        map[item.id] = item;
+      }
+    }
+    return map.values.toList();
+  }
+
+  Future<void> loadForUser({required String? uid, bool isPremium = true}) async {
+    final effectiveUid = (uid != null && uid.isNotEmpty) ? uid : null;
+    if (_syncedUid == effectiveUid && (_isLoading || state.isNotEmpty)) return;
+    if (_isLoading && _syncedUid == effectiveUid) return;
+    _syncedUid = effectiveUid;
+    _isLoading = true;
 
     try {
-      final fs = _firestore ?? FirebaseFirestore.instance;
-      final snapshot = await fs
-          .collection('users')
-          .doc(uid)
-          .collection('regional_work_logs')
-          .get();
+      // 1. Cargar caché local inmediata
+      final localEntries = await _loadFromLocal(effectiveUid);
+      if (localEntries.isNotEmpty) {
+        state = _mergeEntries(state, localEntries);
+      }
 
-      if (snapshot.docs.isNotEmpty) {
-        final loaded = snapshot.docs
-            .map((doc) => RegionalJobEntry.fromJson(doc.data()))
-            .toList();
-        state = loaded;
+      if (effectiveUid == null) {
+        _isLoading = false;
+        return;
+      }
+
+      final fs = _firestore ?? FirebaseFirestore.instance;
+      final cloudEntries = <RegionalJobEntry>[];
+
+      // 2. Leer del documento principal users/{uid} (permitido por las reglas de seguridad de perfil)
+      try {
+        final userDoc = await fs.collection('users').doc(effectiveUid).get();
+        final data = userDoc.data();
+        if (data != null && data['regionalWorkLogs'] is List) {
+          final rawList = data['regionalWorkLogs'] as List<dynamic>;
+          for (final item in rawList) {
+            if (item is Map) {
+              cloudEntries.add(
+                RegionalJobEntry.fromJson(Map<String, dynamic>.from(item)),
+              );
+            }
+          }
+        }
+      } catch (_) {}
+
+      // 3. Leer también de la subcolección regional_work_logs por retrocompatibilidad
+      try {
+        final snapshot = await fs
+            .collection('users')
+            .doc(effectiveUid)
+            .collection('regional_work_logs')
+            .get();
+        if (snapshot.docs.isNotEmpty) {
+          for (final doc in snapshot.docs) {
+            cloudEntries.add(RegionalJobEntry.fromJson(doc.data()));
+          }
+        }
+      } catch (_) {}
+
+      if (cloudEntries.isNotEmpty || state.isNotEmpty) {
+        final merged = _mergeEntries(state, cloudEntries);
+        state = merged;
+        await _saveToLocal(effectiveUid, merged);
       }
     } catch (_) {
       // Offline fallback
+    } finally {
+      _isLoading = false;
     }
   }
 
-  Future<void> addJob(RegionalJobEntry job, {String? uid, bool isPremium = false}) async {
-    state = [...state, job];
+  Future<void> _syncAllToFirestore(String uid, List<RegionalJobEntry> entries) async {
+    final fs = _firestore ?? FirebaseFirestore.instance;
+    final serialized = entries.map((j) => j.toJson()).toList();
+    // Guardado principal dentro de users/{uid} (garantizado por permisos de documento de usuario)
+    await fs.collection('users').doc(uid).set(
+      {
+        'regionalWorkLogs': serialized,
+      },
+      SetOptions(merge: true),
+    );
+  }
 
-    if (isPremium && uid != null && uid.isNotEmpty) {
+  Future<void> addJob(RegionalJobEntry job, {String? uid, bool isPremium = false}) async {
+    _deletedIds.remove(job.id);
+    final updated = [...state.where((j) => j.id != job.id), job];
+    state = updated;
+
+    final effectiveUid = (uid != null && uid.isNotEmpty) ? uid : _syncedUid;
+    await _saveToLocal(effectiveUid, updated);
+
+    if (effectiveUid != null && effectiveUid.isNotEmpty) {
+      try {
+        await _syncAllToFirestore(effectiveUid, updated);
+      } catch (_) {}
+
       try {
         final fs = _firestore ?? FirebaseFirestore.instance;
         await fs
             .collection('users')
-            .doc(uid)
+            .doc(effectiveUid)
             .collection('regional_work_logs')
             .doc(job.id)
             .set(job.toJson());
@@ -170,14 +278,23 @@ class RegionalJobsNotifier extends StateNotifier<List<RegionalJobEntry>> {
   }
 
   Future<void> removeJob(String id, {String? uid, bool isPremium = false}) async {
-    state = state.where((j) => j.id != id).toList();
+    _deletedIds.add(id);
+    final updated = state.where((j) => j.id != id).toList();
+    state = updated;
 
-    if (isPremium && uid != null && uid.isNotEmpty) {
+    final effectiveUid = (uid != null && uid.isNotEmpty) ? uid : _syncedUid;
+    await _saveToLocal(effectiveUid, updated);
+
+    if (effectiveUid != null && effectiveUid.isNotEmpty) {
+      try {
+        await _syncAllToFirestore(effectiveUid, updated);
+      } catch (_) {}
+
       try {
         final fs = _firestore ?? FirebaseFirestore.instance;
         await fs
             .collection('users')
-            .doc(uid)
+            .doc(effectiveUid)
             .collection('regional_work_logs')
             .doc(id)
             .delete();

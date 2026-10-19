@@ -306,11 +306,12 @@ class DashboardScreen extends ConsumerWidget {
                 style: ElevatedButton.styleFrom(backgroundColor: AppColors.secondary),
                 onPressed: () async {
                   Navigator.pop(ctx);
-                  await NotificationService().syncPassportSubscriptions([]);
                   final profile = ref.read(userProfileProvider).value;
                   if (profile != null) {
                     await ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(currentPhase: 2));
                   }
+                  // Desuscribir tópicos de Fase 1 en segundo plano sin bloquear la transición de pantalla
+                  NotificationService().syncPassportSubscriptions([]);
                 },
                 child: const Text('Entrar a la Fase 2', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
               ),

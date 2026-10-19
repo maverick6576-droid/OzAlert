@@ -215,23 +215,33 @@ class NotificationService {
       debugPrint('FCM subscribeToTopic ignorado en modo offline/mock: $e');
     }
   }
-  /// Sincroniza las suscripciones: se suscribe a los códigos activos y se desuscribe del resto
+  /// Sincroniza las suscripciones: se suscribe a los códigos activos y se desuscribe del resto en paralelo
   Future<void> syncPassportSubscriptions(List<String> activeCountryCodes) async {
     if (!_isInitialized) await init();
     try {
+      final futures = <Future<void>>[];
+
       // Suscribirse a los seleccionados
-      for (var code in activeCountryCodes) {
-        await FirebaseMessaging.instance.subscribeToTopic('visa_$code');
-        debugPrint('Sincronizado: Suscrito a visa_$code');
+      for (final code in activeCountryCodes) {
+        futures.add(
+          FirebaseMessaging.instance.subscribeToTopic('visa_$code').then((_) {
+            debugPrint('Sincronizado: Suscrito a visa_$code');
+          }),
+        );
       }
-      
+
       // Desuscribirse de los no seleccionados
-      for (var country in AppConstants.supportedCountries) {
+      for (final country in AppConstants.supportedCountries) {
         if (!activeCountryCodes.contains(country.code)) {
-          await FirebaseMessaging.instance.unsubscribeFromTopic('visa_${country.code}');
-          debugPrint('Sincronizado: Desuscrito de visa_${country.code}');
+          futures.add(
+            FirebaseMessaging.instance.unsubscribeFromTopic('visa_${country.code}').then((_) {
+              debugPrint('Sincronizado: Desuscrito de visa_${country.code}');
+            }),
+          );
         }
       }
+
+      await Future.wait(futures);
     } catch (e) {
       debugPrint('Error sincronizando tópicos: $e');
     }

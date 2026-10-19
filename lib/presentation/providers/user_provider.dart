@@ -42,8 +42,8 @@ final userProfileProvider = StreamProvider<UserProfile?>((ref) async* {
               orElse: () => AppConstants.supportedCountries.first,
             ).code;
           }).toList();
-          // CRÍTICO PARA EL NEGOCIO: Solo suscribir si ha pagado.
-          if (profile.isPremium) {
+          // CRÍTICO PARA EL NEGOCIO: Solo suscribir si ha pagado y está en Fase 1 (búsqueda de visado).
+          if (profile.isPremium && profile.currentPhase == 1) {
             NotificationService().syncPassportSubscriptions(countryCodes);
           } else {
             NotificationService().syncPassportSubscriptions([]);
