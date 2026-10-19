@@ -204,34 +204,33 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                 const SizedBox(height: 24),
 
                 // 3. TITLE (ABIERTA/PAUSADA/CERRADA) + Candado en versión gratuita
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 10,
+                  runSpacing: 6,
                   children: [
-                    Flexible(
-                      child: Text(
-                        getTitle(),
-                        style: TextStyle(
-                          fontSize: 42,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white,
-                          letterSpacing: -0.5,
-                          shadows: [
-                            Shadow(
-                              color: getStatusColor().withValues(alpha: 0.6),
-                              blurRadius: 15,
-                            ),
-                          ],
-                        ),
-                      )
-                          .animate(target: isOpen ? 1 : 0)
-                          .shimmer(duration: 1500.ms, color: AppColors.statusOpen),
-                    ),
-                    if (!isPremium) ...[
-                      const SizedBox(width: 12),
+                    Text(
+                      getTitle(),
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        letterSpacing: -0.5,
+                        shadows: [
+                          Shadow(
+                            color: getStatusColor().withValues(alpha: 0.6),
+                            blurRadius: 15,
+                          ),
+                        ],
+                      ),
+                    )
+                        .animate(target: isOpen ? 1 : 0)
+                        .shimmer(duration: 1500.ms, color: AppColors.statusOpen),
+                    if (!isPremium)
                       GestureDetector(
                         onTap: () => _openProPaywall(context, isEn),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                           decoration: BoxDecoration(
                             color: Colors.black.withValues(alpha: 0.28),
                             borderRadius: BorderRadius.circular(14),
@@ -246,7 +245,7 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                               Icon(
                                 CupertinoIcons.lock_fill,
                                 color: Colors.amberAccent,
-                                size: 16,
+                                size: 15,
                               ),
                               SizedBox(width: 4),
                               Text(
@@ -261,7 +260,6 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                           ),
                         ),
                       ),
-                    ],
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -341,6 +339,7 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                                   isEn
                                       ? 'Visa Open Notification'
                                       : 'Notificación de Visado Abierto',
+                                  softWrap: true,
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 13,
@@ -352,6 +351,7 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                                   isEn
                                       ? 'Subscribe to PRO to receive instant alert when visa opens'
                                       : 'Suscríbete como PRO para recibir la notificación al abrirse',
+                                  softWrap: true,
                                   style: TextStyle(
                                     color: Colors.white.withValues(alpha: 0.88),
                                     fontSize: 11.5,
@@ -413,6 +413,7 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                             isEn
                                 ? 'Visa Open Notification Active (24/7 Channel)'
                                 : 'Notificación de Visado Abierto Activa (Canal 24/7)',
+                            softWrap: true,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 12.5,

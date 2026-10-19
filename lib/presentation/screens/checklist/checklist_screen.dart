@@ -1290,22 +1290,24 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
               children: [
                 Text(
                   (isEn ? 'STAGE: ' : 'ETAPA: ') + themeLabel.toUpperCase(),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
                   style: const TextStyle(
-                    fontSize: 9,
+                    fontSize: 9.5,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 0.4,
                     color: AppColors.primary,
+                    height: 1.25,
                   ),
                 ),
-                const SizedBox(height: 1),
+                const SizedBox(height: 2),
                 Text(
                   categoryLabel,
+                  softWrap: true,
                   style: const TextStyle(
                     fontSize: 13.5,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
+                    height: 1.2,
                   ),
                 ),
               ],
@@ -2273,7 +2275,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                   : 'El examen debe haberse realizado como máximo en los 12 meses previos a solicitar la visa.',
               'body': isEn
                   ? 'To meet Functional English for Subclass 462, you need one of these minimum overall scores:\n• PTE Academic: 30 overall\n• IELTS (General or Academic): 4.5 average across the 4 components\n• TOEFL iBT: 32 total score\n• Cambridge C1 Advanced (CAE): 147 overall\nNote: Home-edition / online tests taken at home (such as IELTS Online, PTE Online or TOEFL iBT Home Edition) are NOT accepted by Australian Immigration.'
-                  : 'Para cumplir el nivel "Functional English" en la Subclase 462 necesitas alcanzar la nota global mínima en UNO de estos exámenes presenciales:\n• PTE Academic: 30 puntos globales (sobre 90)\n• IELTS (General o Academic): 4.5 de media global en las 4 destrezas\n• TOEFL iBT: 32 puntos totales\n• Cambridge C1 Advanced (CAE): 147 puntos globales\n⚠️ MUY IMPORTante: Home Affairs NO acepta exámenes realizados desde casa (Online / Home Edition). Debe hacerse presencialmente en un centro examinador oficial.',
+                  : 'Para cumplir el nivel "Functional English" en la Subclase 462 necesitas alcanzar la nota global mínima en UNO de estos exámenes presenciales:\n• PTE Academic: 30 puntos globales (sobre 90)\n• IELTS (General o Academic): 4.5 de media global en las 4 destrezas\n• TOEFL iBT: 32 puntos totales\n• Cambridge C1 Advanced (CAE): 147 puntos globales\n⚠️ MUY IMPORTANTE: Home Affairs NO acepta exámenes realizados desde casa (Online / Home Edition). Debe hacerse presencialmente en un centro examinador oficial.',
               'tip': isEn
                   ? 'Pro Tip: PTE Academic is the community favourite because it is 100% computer-graded and results usually arrive in 24 to 48 hours.'
                   : 'Tip Pro: El PTE Academic es el favorito de la comunidad porque lo corrige un algoritmo por ordenador y la nota suele llegar en solo 24 a 48 horas.',

@@ -240,6 +240,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
               children: [
                 Text(
                   (isEn ? 'STAGE: ' : 'ETAPA: ') + themeLabel.toUpperCase(),
+                  softWrap: true,
                   style: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
@@ -250,6 +251,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 const SizedBox(height: 2),
                 Text(
                   categoryLabel,
+                  softWrap: true,
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w800,

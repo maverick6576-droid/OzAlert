@@ -79,9 +79,12 @@ class PremiumFeatureGate extends ConsumerWidget {
                     children: [
                       const Icon(CupertinoIcons.lock_fill, color: AppColors.primary, size: 20),
                       const SizedBox(width: 8),
-                      Text(
-                        'Desbloquear $featureTitle',
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primary),
+                      Flexible(
+                        child: Text(
+                          'Desbloquear $featureTitle',
+                          softWrap: true,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primary),
+                        ),
                       ),
                     ],
                   ),

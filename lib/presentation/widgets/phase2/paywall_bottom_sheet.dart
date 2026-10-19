@@ -126,17 +126,21 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
                     children: [
                       Text(
                         isEn ? 'Full OzAlert Pro Access' : 'Acceso Completo OzAlert Pro',
+                        softWrap: true,
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
                       ),
+                      const SizedBox(height: 2),
                       Text(
                         isEn
                             ? '24/7 Visa Open Alerts, unlimited PDF CVs, payslip checks & Form 1263'
                             : 'Alertas 24/7 de Visado Abierto, CVs en PDF, comprobar nóminas y Form 1263',
+                        softWrap: true,
                         style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
                       ),
                     ],
                   ),
                 ),
+                const SizedBox(width: 8),
                 Text(
                   isEn ? '$priceText/mo' : '$priceText/mes',
                   style: const TextStyle(

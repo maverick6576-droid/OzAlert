@@ -752,6 +752,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                             Flexible(
                               child: Text(
                                 _getTaskActionLabel(task.targetGuideCategory!, isEn),
+                                softWrap: true,
                                 style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
