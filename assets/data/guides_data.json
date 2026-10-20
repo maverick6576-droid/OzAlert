@@ -504,6 +504,18 @@
           "officialUrl": "https://www.fairtrading.nsw.gov.au/housing-and-property/renting/rental-bonds-online",
           "officialUrlLabel": "NSW Fair Trading - Rental Bonds Online Oficial",
           "officialUrlLabelEn": "NSW Fair Trading - Official Rental Bonds Online"
+        },
+        {
+          "number": 5,
+          "title": "Recibo Oficial de Fianza y Blindaje contra Retenciones Ilegales",
+          "titleEn": "Official Rental Bond Receipt & Protection Against Illegal Retentions",
+          "description": "En habitaciones de alquiler o pisos compartidos, muchos caseros o subarrendadores cobran fianzas en metálico o transferencia privada y luego se niegan a devolverlas. La ley estatal exige que toda fianza sea registrada formalmente ante el organismo estatal (RBO en NSW, RTBA en Victoria, RTA en Queensland) en un plazo de 7 a 14 días. Exige siempre un recibo legal vinculante.",
+          "descriptionEn": "In shared apartments or private rooms, landlords frequently take cash or private bank transfer deposits and refuse refunds upon departure. State law requires all rental bonds to be lodged with official authorities (RBO NSW, RTBA VIC, RTA QLD) within 7-14 days. Always demand a signed legal receipt.",
+          "tip": "Herramienta en la App: Genera el Recibo Oficial de Fianza de Alquiler en la Suite Documental de Empleo y exporta tu Perfil de Flatmate con solvencia demostrable.",
+          "tipEn": "App Tool: Generate the Official Rental Bond Receipt in the Jobs tab Document Suite and export your verified Flatmate Bio.",
+          "officialUrl": "https://www.fairtrading.nsw.gov.au/housing-and-property/renting/rental-bonds-online",
+          "officialUrlLabel": "Fair Trading - Organismo Estatal de Fianzas",
+          "officialUrlLabelEn": "Fair Trading - Official State Tenancy Authority"
         }
       ],
       "comparisons": [
@@ -658,6 +670,30 @@
           "officialUrl": "https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/growing-and-keeping-track-of-your-super/how-much-super-should-you-get",
           "officialUrlLabel": "ATO - Porcentajes Legales de Superannuation (12%)",
           "officialUrlLabelEn": "ATO - Statutory Superannuation Rates (12%)"
+        },
+        {
+          "number": 5,
+          "title": "Auditor Fair Work 2026: Salarios mínimos y retenciones WHM",
+          "titleEn": "Fair Work 2026 Auditor: Minimum Wages & WHM Tax Withholding",
+          "description": "En 2026, el salario mínimo de horticultura es de $32.18 AUD/h casual (Nivel 1), aumentando obligatoriamente a $33.05 AUD/h (Nivel 2) tras acumular 90 días en tareas agrícolas. En viticultura, la tarifa base es de $32.24 AUD/h (+20% de rendimiento objetivo en piecework). Como titular de WHV, tu retención fiscal es del 15% plano hasta $45,000 AUD. Si tu nómina refleja un 30% de retención, significa que tu empleador no se ha registrado ante la ATO como empleador de WHM. Si te retienen el 47%, indica que falta tu TFN.",
+          "descriptionEn": "In 2026, the Horticulture Award casual minimum is $32.18 AUD/hr (Level 1), increasing mandatorily to $33.05 AUD/hr (Level 2) once you reach 90 days in agricultural work. Viticulture casual base is $32.24 AUD/hr (+20% piecework benchmark). As a WHV holder, your PAYG tax rate is 15% flat up to $45,000 AUD. A 30% tax withholding means your employer failed to register with the ATO as a WHM employer. A 47% withholding indicates a missing TFN.",
+          "tip": "Herramienta en la App: Usa el Escáner Digital Offline y la Calculadora Fair Work en la pestaña Empleo de OzAlert para auditar tus nóminas y detectar si te están pagando de menos.",
+          "tipEn": "App Tool: Use the offline Payslip Scanner and Fair Work Calculator in the Jobs tab of OzAlert to audit your payslips and detect underpayments.",
+          "officialUrl": "https://www.fairwork.gov.au/pay-and-wages/minimum-wages",
+          "officialUrlLabel": "Fair Work Ombudsman - Salarios Mínimos Oficiales 2026",
+          "officialUrlLabelEn": "Fair Work Ombudsman - Official 2026 Minimum Wage Rates"
+        },
+        {
+          "number": 6,
+          "title": "Payday Super: El 12% de pensión pagado en 7 días hábiles",
+          "titleEn": "Payday Super: 12% Retirement Contribution within 7 Business Days",
+          "description": "Por normativa estatutaria, los empleadores deben ingresar tu 12% de Superannuation junto con cada nómina o en un plazo máximo de 7 días hábiles tras el día de pago. No permitas que acumulen meses sin ingresar tus fondos.",
+          "descriptionEn": "Under statutory rules, employers must deposit your 12% Superannuation with each pay run or within a strict 7-business-day statutory deadline. Do not allow employers to delay contributions.",
+          "tip": "Herramienta en la App: La Calculadora Fair Work de OzAlert calcula automáticamente tu aportación del 12% y programa recordatorios a 7 días hábiles.",
+          "tipEn": "App Tool: The OzAlert Fair Work Calculator computes your 12% super and schedules reminders for the 7-day deadline.",
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/growing-and-keeping-track-of-your-super/how-much-super-should-you-get",
+          "officialUrlLabel": "ATO - Ley de Pago de Superannuation (Payday Super)",
+          "officialUrlLabelEn": "ATO - Payday Superannuation Legislation"
         }
       ],
       "comparisons": [
@@ -962,6 +998,30 @@
           "officialUrl": "https://www.fairtrading.nsw.gov.au/housing-and-property/renting/rental-bonds-online",
           "officialUrlLabel": "Fair Trading - Ley de Depósito Estatal de Fianzas",
           "officialUrlLabelEn": "Fair Trading - State Bond Protection Legislation"
+        },
+        {
+          "number": 5,
+          "title": "Exención Medicare Levy 2% (MES Form MS015): Ahorra hasta $900 AUD",
+          "titleEn": "Medicare Levy Exemption 2% (MES Form MS015): Save up to $900 AUD",
+          "description": "En Australia, los residentes tributan un 2.0% adicional de sus ingresos brutos para financiar Medicare. Sin embargo, si tu pasaporte es de un país sin convenio médico recíproco integral (España, Chile, Argentina, Colombia, Perú, etc.), estás exento por ley de pagar este 2%. Al solicitar tu certificado MES mediante el formulario MS015 ante Services Australia, te ahorras entre $600 y $900+ AUD en tu declaración de la renta.",
+          "descriptionEn": "In Australia, residents pay an extra 2.0% Medicare Levy on gross income. However, if your passport is from a country without a comprehensive reciprocal healthcare agreement (Spain, Chile, Argentina, Colombia, Peru, etc.), you are legally exempt. Requesting your Medicare Entitlement Statement (MES form MS015) saves $600 to $900+ AUD on your annual tax return.",
+          "tip": "Herramienta en la App: Abre el Hub Fiscal en la pestaña Empleo de OzAlert para comprobar si tu país es elegible y simular tu ahorro exacto.",
+          "tipEn": "App Tool: Open the Tax Hub in the Jobs tab of OzAlert to check your passport eligibility and calculate your exact savings.",
+          "officialUrl": "https://www.servicesaustralia.gov.au/medicare-entitlement-statement",
+          "officialUrlLabel": "Services Australia - Solicitud de Certificado MES Oficial",
+          "officialUrlLabelEn": "Services Australia - Official MES Entitlement Statement"
+        },
+        {
+          "number": 6,
+          "title": "Doctrina Addy: Umbral libre de impuestos de $18,200 AUD",
+          "titleEn": "Addy Doctrine: $18,200 AUD Tax-Free Threshold",
+          "description": "A raíz de la histórica sentencia Addy v Commissioner of Taxation, los trabajadores de países con tratados de no discriminación (Reino Unido, Alemania, Chile, Japón, Noruega, Finlandia) que demuestren ser residentes a efectos fiscales pueden tributar con el umbral exento general de $18,200 AUD en lugar de pagar el 15% desde el primer dólar.",
+          "descriptionEn": "Following the landmark Addy v Commissioner of Taxation High Court ruling, backpackers from non-discrimination treaty nations (UK, Germany, Chile, Japan, Norway, Finland) deemed Australian tax residents may claim the $18,200 tax-free threshold instead of the 15% flat WHM rate.",
+          "tip": "Herramienta en la App: Comprueba la comparativa fiscal Addy vs WHM en el Hub Fiscal de la pestaña Empleo.",
+          "tipEn": "App Tool: Compare your Addy vs WHM tax outcomes in the Jobs tab Tax Hub.",
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/coming-to-australia-or-going-overseas/coming-to-australia/working-holiday-makers/working-holiday-maker-tax-rates",
+          "officialUrlLabel": "ATO - Jurisprudencia Addy y Tipos Impositivos WHM",
+          "officialUrlLabelEn": "ATO - Addy Ruling and WHM Tax Rates"
         }
       ],
       "comparisons": [
@@ -1267,6 +1327,30 @@
           "officialUrl": "https://wise.com/",
           "officialUrlLabel": "Wise - Transferencia de Ahorros con Tipo de Cambio Real",
           "officialUrlLabelEn": "Wise - Savings Repatriation with Mid-Market Rate"
+        },
+        {
+          "number": 7,
+          "title": "Rego de Western Australia (WA), Chequeo PPSR y Contrato Bill of Sale",
+          "titleEn": "Western Australia (WA) Rego, PPSR Check & Bill of Sale",
+          "description": "A la hora de comprar y vender una furgoneta o camper en Australia, la matrícula de Western Australia (WA) es la más cotizada por los mochileros: se renueva 100% online o por correo y no exige inspección técnica anual obligatoria (RWC/Pink Slip) a diferencia de NSW o VIC. Antes de comprar, realiza siempre el chequeo oficial PPSR ($2 AUD) con el número VIN para verificar que el vehículo no tenga deudas bancarias, multas pendientes o historial de siniestro total (write-off).",
+          "descriptionEn": "When buying or selling a campervan in Australia, Western Australia (WA) registration is the gold standard for backpackers: 100% online/mail renewal without annual mandatory roadworthy inspections (RWC/Pink Slip). Before purchasing, run an official $2 AUD PPSR check using the 17-digit VIN to ensure zero encumbrances, unpaid finance or write-off history.",
+          "tip": "Herramienta en la App: Consulta la Guía de Ventajas de la Rego WA, accede al chequeo PPSR de $2 y genera el Contrato Oficial de Compraventa (Vehicle Bill of Sale) en la pestaña Empleo.",
+          "tipEn": "App Tool: Review the WA Rego Guide, access the $2 PPSR check, and generate the official Vehicle Bill of Sale in the OzAlert Jobs tab.",
+          "officialUrl": "https://www.ppsr.gov.au/",
+          "officialUrlLabel": "PPSR - Registro Oficial de Cargas de Vehículos ($2 AUD)",
+          "officialUrlLabelEn": "PPSR - Official Personal Property Securities Register ($2 AUD)"
+        },
+        {
+          "number": 8,
+          "title": "Conmutador de Fases: Reactivación Automática de Sirenas",
+          "titleEn": "Phase Switcher: Automatic Siren Alarm Reactivation",
+          "description": "Si en algún momento deseas regresar a la Fase 1 (Buscador de Cupos de Visa) para consultar aperturas o ayudar a un amigo, puedes hacerlo en cualquier momento desde Ajustes. En cuanto vuelves a la Fase 1, la app reactiva automáticamente tus suscripciones de notificaciones Push y el canal de sirena sonora de emergencia a máximo volumen para tus pasaportes.",
+          "descriptionEn": "If you ever wish to return to Phase 1 (Visa Quota Radar) to monitor openings or assist a travel partner, you can switch back at any time in Settings. Upon switching to Phase 1, OzAlert automatically reactivates your Push notification topics and emergency siren alarms for your active passports.",
+          "tip": "Herramienta en la App: Conmutador disponible en Ajustes (icono de engranaje) en la esquina superior derecha.",
+          "tipEn": "App Tool: Switch phases anytime in Settings (gear icon in the top right corner).",
+          "officialUrl": "https://immi.homeaffairs.gov.au/what-we-do/whm-program/status-of-country-caps",
+          "officialUrlLabel": "Home Affairs - Estado Oficial de Cupos de Visado",
+          "officialUrlLabelEn": "Home Affairs - Official Visa Quota Status"
         }
       ],
       "comparisons": [

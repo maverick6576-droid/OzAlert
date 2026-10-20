@@ -797,7 +797,8 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                       onTap: () {
                         if (task.id == 'early_tax_return_ato' ||
                             task.id == 'dasp_super_refund_claim' ||
-                            task.id == 'sell_car_rwc_rego') {
+                            task.id == 'sell_car_rwc_rego' ||
+                            task.id == 'medicare_levy_exemption') {
                           TaxAndVehicleHubModal.show(context, isEn: isEn);
                           return;
                         }
@@ -876,6 +877,21 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
     }
     if (taskId == 'sell_car_rwc_rego') {
       return isEn ? 'WA Rego & PPSR Check 🚗' : 'Guía Rego WA & Chequeo PPSR 🚗';
+    }
+    if (taskId == 'medicare_levy_exemption') {
+      return isEn ? 'Medicare MES 2% Calculator 💵' : 'Calculadora Exención MES 2% 💵';
+    }
+    if (taskId == 'sham_contracting_shield') {
+      return isEn ? 'Sham Contracting Test & Claim 🛡️' : 'Test Falso Autónomo & Reclamación 🛡️';
+    }
+    if (taskId == 'condition_8547_work_extension') {
+      return isEn ? 'Condition 8547 Exemption Memo 📄' : 'Memo Exención Condición 8547 📄';
+    }
+    if (taskId == 'rental_bond_receipt') {
+      return isEn ? 'Rental Bond Receipt Generator 🏠' : 'Generador Recibo de Fianza 🏠';
+    }
+    if (taskId == 'verify_88_days_second_visa') {
+      return isEn ? 'Form 1263 & Touch Signature ✍️' : 'Form 1263 & Firma en Pantalla ✍️';
     }
     switch (target) {
       case 'employment':
