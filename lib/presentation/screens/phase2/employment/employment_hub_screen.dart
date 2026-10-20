@@ -2410,7 +2410,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
         ),
         const SizedBox(height: 10),
         DropdownButtonFormField<String>(
-          value: _bondPaymentMethod,
+          initialValue: _bondPaymentMethod,
           decoration: InputDecoration(
             labelText: isEn ? 'Payment Method' : 'Método de Pago',
             filled: true,
@@ -2428,7 +2428,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
         ),
         const SizedBox(height: 10),
         DropdownButtonFormField<String>(
-          value: _bondStateAuthority,
+          initialValue: _bondStateAuthority,
           decoration: InputDecoration(
             labelText: isEn ? 'State Bond Authority' : 'Organismo Estatal de Fianza',
             filled: true,
@@ -2549,7 +2549,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
         _buildTextField(_vehVinController, isEn ? 'VIN / Chassis Number (17 chars)' : 'Número de Bastidor / VIN (17 caracteres)'),
         const SizedBox(height: 10),
         DropdownButtonFormField<String>(
-          value: _vehRegoState,
+          initialValue: _vehRegoState,
           decoration: InputDecoration(
             labelText: isEn ? 'Registration State' : 'Estado de Matriculación (Rego)',
             filled: true,
@@ -2725,7 +2725,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
         _buildTextField(_c8547PassportController, isEn ? 'Your Passport Number' : 'Número de Pasaporte del Trabajador'),
         const SizedBox(height: 10),
         DropdownButtonFormField<String>(
-          value: _c8547Category,
+          initialValue: _c8547Category,
           decoration: InputDecoration(
             labelText: isEn ? 'Exemption Category' : 'Categoría de Exención Aplicable',
             filled: true,
@@ -3178,7 +3178,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
               ),
               const SizedBox(height: 10),
               DropdownButtonFormField<String>(
-                value: _selectedAwardId,
+                initialValue: _selectedAwardId,
                 isExpanded: true,
                 decoration: InputDecoration(
                   filled: true,

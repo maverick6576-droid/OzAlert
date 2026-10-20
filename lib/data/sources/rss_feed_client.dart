@@ -65,7 +65,7 @@ class RssFeedClient {
     }
 
     if (parsedItems.isEmpty) {
-      parsedItems.add(NewsItem(
+      parsedItems.add(const NewsItem(
         title: 'Error de conexión',
         link: url,
         pubDate: 'AHORA',

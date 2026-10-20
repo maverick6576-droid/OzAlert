@@ -277,7 +277,7 @@ class NotificationService {
     final title = '🔔 Payday Super (12%): $employerName';
     final body =
         'Vencimiento legal (${deadlineDate.day}/${deadlineDate.month}): Comprueba en tu app de Super (Hostplus/AustralianSuper) el ingreso de \$${superAmountAud.toStringAsFixed(2)} AUD.';
-    await showLocalNotification(title: title, body: body);
+    await _showLocalNotification(title: title, body: body);
   }
 }
 

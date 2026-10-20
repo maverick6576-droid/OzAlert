@@ -166,5 +166,78 @@ void main() {
       expect(pdfBytes, isNotEmpty);
       expect(pdfBytes.length, greaterThan(1500));
     });
+
+    test('Generate Sham Contracting Claim PDF compiles valid bytes', () async {
+      final pdfBytes = await PdfGeneratorService.generateShamContractingClaimPdf(
+        workerName: 'Alejandro Morales',
+        workerPhone: '+61 412 345 678',
+        workerEmail: 'alejandro.whv@gmail.com',
+        employerBusinessName: 'Aussie Solar Cleaning Pty Ltd',
+        employerAbn: '51 824 753 556',
+        roleTitle: 'Solar Panel Cleaner / Labourer',
+        periodWorked: '01/01/2026 - 28/02/2026',
+        estimatedBackpayAud: 2450.00,
+        estimatedSuperAud: 650.00,
+        shamIndicators: [
+          'Direct supervision and control over working hours and daily tasks',
+          'Company provided all heavy cleaning equipment, van and supplies',
+          'Required to wear uniform with no ability to delegate or subcontract',
+        ],
+      );
+
+      expect(pdfBytes, isNotEmpty);
+      expect(pdfBytes.length, greaterThan(1500));
+    });
+
+    test('Generate Rental Bond Receipt PDF compiles valid bytes', () async {
+      final pdfBytes = await PdfGeneratorService.generateRentalBondReceiptPdf(
+        tenantName: 'Alejandro Morales',
+        landlordName: 'John Smith',
+        propertyAddress: '12/45 Crown Street, Wollongong NSW 2500',
+        bondAmountAud: 1400.0,
+        weeklyRentAud: 350.0,
+        moveInDate: DateTime(2026, 3, 1),
+        paymentMethod: 'Bank Transfer / OSKO',
+        stateRentalAuthority: 'NSW: Rental Bonds Online (RBO)',
+      );
+
+      expect(pdfBytes, isNotEmpty);
+      expect(pdfBytes.length, greaterThan(1500));
+    });
+
+    test('Generate Vehicle Bill of Sale PDF compiles valid bytes', () async {
+      final pdfBytes = await PdfGeneratorService.generateVehicleBillOfSalePdf(
+        buyerName: 'Alejandro Morales',
+        buyerPhone: '+61 412 345 678',
+        buyerLicenseOrPassport: 'ES98765432',
+        sellerName: 'Michael Brown',
+        sellerPhone: '+61 498 765 432',
+        sellerLicenseOrPassport: 'WA87654321',
+        makeModel: 'Toyota Camry Wagon',
+        year: '2008',
+        regoNumber: '1GAB123',
+        regoState: 'WA (Western Australia)',
+        vin: '6T1BF38K90X123456',
+        odometerKm: '245000',
+        salePriceAud: 4500.0,
+        saleDate: DateTime(2026, 3, 15),
+      );
+
+      expect(pdfBytes, isNotEmpty);
+      expect(pdfBytes.length, greaterThan(1500));
+    });
+
+    test('Generate Condition 8547 Exemption Memo PDF compiles valid bytes', () async {
+      final pdfBytes = await PdfGeneratorService.generateCondition8547ExemptionMemoPdf(
+        employeeName: 'Alejandro Morales',
+        passportNumber: 'ES98765432',
+        employerBusinessName: 'Sun Valley Berries Pty Ltd',
+        exemptionCategory: 'agriculture',
+        workDetails: 'Harvesting, packing and maintenance work conducted across horticulture operations in regional Australia under legislative instrument LIN 22/050.',
+      );
+
+      expect(pdfBytes, isNotEmpty);
+      expect(pdfBytes.length, greaterThan(1500));
+    });
   });
 }

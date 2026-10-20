@@ -1737,7 +1737,7 @@ class PdfGeneratorService {
                 children: [
                   pw.Text('OFFICIAL RENTAL BOND & SHARE-HOUSE SECURITY RECEIPT',
                       style: pw.TextStyle(fontSize: 11, fontWeight: pw.FontWeight.bold, color: navyColor)),
-                  pw.Text('Date: ${_formatDate(DateTime.now())}', style: pw.TextStyle(fontSize: 8.5, color: PdfColors.grey700)),
+                  pw.Text('Date: ${_formatDate(DateTime.now())}', style: const pw.TextStyle(fontSize: 8.5, color: PdfColors.grey700)),
                 ],
               ),
               pw.SizedBox(height: 12),
@@ -1784,7 +1784,7 @@ class PdfGeneratorService {
                     children: [
                       pw.Text('RECEIVED BY (LANDLORD / HEAD TENANT):', style: pw.TextStyle(fontSize: 7.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
                       pw.SizedBox(height: 16),
-                      pw.Text(_sanitizeLatin1(landlordName), style: const pw.TextStyle(fontSize: 8.5, fontStyle: pw.FontStyle.italic)),
+                      pw.Text(_sanitizeLatin1(landlordName), style: pw.TextStyle(fontSize: 8.5, fontStyle: pw.FontStyle.italic)),
                     ],
                   ),
                   pw.Column(
@@ -1792,7 +1792,7 @@ class PdfGeneratorService {
                     children: [
                       pw.Text('PAID BY (TENANT):', style: pw.TextStyle(fontSize: 7.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
                       pw.SizedBox(height: 16),
-                      pw.Text(_sanitizeLatin1(tenantName), style: const pw.TextStyle(fontSize: 8.5, fontStyle: pw.FontStyle.italic)),
+                      pw.Text(_sanitizeLatin1(tenantName), style: pw.TextStyle(fontSize: 8.5, fontStyle: pw.FontStyle.italic)),
                     ],
                   ),
                 ],
@@ -1844,7 +1844,7 @@ class PdfGeneratorService {
                 children: [
                   pw.Text('OFFICIAL MOTOR VEHICLE BILL OF SALE & PURCHASE RECEIPT',
                       style: pw.TextStyle(fontSize: 10.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
-                  pw.Text('Date: ${_formatDate(saleDate)}', style: pw.TextStyle(fontSize: 8.5, color: PdfColors.grey700)),
+                  pw.Text('Date: ${_formatDate(saleDate)}', style: const pw.TextStyle(fontSize: 8.5, color: PdfColors.grey700)),
                 ],
               ),
               pw.SizedBox(height: 10),
@@ -1930,7 +1930,7 @@ class PdfGeneratorService {
                       if (sellerSignatureBytes != null)
                         pw.Container(height: 32, width: 90, child: pw.Image(pw.MemoryImage(sellerSignatureBytes), fit: pw.BoxFit.contain))
                       else
-                        pw.Text(_sanitizeLatin1(sellerName), style: const pw.TextStyle(fontSize: 8, fontStyle: pw.FontStyle.italic)),
+                        pw.Text(_sanitizeLatin1(sellerName), style: pw.TextStyle(fontSize: 8, fontStyle: pw.FontStyle.italic)),
                     ],
                   ),
                   pw.Column(
@@ -1941,7 +1941,7 @@ class PdfGeneratorService {
                       if (buyerSignatureBytes != null)
                         pw.Container(height: 32, width: 90, child: pw.Image(pw.MemoryImage(buyerSignatureBytes), fit: pw.BoxFit.contain))
                       else
-                        pw.Text(_sanitizeLatin1(buyerName), style: const pw.TextStyle(fontSize: 8, fontStyle: pw.FontStyle.italic)),
+                        pw.Text(_sanitizeLatin1(buyerName), style: pw.TextStyle(fontSize: 8, fontStyle: pw.FontStyle.italic)),
                     ],
                   ),
                 ],
