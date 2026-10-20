@@ -512,6 +512,9 @@ class PdfGeneratorService {
     String? visaGrantNumber,
     String? contactEmail,
     String? contactPhone,
+    Uint8List? supervisorSignatureBytes,
+    String? supervisorName,
+    String? discrepancyNote,
   }) async {
     final pdf = pw.Document();
     final targetDays = targetYear == 3 ? 179 : 88;
@@ -598,6 +601,32 @@ class PdfGeneratorService {
                 ],
               ),
             ),
+
+            if (discrepancyNote != null && discrepancyNote.isNotEmpty) ...[
+              pw.SizedBox(height: 8),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  color: PdfColor.fromHex('#EFF6FF'),
+                  borderRadius: pw.BorderRadius.circular(6),
+                  border: pw.Border.all(color: PdfColor.fromHex('#BFDBFE'), width: 0.8),
+                ),
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text(
+                      'OFFICIAL AUDIT NOTE: HEADQUARTERS VS. REGIONAL WORKSITE LOCATION (LIN 22/050)',
+                      style: pw.TextStyle(fontSize: 7.5, fontWeight: pw.FontWeight.bold, color: PdfColor.fromHex('#1E40AF')),
+                    ),
+                    pw.SizedBox(height: 2),
+                    pw.Text(
+                      _sanitizeLatin1(discrepancyNote),
+                      style: const pw.TextStyle(fontSize: 7.2, color: PdfColors.grey800, lineSpacing: 1.3),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             pw.SizedBox(height: 14),
 
             // Tabla de Empleos Regionales
@@ -640,6 +669,39 @@ class PdfGeneratorService {
                   ),
                 ],
               ),
+            ),
+            pw.SizedBox(height: 12),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: pw.CrossAxisAlignment.end,
+              children: [
+                pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text('APPLICANT SIGNATURE:', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                    pw.SizedBox(height: 3),
+                    pw.Text(_sanitizeLatin1(applicantName), style: pw.TextStyle(fontSize: 9, fontStyle: pw.FontStyle.italic, color: accentColor)),
+                    pw.Text('Signed electronically via OzAlert Mobile', style: const pw.TextStyle(fontSize: 6.5, color: PdfColors.grey600)),
+                  ],
+                ),
+                if (supervisorSignatureBytes != null)
+                  pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.end,
+                    children: [
+                      pw.Text('SUPERVISOR / EMPLOYER SIGNATURE (FORM 1263):', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                      pw.SizedBox(height: 3),
+                      pw.Container(
+                        height: 35,
+                        width: 110,
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Image(pw.MemoryImage(supervisorSignatureBytes), fit: pw.BoxFit.contain),
+                      ),
+                      if (supervisorName != null && supervisorName.isNotEmpty)
+                        pw.Text('Supervisor: ${_sanitizeLatin1(supervisorName)}', style: const pw.TextStyle(fontSize: 7.5, color: PdfColors.grey800)),
+                      pw.Text('Verified on-site: ${_formatDate(DateTime.now())}', style: const pw.TextStyle(fontSize: 6.5, color: PdfColors.grey600)),
+                    ],
+                  ),
+              ],
             ),
           ];
         },
@@ -1534,8 +1596,429 @@ class PdfGeneratorService {
     return pdf.save();
   }
 
+  /// Genera una Reclamación Formal de Falso Autónomo (Section 15AA / Section 357 Sham Contracting Claim)
+  static Future<Uint8List> generateShamContractingClaimPdf({
+    required String workerName,
+    required String workerPhone,
+    required String workerEmail,
+    required String employerBusinessName,
+    required String employerAbn,
+    required String roleTitle,
+    required String periodWorked,
+    required double estimatedBackpayAud,
+    required double estimatedSuperAud,
+    required List<String> shamIndicators,
+  }) async {
+    final pdf = pw.Document();
+    final navyColor = PdfColor.fromHex('#1E293B');
+    final accentColor = PdfColor.fromHex('#DC2626'); // Rojo advertencia legal
+
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.all(36),
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Container(height: 4, width: double.infinity, color: accentColor),
+              pw.SizedBox(height: 10),
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Text('FORMAL NOTICE: STATUTORY EMPLOYEE RECLASSIFICATION & BACKPAY DEMAND',
+                          style: pw.TextStyle(fontSize: 10.5, fontWeight: pw.FontWeight.bold, color: accentColor)),
+                      pw.Text('Fair Work Act 2009 (Cth) - Section 15AA & Section 357 (Sham Contracting Provisions)',
+                          style: const pw.TextStyle(fontSize: 7.5, color: PdfColors.grey700)),
+                    ],
+                  ),
+                  pw.Text('Date: ${_formatDate(DateTime.now())}', style: pw.TextStyle(fontSize: 8.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                ],
+              ),
+              pw.SizedBox(height: 10),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(color: PdfColor.fromHex('#FEF2F2'), borderRadius: pw.BorderRadius.circular(6), border: pw.Border.all(color: PdfColor.fromHex('#FECACA'))),
+                child: pw.Row(
+                  children: [
+                    pw.Expanded(
+                      child: pw.Text(
+                        'TO: ${_sanitizeLatin1(employerBusinessName)} (ABN: ${_sanitizeLatin1(employerAbn)})\nFROM: ${_sanitizeLatin1(workerName)} | Role: ${_sanitizeLatin1(roleTitle)} | Period: ${_sanitizeLatin1(periodWorked)}',
+                        style: const pw.TextStyle(fontSize: 8, color: PdfColors.grey900, lineSpacing: 1.3),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Text('Dear Management,', style: const pw.TextStyle(fontSize: 8.5)),
+              pw.SizedBox(height: 6),
+              pw.Text(
+                'This correspondence serves as a formal assertion of statutory employment status. While I was instructed to provide an Australian Business Number (ABN), an objective legal assessment under Section 15AA of the Fair Work Act (Whole of Relationship Test) establishes that I performed work as a common-law employee and not an independent contractor.',
+                style: const pw.TextStyle(fontSize: 8, lineSpacing: 1.35, color: PdfColors.grey800),
+              ),
+              pw.SizedBox(height: 6),
+              pw.Text('EVIDENCE OF EMPLOYEE RELATIONSHIP (SECTION 15AA CRITERIA):', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: navyColor)),
+              pw.SizedBox(height: 3),
+              ...shamIndicators.map((ind) => pw.Bullet(text: _sanitizeLatin1(ind), style: const pw.TextStyle(fontSize: 7.5, color: PdfColors.grey800))),
+              pw.SizedBox(height: 8),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(color: PdfColor.fromHex('#F8FAFC'), borderRadius: pw.BorderRadius.circular(6), border: pw.Border.all(color: PdfColor.fromHex('#CBD5E1'))),
+                child: pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text('STATUTORY UNDERPAYMENT ESTIMATE (25% Casual Loading):', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
+                    pw.Text('\$${estimatedBackpayAud.toStringAsFixed(2)} AUD', style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold, color: accentColor)),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 4),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(color: PdfColor.fromHex('#F8FAFC'), borderRadius: pw.BorderRadius.circular(6), border: pw.Border.all(color: PdfColor.fromHex('#CBD5E1'))),
+                child: pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text('STATUTORY SUPERANNUATION GUARANTEE (12% SG):', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
+                    pw.Text('\$${estimatedSuperAud.toStringAsFixed(2)} AUD', style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold, color: accentColor)),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 8),
+              pw.Text(
+                'Pursuant to Section 357 of the Fair Work Act, misrepresenting employment as an independent contractor is subject to civil penalties exceeding \$109,000 per breach. I request that these outstanding entitlements be rectified within 14 business days, failing which this matter will be escalated to the Fair Work Ombudsman and the ATO.',
+                style: const pw.TextStyle(fontSize: 7.5, color: PdfColors.grey800, lineSpacing: 1.35),
+              ),
+              pw.Spacer(),
+              pw.Text('Yours sincerely,', style: const pw.TextStyle(fontSize: 8.5)),
+              pw.SizedBox(height: 3),
+              pw.Text(_sanitizeLatin1(workerName), style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold, color: navyColor)),
+              pw.Text('Contact: ${_sanitizeLatin1(workerPhone)} | ${_sanitizeLatin1(workerEmail)}', style: const pw.TextStyle(fontSize: 7.5, color: PdfColors.grey700)),
+            ],
+          );
+        },
+      ),
+    );
+
+    return pdf.save();
+  }
+
+  /// Genera un Recibo Oficial de Fianza de Alquiler y Subarriendo (Rental Bond & Share-House Shield)
+  static Future<Uint8List> generateRentalBondReceiptPdf({
+    required String tenantName,
+    required String landlordName,
+    required String propertyAddress,
+    required double bondAmountAud,
+    required double weeklyRentAud,
+    required DateTime moveInDate,
+    required String paymentMethod,
+    required String stateRentalAuthority,
+  }) async {
+    final pdf = pw.Document();
+    final navyColor = PdfColor.fromHex('#1E293B');
+    final tealColor = PdfColor.fromHex('#00A896');
+
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.all(36),
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Container(height: 4, width: double.infinity, color: tealColor),
+              pw.SizedBox(height: 10),
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Text('OFFICIAL RENTAL BOND & SHARE-HOUSE SECURITY RECEIPT',
+                      style: pw.TextStyle(fontSize: 11, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                  pw.Text('Date: ${_formatDate(DateTime.now())}', style: pw.TextStyle(fontSize: 8.5, color: PdfColors.grey700)),
+                ],
+              ),
+              pw.SizedBox(height: 12),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(12),
+                decoration: pw.BoxDecoration(color: PdfColor.fromHex('#F8FAFC'), borderRadius: pw.BorderRadius.circular(8), border: pw.Border.all(color: PdfColor.fromHex('#CBD5E1'))),
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text('TENANCY & PAYMENT DETAILS:', style: pw.TextStyle(fontSize: 8.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                    pw.SizedBox(height: 6),
+                    pw.Text('Tenant / Subtenant Name: ${_sanitizeLatin1(tenantName)}', style: const pw.TextStyle(fontSize: 8)),
+                    pw.Text('Landlord / Head Tenant: ${_sanitizeLatin1(landlordName)}', style: const pw.TextStyle(fontSize: 8)),
+                    pw.Text('Rental Premises: ${_sanitizeLatin1(propertyAddress)}', style: const pw.TextStyle(fontSize: 8)),
+                    pw.Text('Security Bond Amount: \$${bondAmountAud.toStringAsFixed(2)} AUD', style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold, color: tealColor)),
+                    pw.Text('Agreed Weekly Rent: \$${weeklyRentAud.toStringAsFixed(2)} AUD / week', style: const pw.TextStyle(fontSize: 8)),
+                    pw.Text('Move-In Date: ${_formatDate(moveInDate)}', style: const pw.TextStyle(fontSize: 8)),
+                    pw.Text('Payment Method / Reference: ${_sanitizeLatin1(paymentMethod)}', style: const pw.TextStyle(fontSize: 8)),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 12),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(10),
+                decoration: pw.BoxDecoration(color: PdfColor.fromHex('#EFF6FF'), borderRadius: pw.BorderRadius.circular(6), border: pw.Border.all(color: PdfColor.fromHex('#BFDBFE'))),
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text('STATUTORY LODGEMENT REQUIREMENT ($stateRentalAuthority):', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: PdfColor.fromHex('#1E40AF'))),
+                    pw.SizedBox(height: 3),
+                    pw.Text(
+                      'Under Australian State Tenancy Law, the person receiving a rental bond must lodge it with the official state bond authority ($stateRentalAuthority) within the statutory timeframe (typically 7-14 days). Holding bond funds in a private account without lodgement is an offence.',
+                      style: const pw.TextStyle(fontSize: 7.5, color: PdfColors.grey800, lineSpacing: 1.3),
+                    ),
+                  ],
+                ),
+              ),
+              pw.Spacer(),
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Text('RECEIVED BY (LANDLORD / HEAD TENANT):', style: pw.TextStyle(fontSize: 7.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                      pw.SizedBox(height: 16),
+                      pw.Text(_sanitizeLatin1(landlordName), style: const pw.TextStyle(fontSize: 8.5, fontStyle: pw.FontStyle.italic)),
+                    ],
+                  ),
+                  pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.end,
+                    children: [
+                      pw.Text('PAID BY (TENANT):', style: pw.TextStyle(fontSize: 7.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                      pw.SizedBox(height: 16),
+                      pw.Text(_sanitizeLatin1(tenantName), style: const pw.TextStyle(fontSize: 8.5, fontStyle: pw.FontStyle.italic)),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
+    );
+
+    return pdf.save();
+  }
+
+  /// Genera un Contrato Legal Oficial de Compraventa de Vehículo (Vehicle Bill of Sale & Receipt)
+  static Future<Uint8List> generateVehicleBillOfSalePdf({
+    required String buyerName,
+    required String buyerPhone,
+    required String buyerLicenseOrPassport,
+    required String sellerName,
+    required String sellerPhone,
+    required String sellerLicenseOrPassport,
+    required String makeModel,
+    required String year,
+    required String regoNumber,
+    required String regoState,
+    required String vin,
+    required String odometerKm,
+    required double salePriceAud,
+    required DateTime saleDate,
+    Uint8List? buyerSignatureBytes,
+    Uint8List? sellerSignatureBytes,
+  }) async {
+    final pdf = pw.Document();
+    final navyColor = PdfColor.fromHex('#1E293B');
+    final accentColor = PdfColor.fromHex('#2563EB');
+
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.all(34),
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Container(height: 4, width: double.infinity, color: accentColor),
+              pw.SizedBox(height: 8),
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Text('OFFICIAL MOTOR VEHICLE BILL OF SALE & PURCHASE RECEIPT',
+                      style: pw.TextStyle(fontSize: 10.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                  pw.Text('Date: ${_formatDate(saleDate)}', style: pw.TextStyle(fontSize: 8.5, color: PdfColors.grey700)),
+                ],
+              ),
+              pw.SizedBox(height: 10),
+              // Detalles del vehículo
+              pw.Container(
+                padding: const pw.EdgeInsets.all(10),
+                decoration: pw.BoxDecoration(color: PdfColor.fromHex('#F8FAFC'), borderRadius: pw.BorderRadius.circular(6), border: pw.Border.all(color: PdfColor.fromHex('#CBD5E1'))),
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text('VEHICLE IDENTIFICATION PARTICULARS:', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                    pw.SizedBox(height: 4),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('Make & Model: ${_sanitizeLatin1(makeModel)} ($year)', style: const pw.TextStyle(fontSize: 8)),
+                        pw.Text('Rego: ${_sanitizeLatin1(regoNumber)} ($regoState)', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
+                      ],
+                    ),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text('VIN / Chassis: ${_sanitizeLatin1(vin)}', style: const pw.TextStyle(fontSize: 8)),
+                        pw.Text('Odometer: ${_sanitizeLatin1(odometerKm)} km', style: const pw.TextStyle(fontSize: 8)),
+                      ],
+                    ),
+                    pw.SizedBox(height: 4),
+                    pw.Text('Agreed Sale Price: \$${salePriceAud.toStringAsFixed(2)} AUD (Paid in full)', style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold, color: accentColor)),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 8),
+              pw.Row(
+                children: [
+                  pw.Expanded(
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.all(8),
+                      decoration: pw.BoxDecoration(color: PdfColor.fromHex('#F8FAFC'), borderRadius: pw.BorderRadius.circular(6), border: pw.Border.all(color: PdfColor.fromHex('#E2E8F0'))),
+                      child: pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Text('SELLER (CURRENT OWNER):', style: pw.TextStyle(fontSize: 7.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                          pw.Text('Name: ${_sanitizeLatin1(sellerName)}', style: const pw.TextStyle(fontSize: 7.5)),
+                          pw.Text('Phone: ${_sanitizeLatin1(sellerPhone)}', style: const pw.TextStyle(fontSize: 7.5)),
+                          pw.Text('ID/Passport: ${_sanitizeLatin1(sellerLicenseOrPassport)}', style: const pw.TextStyle(fontSize: 7.5)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  pw.SizedBox(width: 8),
+                  pw.Expanded(
+                    child: pw.Container(
+                      padding: const pw.EdgeInsets.all(8),
+                      decoration: pw.BoxDecoration(color: PdfColor.fromHex('#F8FAFC'), borderRadius: pw.BorderRadius.circular(6), border: pw.Border.all(color: PdfColor.fromHex('#E2E8F0'))),
+                      child: pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Text('BUYER (NEW OWNER):', style: pw.TextStyle(fontSize: 7.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                          pw.Text('Name: ${_sanitizeLatin1(buyerName)}', style: const pw.TextStyle(fontSize: 7.5)),
+                          pw.Text('Phone: ${_sanitizeLatin1(buyerPhone)}', style: const pw.TextStyle(fontSize: 7.5)),
+                          pw.Text('ID/Passport: ${_sanitizeLatin1(buyerLicenseOrPassport)}', style: const pw.TextStyle(fontSize: 7.5)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              pw.SizedBox(height: 8),
+              pw.Text('SELLER DECLARATION & TITLE GUARANTEE:', style: pw.TextStyle(fontSize: 7.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+              pw.Text(
+                'The Seller hereby warrants that they are the sole lawful owner of the vehicle, that the vehicle is free from all encumbrances, liens, or financial security interests (PPSR Clean Title), and that all registration documentation has been surrendered to the Buyer.',
+                style: const pw.TextStyle(fontSize: 7, color: PdfColors.grey800, lineSpacing: 1.3),
+              ),
+              pw.Spacer(),
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Text('SELLER SIGNATURE:', style: pw.TextStyle(fontSize: 7.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                      pw.SizedBox(height: 2),
+                      if (sellerSignatureBytes != null)
+                        pw.Container(height: 32, width: 90, child: pw.Image(pw.MemoryImage(sellerSignatureBytes), fit: pw.BoxFit.contain))
+                      else
+                        pw.Text(_sanitizeLatin1(sellerName), style: const pw.TextStyle(fontSize: 8, fontStyle: pw.FontStyle.italic)),
+                    ],
+                  ),
+                  pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.end,
+                    children: [
+                      pw.Text('BUYER SIGNATURE:', style: pw.TextStyle(fontSize: 7.5, fontWeight: pw.FontWeight.bold, color: navyColor)),
+                      pw.SizedBox(height: 2),
+                      if (buyerSignatureBytes != null)
+                        pw.Container(height: 32, width: 90, child: pw.Image(pw.MemoryImage(buyerSignatureBytes), fit: pw.BoxFit.contain))
+                      else
+                        pw.Text(_sanitizeLatin1(buyerName), style: const pw.TextStyle(fontSize: 8, fontStyle: pw.FontStyle.italic)),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
+    );
+
+    return pdf.save();
+  }
+
+  /// Genera un Memorando Oficial de Exención de 6 Meses por Empleador (Condition 8547 Exemption Memo)
+  static Future<Uint8List> generateCondition8547ExemptionMemoPdf({
+    required String employeeName,
+    required String passportNumber,
+    required String employerBusinessName,
+    required String exemptionCategory, // 'different_locations', 'agriculture', 'hospitality', 'disaster_recovery'
+    required String workDetails,
+  }) async {
+    final pdf = pw.Document();
+    final navyColor = PdfColor.fromHex('#1E293B');
+    final accentColor = PdfColor.fromHex('#00A896');
+
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.all(36),
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Container(height: 4, width: double.infinity, color: accentColor),
+              pw.SizedBox(height: 10),
+              pw.Text('LEGAL ADVISORY MEMORANDUM: VISA CONDITION 8547 EXEMPTION',
+                  style: pw.TextStyle(fontSize: 11, fontWeight: pw.FontWeight.bold, color: navyColor)),
+              pw.Text('Department of Home Affairs Policy Guidelines - 6-Month Employment Limitation',
+                  style: const pw.TextStyle(fontSize: 8, color: PdfColors.grey700)),
+              pw.SizedBox(height: 12),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(10),
+                decoration: pw.BoxDecoration(color: PdfColor.fromHex('#F8FAFC'), borderRadius: pw.BorderRadius.circular(6), border: pw.Border.all(color: PdfColor.fromHex('#CBD5E1'))),
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text('TO: Human Resources / Management (${_sanitizeLatin1(employerBusinessName)})', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
+                    pw.Text('EMPLOYEE: ${_sanitizeLatin1(employeeName)} | Passport: ${_sanitizeLatin1(passportNumber)}', style: const pw.TextStyle(fontSize: 8)),
+                    pw.Text('EXEMPTION CATEGORY: ${_sanitizeLatin1(exemptionCategory.toUpperCase())}', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: accentColor)),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 12),
+              pw.Text('STATUTORY BASIS FOR CONTINUED EMPLOYMENT BEYOND 6 MONTHS:', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: navyColor)),
+              pw.SizedBox(height: 4),
+              pw.Text(
+                'Pursuant to Department of Home Affairs regulations, Working Holiday Visa (Subclass 417 & 462) holders are permitted to work for the same employer for more than 6 months WITHOUT requiring prior written permission from the Department, provided they satisfy approved operational exemption criteria.',
+                style: const pw.TextStyle(fontSize: 7.8, color: PdfColors.grey800, lineSpacing: 1.35),
+              ),
+              pw.SizedBox(height: 6),
+              pw.Text('APPLICABLE OPERATIONAL EVIDENCE:', style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold, color: navyColor)),
+              pw.SizedBox(height: 3),
+              pw.Text(_sanitizeLatin1(workDetails), style: const pw.TextStyle(fontSize: 7.8, color: PdfColors.grey800, lineSpacing: 1.35)),
+              pw.Spacer(),
+              pw.Text('Verified and generated via OzAlert Australian Immigration Legal Suite', style: const pw.TextStyle(fontSize: 7, color: PdfColors.grey600)),
+            ],
+          );
+        },
+      ),
+    );
+
+    return pdf.save();
+  }
+
   /// Muestra el diálogo nativo para previsualizar o compartir el PDF generado
   static Future<void> shareOrPrintPdf(Uint8List pdfBytes, String fileName) async {
     await Printing.sharePdf(bytes: pdfBytes, filename: fileName);
   }
 }
+

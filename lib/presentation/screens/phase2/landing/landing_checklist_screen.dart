@@ -7,6 +7,7 @@ import '../../../providers/phase2/phase2_providers.dart';
 import '../../../providers/locale_provider.dart';
 import '../../../../domain/models/phase2/landing_task.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/phase2_app_bar.dart';
+import '../../../widgets/phase2/tax_and_vehicle_hub_modal.dart';
 
 class LandingChecklistScreen extends ConsumerStatefulWidget {
   const LandingChecklistScreen({super.key});
@@ -630,6 +631,75 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (stageIndex == 3) ...[
+                    InkWell(
+                      onTap: () => TaxAndVehicleHubModal.show(context, isEn: isEn),
+                      borderRadius: BorderRadius.circular(14),
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              AppColors.primary.withValues(alpha: 0.12),
+                              AppColors.secondary.withValues(alpha: 0.08),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Icon(CupertinoIcons.money_dollar_circle_fill, color: AppColors.primary, size: 20),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    isEn ? 'Tax Return, MES & DASP Hub' : 'Hub Fiscal, MES 2% & Retiro DASP',
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w800,
+                                      color: AppColors.textPrimary,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    isEn
+                                        ? 'Simulate your super refund and tax deductions before leaving.'
+                                        : 'Calcula tu devolución DASP del 12% y exención Medicare antes de salir.',
+                                    style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                isEn ? 'Open' : 'Abrir',
+                                style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                   if (pendingTasks.isNotEmpty) ...[
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -725,6 +795,12 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                     // Botón interactivo Smart Link
                     InkWell(
                       onTap: () {
+                        if (task.id == 'early_tax_return_ato' ||
+                            task.id == 'dasp_super_refund_claim' ||
+                            task.id == 'sell_car_rwc_rego') {
+                          TaxAndVehicleHubModal.show(context, isEn: isEn);
+                          return;
+                        }
                         final target = task.targetGuideCategory!;
                         if (target == 'employment') {
                           ref.read(phase2NavigationProvider.notifier).setTabIndex(2);
@@ -751,7 +827,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                             const SizedBox(width: 6),
                             Flexible(
                               child: Text(
-                                _getTaskActionLabel(task.targetGuideCategory!, isEn),
+                                _getTaskActionLabel(task.targetGuideCategory!, isEn, taskId: task.id),
                                 softWrap: true,
                                 style: const TextStyle(
                                   fontSize: 12,
@@ -791,7 +867,16 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
     );
   }
 
-  String _getTaskActionLabel(String target, bool isEn) {
+  String _getTaskActionLabel(String target, bool isEn, {String? taskId}) {
+    if (taskId == 'early_tax_return_ato') {
+      return isEn ? 'Tax Return & MES 2% Calculator 💵' : 'Simulador Tax Return & MES 2% 💵';
+    }
+    if (taskId == 'dasp_super_refund_claim') {
+      return isEn ? 'DASP Super Refund Simulator 💰' : 'Simulador Devolución DASP (12%) 💰';
+    }
+    if (taskId == 'sell_car_rwc_rego') {
+      return isEn ? 'WA Rego & PPSR Check 🚗' : 'Guía Rego WA & Chequeo PPSR 🚗';
+    }
     switch (target) {
       case 'employment':
         return isEn ? 'Resume & Document Suite 📄' : 'Generador CV & Documentos 📄';

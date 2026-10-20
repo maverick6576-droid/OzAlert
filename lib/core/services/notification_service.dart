@@ -267,4 +267,17 @@ class NotificationService {
       debugPrint('Error sincronizando tópicos: $e');
     }
   }
+
+  /// Programa o emite recordatorio del 12% de Payday Super (7 días hábiles)
+  Future<void> schedulePaydaySuperReminder({
+    required String employerName,
+    required double superAmountAud,
+    required DateTime deadlineDate,
+  }) async {
+    final title = '🔔 Payday Super (12%): $employerName';
+    final body =
+        'Vencimiento legal (${deadlineDate.day}/${deadlineDate.month}): Comprueba en tu app de Super (Hostplus/AustralianSuper) el ingreso de \$${superAmountAud.toStringAsFixed(2)} AUD.';
+    await showLocalNotification(title: title, body: body);
+  }
 }
+

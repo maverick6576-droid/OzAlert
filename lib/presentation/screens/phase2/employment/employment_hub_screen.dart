@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/services/fair_work_service.dart';
 import '../../../../core/services/pdf_generator_service.dart';
+import '../../../../core/services/payslip_parser_service.dart';
+import '../../../../data/repositories/phase2/community_intel_repository.dart';
 import '../../../providers/locale_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../providers/auth_provider.dart';
@@ -11,6 +14,8 @@ import '../../../../domain/models/phase2/resume_data.dart';
 import '../../../../domain/models/phase2/resume_presets.dart';
 import '../../../widgets/phase2/premium_feature_gate.dart';
 import '../../../widgets/phase2/paywall_bottom_sheet.dart';
+import '../../../widgets/phase2/signature_pad_dialog.dart';
+import '../../../widgets/phase2/tax_and_vehicle_hub_modal.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/phase2_app_bar.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/official_sources_modal.dart';
 
@@ -89,11 +94,56 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
     text: 'I would like to sincerely thank you for the wonderful opportunity to work with the team. I have thoroughly enjoyed my time here and greatly appreciate the support and experience gained during my tenure.',
   );
 
-  // Calculadora Fair Work
+  // Calculadora Fair Work & Modern Awards
+  String _selectedAwardId = 'horticulture_lvl1';
   double _hoursWorked = 38.0;
   bool _isCasualContract = true;
   String _dayType = 'weekday';
   final _grossPaidController = TextEditingController(text: '1255.90');
+
+  // Rental Bond Receipt
+  final _bondLandlordController = TextEditingController(text: 'John Henderson');
+  final _bondPropertyController = TextEditingController(text: '42 Albion St, Surry Hills NSW 2010');
+  final _bondAmountController = TextEditingController(text: '1400.00');
+  final _bondWeeklyRentController = TextEditingController(text: '350.00');
+  String _bondPaymentMethod = 'Bank Transfer / OSKO';
+  String _bondStateAuthority = 'RBO (Rental Bonds Online - NSW)';
+  final DateTime _bondMoveInDate = DateTime.now();
+
+  // Vehicle Bill of Sale
+  final _vehMakeModelController = TextEditingController(text: 'Toyota HiAce Commuter Campervan');
+  final _vehYearController = TextEditingController(text: '2011');
+  final _vehRegoNumberController = TextEditingController(text: '1GBA452');
+  String _vehRegoState = 'WA (Western Australia)';
+  final _vehVinController = TextEditingController(text: 'JT732GHA109847261');
+  final _vehOdometerController = TextEditingController(text: '248000');
+  final _vehPriceController = TextEditingController(text: '8500.00');
+  final _vehSellerNameController = TextEditingController(text: 'Lucas Dupont');
+  final _vehSellerPhoneController = TextEditingController(text: '+61 411 222 333');
+  final _vehSellerIdController = TextEditingController(text: 'Passport 21FA98124');
+  final _vehBuyerNameController = TextEditingController();
+  final _vehBuyerPhoneController = TextEditingController();
+  final _vehBuyerIdController = TextEditingController(text: 'Passport / Australian ID');
+  Uint8List? _vehBuyerSignature;
+  Uint8List? _vehSellerSignature;
+
+  // Condition 8547 Exemption Memo
+  final _c8547PassportController = TextEditingController(text: 'PA1234567');
+  final _c8547EmployerController = TextEditingController(text: 'Sunburst Orchards Pty Ltd');
+  String _c8547Category = 'different_locations';
+  final _c8547DetailsController = TextEditingController(
+    text: 'Transferred to Griffith regional packing shed (Location B) after 6 months at Cobram farm (Location A), operating under LIN 22/050 regional site criteria.',
+  );
+
+  // Test Falso Autónomo ABN (Sección 15AA Fair Work Act)
+  final List<bool> _shamAnswers = [false, false, false, false, false];
+
+  // Escáner de Nómina Offline
+  final _payslipRawTextController = TextEditingController();
+  ParsedPayslip? _lastParsedPayslip;
+
+  // Repositorio de Foso de Datos Comunitario (Atomic FieldValue.increment)
+  final _communityIntelRepo = CommunityIntelRepository();
 
   bool _hasSyncedAuthIdentity = false;
 
@@ -193,6 +243,26 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
     _resEmployerController.dispose();
     _resRoleController.dispose();
     _resGratitudeController.dispose();
+    _bondLandlordController.dispose();
+    _bondPropertyController.dispose();
+    _bondAmountController.dispose();
+    _bondWeeklyRentController.dispose();
+    _vehMakeModelController.dispose();
+    _vehYearController.dispose();
+    _vehRegoNumberController.dispose();
+    _vehVinController.dispose();
+    _vehOdometerController.dispose();
+    _vehPriceController.dispose();
+    _vehSellerNameController.dispose();
+    _vehSellerPhoneController.dispose();
+    _vehSellerIdController.dispose();
+    _vehBuyerNameController.dispose();
+    _vehBuyerPhoneController.dispose();
+    _vehBuyerIdController.dispose();
+    _c8547PassportController.dispose();
+    _c8547EmployerController.dispose();
+    _c8547DetailsController.dispose();
+    _payslipRawTextController.dispose();
     super.dispose();
   }
 
@@ -366,6 +436,54 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
               ? 'Standard Australian 14-day notice guaranteeing your final payslip calculation and positive employer reference.'
               : 'Preaviso estándar de 14 días para asegurar el finiquito íntegro y una referencia laboral impecable.',
           tags: [isEn ? '14-Day Notice' : 'Preaviso 14 Días', isEn ? 'Guaranteed Reference' : 'Referencia Segura'],
+          isPro: false,
+          isEn: isEn,
+          isPremium: isPremium,
+        ),
+        const SizedBox(height: 12),
+
+        // 6. Rental Bond Receipt
+        _buildDocumentHubCard(
+          docId: 'rental_bond',
+          icon: CupertinoIcons.doc_checkmark_fill,
+          iconColor: const Color(0xFF0284C7),
+          title: isEn ? 'Rental Bond Receipt & Shield' : 'Recibo Legal de Fianza (Share-House)',
+          subtitle: isEn
+              ? 'Official deposit receipt requiring landlord to lodge funds with state bond authority (RBO/RTBA/RTA).'
+              : 'Recibo vinculante para pagar fianzas en habitaciones y pisos, exigiendo el registro en el organismo estatal.',
+          tags: [isEn ? 'Anti-Scam' : 'Anti-Fraude', isEn ? 'State Lodgement' : 'Fianza Legal', isEn ? 'Official' : 'Oficial'],
+          isPro: false,
+          isEn: isEn,
+          isPremium: isPremium,
+        ),
+        const SizedBox(height: 12),
+
+        // 7. Vehicle Bill of Sale
+        _buildDocumentHubCard(
+          docId: 'vehicle_sale',
+          icon: CupertinoIcons.car_detailed,
+          iconColor: const Color(0xFFF59E0B),
+          title: isEn ? 'Vehicle & Camper Bill of Sale' : 'Contrato Compraventa Coche/Camper',
+          subtitle: isEn
+              ? 'Bilingual contract with PPSR clear title warranty, RWC/roadworthy status and on-screen signatures.'
+              : 'Contrato legal de compraventa con cláusula PPSR sin cargas financieras, estado RWC y firmas en pantalla.',
+          tags: [isEn ? 'PPSR Warranty' : 'Cargas PPSR', isEn ? 'WA/Interstate' : 'Traspaso Seguro', isEn ? 'Signatures' : 'Firmas'],
+          isPro: false,
+          isEn: isEn,
+          isPremium: isPremium,
+        ),
+        const SizedBox(height: 12),
+
+        // 8. Condition 8547 Exemption Memo
+        _buildDocumentHubCard(
+          docId: 'condition_8547',
+          icon: CupertinoIcons.building_2_fill,
+          iconColor: const Color(0xFF8B5CF6),
+          title: isEn ? 'Condition 8547 Exemption Memo' : 'Memorando Exención 6 Meses (LIN 22/050)',
+          subtitle: isEn
+              ? 'Official HR advisory citing Home Affairs policy for working beyond 6 months at different sites or sectors.'
+              : 'Escrito formal para RRHH citando la normativa de Inmigración para trabajar más de 6 meses con la misma empresa.',
+          tags: [isEn ? 'LIN 22/050' : 'Ley LIN 22/050', isEn ? 'Home Affairs' : 'Inmigración', isEn ? 'HR Ready' : 'Para RRHH'],
           isPro: false,
           isEn: isEn,
           isPremium: isPremium,
@@ -582,6 +700,12 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
         return isEn ? 'Fair Work Formal Claim' : 'Reclamación Salarial Fair Work';
       case 'resignation':
         return isEn ? '2-Week Resignation Letter' : 'Carta de Renuncia (2 Semanas)';
+      case 'rental_bond':
+        return isEn ? 'Rental Bond Receipt & Shield' : 'Recibo Legal de Fianza (Share-House)';
+      case 'vehicle_sale':
+        return isEn ? 'Vehicle & Camper Bill of Sale' : 'Contrato Compraventa Coche/Camper';
+      case 'condition_8547':
+        return isEn ? 'Condition 8547 Exemption Memo' : 'Memorando Exención Condición 8547';
       default:
         return isEn ? 'Document Assistant' : 'Asistente de Documentos';
     }
@@ -596,8 +720,14 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
       return _buildRentalBioForm(isEn, isPremium);
     } else if (_selectedDocType == 'fair_work_claim') {
       return _buildFairWorkClaimForm(isEn, isPremium);
-    } else {
+    } else if (_selectedDocType == 'resignation') {
       return _buildResignationForm(isEn, isPremium);
+    } else if (_selectedDocType == 'rental_bond') {
+      return _buildRentalBondForm(isEn, isPremium);
+    } else if (_selectedDocType == 'vehicle_sale') {
+      return _buildVehicleSaleForm(isEn, isPremium);
+    } else {
+      return _buildCondition8547Form(isEn, isPremium);
     }
   }
 
@@ -632,6 +762,24 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
         'icon': CupertinoIcons.hand_raised_fill,
         'label': '🤝 Renuncia 2 Sem.',
         'labelEn': '🤝 2-Wk Resign',
+      },
+      {
+        'id': 'rental_bond',
+        'icon': CupertinoIcons.doc_checkmark_fill,
+        'label': '🔑 Recibo Fianza',
+        'labelEn': '🔑 Bond Receipt',
+      },
+      {
+        'id': 'vehicle_sale',
+        'icon': CupertinoIcons.car_detailed,
+        'label': '🚗 Venta Coche',
+        'labelEn': '🚗 Car Sale',
+      },
+      {
+        'id': 'condition_8547',
+        'icon': CupertinoIcons.building_2_fill,
+        'label': '🏢 Exención 6m',
+        'labelEn': '🏢 6-Mo Exemption',
       },
     ];
 
@@ -2066,20 +2214,920 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
     await PdfGeneratorService.shareOrPrintPdf(pdfBytes, 'Resignation_${cleanName.isNotEmpty ? cleanName : "Notice"}.pdf');
   }
 
+  Future<void> _generateAndShareRentalBond(BuildContext context, bool isEn, bool isPremium) async {
+    if (!isPremium) {
+      showPhase2PaywallBottomSheet(
+        context: context,
+        featureTitle: isEn ? 'Rental Bond Receipt & Shield' : 'Recibo Legal de Fianza y Alquiler',
+        featureBenefit: isEn
+            ? 'Legally binding receipt protecting your deposit under official Australian tenancy laws.'
+            : 'Protege tu dinero con un recibo vinculante que obliga al casero a registrar la fianza en el organismo oficial del estado.',
+      );
+      return;
+    }
+    final pdfBytes = await PdfGeneratorService.generateRentalBondReceiptPdf(
+      tenantName: _nameController.text.trim().isNotEmpty ? _nameController.text.trim() : 'Tenant',
+      landlordName: _bondLandlordController.text.trim(),
+      propertyAddress: _bondPropertyController.text.trim(),
+      bondAmountAud: double.tryParse(_bondAmountController.text.trim()) ?? 0.0,
+      weeklyRentAud: double.tryParse(_bondWeeklyRentController.text.trim()) ?? 0.0,
+      moveInDate: _bondMoveInDate,
+      paymentMethod: _bondPaymentMethod,
+      stateRentalAuthority: _bondStateAuthority,
+    );
+    await PdfGeneratorService.shareOrPrintPdf(pdfBytes, 'Rental_Bond_Receipt.pdf');
+  }
+
+  Future<void> _generateAndShareVehicleSale(BuildContext context, bool isEn, bool isPremium) async {
+    if (!isPremium) {
+      showPhase2PaywallBottomSheet(
+        context: context,
+        featureTitle: isEn ? 'Vehicle & Camper Bill of Sale' : 'Contrato Compraventa Coche/Camper',
+        featureBenefit: isEn
+            ? 'Bilingual contract with PPSR clear title warranty and touch signatures to legally transfer vehicles.'
+            : 'Contrato bilingüe con garantía de título limpio PPSR y firmas táctiles para comprar o vender vehículos con total seguridad.',
+      );
+      return;
+    }
+    final buyerName = _vehBuyerNameController.text.trim().isNotEmpty
+        ? _vehBuyerNameController.text.trim()
+        : _nameController.text.trim();
+    final buyerPhone = _vehBuyerPhoneController.text.trim().isNotEmpty
+        ? _vehBuyerPhoneController.text.trim()
+        : _phoneController.text.trim();
+
+    final pdfBytes = await PdfGeneratorService.generateVehicleBillOfSalePdf(
+      buyerName: buyerName,
+      buyerPhone: buyerPhone,
+      buyerLicenseOrPassport: _vehBuyerIdController.text.trim(),
+      sellerName: _vehSellerNameController.text.trim(),
+      sellerPhone: _vehSellerPhoneController.text.trim(),
+      sellerLicenseOrPassport: _vehSellerIdController.text.trim(),
+      makeModel: _vehMakeModelController.text.trim(),
+      year: _vehYearController.text.trim(),
+      regoNumber: _vehRegoNumberController.text.trim(),
+      regoState: _vehRegoState,
+      vin: _vehVinController.text.trim(),
+      odometerKm: _vehOdometerController.text.trim(),
+      salePriceAud: double.tryParse(_vehPriceController.text.trim()) ?? 0.0,
+      saleDate: DateTime.now(),
+      buyerSignatureBytes: _vehBuyerSignature,
+      sellerSignatureBytes: _vehSellerSignature,
+    );
+    await PdfGeneratorService.shareOrPrintPdf(pdfBytes, 'Vehicle_Bill_of_Sale.pdf');
+  }
+
+  Future<void> _generateAndShareCondition8547(BuildContext context, bool isEn, bool isPremium) async {
+    if (!isPremium) {
+      showPhase2PaywallBottomSheet(
+        context: context,
+        featureTitle: isEn ? 'Condition 8547 Exemption Memo' : 'Memorando Exención Condición 8547',
+        featureBenefit: isEn
+            ? 'Official legal letter invoking Home Affairs policy to work beyond 6 months for the same employer.'
+            : 'Carta formal con directrices de Inmigración para trabajar más de 6 meses con el mismo empleador legalmente.',
+      );
+      return;
+    }
+    final pdfBytes = await PdfGeneratorService.generateCondition8547ExemptionMemoPdf(
+      employeeName: _nameController.text.trim(),
+      passportNumber: _c8547PassportController.text.trim(),
+      employerBusinessName: _c8547EmployerController.text.trim(),
+      exemptionCategory: _c8547Category,
+      workDetails: _c8547DetailsController.text.trim(),
+    );
+    await PdfGeneratorService.shareOrPrintPdf(pdfBytes, 'Condition_8547_Exemption_Memo.pdf');
+  }
+
+  Future<void> _generateAndShareShamContractingClaim(BuildContext context, bool isEn, bool isPremium) async {
+    if (!isPremium) {
+      showPhase2PaywallBottomSheet(
+        context: context,
+        featureTitle: isEn ? 'ABN Sham Contracting Demand' : 'Reclamación Falso Autónomo (ABN)',
+        featureBenefit: isEn
+            ? 'Legally enforce Section 15AA Fair Work Act to claim 25% casual loading and 12% super backpay.'
+            : 'Exige el cobro retroactivo del 25% de casual loading y el 12% de superannuation bajo las secciones 15AA y 357 de Fair Work.',
+      );
+      return;
+    }
+    final indicators = <String>[];
+    if (_shamAnswers[0]) indicators.add('Set working hours controlled entirely by employer with no right of delegation/substitution');
+    if (_shamAnswers[1]) indicators.add('All tools, machinery, and equipment provided directly by employer at zero capital cost to worker');
+    if (_shamAnswers[2]) indicators.add('Remunerated strictly on hourly basis rather than quoting an agreed lump-sum project price');
+    if (_shamAnswers[3]) indicators.add('Direct operational supervision, control, and management by employer representatives');
+    if (_shamAnswers[4]) indicators.add('Worker has no independent commercial enterprise, business profile, or multiple independent clients');
+
+    final grossEstimated = double.tryParse(_fwOwedAmountController.text.trim()) ?? 2500.0;
+    final pdfBytes = await PdfGeneratorService.generateShamContractingClaimPdf(
+      workerName: _nameController.text.trim(),
+      workerPhone: _phoneController.text.trim(),
+      workerEmail: _emailController.text.trim(),
+      employerBusinessName: _fwEmployerNameController.text.trim(),
+      employerAbn: _fwEmployerAbnController.text.trim(),
+      roleTitle: _jobTitleController.text.trim().isNotEmpty ? _jobTitleController.text.trim() : 'Farm / Regional Hand',
+      periodWorked: _fwPeriodController.text.trim(),
+      shamIndicators: indicators.isNotEmpty ? indicators : ['Direct employer control and no genuine independent business under Section 15AA'],
+      estimatedBackpayAud: grossEstimated * 0.25,
+      estimatedSuperAud: grossEstimated * 0.12,
+    );
+    await PdfGeneratorService.shareOrPrintPdf(pdfBytes, 'Sham_Contracting_Section15AA_Claim.pdf');
+  }
+
+  // Formularios de configuración de los nuevos documentos
+  Widget _buildRentalBondForm(bool isEn, bool isPremium) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.cardBorder),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF0284C7).withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      isEn ? '🔑 RENTAL BOND SHIELD' : '🔑 ESCUDO DE FIANZA',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5, color: Color(0xFF0284C7)),
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    isEn ? 'Anti-Scam Proof' : 'Anti-Fraude',
+                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                isEn ? 'Official Rental & Sublet Bond Receipt' : 'Recibo Oficial de Fianza de Habitación / Piso',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                isEn
+                    ? 'Prevents cash bond theft when moving into share-houses. Legally requires landlord or head tenant to lodge funds with the official State Tenancy Board.'
+                    : 'Evita perder tu fianza al alquilar habitaciones en Flatmates o casas compartidas. Obliga legalmente al casero o subarrendador a registrar el dinero en el organismo estatal.',
+                style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        _buildSectionHeader(
+          icon: CupertinoIcons.person_crop_circle_fill,
+          title: isEn ? 'Landlord & Property' : 'Datos del Casero y Vivienda',
+          subtitle: isEn ? 'Address and receiving party' : 'Nombre de quien cobra y dirección exacta',
+        ),
+        const SizedBox(height: 8),
+        _buildTextField(_bondLandlordController, isEn ? 'Landlord / Head-Tenant Full Name' : 'Nombre Completo del Casero o Head-Tenant'),
+        const SizedBox(height: 10),
+        _buildTextField(_bondPropertyController, isEn ? 'Rental Premises Address' : 'Dirección del Inmueble Alquilado'),
+        const SizedBox(height: 16),
+
+        _buildSectionHeader(
+          icon: CupertinoIcons.money_dollar_circle_fill,
+          title: isEn ? 'Financial Terms' : 'Importes y Modalidad de Pago',
+          subtitle: isEn ? 'Bond and weekly rent in AUD' : 'Fianza y renta pactada en dólares australianos',
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(child: _buildTextField(_bondAmountController, isEn ? 'Bond Amount (\$ AUD)' : 'Importe Fianza (\$ AUD)')),
+            const SizedBox(width: 10),
+            Expanded(child: _buildTextField(_bondWeeklyRentController, isEn ? 'Weekly Rent (\$ AUD)' : 'Renta Semanal (\$ AUD)')),
+          ],
+        ),
+        const SizedBox(height: 10),
+        DropdownButtonFormField<String>(
+          value: _bondPaymentMethod,
+          decoration: InputDecoration(
+            labelText: isEn ? 'Payment Method' : 'Método de Pago',
+            filled: true,
+            fillColor: AppColors.surfaceElevated,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+          ),
+          items: const [
+            DropdownMenuItem(value: 'Bank Transfer / OSKO', child: Text('Bank Transfer / OSKO')),
+            DropdownMenuItem(value: 'Cash in Hand (with this receipt)', child: Text('Cash with Signed Receipt')),
+            DropdownMenuItem(value: 'Bank Cheque / Money Order', child: Text('Bank Cheque')),
+          ],
+          onChanged: (val) {
+            if (val != null) _syncState(() => _bondPaymentMethod = val);
+          },
+        ),
+        const SizedBox(height: 10),
+        DropdownButtonFormField<String>(
+          value: _bondStateAuthority,
+          decoration: InputDecoration(
+            labelText: isEn ? 'State Bond Authority' : 'Organismo Estatal de Fianza',
+            filled: true,
+            fillColor: AppColors.surfaceElevated,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+          ),
+          items: const [
+            DropdownMenuItem(value: 'RBO (Rental Bonds Online - NSW)', child: Text('NSW: Rental Bonds Online (RBO)')),
+            DropdownMenuItem(value: 'RTBA (Residential Tenancies Bond Authority - VIC)', child: Text('VIC: RTBA Victoria')),
+            DropdownMenuItem(value: 'RTA (Residential Tenancies Authority - QLD)', child: Text('QLD: RTA Queensland')),
+            DropdownMenuItem(value: 'BondAdministrator (Department of Commerce - WA)', child: Text('WA: BondAdministrator')),
+            DropdownMenuItem(value: 'CBS (Consumer and Business Services - SA)', child: Text('SA: CBS South Australia')),
+          ],
+          onChanged: (val) {
+            if (val != null) _syncState(() => _bondStateAuthority = val);
+          },
+        ),
+        const SizedBox(height: 24),
+
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            icon: const Icon(CupertinoIcons.arrow_down_doc_fill, size: 20),
+            label: Text(
+              isEn ? 'Generate Bond Receipt (PDF)' : 'Generar Recibo de Fianza Oficial (PDF)',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF0284C7),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              elevation: 2,
+            ),
+            onPressed: () => _generateAndShareRentalBond(context, isEn, isPremium),
+          ),
+        ),
+        const SizedBox(height: 40),
+      ],
+    );
+  }
+
+  Widget _buildVehicleSaleForm(bool isEn, bool isPremium) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.cardBorder),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF59E0B).withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      isEn ? '🚗 VEHICLE & CAMPER CONTRACT' : '🚗 CONTRATO COCHE/CAMPER',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5, color: Color(0xFFD97706)),
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    isEn ? 'PPSR Clear Title' : 'Sin Cargas PPSR',
+                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                isEn ? 'Official Vehicle Bill of Sale & Receipt' : 'Contrato Legal de Compraventa de Vehículo',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                isEn
+                    ? 'Protects buyer and seller across WA, NSW, QLD, VIC with statutory title warranty, VIN particulars, and touch signatures.'
+                    : 'Protege a comprador y vendedor al comprar o vender coches o furgonetas en Australia, garantizando la titularidad sin deudas financieras.',
+                style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        _buildSectionHeader(
+          icon: CupertinoIcons.car_detailed,
+          title: isEn ? 'Vehicle Particulars' : 'Datos del Vehículo o Campervan',
+          subtitle: isEn ? 'Make, model, VIN and Rego plate' : 'Marca, modelo, VIN y matrícula',
+        ),
+        const SizedBox(height: 8),
+        _buildTextField(_vehMakeModelController, isEn ? 'Make & Model (e.g. Toyota HiAce)' : 'Marca y Modelo'),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(child: _buildTextField(_vehYearController, isEn ? 'Year' : 'Año')),
+            const SizedBox(width: 10),
+            Expanded(child: _buildTextField(_vehOdometerController, isEn ? 'Odometer (Kms)' : 'Kilómetros')),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(child: _buildTextField(_vehRegoNumberController, isEn ? 'Rego Plate' : 'Matrícula (Placa)')),
+            const SizedBox(width: 10),
+            Expanded(child: _buildTextField(_vehPriceController, isEn ? 'Price (\$ AUD)' : 'Precio (\$ AUD)')),
+          ],
+        ),
+        const SizedBox(height: 10),
+        _buildTextField(_vehVinController, isEn ? 'VIN / Chassis Number (17 chars)' : 'Número de Bastidor / VIN (17 caracteres)'),
+        const SizedBox(height: 10),
+        DropdownButtonFormField<String>(
+          value: _vehRegoState,
+          decoration: InputDecoration(
+            labelText: isEn ? 'Registration State' : 'Estado de Matriculación (Rego)',
+            filled: true,
+            fillColor: AppColors.surfaceElevated,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+          ),
+          items: const [
+            DropdownMenuItem(value: 'WA (Western Australia)', child: Text('WA (Western Australia - Sin RWC)')),
+            DropdownMenuItem(value: 'NSW (New South Wales)', child: Text('NSW (New South Wales)')),
+            DropdownMenuItem(value: 'QLD (Queensland)', child: Text('QLD (Queensland)')),
+            DropdownMenuItem(value: 'VIC (Victoria)', child: Text('VIC (Victoria)')),
+            DropdownMenuItem(value: 'SA (South Australia)', child: Text('SA (South Australia)')),
+          ],
+          onChanged: (val) {
+            if (val != null) _syncState(() => _vehRegoState = val);
+          },
+        ),
+        const SizedBox(height: 16),
+
+        _buildSectionHeader(
+          icon: CupertinoIcons.person_2_fill,
+          title: isEn ? 'Seller & Buyer Particulars' : 'Datos del Vendedor y Comprador',
+          subtitle: isEn ? 'Contacts and touch signatures' : 'Identificación y firmas digitales',
+        ),
+        const SizedBox(height: 8),
+        _buildTextField(_vehSellerNameController, isEn ? 'Seller Name' : 'Nombre del Vendedor'),
+        const SizedBox(height: 8),
+        _buildTextField(_vehSellerPhoneController, isEn ? 'Seller Phone' : 'Teléfono del Vendedor'),
+        const SizedBox(height: 8),
+        _buildTextField(_vehSellerIdController, isEn ? 'Seller License/Passport' : 'Pasaporte / Carnet del Vendedor'),
+        const SizedBox(height: 12),
+
+        // Firmas táctiles
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                icon: Icon(_vehSellerSignature != null ? CupertinoIcons.checkmark_seal_fill : CupertinoIcons.pencil, size: 16),
+                label: Text(
+                  _vehSellerSignature != null ? (isEn ? 'Seller Signed ✓' : 'Firma Vendedor ✓') : (isEn ? 'Sign (Seller)' : 'Firmar Vendedor'),
+                  style: const TextStyle(fontSize: 12),
+                ),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: _vehSellerSignature != null ? const Color(0xFF0D9488) : AppColors.primary,
+                  side: BorderSide(color: _vehSellerSignature != null ? const Color(0xFF0D9488) : AppColors.cardBorder),
+                ),
+                onPressed: () async {
+                  final bytes = await showDialog<Uint8List>(
+                    context: context,
+                    builder: (ctx) => SignaturePadDialog(
+                      title: isEn ? 'Seller Signature' : 'Firma del Vendedor',
+                      subtitle: isEn ? 'Sign with finger on screen' : 'Firma con el dedo para el contrato',
+                    ),
+                  );
+                  if (bytes != null) {
+                    _syncState(() => _vehSellerSignature = bytes);
+                  }
+                },
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: OutlinedButton.icon(
+                icon: Icon(_vehBuyerSignature != null ? CupertinoIcons.checkmark_seal_fill : CupertinoIcons.pencil, size: 16),
+                label: Text(
+                  _vehBuyerSignature != null ? (isEn ? 'Buyer Signed ✓' : 'Firma Comprador ✓') : (isEn ? 'Sign (Buyer)' : 'Firmar Comprador'),
+                  style: const TextStyle(fontSize: 12),
+                ),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: _vehBuyerSignature != null ? const Color(0xFF0D9488) : AppColors.secondary,
+                  side: BorderSide(color: _vehBuyerSignature != null ? const Color(0xFF0D9488) : AppColors.cardBorder),
+                ),
+                onPressed: () async {
+                  final bytes = await showDialog<Uint8List>(
+                    context: context,
+                    builder: (ctx) => SignaturePadDialog(
+                      title: isEn ? 'Buyer Signature' : 'Firma del Comprador',
+                      subtitle: isEn ? 'Sign with finger on screen' : 'Firma con el dedo para el contrato',
+                    ),
+                  );
+                  if (bytes != null) {
+                    _syncState(() => _vehBuyerSignature = bytes);
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            icon: const Icon(CupertinoIcons.arrow_down_doc_fill, size: 20),
+            label: Text(
+              isEn ? 'Generate Bill of Sale (PDF)' : 'Generar Contrato Compraventa (PDF)',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFF59E0B),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              elevation: 2,
+            ),
+            onPressed: () => _generateAndShareVehicleSale(context, isEn, isPremium),
+          ),
+        ),
+        const SizedBox(height: 40),
+      ],
+    );
+  }
+
+  Widget _buildCondition8547Form(bool isEn, bool isPremium) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.cardBorder),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF8B5CF6).withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      isEn ? '🏢 CONDITION 8547 EXEMPTION' : '🏢 EXENCIÓN CONDICIÓN 8547',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5, color: Color(0xFF8B5CF6)),
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    isEn ? 'Home Affairs LIN 22/050' : 'Ley LIN 22/050',
+                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                isEn ? 'Condition 8547 Exemption Memorandum' : 'Memorando Legal de Exención de 6 Meses',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                isEn
+                    ? 'Official HR advisory letter invoking Home Affairs policy to permit employment beyond 6 months with the same business at different sites or sectors without departmental permission.'
+                    : 'Escrito formal para Recursos Humanos que acredita que puedes seguir trabajando más de 6 meses con la misma empresa (en distintas sedes, hostelería o agricultura) sin cometer infracción.',
+                style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        _buildSectionHeader(
+          icon: CupertinoIcons.building_2_fill,
+          title: isEn ? 'Employer & Category' : 'Empresa y Categoría de Exención',
+          subtitle: isEn ? 'Business name and statutory exemption' : 'Nombre de la empresa y causa legal',
+        ),
+        const SizedBox(height: 8),
+        _buildTextField(_c8547EmployerController, isEn ? 'Employer Business Name' : 'Nombre de la Empresa'),
+        const SizedBox(height: 10),
+        _buildTextField(_c8547PassportController, isEn ? 'Your Passport Number' : 'Número de Pasaporte del Trabajador'),
+        const SizedBox(height: 10),
+        DropdownButtonFormField<String>(
+          value: _c8547Category,
+          decoration: InputDecoration(
+            labelText: isEn ? 'Exemption Category' : 'Categoría de Exención Aplicable',
+            filled: true,
+            fillColor: AppColors.surfaceElevated,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+          ),
+          items: [
+            DropdownMenuItem(
+              value: 'different_locations',
+              child: Text(isEn ? 'Different Business Locations (LIN 22/050)' : 'Diferentes Sedes / Ubicaciones (LIN 22/050)'),
+            ),
+            DropdownMenuItem(
+              value: 'agriculture',
+              child: Text(isEn ? 'Plant & Animal Cultivation (Agriculture)' : 'Agricultura, Fruta y Ganadería'),
+            ),
+            DropdownMenuItem(
+              value: 'hospitality',
+              child: Text(isEn ? 'Tourism & Hospitality Nationwide' : 'Hostelería y Turismo'),
+            ),
+            DropdownMenuItem(
+              value: 'disaster_recovery',
+              child: Text(isEn ? 'Natural Disaster Recovery Works' : 'Recuperación de Desastres Naturales'),
+            ),
+          ],
+          onChanged: (val) {
+            if (val != null) _syncState(() => _c8547Category = val);
+          },
+        ),
+        const SizedBox(height: 10),
+        _buildTextField(_c8547DetailsController, isEn ? 'Operational Evidence & Work Particulars' : 'Justificación y Detalles del Trabajo', maxLines: 3),
+        const SizedBox(height: 24),
+
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            icon: const Icon(CupertinoIcons.arrow_down_doc_fill, size: 20),
+            label: Text(
+              isEn ? 'Generate Exemption Memo (PDF)' : 'Generar Memorando Exención (PDF)',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF8B5CF6),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              elevation: 2,
+            ),
+            onPressed: () => _generateAndShareCondition8547(context, isEn, isPremium),
+          ),
+        ),
+        const SizedBox(height: 40),
+      ],
+    );
+  }
+
+  void _showPayslipScannerSheet(BuildContext context, bool isEn) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (modalCtx) {
+        return StatefulBuilder(
+          builder: (ctx, setModalState) {
+            final keyboardInset = MediaQuery.of(ctx).viewInsets.bottom;
+            final parsed = _lastParsedPayslip;
+            return AnimatedPadding(
+              duration: const Duration(milliseconds: 100),
+              curve: Curves.easeOut,
+              padding: EdgeInsets.only(bottom: keyboardInset),
+              child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(ctx).size.height * 0.90,
+                ),
+                decoration: const BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 10, bottom: 6),
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.cardBorder,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                const Icon(CupertinoIcons.doc_text_search, color: AppColors.primary, size: 22),
+                                const SizedBox(width: 8),
+                                Text(
+                                  isEn ? 'Digital Payslip Scanner (Free)' : 'Escáner de Nómina (Gratuito)',
+                                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15, color: AppColors.textPrimary),
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(CupertinoIcons.xmark_circle_fill, color: AppColors.textMuted),
+                            onPressed: () => Navigator.pop(modalCtx),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(height: 1, color: AppColors.cardBorder),
+                    Flexible(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              isEn
+                                  ? 'Paste the text from your payslip PDF, email, Xero, MYOB or KeyPay:'
+                                  : 'Pega el texto de tu nómina en PDF, email, Xero, MYOB o KeyPay:',
+                              style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                            ),
+                            const SizedBox(height: 8),
+                            TextField(
+                              controller: _payslipRawTextController,
+                              maxLines: 5,
+                              style: const TextStyle(fontSize: 12, fontFamily: 'monospace'),
+                              decoration: InputDecoration(
+                                hintText: isEn ? 'Paste payslip text here...' : 'Pega el texto de la nómina aquí...',
+                                filled: true,
+                                fillColor: AppColors.surfaceElevated,
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: OutlinedButton.icon(
+                                    icon: const Icon(CupertinoIcons.doc_on_clipboard, size: 16),
+                                    label: Text(isEn ? 'Paste' : 'Pegar'),
+                                    onPressed: () async {
+                                      final cdata = await Clipboard.getData(Clipboard.kTextPlain);
+                                      if (cdata?.text != null) {
+                                        setModalState(() {
+                                          _payslipRawTextController.text = cdata!.text!;
+                                        });
+                                      }
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: ElevatedButton.icon(
+                                    icon: const Icon(CupertinoIcons.sparkles, size: 16),
+                                    label: Text(isEn ? 'Audit Now' : 'Auditar Nómina'),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.primary,
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                    ),
+                                    onPressed: () {
+                                      final res = PayslipParserService.parse(
+                                        _payslipRawTextController.text,
+                                        selectedAwardId: _selectedAwardId,
+                                        isCasual: _isCasualContract,
+                                      );
+                                      setModalState(() {
+                                        _lastParsedPayslip = res;
+                                      });
+                                      if (res.hoursWorked != null && res.grossPay != null) {
+                                        _communityIntelRepo.logAnonymousShiftMetrics(
+                                          postcode: '',
+                                          abn: res.abn,
+                                          hours: res.hoursWorked!,
+                                          grossPay: res.grossPay!,
+                                          isFairWorkCompliant: !(res.fairWorkAudit?['isUnderpaid'] ?? false),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (parsed != null) ...[
+                              const SizedBox(height: 16),
+                              Container(
+                                padding: const EdgeInsets.all(14),
+                                decoration: BoxDecoration(
+                                  color: AppColors.surfaceElevated,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(color: AppColors.cardBorder),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          isEn ? 'Extracted ABN:' : 'ABN Detectado:',
+                                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                          decoration: BoxDecoration(
+                                            color: parsed.isAbnChecksumValid
+                                                ? const Color(0xFF0D9488).withValues(alpha: 0.15)
+                                                : AppColors.statusClosed.withValues(alpha: 0.15),
+                                            borderRadius: BorderRadius.circular(6),
+                                          ),
+                                          child: Text(
+                                            parsed.abn != null
+                                                ? '${parsed.abn} (${parsed.isAbnChecksumValid ? "Válido" : "Inválido"})'
+                                                : (isEn ? 'Not found' : 'No detectado'),
+                                            style: TextStyle(
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.bold,
+                                              color: parsed.isAbnChecksumValid ? const Color(0xFF0D9488) : AppColors.statusClosed,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(height: 14),
+                                    _buildPayRow(isEn ? 'Gross Pay' : 'Salario Bruto', '\$${parsed.grossPay?.toStringAsFixed(2) ?? "---"} AUD'),
+                                    _buildPayRow(isEn ? 'Hours' : 'Horas', '${parsed.hoursWorked?.toStringAsFixed(1) ?? "---"} h'),
+                                    _buildPayRow(isEn ? 'Effective Rate' : 'Tarifa por Hora', '\$${parsed.hourlyRate?.toStringAsFixed(2) ?? "---"}/h'),
+                                    _buildPayRow(isEn ? 'Tax Withheld' : 'Impuesto Retenido (PAYG)', '\$${parsed.taxWithheld?.toStringAsFixed(2) ?? "---"} AUD'),
+                                    _buildPayRow(isEn ? 'Superannuation' : 'Superannuation (12%)', '\$${parsed.superannuation?.toStringAsFixed(2) ?? "---"} AUD'),
+                                    if (parsed.fairWorkAudit != null) ...[
+                                      const Divider(height: 14),
+                                      if (parsed.fairWorkAudit!['isUnderpaid'] == true) ...[
+                                        Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.statusClosed.withValues(alpha: 0.12),
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              const Icon(CupertinoIcons.exclamationmark_triangle_fill, color: AppColors.statusClosed, size: 20),
+                                              const SizedBox(width: 8),
+                                              Expanded(
+                                                child: Text(
+                                                  isEn
+                                                      ? '⚠️ Underpayment of \$${parsed.fairWorkAudit!["underpaidAmount"].toStringAsFixed(2)} AUD detected!'
+                                                      : '⚠️ ¡Infrasueldo de \$${parsed.fairWorkAudit!["underpaidAmount"].toStringAsFixed(2)} AUD detectado!',
+                                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.statusClosed),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: AppColors.primary,
+                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                            ),
+                                            onPressed: () {
+                                              if (parsed.abn != null) {
+                                                _fwEmployerAbnController.text = parsed.abn!;
+                                              }
+                                              _fwOwedAmountController.text = parsed.fairWorkAudit!["underpaidAmount"].toStringAsFixed(2);
+                                              Navigator.pop(modalCtx);
+                                              _openDocumentAssistantModal(context, 'fair_work_claim', isEn, true);
+                                            },
+                                            child: Text(isEn ? 'Transfer to Formal Wage Claim' : 'Llevar a Reclamación Formal'),
+                                          ),
+                                        ),
+                                      ] else ...[
+                                        Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFF0D9488).withValues(alpha: 0.12),
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              const Icon(CupertinoIcons.checkmark_seal_fill, color: Color(0xFF0D9488), size: 20),
+                                              const SizedBox(width: 8),
+                                              Expanded(
+                                                child: Text(
+                                                  isEn
+                                                      ? '✅ Payslip matches or exceeds legal Fair Work minimum award rates!'
+                                                      : '✅ ¡Tu nómina cumple o supera los mínimos legales de Fair Work!',
+                                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF0D9488)),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ],
+                                    if (parsed.taxAudit != null && parsed.taxAudit!['issueType'] != 'correct_15') ...[
+                                      const SizedBox(height: 8),
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.amber.withValues(alpha: 0.15),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: Text(
+                                          parsed.taxAudit!['warning'] ?? '',
+                                          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.brown),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   // ==========================================
-  // PESTAÑA 2: CALCULADORA FAIR WORK
+  // PESTAÑA 2: CALCULADORA FAIR WORK & SUITE LEGAL
   // ==========================================
   Widget _buildFairWorkTab(bool isEn, bool isPremium) {
+    final award = FairWorkService.getAwardById(_selectedAwardId);
     final payCalc = FairWorkService.calculateShiftPay(
       hours: _hoursWorked,
       isCasual: _isCasualContract,
       dayType: _dayType,
+      awardId: _selectedAwardId,
     );
+
+    final shamYesCount = _shamAnswers.where((a) => a).length;
 
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       children: [
-        // Indicador de Salario Mínimo Nacional Oficial
+        // 1. Banner Destacado Hub Fiscal & Rego
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [const Color(0xFF0D9488).withValues(alpha: 0.16), AppColors.surfaceElevated],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: const Color(0xFF0D9488).withValues(alpha: 0.35)),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0D9488).withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(CupertinoIcons.money_dollar_circle_fill, color: Color(0xFF0D9488), size: 24),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      isEn ? 'Tax Hub: 2% Medicare MES & WA Rego' : 'Hub Fiscal: Exención Medicare 2% & Coche WA',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.textPrimary),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      isEn ? 'Calculate your \$900+ refund & PPSR car checks' : 'Calcula tu devolución de +\$900 AUD y revisión de cargas PPSR',
+                      style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                    ),
+                  ],
+                ),
+              ),
+              TextButton(
+                onPressed: () => TaxAndVehicleHubModal.show(context, isEn: isEn),
+                child: Text(isEn ? 'Open' : 'Abrir', style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF0D9488))),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+
+        // 2. Selector de Convenio Colectivo (Modern Awards 2026)
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -2094,9 +3142,18 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
               Row(
                 children: [
                   Expanded(
-                    child: Text(
-                      isEn ? '2026 Fair Work Minimum Wage' : 'Tarifas Mínimas Fair Work 2026',
-                      style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.textPrimary),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          isEn ? 'Modern Award 2026 (Fair Work)' : 'Convenio Colectivo Oficial 2026',
+                          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.textPrimary),
+                        ),
+                        Text(
+                          'Award Code: ${award.code}',
+                          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.secondary),
+                        ),
+                      ],
                     ),
                   ),
                   InkWell(
@@ -2119,6 +3176,46 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                   ),
                 ],
               ),
+              const SizedBox(height: 10),
+              DropdownButtonFormField<String>(
+                value: _selectedAwardId,
+                isExpanded: true,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColors.surfaceElevated,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+                ),
+                items: FairWorkService.officialAwards.map((aw) {
+                  return DropdownMenuItem(
+                    value: aw.id,
+                    child: Text(aw.name, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold)),
+                  );
+                }).toList(),
+                onChanged: (val) {
+                  if (val != null) setState(() => _selectedAwardId = val);
+                },
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceElevated,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(CupertinoIcons.lightbulb_fill, size: 16, color: AppColors.primary),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        award.specialRuleNote,
+                        style: const TextStyle(fontSize: 11, color: AppColors.textSecondary, height: 1.35),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               const SizedBox(height: 12),
               Row(
                 children: [
@@ -2133,13 +3230,13 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            isEn ? 'Full-Time Base' : 'Salario Base FT',
-                            style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary, fontWeight: FontWeight.w600),
+                            isEn ? 'Base Rate (FT/PT)' : 'Salario Base FT',
+                            style: const TextStyle(fontSize: 11, color: AppColors.textSecondary, fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(height: 2),
-                          const Text(
-                            '\$26.44 / hr',
-                            style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: AppColors.textPrimary),
+                          Text(
+                            '\$${award.baseHourlyRate.toStringAsFixed(2)} / hr',
+                            style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15, color: AppColors.textPrimary),
                           ),
                         ],
                       ),
@@ -2154,17 +3251,17 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
                       ),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Casual (+25%)',
-                            style: TextStyle(fontSize: 11.5, color: AppColors.primary, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 11, color: AppColors.primary, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 2),
+                          const SizedBox(height: 2),
                           Text(
-                            '\$33.05 / hr',
-                            style: TextStyle(fontWeight: FontWeight.w900, fontSize: 17, color: AppColors.primary),
+                            '\$${award.casualHourlyRate.toStringAsFixed(2)} / hr',
+                            style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: AppColors.primary),
                           ),
                         ],
                       ),
@@ -2175,9 +3272,58 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
             ],
           ),
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: 16),
 
-        // Tipo de Contrato (Segmented Selector nativo para evitar recortes)
+        // 3. Botón Destacado: Escáner de Nóminas Digital (100% Gratis y Offline)
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: AppColors.cardBorder),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(CupertinoIcons.doc_text_search, color: AppColors.primary, size: 22),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      isEn ? 'Free Payslip Scanner' : 'Escáner Digital de Nómina',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: AppColors.textPrimary),
+                    ),
+                    Text(
+                      isEn ? 'Audit ABN, 15% tax & 12% super offline' : 'Audita tu ABN, 15% IRPF y 12% super gratis',
+                      style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
+                    ),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                onPressed: () => _showPayslipScannerSheet(context, isEn),
+                child: Text(isEn ? 'Scan' : 'Escanear', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        // 4. Tipo de Contrato
         Text(
           isEn ? 'Contract Type' : 'Tipo de Contrato',
           style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: AppColors.textPrimary),
@@ -2255,7 +3401,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
             _buildShiftChip('weekday', isEn ? 'Weekday (Normal)' : 'Entre Semana (100%)'),
             _buildShiftChip('saturday', isEn ? 'Saturday (150%)' : 'Sábado (150%)'),
             _buildShiftChip('sunday', isEn ? 'Sunday (175%)' : 'Domingo (175%)'),
-            _buildShiftChip('public_holiday', isEn ? 'Public Holiday (250%)' : 'Festivo (250%)'),
+            _buildShiftChip('public_holiday', isEn ? 'Public Holiday (225%)' : 'Festivo (225%)'),
           ],
         ),
         const SizedBox(height: 18),
@@ -2313,7 +3459,162 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
         ),
         const SizedBox(height: 18),
 
-        // Auditor de Nómina (Paywall Gate)
+        // 5. ABN Sham Contracting Shield (Test de Falso Autónomo - Sección 15AA)
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: shamYesCount >= 3 ? AppColors.statusClosed : AppColors.cardBorder,
+              width: shamYesCount >= 3 ? 1.5 : 1.0,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: (shamYesCount >= 3 ? AppColors.statusClosed : AppColors.secondary).withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      CupertinoIcons.shield_lefthalf_fill,
+                      color: shamYesCount >= 3 ? AppColors.statusClosed : AppColors.secondary,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          isEn ? 'ABN Sham Contracting Shield' : 'Test Falso Autónomo (Ley 15AA)',
+                          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: AppColors.textPrimary),
+                        ),
+                        Text(
+                          isEn ? 'Fair Work Act 2026 - Whole of Relationship Test' : 'Detecta si te obligaron a abrir ABN ilegalmente',
+                          style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                isEn
+                    ? 'Answer these 5 questions based on your day-to-day work:'
+                    : 'Responde a estas 5 preguntas sobre tu día a día en el puesto:',
+                style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
+              ),
+              const SizedBox(height: 8),
+              ...[
+                isEn ? '1. Boss decides your exact hours with no right of substitution?' : '1. ¿Tu jefe fija tu horario exacto y no puedes enviar a otro en tu lugar?',
+                isEn ? '2. Company provides all tools, equipment, or machinery?' : '2. ¿La empresa te proporciona todas las herramientas y maquinaria?',
+                isEn ? '3. Paid on an hourly rate instead of fixed quoted job price?' : '3. ¿Cobras una tarifa por hora en vez de un presupuesto por obra acabada?',
+                isEn ? '4. Directly supervised and managed by employer staff?' : '4. ¿Tu trabajo es supervisado y dirigido directamente por la empresa?',
+                isEn ? '5. You have no independent business or other direct clients?' : '5. ¿No tienes un negocio propio real con otros clientes en Australia?',
+              ].asMap().entries.map((entry) {
+                final idx = entry.key;
+                final qText = entry.value;
+                final isChecked = _shamAnswers[idx];
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: InkWell(
+                    onTap: () => setState(() => _shamAnswers[idx] = !_shamAnswers[idx]),
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: isChecked ? AppColors.statusClosed.withValues(alpha: 0.08) : AppColors.surfaceElevated,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: isChecked ? AppColors.statusClosed.withValues(alpha: 0.3) : AppColors.cardBorder),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            isChecked ? CupertinoIcons.check_mark_circled_solid : CupertinoIcons.circle,
+                            size: 18,
+                            color: isChecked ? AppColors.statusClosed : AppColors.textMuted,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              qText,
+                              style: TextStyle(
+                                fontSize: 11.5,
+                                fontWeight: isChecked ? FontWeight.bold : FontWeight.normal,
+                                color: isChecked ? AppColors.textPrimary : AppColors.textSecondary,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }),
+              const SizedBox(height: 10),
+              if (shamYesCount >= 3) ...[
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.statusClosed.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        isEn
+                            ? '⚠️ HIGH RISK: ILLEGAL SHAM CONTRACTING DETECTED'
+                            : '⚠️ RIESGO ALTO: FALSO AUTÓNOMO DETECTADO',
+                        style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12, color: AppColors.statusClosed),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        isEn
+                            ? 'Under Section 15AA, you are legally an employee! You are entitled to 25% casual loading and 12% superannuation backpay.'
+                            : 'Bajo la Sección 15AA de Fair Work, ¡eres legalmente un empleado! Tienes derecho a reclamar el +25% de casual loading y el 12% de superannuation impagados.',
+                        style: const TextStyle(fontSize: 11, color: AppColors.textPrimary, height: 1.35),
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          icon: const Icon(CupertinoIcons.arrow_down_doc_fill, size: 16),
+                          label: Text(
+                            isEn ? 'Generate Section 15AA Claim (PDF)' : 'Generar Reclamación Falso Autónomo (PDF)',
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.statusClosed,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          ),
+                          onPressed: () => _generateAndShareShamContractingClaim(context, isEn, isPremium),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ] else ...[
+                Text(
+                  isEn ? '✅ Low risk of sham contracting based on current answers.' : '✅ Riesgo bajo de falso autónomo según las respuestas seleccionadas.',
+                  style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Color(0xFF0D9488)),
+                ),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(height: 18),
+
+        // 6. Auditor Manual Rápido (Gross Pay)
         PremiumFeatureGate(
           featureTitle: isEn ? 'Payslip Underpayment Auditor' : 'Auditor de Nóminas Anti-Fraude',
           featureBenefit: isEn
@@ -2330,8 +3631,8 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  isEn ? 'Payslip Checker: Enter your gross pay' : 'Comprobar Nómina',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
+                  isEn ? 'Payslip Checker: Enter your gross pay' : 'Comprobar Salario Bruto Percibido',
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5, color: AppColors.textPrimary),
                 ),
                 const SizedBox(height: 8),
                 _buildTextField(_grossPaidController, isEn ? 'Gross Paid in AUD' : 'Importe bruto pagado en AUD'),
