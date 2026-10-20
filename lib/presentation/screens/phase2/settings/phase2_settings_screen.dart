@@ -10,6 +10,8 @@ import '../../../providers/locale_provider.dart';
 import '../../../providers/news_notifications_provider.dart';
 import '../../../providers/user_provider.dart';
 import '../../../widgets/phase2/visa_dates_survey_dialog.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/services/notification_service.dart';
 
 class Phase2SettingsScreen extends ConsumerWidget {
   const Phase2SettingsScreen({super.key});
@@ -330,6 +332,15 @@ class Phase2SettingsScreen extends ConsumerWidget {
               if (context.mounted) Navigator.of(context).maybePop();
               if (profile != null) {
                 await ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(currentPhase: 1));
+                if (profile.isPremium) {
+                  final countryCodes = profile.passports.map((pName) {
+                    return AppConstants.supportedCountries.firstWhere(
+                      (c) => c.name == pName,
+                      orElse: () => AppConstants.supportedCountries.first,
+                    ).code;
+                  }).toList();
+                  NotificationService().syncPassportSubscriptions(countryCodes);
+                }
               }
             },
             child: Text(
