@@ -82,7 +82,7 @@ class AbrService {
     }
 
     // 3. Determinar GUID de autenticación (gratuito)
-    final guid = (customGuid != null && customGuid.trim().isNotEmpty)
+    final guid = (customGuid != null)
         ? customGuid.trim()
         : AppConstants.abrAuthenticationGuid.trim();
 

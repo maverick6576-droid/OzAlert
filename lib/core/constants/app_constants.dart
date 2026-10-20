@@ -229,5 +229,5 @@ class AppConstants {
 
   // Australian Business Register (ABR) ABN Lookup Web Services GUID
   // Se obtiene de forma 100% gratuita en https://abr.business.gov.au/Tools/WebServicesAgreement
-  static const String abrAuthenticationGuid = '';
+  static const String abrAuthenticationGuid = 'b12dc979-5065-4179-b017-2c77e3db6b96';
 }
