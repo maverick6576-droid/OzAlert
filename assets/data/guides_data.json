@@ -1777,5 +1777,105 @@
         }
       ]
     }
+  },
+  "visa_renewal": {
+    "steps": [
+      {
+        "number": 1,
+        "title": "Cálculo exacto de los 88 días para el 2º año",
+        "titleEn": "Legal calculation of the 88 days (2nd Year)",
+        "description": "Para la 2ª visa necesitas 88 días naturales de trabajo remunerado a jornada completa (normalmente 35-38 horas semanales o el turno estándar de la industria). Si trabajas 5 días completos de lunes a viernes, puedes computar los 7 días de la semana (incluyendo el fin de semana de descanso). Si trabajas a tiempo parcial o días sueltos casuales, solo cuentas los días individuales efectivamente trabajados (mínimo ~7 horas de turno).",
+        "descriptionEn": "You need 88 calendar days of full-time specified work (usually 35-38 hrs/week or industry norm). A full 5-day week counts as 7 days including rest days. For part-time/casual irregular shifts, count only days actually worked (minimum ~7 hours per shift).",
+        "tip": "Herramienta en la App: Usa el Contador de 88 Días de OzAlert para registrar cada turno y verificar que el código postal sea regional bajo LIN 22/050.",
+        "tipEn": "App Tool: Use OzAlert's 88-Day Tracker to log each shift and verify that your workplace postcode is eligible under LIN 22/050.",
+        "officialUrl": "https://www.legislation.gov.au/Details/F2022L00445",
+        "officialUrlLabel": "Federal Register of Legislation - LIN 22/050 Oficial",
+        "officialUrlLabelEn": "Federal Register of Legislation - Official LIN 22/050"
+      },
+      {
+        "number": 2,
+        "title": "El expediente de pruebas que exige Inmigración para el 2º año",
+        "titleEn": "Evidence dossier required by Home Affairs for 2nd Year",
+        "description": "El Departamento de Inmigración audita cerca del 23% de las solicitudes. Para superar la revisión sin problemas necesitas: 1) Formulario 1263 con ABNs válidos y fechas exactas; 2) Todas las nóminas (payslips) oficiales con retención de impuestos (tax 15%) y superannuation (12%); 3) Extractos bancarios oficiales (Bank Statements) que demuestren que cada nómina entró en tu cuenta por transferencia (los pagos en efectivo 'cash' son motivo de denegación fulminante bajo PIC 4020); 4) Contratos de trabajo y recibos de alojamiento en la zona regional.",
+        "descriptionEn": "Immigration audits ~23% of applications. You must provide: 1) Form 1263 with valid employer ABNs; 2) Official payslips with tax withholding (15%) and 12% superannuation; 3) Bank statements proving salary deposits (cash-in-hand is an instant rejection trigger under PIC 4020); 4) Employment contracts and regional accommodation receipts.",
+        "tip": "Herramienta en la App: Pide a tu jefe que firme con el dedo en la pantalla de OzAlert y descarga el Dossier Form 1263 consolidado listo para ImmiAccount.",
+        "tipEn": "App Tool: Have your supervisor sign with their finger on OzAlert's screen and export the consolidated Form 1263 dossier for ImmiAccount.",
+        "officialUrl": "https://immi.homeaffairs.gov.au/form-listing/forms/1263.pdf",
+        "officialUrlLabel": "Home Affairs - Formulario 1263 Oficial de Trabajo Regional",
+        "officialUrlLabelEn": "Home Affairs - Official Form 1263 Specified Work"
+      },
+      {
+        "number": 3,
+        "title": "Cuándo y cómo solicitar la 2ª Visa en ImmiAccount (Onshore/Offshore)",
+        "titleEn": "When and how to lodge your 2nd Visa in ImmiAccount (Onshore/Offshore)",
+        "description": "Si estás en Australia (Onshore), debes solicitarla antes de que expire tu 1er año. Al enviar la solicitud se te concederá automáticamente una Bridging Visa A (BVA), que te permite seguir viviendo y trabajando legalmente a tiempo completo cuando expire tu primera visa hasta que aprueben la segunda. Si necesitas salir de Australia mientras esperas la resolución, debes solicitar una Bridging Visa B (BVB) antes de volar.",
+        "descriptionEn": "If onshore in Australia, lodge before your 1st year visa expires. You will automatically receive a Bridging Visa A (BVA) granting full legal work rights while your extension is processed. If traveling overseas while waiting, apply for Bridging Visa B (BVB) before boarding.",
+        "tip": "Consejo: La tasa oficial del gobierno es de $650 AUD no reembolsables. Verifica que los códigos postales del empleador coincidan con LIN 22/050.",
+        "tipEn": "Tip: The non-refundable government fee is $650 AUD. Triple check that workplace postcodes match LIN 22/050.",
+        "officialUrl": "https://online.immi.gov.au/lusc/login",
+        "officialUrlLabel": "ImmiAccount - Portal Oficial de Solicitud del Gobierno",
+        "officialUrlLabelEn": "ImmiAccount - Official Visa Lodgement Portal"
+      },
+      {
+        "number": 4,
+        "title": "Tercera Visa: Requisito de 6 meses (179 días naturales) en tu 2º año",
+        "titleEn": "3rd Year Visa: 6 Months (179 Calendar Days) Requirement in Year 2",
+        "description": "Para conseguir el 3er año de visado, debes completar 6 meses (estrictamente 179 días naturales) de trabajo regional específico realizado EXCLUSIVAMENTE durante la vigencia de tu segundo año (o durante la Bridging Visa A asociada a la espera del 2º visado). El trabajo realizado durante el 1er año caduca y no puede reutilizarse. Regla de equivalencia: trabajar 5 días a jornada completa (35-38h/semana) computa como 7 días naturales. Si trabajas turnos casuales o por horas, debes acumular 179 turnos efectivos remunerados con un mínimo de ~7h por turno.",
+        "descriptionEn": "To qualify for the 3rd year visa, you must complete 6 months (strictly 179 calendar days) of regional work completed SOLELY during your 2nd year visa (or its BVA). 1st year work expires and cannot be recycled. Equivalency rule: working 5 full days/week (35-38 hrs) counts as 7 calendar days. Casual or hourly work requires accumulating 179 paid shifts meeting the standard daily benchmark (~7h).",
+        "tip": "Consejo Estratégico: Empieza el trabajo regional a más tardar en el mes 4 o 5 de tu 2º año. Si empiezas en el mes 8 o 9, cualquier temporada corta, lluvias torrenciales o rescisión de contrato te dejará sin días suficientes antes de que venza tu visa.",
+        "tipEn": "Strategic Tip: Start regional work no later than month 4 or 5 of your second year. Starting in month 8 or 9 leaves zero buffer against weather cuts, wet season pauses, or employer disputes.",
+        "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462/specified-462-work",
+        "officialUrlLabel": "Home Affairs - Requisitos Oficiales de Trabajo Específico para 3er Año",
+        "officialUrlLabelEn": "Home Affairs - Official 3rd Year Specified Work Requirements"
+      },
+      {
+        "number": 5,
+        "title": "Sectores y Códigos Postales para la 3ª Visa (Subclase 417 vs 462)",
+        "titleEn": "Eligible Industries & Postcodes for 3rd Year (Subclass 417 vs 462)",
+        "description": "Existen diferencias críticas entre subclases: 1) Agricultura y Ganadería: Habilitada para ambas subclases en todos los códigos postales regionales de Australia (excepto capitales metropolitanas). 2) Construcción e Ingeniería: Habilitada para ambas subclases en zonas regionales. 3) Minería: EXCLUSIVA para la Subclase 417 (los titulares de la 462 NO pueden computar minería para su extensión). 4) Hostelería y Turismo: EXCLUSIVA para la Subclase 462 en el NORTE de Australia y zonas remotas especificadas (Trópico de Capricornio, NT, Norte de QLD y Kimberley en WA). Para la 417, la hostelería ordinaria no computa.",
+        "descriptionEn": "Crucial subclass differences exist: 1) Plant & Animal Cultivation: Eligible for both subclasses across designated regional postcodes nationwide. 2) Construction: Eligible for both subclasses in regional zones. 3) Mining: EXCLUSIVE to Subclass 417 (Subclass 462 holders CANNOT claim mining work). 4) Tourism & Hospitality: EXCLUSIVE to Subclass 462 in NORTHERN and remote Australia (Northern Territory, Far North Queensland, Kimberley in WA). Hospitality does NOT count for 417.",
+        "tip": "Herramienta en la App: Usa el Mapa Interactivo de OzAlert y la consulta en vivo de ABN con el ABR oficial para comprobar que la razón social del empleador y la dirección coinciden antes de aceptar el trabajo.",
+        "tipEn": "App Tool: Use OzAlert's Interactive Map and live ABN verification via the official ABR to ensure the employer entity and physical address qualify before taking the job.",
+        "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462/specified-462-work",
+        "officialUrlLabel": "Home Affairs - Tablas de Códigos Postales e Industrias LIN 22/050",
+        "officialUrlLabelEn": "Home Affairs - LIN 22/050 Postcode and Industry Schedule"
+      },
+      {
+        "number": 6,
+        "title": "El Dossier Probatorio de los 179 Días (Blindaje Anti-Auditoría)",
+        "titleEn": "The 179-Day Evidence Dossier (Audit-Proofing)",
+        "description": "Inmigración somete a verificación exhaustiva las solicitudes de 3er año. Para que te aprueben sin requerimientos s56 debes adjuntar: 1) Formulario 1263 completado y firmado por cada empleador; 2) Al menos 26 nóminas semanales consecutivas o acumuladas con ABN, desglose de horas, salario legal por encima de convenio (mínimo $32.18 casual Nivel 1 o $33.05 casual Nivel 2 en Horticultura), 15% de IRPF y 12% de Superannuation; 3) Extractos bancarios oficiales donde cada ingreso coincida exactamente con el neto de cada nómina (¡cero pagos en mano!); 4) Resumen anual de ingresos de la ATO (Income Statement descargado de myGov); 5) Recibos de alquiler, compras locales o billetes de transporte que acrediten tu residencia física en el código postal regional.",
+        "descriptionEn": "Home Affairs subjects 3rd year applications to rigorous verification. For approval without s56 delays, attach: 1) Form 1263 signed by every employer; 2) At least 26 weekly payslips showing official ABN, hourly breakdown, legal award rates ($32.18 Level 1 or $33.05 Level 2 casual in Horticulture), 15% PAYG tax and 12% super; 3) Bank statements with direct wage deposits matching payslips to the cent (zero cash-in-hand); 4) ATO Income Statement from myGov; 5) Regional rent receipts, local grocery bills or transport tickets demonstrating physical residence.",
+        "tip": "Herramienta en la App: Cambia el objetivo a '3er Año (179 Días)' en el Contador de OzAlert, exporta el Dossier PDF blindado y haz que tus supervisores firmen directamente con el dedo en pantalla.",
+        "tipEn": "App Tool: Switch target to '3rd Year (179 Days)' in OzAlert's Tracker, export the consolidated proof dossier, and have supervisors sign on screen with their finger.",
+        "officialUrl": "https://immi.homeaffairs.gov.au/form-listing/forms/1263.pdf",
+        "officialUrlLabel": "Home Affairs - Formulario 1263 Oficial de Especificación Laboral",
+        "officialUrlLabelEn": "Home Affairs - Official Form 1263 Specified Work Form"
+      },
+      {
+        "number": 7,
+        "title": "Presentación en ImmiAccount de la 3ª Visa y Bridging Visa A",
+        "titleEn": "Lodging 3rd Year WHV on ImmiAccount & Bridging Visa A",
+        "description": "Debes presentar la solicitud a través de ImmiAccount antes de la fecha de caducidad de tu segundo visado. Si solicitas Onshore (dentro de Australia), se te concede de inmediato una Bridging Visa A (BVA) con derechos de trabajo a tiempo completo para que puedas seguir trabajando legalmente si tu segundo año expira mientras tramitan el tercero. La tasa oficial es de $650 AUD.",
+        "descriptionEn": "You must lodge via ImmiAccount prior to your second visa expiry date. When lodging onshore, you are instantly granted Bridging Visa A (BVA) with unlimited work rights, allowing seamless legal employment even if your second visa expires while awaiting final decision. Official fee is $650 AUD.",
+        "tip": "Consejo: Si planeas viajar al extranjero mientras esperas la concesión de tu 3ª visa, debes solicitar y obtener una Bridging Visa B (BVB) antes de salir de Australia para no perder tus derechos de reentrada.",
+        "tipEn": "Tip: If planning to travel abroad while awaiting your 3rd year approval, apply for and secure a Bridging Visa B (BVB) before leaving Australia to safeguard re-entry rights.",
+        "officialUrl": "https://online.immi.gov.au/lusc/login",
+        "officialUrlLabel": "ImmiAccount - Portal Oficial de Presentación Telemática",
+        "officialUrlLabelEn": "ImmiAccount - Official Online Lodgement Portal"
+      },
+      {
+        "number": 8,
+        "title": "Cómo superar una auditoría s56 (Request for Information)",
+        "titleEn": "Handling a Section 56 Request for Information (RFI)",
+        "description": "Si recibes una notificación s56 de Inmigración, tendrás un plazo estricto de 28 días naturales para aportar pruebas adicionales. Los oficiales cruzan datos con la ATO y el registro de la empresa (ASIC/ABR). Nunca inventes un ABN ni recurras a intermediarios fraudulentos; las penas incluyen la prohibición de entrada a Australia por 3 años (Public Interest Criterion 4020). Si has llevado el registro en OzAlert con nóminas y extractos bancarios coincidentes, tu expediente está 100% blindado.",
+        "descriptionEn": "If you receive an s56 RFI notice, you have exactly 28 days to provide extra proof. Immigration officers cross-check ATO and ASIC/ABR databases. Never fabricate ABNs or work records; penalties include a 3-year Australia entry ban under PIC 4020. If you logged your shifts in OzAlert with matched payslips and bank statements, your case is fully audit-proof.",
+        "tip": "Consejo: Ante cualquier requerimiento complejo o duda sobre tu empleador, consulta a un Agente Migratorio Registrado (MARA) colegiado.",
+        "tipEn": "Tip: For complex inquiries or employer disputes, always consult an official Registered MARA Migration Agent.",
+        "officialUrl": "https://portal.mara.gov.au/",
+        "officialUrlLabel": "OMARA - Registro Oficial de Agentes de Migración Registrados",
+        "officialUrlLabelEn": "OMARA - Official Register of Migration Agents"
+      }
+    ]
   }
 }

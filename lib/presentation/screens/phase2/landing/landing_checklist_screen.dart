@@ -890,8 +890,14 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
     if (taskId == 'rental_bond_receipt') {
       return isEn ? 'Rental Bond Receipt Generator 🏠' : 'Generador Recibo de Fianza 🏠';
     }
-    if (taskId == 'verify_88_days_second_visa') {
+    if (taskId == 'verify_88_days_second_visa' || taskId == 'sign_form_1263_third_visa') {
       return isEn ? 'Form 1263 & Touch Signature ✍️' : 'Form 1263 & Firma en Pantalla ✍️';
+    }
+    if (taskId == 'plan_third_visa_regional' || taskId == 'verify_179_days_postcodes_industry') {
+      return isEn ? '179-Day Tracker & Map 🌾' : 'Contador 179 Días & Mapa 🌾';
+    }
+    if (taskId == 'audit_179_days_payslips_bank') {
+      return isEn ? 'Payslip Scanner & Auditor 🧾' : 'Auditor de Nóminas & Fair Work 🧾';
     }
     switch (target) {
       case 'employment':

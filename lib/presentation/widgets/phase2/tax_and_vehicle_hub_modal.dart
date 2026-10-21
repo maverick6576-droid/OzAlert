@@ -204,10 +204,14 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              isEn ? 'Estimated Annual Income:' : 'Sueldo Anual Estimado:',
-              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppColors.textPrimary),
+            Expanded(
+              child: Text(
+                isEn ? 'Estimated Annual Income:' : 'Sueldo Anual Estimado:',
+                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppColors.textPrimary),
+                softWrap: true,
+              ),
             ),
+            const SizedBox(width: 8),
             Text(
               '\$${_annualIncome.toInt()} AUD',
               style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15, color: AppColors.primary),
@@ -239,10 +243,14 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    isEn ? 'Direct Refund in Tax Return:' : 'Devolución Directa en el Tax Return:',
-                    style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w600),
+                  Expanded(
+                    child: Text(
+                      isEn ? 'Direct Refund in Tax Return:' : 'Devolución Directa en el Tax Return:',
+                      style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, fontWeight: FontWeight.w600),
+                      softWrap: true,
+                    ),
                   ),
+                  const SizedBox(width: 8),
                   Text(
                     '+\$${mesSaving.toStringAsFixed(2)} AUD',
                     style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 17, color: Color(0xFF0D9488)),
@@ -357,7 +365,14 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(isEn ? 'Standard WHM Tax (15%):' : 'Impuesto WHM Estándar (15%):', style: const TextStyle(fontSize: 12.5)),
+                  Expanded(
+                    child: Text(
+                      isEn ? 'Standard WHM Tax (15%):' : 'Impuesto WHM Estándar (15%):',
+                      style: const TextStyle(fontSize: 12.5),
+                      softWrap: true,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                   Text('\$${comparison['whmTax']!.toStringAsFixed(2)} AUD', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5)),
                 ],
               ),
@@ -365,7 +380,14 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(isEn ? 'Resident Tax (Addy Rule):' : 'Impuesto Residente (Addy):', style: const TextStyle(fontSize: 12.5)),
+                  Expanded(
+                    child: Text(
+                      isEn ? 'Resident Tax (Addy Rule):' : 'Impuesto Residente (Addy):',
+                      style: const TextStyle(fontSize: 12.5),
+                      softWrap: true,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                   Text('\$${comparison['residentTax']!.toStringAsFixed(2)} AUD', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5)),
                 ],
               ),
@@ -373,10 +395,14 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    isEn ? 'Potential Extra Refund:' : 'Posible Ahorro / Devolución:',
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: AppColors.primary),
+                  Expanded(
+                    child: Text(
+                      isEn ? 'Potential Extra Refund:' : 'Posible Ahorro / Devolución:',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: AppColors.primary),
+                      softWrap: true,
+                    ),
                   ),
+                  const SizedBox(width: 8),
                   Text(
                     '+\$${comparison['potentialSaving']!.toStringAsFixed(2)} AUD',
                     style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: AppColors.primary),
@@ -448,7 +474,14 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(isEn ? 'Accumulated Super Balance:' : 'Saldo de Super Acumulado:', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+            Expanded(
+              child: Text(
+                isEn ? 'Accumulated Super Balance:' : 'Saldo de Super Acumulado:',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                softWrap: true,
+              ),
+            ),
+            const SizedBox(width: 8),
             Text('\$${_accumulatedSuper.toInt()} AUD', style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15, color: AppColors.secondary)),
           ],
         ),
@@ -468,20 +501,38 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
           children: [
             Expanded(
               child: ChoiceChip(
-                label: Text(isEn ? 'WHM 417 / 462 (65% Tax)' : 'WHM 417 / 462 (65% IRPF)'),
+                label: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    isEn ? 'WHM 417 / 462 (65% Tax)' : 'WHM 417 / 462 (65% IRPF)',
+                    style: TextStyle(
+                      color: _isWhv ? Colors.white : AppColors.textPrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
                 selected: _isWhv,
                 selectedColor: AppColors.primary,
-                labelStyle: TextStyle(color: _isWhv ? Colors.white : AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 12),
                 onSelected: (_) => setState(() => _isWhv = true),
               ),
             ),
             const SizedBox(width: 8),
             Expanded(
               child: ChoiceChip(
-                label: Text(isEn ? 'Student 500 (35% Tax)' : 'Estudiante 500 (35% IRPF)'),
+                label: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    isEn ? 'Student 500 (35% Tax)' : 'Estudiante 500 (35% IRPF)',
+                    style: TextStyle(
+                      color: !_isWhv ? Colors.white : AppColors.textPrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
                 selected: !_isWhv,
                 selectedColor: AppColors.primary,
-                labelStyle: TextStyle(color: !_isWhv ? Colors.white : AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 12),
                 onSelected: (_) => setState(() => _isWhv = false),
               ),
             ),
@@ -501,7 +552,14 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(isEn ? 'ATO Departure Tax:' : 'Retención Fiscal ATO:', style: const TextStyle(fontSize: 12.5)),
+                  Expanded(
+                    child: Text(
+                      isEn ? 'ATO Departure Tax:' : 'Retención Fiscal ATO:',
+                      style: const TextStyle(fontSize: 12.5),
+                      softWrap: true,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                   Text('-\$${dasp['taxWithheld']!.toStringAsFixed(2)} AUD (${dasp['taxRatePercentage']!.toInt()}%)', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.statusClosed)),
                 ],
               ),
@@ -509,10 +567,14 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    isEn ? 'Net Cash to Receive:' : 'Dinero Neto a Percibir:',
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textPrimary),
+                  Expanded(
+                    child: Text(
+                      isEn ? 'Net Cash to Receive:' : 'Dinero Neto a Percibir:',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textPrimary),
+                      softWrap: true,
+                    ),
                   ),
+                  const SizedBox(width: 8),
                   Text(
                     '+\$${dasp['netRefund']!.toStringAsFixed(2)} AUD',
                     style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18, color: Color(0xFF0D9488)),
@@ -568,9 +630,13 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   icon: const Icon(CupertinoIcons.shield_lefthalf_fill, size: 16),
-                  label: Text(
-                    isEn ? 'Official PPSR Check (\$2 AUD)' : 'Comprobar VIN en PPSR Oficial (\$2 AUD)',
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5),
+                  label: Flexible(
+                    child: Text(
+                      isEn ? 'Official PPSR Check (\$2 AUD)' : 'Comprobar VIN en PPSR Oficial (\$2 AUD)',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5),
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                    ),
                   ),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.primary,
@@ -589,11 +655,13 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
         Text(
           isEn ? 'High-ROI Tickets & Licences' : 'Cursos y Licencias de Mayor Retorno (ROI)',
           style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: AppColors.textPrimary),
+          softWrap: true,
         ),
         const SizedBox(height: 4),
         Text(
           isEn ? 'Licences that pay for themselves in 1-2 shifts:' : 'Inversiones que se amortizan en 1 o 2 días de trabajo:',
           style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+          softWrap: true,
         ),
         const SizedBox(height: 10),
         ...TaxAndRegoService.highRoiTickets.map((ticket) {
@@ -615,8 +683,10 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
                       child: Text(
                         ticket.title,
                         style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: AppColors.textPrimary),
+                        softWrap: true,
                       ),
                     ),
+                    const SizedBox(width: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
@@ -634,15 +704,20 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
                 Text(
                   isEn ? ticket.descriptionEn : ticket.description,
                   style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary, height: 1.35),
+                  softWrap: true,
                 ),
                 const SizedBox(height: 6),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      isEn ? 'Cost: ~\$${ticket.estimatedCostAud.toInt()} AUD' : 'Coste: ~\$${ticket.estimatedCostAud.toInt()} AUD',
-                      style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+                    Expanded(
+                      child: Text(
+                        isEn ? 'Cost: ~\$${ticket.estimatedCostAud.toInt()} AUD' : 'Coste: ~\$${ticket.estimatedCostAud.toInt()} AUD',
+                        style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+                        softWrap: true,
+                      ),
                     ),
+                    const SizedBox(width: 8),
                     Text(
                       isEn ? 'Avg Wage: \$${ticket.averageHourlyWageAud.toStringAsFixed(2)}/h' : 'Sueldo: \$${ticket.averageHourlyWageAud.toStringAsFixed(2)}/h',
                       style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: AppColors.secondary),
