@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/services/tax_and_rego_service.dart';
 import '../../../core/services/url_launcher_service.dart';
+import '../../../core/services/community_telemetry_service.dart';
 
 class TaxAndVehicleHubModal extends StatefulWidget {
   final bool isEn;
@@ -47,6 +48,19 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
 
   @override
   void dispose() {
+    // Registro silencioso anónimo de benchmarks de impuestos y superannuation
+    final mesSaving = TaxAndRegoService.calculateMedicareLevySaving(_annualIncome);
+    final dasp = TaxAndRegoService.calculateDaspRefund(
+      grossSuperAccumulated: _accumulatedSuper,
+      isWorkingHolidayVisa: _isWhv,
+    );
+    CommunityTelemetryService().logTaxSaving(
+      annualIncomeAud: _annualIncome,
+      mesSavingAud: mesSaving,
+      accumulatedSuperAud: _accumulatedSuper,
+      netDaspRefundAud: dasp['netRefund'] ?? 0.0,
+      isWhv: _isWhv,
+    );
     _tabController.dispose();
     super.dispose();
   }

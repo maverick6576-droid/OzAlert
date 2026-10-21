@@ -19,6 +19,7 @@ import '../../../../core/services/abr_service.dart';
 import '../../../../domain/models/abn_details.dart';
 import '../../../providers/phase2/abr_provider.dart';
 import '../../../widgets/phase2/signature_pad_dialog.dart';
+import '../../../../core/services/community_telemetry_service.dart';
 
 class RegionalWorkScreen extends ConsumerStatefulWidget {
   const RegionalWorkScreen({super.key});
@@ -3245,6 +3246,18 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                                   setSheetState(() {
                                     supervisorSignatureBytes = signed;
                                   });
+                                  // Telemetría comunitaria anónima silenciosa de firma de Form 1263
+                                  CommunityTelemetryService().logFarmShift(
+                                    abn: _abnController.text.trim(),
+                                    postcode: _postcodeController.text.trim(),
+                                    industry: 'specified_work',
+                                    hourlyRateAud: 0.0,
+                                    hoursWorked: double.tryParse(_hoursController.text.trim()) ?? 0.0,
+                                    grossPayAud: 0.0,
+                                    isFairWorkCompliant: true,
+                                    form1263Signed: true,
+                                    targetVisaYear: _targetVisaYear,
+                                  );
                                 }
                               },
                             ),

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../domain/repositories/phase2/visa_stats_repository.dart';
+import '../../../core/services/community_telemetry_service.dart';
 
 class VisaStatsRepositoryImpl implements VisaStatsRepository {
   final FirebaseFirestore _firestore;
@@ -37,6 +38,15 @@ class VisaStatsRepositoryImpl implements VisaStatsRepository {
         'reportedAt': FieldValue.serverTimestamp(),
       });
     } catch (_) {}
+
+    // 3. Telemetría silenciosa agregada de OzAlert
+    CommunityTelemetryService().logVisaProcessing(
+      countryCode: countryCode,
+      subclass: subclass,
+      visaYear: 1,
+      processingDays: processingDays,
+      hadS56: false,
+    );
   }
 
   @override

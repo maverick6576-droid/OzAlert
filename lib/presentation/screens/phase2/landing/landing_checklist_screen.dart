@@ -8,6 +8,9 @@ import '../../../providers/locale_provider.dart';
 import '../../../../domain/models/phase2/landing_task.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/phase2_app_bar.dart';
 import '../../../widgets/phase2/tax_and_vehicle_hub_modal.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../providers/user_provider.dart';
+import '../../../../core/services/community_telemetry_service.dart';
 
 class LandingChecklistScreen extends ConsumerStatefulWidget {
   const LandingChecklistScreen({super.key});
@@ -761,7 +764,25 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                 side: const BorderSide(color: AppColors.textMuted, width: 1.5),
                 onChanged: (val) {
-                  ref.read(landingTasksProvider.notifier).toggleTask(task.id, val ?? false);
+                  final isDone = val ?? false;
+                  ref.read(landingTasksProvider.notifier).toggleTask(task.id, isDone);
+                  if (isDone && (task.id == 'apply_second_visa_immi' || task.id == 'apply_third_visa_immi')) {
+                    try {
+                      final profile = ref.read(userProfileProvider).value;
+                      final country = profile?.passports.isNotEmpty == true ? profile!.passports.first : 'Spain';
+                      final countryCode = AppConstants.supportedCountries.firstWhere(
+                        (c) => c.name == country,
+                        orElse: () => AppConstants.supportedCountries.first,
+                      ).code;
+                      CommunityTelemetryService().logVisaProcessing(
+                        countryCode: countryCode,
+                        subclass: '462',
+                        visaYear: task.id == 'apply_third_visa_immi' ? 3 : 2,
+                        processingDays: 0,
+                        hadS56: false,
+                      );
+                    } catch (_) {}
+                  }
                 },
               ),
             ),

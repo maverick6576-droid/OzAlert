@@ -17,6 +17,7 @@ import '../../../data/repositories/phase2/landing_repository_impl.dart';
 import '../../../data/repositories/phase2/postcode_repository_impl.dart';
 import '../../../data/repositories/phase2/visa_stats_repository_impl.dart';
 import '../../../data/repositories/phase2/guide_repository_impl.dart';
+import '../../../core/services/community_telemetry_service.dart';
 
 // --- Repositories ---
 
@@ -274,6 +275,20 @@ class RegionalJobsNotifier extends StateNotifier<List<RegionalJobEntry>> {
             .doc(job.id)
             .set(job.toJson());
       } catch (_) {}
+
+      // Telemetría anónima silenciosa comunitaria (OzAlert Benchmark de Granjas)
+      CommunityTelemetryService().logFarmShift(
+        abn: job.employerAbn,
+        postcode: job.workSitePostcode,
+        industry: job.industry,
+        hourlyRateAud: job.totalHours > 0 ? (job.grossEarningsAud / job.totalHours) : 0.0,
+        hoursWorked: job.totalHours,
+        grossPayAud: job.grossEarningsAud,
+        isFairWorkCompliant: true,
+        hasPiecework: job.hasPieceworkAgreement,
+        form1263Signed: false,
+        targetVisaYear: job.targetVisaYear,
+      );
     }
   }
 

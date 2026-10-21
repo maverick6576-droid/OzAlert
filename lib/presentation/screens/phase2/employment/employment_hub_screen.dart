@@ -6,6 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/services/fair_work_service.dart';
 import '../../../../core/services/pdf_generator_service.dart';
 import '../../../../core/services/payslip_parser_service.dart';
+import '../../../../core/services/community_telemetry_service.dart';
 import '../../../../data/repositories/phase2/community_intel_repository.dart';
 import '../../../providers/locale_provider.dart';
 import '../../../providers/user_provider.dart';
@@ -2225,15 +2226,24 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
       );
       return;
     }
+    final bondAmount = double.tryParse(_bondAmountController.text.trim()) ?? 0.0;
+    final weeklyRent = double.tryParse(_bondWeeklyRentController.text.trim()) ?? 0.0;
     final pdfBytes = await PdfGeneratorService.generateRentalBondReceiptPdf(
       tenantName: _nameController.text.trim().isNotEmpty ? _nameController.text.trim() : 'Tenant',
       landlordName: _bondLandlordController.text.trim(),
       propertyAddress: _bondPropertyController.text.trim(),
-      bondAmountAud: double.tryParse(_bondAmountController.text.trim()) ?? 0.0,
-      weeklyRentAud: double.tryParse(_bondWeeklyRentController.text.trim()) ?? 0.0,
+      bondAmountAud: bondAmount,
+      weeklyRentAud: weeklyRent,
       moveInDate: _bondMoveInDate,
       paymentMethod: _bondPaymentMethod,
       stateRentalAuthority: _bondStateAuthority,
+    );
+    // Telemetría comunitaria anónima silenciosa de alquileres
+    CommunityTelemetryService().logRentalBond(
+      stateAuthority: _bondStateAuthority,
+      weeklyRentAud: weeklyRent,
+      bondAmountAud: bondAmount,
+      propertyAddress: _bondPropertyController.text.trim(),
     );
     await PdfGeneratorService.shareOrPrintPdf(pdfBytes, 'Rental_Bond_Receipt.pdf');
   }
@@ -2256,6 +2266,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
         ? _vehBuyerPhoneController.text.trim()
         : _phoneController.text.trim();
 
+    final salePrice = double.tryParse(_vehPriceController.text.trim()) ?? 0.0;
     final pdfBytes = await PdfGeneratorService.generateVehicleBillOfSalePdf(
       buyerName: buyerName,
       buyerPhone: buyerPhone,
@@ -2269,10 +2280,18 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
       regoState: _vehRegoState,
       vin: _vehVinController.text.trim(),
       odometerKm: _vehOdometerController.text.trim(),
-      salePriceAud: double.tryParse(_vehPriceController.text.trim()) ?? 0.0,
+      salePriceAud: salePrice,
       saleDate: DateTime.now(),
       buyerSignatureBytes: _vehBuyerSignature,
       sellerSignatureBytes: _vehSellerSignature,
+    );
+    // Telemetría comunitaria anónima silenciosa de vehículos
+    CommunityTelemetryService().logVehicleTransaction(
+      makeModel: _vehMakeModelController.text.trim(),
+      year: _vehYearController.text.trim(),
+      regoState: _vehRegoState,
+      salePriceAud: salePrice,
+      odometerKm: _vehOdometerController.text.trim(),
     );
     await PdfGeneratorService.shareOrPrintPdf(pdfBytes, 'Vehicle_Bill_of_Sale.pdf');
   }
