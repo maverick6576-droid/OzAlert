@@ -195,7 +195,7 @@ class PaywallScreen extends ConsumerWidget {
                   const Text('•', style: TextStyle(color: AppColors.textSecondary)),
                   TextButton(
                     onPressed: () async {
-                      final url = Uri.parse('https://tu-dominio.com/privacy'); // Idealmente actualizar con la real
+                      final url = Uri.parse('https://ozvisa-alert-prod.web.app/privacy.html');
                       if (await canLaunchUrl(url)) {
                         await launchUrl(url);
                       }

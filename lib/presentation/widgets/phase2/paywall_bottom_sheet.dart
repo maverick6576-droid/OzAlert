@@ -5,6 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/localization/app_strings.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/paywall_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void showPhase2PaywallBottomSheet({
   required BuildContext context,
@@ -208,6 +209,40 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
               AppStrings.paywallRestorePrevious(lang),
               style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
             ),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              InkWell(
+                onTap: () async {
+                  final url = Uri.parse('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url);
+                  }
+                },
+                child: Text(
+                  lang == 'es' ? 'Términos de Uso' : (lang == 'fr' ? "Conditions d'utilisation" : (lang == 'it' ? 'Termini di utilizzo' : (lang == 'zh' ? '使用条款' : 'Terms of Use'))),
+                  style: const TextStyle(fontSize: 11, color: AppColors.textMuted, decoration: TextDecoration.underline),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Text('•', style: TextStyle(color: AppColors.textMuted, fontSize: 11)),
+              ),
+              InkWell(
+                onTap: () async {
+                  final url = Uri.parse('https://ozvisa-alert-prod.web.app/privacy.html');
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url);
+                  }
+                },
+                child: Text(
+                  lang == 'es' ? 'Política de Privacidad' : (lang == 'fr' ? 'Confidentialité' : (lang == 'it' ? 'Informativa Privacy' : (lang == 'zh' ? '隐私政策' : 'Privacy Policy'))),
+                  style: const TextStyle(fontSize: 11, color: AppColors.textMuted, decoration: TextDecoration.underline),
+                ),
+              ),
+            ],
           ),
         ],
       ),
