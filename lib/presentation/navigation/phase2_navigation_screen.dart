@@ -88,7 +88,7 @@ class _Phase2NavigationScreenState extends ConsumerState<Phase2NavigationScreen>
                   index: 3,
                   icon: CupertinoIcons.calendar_badge_plus,
                   activeIcon: CupertinoIcons.calendar_badge_plus,
-                  label: isEn ? '88 Days' : '88 Días',
+                  label: isEn ? '88/179 Days' : '88/179 Días',
                 ),
               ],
             ),

@@ -41,10 +41,11 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
           final totalCount = tasks.length;
           final progressPercent = totalCount > 0 ? (completedCount / totalCount) : 0.0;
 
-          // Agrupación en 4 etapas ejecutivas
+          // Agrupación en 5 etapas ejecutivas
           final preDepartureTasks = tasks.where((t) => t.phase == 'pre_departure').toList();
           final arrivalTasks = tasks.where((t) => t.phase == 'first_48h' || t.phase == 'first_week').toList();
-          final renewalTasks = tasks.where((t) => t.phase == 'first_month' || t.phase == 'visa_renewal').toList();
+          final renewal88Tasks = tasks.where((t) => t.phase == 'first_month' || t.phase == 'visa_renewal_88' || (t.phase == 'visa_renewal' && !t.id.contains('179') && !t.id.contains('third'))).toList();
+          final renewal179Tasks = tasks.where((t) => t.phase == 'visa_renewal_179' || t.id.contains('179') || t.id.contains('third')).toList();
           final departureTasks = tasks.where((t) => t.phase == 'departure_exit').toList();
 
           final stages = [
@@ -67,13 +68,22 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
               'tasks': arrivalTasks,
             },
             {
-              'title': isEn ? '🚜 88 Days' : '🚜 88 Días',
+              'title': isEn ? '🚜 88 Days (2nd Visa)' : '🚜 88 Días (2ª Visa)',
               'shortTitle': isEn ? '88 Days' : '88 Días',
-              'subtitle': isEn ? 'Regional & 2nd visa' : 'Renovación de visa',
+              'subtitle': isEn ? 'Regional work & 2nd year' : 'Trabajo regional 2º año',
               'icon': '🚜',
               'landmark': isEn ? 'Red Dirt Farm' : 'Outback & Granja',
               'aussieTheme': isEn ? 'Red Dust & 88 Days Work Log' : 'Tierra Roja & Faena de 88 Días',
-              'tasks': renewalTasks,
+              'tasks': renewal88Tasks,
+            },
+            {
+              'title': isEn ? '🌾 179 Days (3rd Visa)' : '🌾 179 Días (3ª Visa)',
+              'shortTitle': isEn ? '179 Days' : '179 Días',
+              'subtitle': isEn ? '6 months & 3rd year' : '6 meses & 3r año',
+              'icon': '🌾',
+              'landmark': isEn ? 'Top End & Far North' : 'Top End & Outback Profundo',
+              'aussieTheme': isEn ? '179 Days Log & Form 1263 Audit' : 'Registro 179 Días & Auditoría 1263',
+              'tasks': renewal179Tasks,
             },
             {
               'title': isEn ? '🛫 Departure' : '🛫 Salida',
@@ -270,6 +280,14 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
     final stage2Done = stage2Tasks.where((t) => t.isCompleted).length;
     final stage2Ratio = stage2Tasks.isNotEmpty ? (stage2Done / stage2Tasks.length) : 0.0;
 
+    final stage3Tasks = stages[3]['tasks'] as List<LandingTask>;
+    final stage3Done = stage3Tasks.where((t) => t.isCompleted).length;
+    final stage3Ratio = stage3Tasks.isNotEmpty ? (stage3Done / stage3Tasks.length) : 0.0;
+
+    final stage4Tasks = stages[4]['tasks'] as List<LandingTask>;
+    final stage4Done = stage4Tasks.where((t) => t.isCompleted).length;
+    final stage4Ratio = stage4Tasks.isNotEmpty ? (stage4Done / stage4Tasks.length) : 0.0;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final availableWidth = constraints.maxWidth;
@@ -308,20 +326,32 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
           ..moveTo(padX, y0)
           ..lineTo(availableWidth - padX, y0)
           ..cubicTo(availableWidth - 2, y0, availableWidth - 2, y1, availableWidth - padX, y1)
-          ..lineTo(padX, y1);
+          ..lineTo(availableWidth * 0.58, y1);
         final lenW2 = subPathToW2.computeMetrics().first.length;
+
+        final subPathToW3 = Path()
+          ..moveTo(padX, y0)
+          ..lineTo(availableWidth - padX, y0)
+          ..cubicTo(availableWidth - 2, y0, availableWidth - 2, y1, availableWidth - padX, y1)
+          ..lineTo(padX, y1);
+        final lenW3 = subPathToW3.computeMetrics().first.length;
 
         final f1 = (lenW1 / totalLength).clamp(0.0, 1.0);
         final f2 = (lenW2 / totalLength).clamp(0.0, 1.0);
+        final f3 = (lenW3 / totalLength).clamp(0.0, 1.0);
 
-        // Progresión exacta: el canguro llega al icono de la siguiente fase cuando se completan todos los pasos de la fase anterior
+        // Progresión exacta: el canguro avanza de forma fluida y continua etapa por etapa
         double effectiveProgress = 0.0;
         if (stage0Ratio < 1.0) {
           effectiveProgress = f1 * stage0Ratio;
         } else if (stage1Ratio < 1.0) {
           effectiveProgress = f1 + (f2 - f1) * stage1Ratio;
         } else if (stage2Ratio < 1.0) {
-          effectiveProgress = f2 + (1.0 - f2) * stage2Ratio;
+          effectiveProgress = f2 + (f3 - f2) * stage2Ratio;
+        } else if (stage3Ratio < 1.0) {
+          effectiveProgress = f3 + (1.0 - f3) * stage3Ratio;
+        } else if (stage4Ratio < 1.0) {
+          effectiveProgress = 0.96 + (0.04 * stage4Ratio);
         } else {
           effectiveProgress = 1.0;
         }
@@ -329,6 +359,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
         final waypoints = [
           const Offset(padX, y0),
           Offset(availableWidth - padX, y0),
+          Offset(availableWidth * 0.58, y1),
           const Offset(padX, y1),
           Offset(availableWidth - padX, y2),
         ];
@@ -360,7 +391,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                     ),
                   ),
 
-                  // Capa 3: Botones interactivos con solo el icono/dibujo de las 4 etapas (sin texto en el camino)
+                  // Capa 3: Botones interactivos con solo el icono/dibujo de las 5 etapas
                   // Etapa 0 (Pre-Vuelo): situado exactamente en Waypoint 0
                   Positioned(
                     left: padX - 17,
@@ -383,9 +414,9 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                     ),
                   ),
 
-                  // Etapa 2 (88 Días): situado exactamente en Waypoint 2
+                  // Etapa 2 (88 Días): situado en Waypoint 2
                   Positioned(
-                    left: padX - 17,
+                    left: availableWidth * 0.58 - 17,
                     top: y1 - 17,
                     child: _buildStageIconNode(
                       index: 2,
@@ -394,14 +425,25 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                     ),
                   ),
 
-                  // Etapa 3 (Salida): situado exactamente en Waypoint 3
+                  // Etapa 3 (179 Días): situado en Waypoint 3
                   Positioned(
-                    left: availableWidth - padX - 17,
-                    top: y2 - 17,
+                    left: padX - 17,
+                    top: y1 - 17,
                     child: _buildStageIconNode(
                       index: 3,
                       stage: stages[3],
                       isSelected: _selectedStageIndex == 3,
+                    ),
+                  ),
+
+                  // Etapa 4 (Salida): situado exactamente en Waypoint 4
+                  Positioned(
+                    left: availableWidth - padX - 17,
+                    top: y2 - 17,
+                    child: _buildStageIconNode(
+                      index: 4,
+                      stage: stages[4],
+                      isSelected: _selectedStageIndex == 4,
                     ),
                   ),
 
@@ -861,6 +903,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                             if (task.targetGuideCategory == 'savings' ||
                                 task.targetGuideCategory == '88days' ||
                                 task.targetGuideCategory == 'visa_renewal' ||
+                                task.targetGuideCategory == 'visa_renewal_179' ||
                                 task.targetGuideCategory == 'departure') ...[
                               const SizedBox(width: 6),
                               Container(
@@ -931,7 +974,9 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
       case 'savings':
         return isEn ? 'Pro Money & Tax Hacks 💵' : 'Hacks Pro de Ahorro Masivo 💵';
       case 'visa_renewal':
-        return isEn ? '2nd & 3rd Visa Guide 🦘' : 'Guía 2ª y 3ª Visa 🦘';
+        return isEn ? '2nd Year Visa Guide (88 Days) 🚜' : 'Guía 2ª Visa (88 Días) 🚜';
+      case 'visa_renewal_179':
+        return isEn ? '3rd Year Visa Guide (179 Days) 🌾' : 'Guía 3ª Visa (179 Días) 🌾';
       case 'international_license':
         return isEn ? 'International Permit & NAATI Guide 🪪' : 'Guía Carnet Internacional & NAATI 🪪';
       case 'australian_license':

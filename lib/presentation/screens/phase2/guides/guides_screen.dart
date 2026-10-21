@@ -75,7 +75,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
       'label': '🔄 Visa & Retorno',
       'labelEn': '🔄 Visa & Exit',
       'categories': [
-        {'id': 'visa_renewal', 'label': '🦘 2ª y 3ª Visa', 'labelEn': '🦘 2nd & 3rd Visa'},
+        {'id': 'visa_renewal', 'label': '🚜 88 Días (2ª Visa)', 'labelEn': '🚜 88 Days (2nd Visa)'},
+        {'id': 'visa_renewal_179', 'label': '⭐ 179 Días (3ª Visa)', 'labelEn': '⭐ 179 Days (3rd Visa)'},
         {'id': 'departure', 'label': '🛫 Vuelta & DASP', 'labelEn': '🛫 Exit & DASP'},
       ]
     },

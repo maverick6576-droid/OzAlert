@@ -230,7 +230,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: Phase2AppBar(
-        title: isEn ? '88 Days Regional' : '88 Días Regionales',
+        title: _targetVisaYear == 2
+            ? (isEn ? '88 Days Regional' : '88 Días Regionales')
+            : (isEn ? '179 Days Regional' : '179 Días Regionales'),
         isEn: isEn,
         infoTopic: 'regional',
         bottom: TabBar(
@@ -244,10 +246,12 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             Tab(text: isEn ? '📍 Postcode & Map' : '📍 Mapa & Códigos'),
             Tab(
               text: !isPremium
-                  ? (isEn ? '🗓️ 88 Days ($totalDays/10)' : '🗓️ 88 Días ($totalDays/10)')
+                  ? (_targetVisaYear == 2
+                      ? (isEn ? '🗓️ 88 Days ($totalDays/10)' : '🗓️ 88 Días ($totalDays/10)')
+                      : (isEn ? '🗓️ 179 Days ($totalDays/10)' : '🗓️ 179 Días ($totalDays/10)'))
                   : (isEn
-                      ? (_targetVisaYear == 2 ? '🗓️ 88 Days ($totalDays/88)' : '🗓️ 3rd Year ($totalDays/179)')
-                      : (_targetVisaYear == 2 ? '🗓️ 88 Días ($totalDays/88)' : '🗓️ 3r Año ($totalDays/179)')),
+                      ? (_targetVisaYear == 2 ? '🗓️ 88 Days ($totalDays/88)' : '🗓️ 179 Days ($totalDays/179)')
+                      : (_targetVisaYear == 2 ? '🗓️ 88 Días ($totalDays/88)' : '🗓️ 179 Días ($totalDays/179)')),
             ),
           ],
         ),
@@ -1452,6 +1456,22 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       children: [
+        // Título del Módulo Dinámico según Año de Visa seleccionado
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10, left: 4),
+          child: Text(
+            _targetVisaYear == 2
+                ? (isEn ? '🗓️ 88 Days Regional Tracker (2nd Year)' : '🗓️ Registro de 88 Días Regionales (2º Año)')
+                : (isEn ? '🗓️ 179 Days Regional Tracker (3rd Year)' : '🗓️ Registro de 179 Días Regionales (3r Año)'),
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+              color: AppColors.textPrimary,
+              letterSpacing: -0.3,
+            ),
+          ),
+        ),
+
         // Selector Adaptativo: 2º Año (88 Días) vs 3r Año (179 Días / 6 Meses)
         Container(
           padding: const EdgeInsets.all(4),
@@ -1564,10 +1584,12 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 children: [
                   Text(
                     !isPremium
-                        ? (isEn ? 'Free Trial Progress (10-Day Cap)' : 'Progreso Gratuito (Límite 10 Días)')
+                        ? (_targetVisaYear == 2
+                            ? (isEn ? 'Free Trial Progress (10-Day Cap)' : 'Progreso Gratuito (Límite 10 Días)')
+                            : (isEn ? '3rd Year Trial (10-Day Cap)' : 'Prueba 3r Año (Límite 10 Días)'))
                         : (_targetVisaYear == 2
-                            ? (isEn ? '2nd Year Visa Progress' : 'Progreso 2º Año de Visa')
-                            : (isEn ? '3rd Year Visa Progress' : 'Progreso 3r Año de Visa')),
+                            ? (isEn ? '2nd Year Visa Progress (88 Days)' : 'Progreso 2º Año: 88 Días')
+                            : (isEn ? '3rd Year Visa Progress (179 Days)' : 'Progreso 3r Año: 179 Días')),
                     style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.textPrimary),
                   ),
                   Text(

@@ -176,7 +176,7 @@
       "titleEn": "Plan & Log 88 Days Regional Work (LIN 22/050)",
       "subtitle": "Usa el Contador de 88 Días en la app: verifica códigos postales en el mapa oficial, consulta ABNs en vivo con ABR y audita tus turnos.",
       "subtitleEn": "Use the app's 88-Day Tracker: verify postcodes on the official map, validate employer ABNs live with ABR and audit shifts.",
-      "phase": "first_month",
+      "phase": "visa_renewal_88",
       "priority": 18,
       "targetGuideCategory": "88days"
     },
@@ -186,7 +186,7 @@
       "titleEn": "Verify 88 Days & Form 1263 Touch Signature",
       "subtitle": "Pide a tu supervisor que firme con el dedo en la pantalla de la app en la pestaña 88 Días y exporta el Dossier oficial blindado para ImmiAccount.",
       "subtitleEn": "Have your supervisor sign with their finger directly on the app screen in the 88 Days tab and export the official dossier for ImmiAccount.",
-      "phase": "visa_renewal",
+      "phase": "visa_renewal_88",
       "priority": 19,
       "targetGuideCategory": "88days"
     },
@@ -196,7 +196,7 @@
       "titleEn": "Lodge 2nd Year WHV on ImmiAccount (Onshore/Offshore)",
       "subtitle": "Preséntala antes de que venza tu visado para recibir la Bridging Visa A y mantener tus derechos laborales plenos.",
       "subtitleEn": "Apply before your visa expires to obtain Bridging Visa A and maintain full work rights.",
-      "phase": "visa_renewal",
+      "phase": "visa_renewal_88",
       "priority": 20,
       "targetGuideCategory": "visa_renewal"
     },
@@ -206,7 +206,7 @@
       "titleEn": "Plan & Start 179 Days (6 Months) for 3rd Year Visa",
       "subtitle": "Los 179 días deben completarse durante tu 2ª visa (o BVA). Empieza antes del mes 5 de tu 2º año en el Contador de la app para no quedarte sin margen por lluvias o fin de cosecha.",
       "subtitleEn": "All 179 days must be completed during your 2nd visa (or BVA). Start by month 4-5 of Year 2 in the app's Tracker to safeguard against rain pauses or season cuts.",
-      "phase": "visa_renewal",
+      "phase": "visa_renewal_179",
       "priority": 21,
       "targetGuideCategory": "88days"
     },
@@ -216,7 +216,7 @@
       "titleEn": "Verify Eligible Postcodes & Industries for 3rd Year",
       "subtitle": "Comprueba en el mapa de la app las zonas cualificadas bajo LIN 22/050: agricultura y horticultura en todo el país, construcción, minería (solo 417), o turismo/hostelería en el Norte y áreas remotas (462).",
       "subtitleEn": "Check eligible areas on the app's map under LIN 22/050: nationwide regional agriculture, construction, mining (417 only), or tourism/hospitality in Northern & remote zones (462).",
-      "phase": "visa_renewal",
+      "phase": "visa_renewal_179",
       "priority": 22,
       "targetGuideCategory": "88days"
     },
@@ -226,7 +226,7 @@
       "titleEn": "Audit 26 Weekly Payslips & Bank Statements (179-Day Dossier)",
       "subtitle": "Inmigración audita con lupa el 3er año: cada nómina con ABN oficial verificado, retención 15% y Super 12% debe coincidir al céntimo con tu ingreso bancario. Cero pagos en efectivo.",
       "subtitleEn": "Home Affairs rigorously audits 3rd year files: every payslip with verified official ABN, 15% tax and 12% super must match bank deposits to the cent. Zero cash-in-hand.",
-      "phase": "visa_renewal",
+      "phase": "visa_renewal_179",
       "priority": 23,
       "targetGuideCategory": "employment"
     },
@@ -236,7 +236,7 @@
       "titleEn": "Sign Form 1263 on Screen for 3rd Year Visa",
       "subtitle": "Pide a tus supervisores que firmen con el dedo en la pantalla de la app en la pestaña 88/179 Días para certificar los 179 días y exporta el Dossier PDF consolidado blindado para ImmiAccount.",
       "subtitleEn": "Have each supervisor sign with their finger directly in the app's 88/179 Days tab to certify 179 days and export the consolidated official PDF dossier for ImmiAccount.",
-      "phase": "visa_renewal",
+      "phase": "visa_renewal_179",
       "priority": 24,
       "targetGuideCategory": "88days"
     },
@@ -246,9 +246,9 @@
       "titleEn": "Lodge 3rd Year WHV on ImmiAccount ($650 AUD)",
       "subtitle": "Presenta la solicitud antes de que expire tu 2º año para recibir la Bridging Visa A y conservar tus derechos de trabajo a tiempo completo hasta la concesión definitiva.",
       "subtitleEn": "Apply before your 2nd year visa expires to receive Bridging Visa A and retain full-time work rights until final approval.",
-      "phase": "visa_renewal",
+      "phase": "visa_renewal_179",
       "priority": 25,
-      "targetGuideCategory": "visa_renewal"
+      "targetGuideCategory": "visa_renewal_179"
     },
     {
       "id": "claim_bond_board_exit",

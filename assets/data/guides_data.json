@@ -1116,10 +1116,10 @@
     },
     "visa_renewal": {
       "id": "visa_renewal",
-      "title": "Segunda y Tercera Visa (2nd & 3rd Year)",
-      "titleEn": "2nd & 3rd Year Visa Extension (WHV 417 & 462)",
-      "subtitle": "Normativa oficial LIN 22/050, cálculo legal de los 88 días y 6 meses, y cómo blindar tu expediente ante auditorías de Inmigración.",
-      "subtitleEn": "Official LIN 22/050 criteria, legal calculation of 88 days and 6 months, and audit-proofing your ImmiAccount submission.",
+      "title": "Segunda Visa: 88 Días Regionales (2nd Year WHV)",
+      "titleEn": "2nd Year Visa Extension: 88 Days (WHV 417 & 462)",
+      "subtitle": "Normativa oficial LIN 22/050, cálculo legal de los 88 días naturales y cómo blindar tu expediente ante Inmigración.",
+      "subtitleEn": "Official LIN 22/050 criteria, legal calculation of 88 calendar days, and audit-proofing your ImmiAccount submission.",
       "steps": [
         {
           "number": 1,
@@ -1159,18 +1159,6 @@
         },
         {
           "number": 4,
-          "title": "Tercera Visa: 6 meses (179 días) en tu 2º año",
-          "titleEn": "3rd Year Visa: 6 Months (179 Days) in Year 2",
-          "description": "Para conseguir el 3er año de visado, debes completar 6 meses (mínimo 179 días naturales) de trabajo regional específico realizado EXCLUSIVAMENTE durante la vigencia de tu segundo año (o su Bridging Visa). El trabajo realizado durante el 1er año no computa para la 3ª visa. Se exigen al menos 26 nóminas semanales consecutivas o acumuladas en sectores y zonas aprobadas.",
-          "descriptionEn": "To qualify for the 3rd year visa, you must complete 6 months (minimum 179 calendar days) of regional work completed SOLELY during your 2nd year visa (or its BVA). 1st year work cannot be reused. At least 26 weekly payslips are required.",
-          "tip": "Consejo: Empieza el trabajo regional a más tardar en el mes 4 o 5 de tu 2º año para no quedarte sin margen de tiempo ante pausas por lluvia o final de temporada.",
-          "tipEn": "Tip: Start regional work by month 4-5 of your second year to maintain buffer against weather pauses or seasonal cuts.",
-          "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462/specified-462-work",
-          "officialUrlLabel": "Home Affairs - Requisitos de Trabajo Específico para 3er Año",
-          "officialUrlLabelEn": "Home Affairs - 3rd Year Specified Work Requirements"
-        },
-        {
-          "number": 5,
           "title": "Cómo superar una auditoría s56 (Request for Information)",
           "titleEn": "Handling a Section 56 Request for Information (RFI)",
           "description": "Si recibes una notificación s56 de Inmigración, tendrás un plazo estricto de 28 días naturales para aportar pruebas adicionales. Los oficiales cruzan datos con la ATO y el registro de la empresa (ASIC). Nunca inventes un ABN ni recurras a intermediarios fraudulentos; las penas incluyen la prohibición de entrada a Australia por 3 años (Public Interest Criterion 4020).",
@@ -1246,6 +1234,145 @@
           "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing",
           "officialUrlLabel": "Home Affairs - Directorio Oficial de Tipos de Visado",
           "officialUrlLabelEn": "Home Affairs - Official Visa Options Directory"
+        }
+      ]
+    },
+    "visa_renewal_179": {
+      "id": "visa_renewal_179",
+      "title": "Tercera Visa: 179 Días / 6 Meses (3rd Year WHV)",
+      "titleEn": "3rd Year Visa Extension: 179 Days (WHV 417 & 462)",
+      "subtitle": "Requisitos específicos de 6 meses de trabajo regional durante el 2º año, 26 nóminas auditadas y solicitud en ImmiAccount.",
+      "subtitleEn": "Exclusive 6 months of regional work during Year 2, 26 audited weekly payslips and 3rd year visa lodgement.",
+      "steps": [
+        {
+          "number": 1,
+          "title": "Requisito estricto de 6 meses (179 días naturales)",
+          "titleEn": "Strict 6-month requirement (179 calendar days)",
+          "description": "Para conseguir el 3er año de visado, debes completar 6 meses naturales (mínimo 179 días) de trabajo regional específico realizado EXCLUSIVAMENTE durante la vigencia de tu 2ª visa (o su Bridging Visa A). Los 88 días realizados durante tu 1er año caducan y NO se pueden reutilizar bajo ningún concepto.",
+          "descriptionEn": "To qualify for the 3rd year visa, you must complete 6 calendar months (minimum 179 days) of specified work completed SOLELY during your 2nd year visa (or its BVA). Days worked during Year 1 cannot be reused under any circumstances.",
+          "tip": "Consejo: Empieza el trabajo regional a más tardar en el mes 4 o 5 de tu 2º año para contar con margen de seguridad ante lluvias, heladas o cortes de temporada.",
+          "tipEn": "Tip: Start regional work by month 4-5 of Year 2 to maintain a safety buffer against weather pauses or seasonal cuts.",
+          "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462/specified-462-work",
+          "officialUrlLabel": "Home Affairs - Requisitos de Trabajo Específico para 3er Año",
+          "officialUrlLabelEn": "Home Affairs - 3rd Year Specified Work Requirements"
+        },
+        {
+          "number": 2,
+          "title": "Zonas y sectores cualificados bajo LIN 22/050",
+          "titleEn": "Eligible postcodes and industries under LIN 22/050",
+          "description": "El trabajo debe realizarse en códigos postales regionales específicos. Sectores aprobados: agricultura, silvicultura, pesca y horticultura en toda Australia regional; construcción; minería (solo 417); y turismo y hostelería en el Norte de Australia y áreas muy remotas (462). Verifica siempre el código postal en el mapa oficial de la app antes de firmar contrato.",
+          "descriptionEn": "Work must take place in designated postcodes. Approved industries: regional agriculture, forestry, fishing and plant cultivation nationwide; construction; mining (417 only); and tourism/hospitality in Northern & remote Australia (462). Always verify postcodes on the app map.",
+          "tip": "Consejo: En hostelería para la 462, solo cuentan establecimientos ubicados al norte del Trópico de Capricornio o en zonas remotas designadas.",
+          "tipEn": "Tip: For 462 hospitality, jobs only qualify if located north of the Tropic of Capricorn or designated remote zones.",
+          "officialUrl": "https://www.legislation.gov.au/Details/F2022L00445",
+          "officialUrlLabel": "Federal Register of Legislation - LIN 22/050 Oficial",
+          "officialUrlLabelEn": "Federal Register of Legislation - Official LIN 22/050"
+        },
+        {
+          "number": 3,
+          "title": "Auditoría de 26 nóminas semanales y extractos bancarios",
+          "titleEn": "Audit of 26 weekly payslips and matching bank records",
+          "description": "Inmigración somete el 3er año a auditorías rigurosas. Necesitas acumular un mínimo de 26 semanas de nóminas oficiales (o equivalentes quincenales) con desglose de horas, salario por encima del laudo Fair Work ($30.15/h casual), retención 15% WHM y cotización 12% Super. Cada nómina debe coincidir con el ingreso registrado en tus extractos bancarios (Bank Statements). Los pagos en mano 'cash-in-hand' conllevan la denegación inmediata.",
+          "descriptionEn": "Home Affairs rigorously audits 3rd year applications. You need at least 26 weekly payslips with hour breakdowns, wages above Fair Work minimum ($30.15/h casual), 15% WHM tax, and 12% super. Every single payslip must match your bank statement deposits to the cent. Cash-in-hand triggers immediate rejection.",
+          "tip": "Consejo: Usa el Escáner de Nóminas de OzAlert en la pestaña Empleo para auditar cada nómina antes de guardarla en tu expediente.",
+          "tipEn": "Tip: Use OzAlert's Payslip Scanner in the Jobs tab to audit each payslip before filing it.",
+          "officialUrl": "https://www.fairwork.gov.au/pay-and-wages/minimum-wages",
+          "officialUrlLabel": "Fair Work Ombudsman - Salarios Mínimos Legales 2026",
+          "officialUrlLabelEn": "Fair Work Ombudsman - Official Minimum Wages 2026"
+        },
+        {
+          "number": 4,
+          "title": "Firma en pantalla del Formulario 1263 consolidado",
+          "titleEn": "Form 1263 touch signatures and consolidated dossier",
+          "description": "Si trabajaste para varios empleadores durante los 6 meses, cada supervisor debe certificar sus semanas en el Formulario 1263 oficial. Puedes abrir la pestaña 88/179 Días en la app y pedir a tu supervisor que firme con el dedo directamente en la pantalla para generar tu Dossier PDF consolidado con validez jurídica ante Home Affairs.",
+          "descriptionEn": "If you worked for multiple employers across the 6 months, each supervisor must certify their weeks on Form 1263. Use the app's touch signature pad in the 88/179 Days tab to collect digital signatures and compile your consolidated PDF dossier for Home Affairs.",
+          "tip": "Consejo: Pide la firma y la confirmación de contacto a tu supervisor antes de marcharte de cada granja o empresa regional.",
+          "tipEn": "Tip: Collect supervisor signatures and valid contact phone/email before departing each workplace.",
+          "officialUrl": "https://immi.homeaffairs.gov.au/form-listing/forms/1263.pdf",
+          "officialUrlLabel": "Home Affairs - Formulario 1263 Oficial de Trabajo Regional",
+          "officialUrlLabelEn": "Home Affairs - Official Form 1263 Specified Work"
+        },
+        {
+          "number": 5,
+          "title": "Solicitud de la 3ª Visa en ImmiAccount ($650 AUD)",
+          "titleEn": "Lodging 3rd Year WHV on ImmiAccount ($650 AUD)",
+          "description": "Presenta tu solicitud online en ImmiAccount antes de que expire tu 2º año. Si estás en Australia (Onshore), obtendrás de inmediato la Bridging Visa A (BVA), que mantiene intactos tus derechos para trabajar a tiempo completo con cualquier empleador mientras Inmigración resuelve tu visado.",
+          "descriptionEn": "Lodge your application online via ImmiAccount before your 2nd year visa expires. If onshore, you instantly receive Bridging Visa A (BVA), maintaining full-time work rights with any employer while processing.",
+          "tip": "Consejo: Adjunta en ImmiAccount el Dossier PDF exportado desde OzAlert junto con tus extractos bancarios en un único archivo ordenado.",
+          "tipEn": "Tip: Attach your OzAlert PDF dossier and bank statements in a clean, indexed submission.",
+          "officialUrl": "https://online.immi.gov.au/lusc/login",
+          "officialUrlLabel": "ImmiAccount - Portal Oficial de Solicitud del Gobierno",
+          "officialUrlLabelEn": "ImmiAccount - Official Visa Lodgement Portal"
+        }
+      ],
+      "comparisons": [
+        {
+          "id": "year2_vs_year3_comparison",
+          "name": "Diferencias: 2º Año (88 Días) vs 3er Año (179 Días)",
+          "tagline": "Comparativa directa de duración, plazos y rigor de auditoría",
+          "taglineEn": "Direct comparison of duration, deadlines and audit scrutiny",
+          "status": "Normativa LIN 22/050",
+          "statusEn": "LIN 22/050 Standard",
+          "cost": "$650 AUD (Tasa de solicitud oficial)",
+          "costEn": "$650 AUD (Official visa charge)",
+          "pros": [
+            "2º Año: Solo 3 meses (88 días naturales) completados durante tu primer año",
+            "3er Año: Otorga un año completo adicional en Australia (total de 3 años en el país)",
+            "Ambos otorgan Bridging Visa A con derechos laborales plenos al solicitar Onshore"
+          ],
+          "prosEn": [
+            "Year 2: Only 3 calendar months (88 days) during your first year",
+            "Year 3: Grants a full extra year in Australia (totalling 3 years)",
+            "Both grant Bridging Visa A with unlimited work rights when lodged onshore"
+          ],
+          "cons": [
+            "3er Año exige el doble de tiempo: 6 meses completos (mínimo 179 días naturales)",
+            "3er Año tiene una tasa de auditoría s56 significativamente más alta por parte de Inmigración",
+            "Los días del 1er año no son reciclables para el 3er año"
+          ],
+          "consEn": [
+            "Year 3 requires double the time: 6 full months (minimum 179 calendar days)",
+            "Year 3 faces significantly higher Section 56 audit scrutiny from Home Affairs",
+            "Year 1 work days cannot be carried over or reused for Year 3"
+          ],
+          "verdict": "Planifica el 3er año con antelación desde el inicio de tu 2º año para no depender de extensiones de última hora.",
+          "verdictEn": "Plan your 3rd year regional commitment right from month 1-2 of Year 2 to secure uninterrupted stay.",
+          "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462/specified-462-work",
+          "officialUrlLabel": "Home Affairs - Guía Oficial de Trabajo para 3er Año",
+          "officialUrlLabelEn": "Home Affairs - Official 3rd Year Work Specification"
+        },
+        {
+          "id": "post_third_year_pathways",
+          "name": "Vías de Permanencia tras agotar los 3 años de WHV",
+          "tagline": "Sponsorship TSS 482, DAMA regional o Residencia Permanente",
+          "taglineEn": "TSS 482 Employer Sponsorship, DAMA or Permanent Residency",
+          "status": "Opciones post-WHV",
+          "statusEn": "Post-WHV pathways",
+          "cost": "Desde $3,000 AUD según tipo de visado",
+          "costEn": "From $3,000 AUD depending on visa stream",
+          "pros": [
+            "Sponsorship TSS 482: Patrocinio por una empresa australiana de 2 a 4 años con vía directa a la residencia (PR 186)",
+            "DAMA Regional: Acuerdos migratorios regionales con requisitos de inglés y ocupación más flexibles",
+            "Skilled Migration (189/190/491): Residencia permanente por puntos si tu profesión está en la lista estratégica"
+          ],
+          "prosEn": [
+            "TSS 482 Sponsorship: 2-4 year employer visa with clear PR transition pathway (subclass 186)",
+            "Regional DAMA: Concessions on English, age, and salary thresholds in regional areas",
+            "Skilled Migration (189/190/491): Points-tested permanent residency for priority occupations"
+          ],
+          "cons": [
+            "Exige contar con experiencia laboral demostrable o cualificación formativa homologada",
+            "Trámite más largo que requiere asesoramiento de un Agente MARA colegiado"
+          ],
+          "consEn": [
+            "Requires verifiable skilled employment experience or accredited qualifications",
+            "Longer processing times usually requiring registered MARA agent assistance"
+          ],
+          "verdict": "Aprovecha tus 3 años de WHV para conseguir experiencia local y contactos con empresas dispuestas a patrocinarte.",
+          "verdictEn": "Leverage your 3 WHV years to gain local experience and relationships with sponsoring employers.",
+          "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/temporary-skill-shortage-482",
+          "officialUrlLabel": "Home Affairs - Visa de Patrocinio Laboral TSS 482",
+          "officialUrlLabelEn": "Home Affairs - TSS 482 Employer Sponsorship Visa"
         }
       ]
     },
