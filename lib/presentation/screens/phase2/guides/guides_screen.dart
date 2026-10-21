@@ -1395,19 +1395,27 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
   Widget _buildPartnersView(AsyncValue<List<AffiliatePartner>> partnersAsync, bool isEn) {
     return partnersAsync.when(
       data: (partners) {
-        if (partners.isEmpty) {
-          return Center(
-            child: Text(
-              isEn ? 'No services found for this category' : 'No hay servicios disponibles en esta categoría',
-              style: const TextStyle(color: AppColors.textMuted),
-            ),
+        // Filtro estricto: Solo mostrar partners con código de descuento / beneficio B2B real
+        final activeDeals = partners
+            .where((p) => p.isActive && p.promoCode != null && p.promoCode!.isNotEmpty)
+            .toList();
+
+        if (activeDeals.isEmpty) {
+          return ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            children: [
+              _buildComingSoonDealsCard(isEn),
+              const SizedBox(height: 16),
+              _buildTaxHackBanner(isEn),
+              const SizedBox(height: 36),
+            ],
           );
         }
 
         return ListView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           children: [
-            ...partners.map((p) => _buildPartnerCard(p, isEn)),
+            ...activeDeals.map((p) => _buildPartnerCard(p, isEn)),
             const SizedBox(height: 16),
             _buildTaxHackBanner(isEn),
             const SizedBox(height: 36),
@@ -1416,6 +1424,164 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
       },
       loading: () => const Center(child: CircularProgressIndicator(color: AppColors.primary)),
       error: (err, _) => Center(child: Text('Error: $err')),
+    );
+  }
+
+  Widget _buildComingSoonDealsCard(bool isEn) {
+    return Container(
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            AppColors.surfaceElevated,
+            AppColors.surface,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: AppColors.primary.withValues(alpha: 0.35),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withValues(alpha: 0.08),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.15),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  CupertinoIcons.sparkles,
+                  color: AppColors.primary,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        isEn ? 'EXCLUSIVE OZALERT COMMUNITY' : 'COMUNIDAD OZALERT EXCLUSIVA',
+                        style: const TextStyle(
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.6,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      isEn ? 'B2B Partner Deals' : 'Acuerdos con Partners B2B',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            isEn
+                ? 'Coming Soon: Exclusive partnerships and discounts being negotiated with Australian partners for the OzAlert community.'
+                : 'Próximamente: Acuerdos y descuentos exclusivos en negociación con partners australianos para la comunidad OzAlert.',
+            style: const TextStyle(
+              fontSize: 14.5,
+              fontWeight: FontWeight.w800,
+              height: 1.4,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            isEn
+                ? 'We are directly negotiating unique deals with verified Australian providers so you get 100% genuine benefits with our partner codes.'
+                : 'Estamos cerrando acuerdos directos con proveedores verificados para ofrecerte descuentos y condiciones exclusivas mediante códigos oficiales sin intermediarios.',
+            style: const TextStyle(
+              fontSize: 12.5,
+              height: 1.45,
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Divider(height: 1, color: AppColors.cardBorder),
+          const SizedBox(height: 14),
+          _buildComingSoonPerkItem(
+            icon: CupertinoIcons.shield_fill,
+            color: const Color(0xFF0D9488),
+            title: isEn ? 'Travel & OVHC Health Insurance' : 'Seguro Médico Internacional & OVHC',
+            desc: isEn ? 'Exclusive % discounts on top visa-compliant policies' : 'Descuentos exclusivos en pólizas homologadas',
+          ),
+          const SizedBox(height: 10),
+          _buildComingSoonPerkItem(
+            icon: CupertinoIcons.money_dollar_circle_fill,
+            color: AppColors.secondary,
+            title: isEn ? 'Zero-Fee International Transfers' : 'Transferencias de Divisas sin Comisión',
+            desc: isEn ? 'Real mid-market rate savings for your funds' : 'Ahorro masivo de comisiones bancarias',
+          ),
+          const SizedBox(height: 10),
+          _buildComingSoonPerkItem(
+            icon: CupertinoIcons.doc_checkmark_fill,
+            color: AppColors.warning,
+            title: isEn ? 'Official Training Certificates (RSA & White Card)' : 'Cursos Homologados (RSA & White Card)',
+            desc: isEn ? 'Special community rates for hospitality and construction tickets' : 'Tarifas preferentes para certificados laborales',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildComingSoonPerkItem({
+    required IconData icon,
+    required Color color,
+    required String title,
+    required String desc,
+  }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, color: color, size: 16),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+              ),
+              Text(
+                desc,
+                style: const TextStyle(fontSize: 11.5, color: AppColors.textMuted),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

@@ -49,6 +49,8 @@ final userProfileProvider = StreamProvider<UserProfile?>((ref) async* {
           } else {
             NotificationService().syncPassportSubscriptions([]);
           }
+          // Sincronizar automáticamente el canal de noticias de la fase (Fase 1 = all_users, Fase 2 = desuscrito)
+          NotificationService().syncPhaseNewsSubscription(profile.currentPhase);
 
           return profile;
         }
@@ -114,6 +116,7 @@ class PhaseSelectionController extends AutoDisposeAsyncNotifier<void> {
         'currentPhase': phase,
         'initialPhaseSelected': true,
       });
+      NotificationService().syncPhaseNewsSubscription(phase);
     });
   }
 }

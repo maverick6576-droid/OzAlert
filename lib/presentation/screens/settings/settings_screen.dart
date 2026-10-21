@@ -253,6 +253,7 @@ class SettingsScreen extends ConsumerWidget {
                 await ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(currentPhase: 2));
               }
               NotificationService().syncPassportSubscriptions([]);
+              NotificationService().syncPhaseNewsSubscription(2);
             },
             child: Text(
               isEn ? 'Enter Phase 2' : 'Entrar a Fase 2',

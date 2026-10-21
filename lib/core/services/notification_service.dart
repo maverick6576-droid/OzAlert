@@ -268,6 +268,29 @@ class NotificationService {
     }
   }
 
+  /// Sincroniza la suscripción al canal de noticias según la fase del usuario:
+  /// - Fase 1: Se suscribe a 'all_users' (si news_notifications_enabled está activo).
+  /// - Fase 2: Se desuscribe de 'all_users' para no recibir avisos de noticias de la Fase 1.
+  Future<void> syncPhaseNewsSubscription(int currentPhase) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final newsEnabled = prefs.getBool('news_notifications_enabled') ?? true;
+
+      if (currentPhase == 1) {
+        if (newsEnabled) {
+          await FirebaseMessaging.instance.subscribeToTopic('all_users');
+          debugPrint('FCM: Suscrito al canal de noticias de Fase 1 (all_users)');
+        }
+      } else {
+        // En Fase 2 desuscribirse del canal de noticias de la Fase 1
+        await FirebaseMessaging.instance.unsubscribeFromTopic('all_users');
+        debugPrint('FCM: Desuscrito del canal de noticias de Fase 1 (all_users) - Fase actual: $currentPhase');
+      }
+    } catch (e) {
+      debugPrint('Error sincronizando suscripción de noticias de fase: $e');
+    }
+  }
+
   /// Programa o emite recordatorio del 12% de Payday Super (7 días hábiles)
   Future<void> schedulePaydaySuperReminder({
     required String employerName,

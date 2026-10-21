@@ -332,6 +332,7 @@ class Phase2SettingsScreen extends ConsumerWidget {
               if (context.mounted) Navigator.of(context).maybePop();
               if (profile != null) {
                 await ref.read(userRepositoryProvider).saveUserProfile(profile.copyWith(currentPhase: 1));
+                NotificationService().syncPhaseNewsSubscription(1);
                 if (profile.isPremium) {
                   final countryCodes = profile.passports.map((pName) {
                     return AppConstants.supportedCountries.firstWhere(
