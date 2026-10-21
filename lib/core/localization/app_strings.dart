@@ -493,29 +493,31 @@ class AppStrings {
           default: return '🧳 1. Arrival & Essential Setup';
         }
       case 'employment':
+      case 'work':
         switch (clean) {
-          case 'es': return '💼 2. Empleo, Nóminas y Derechos';
-          case 'fr': return '💼 2. Emploi, Salaires & Droits';
-          case 'it': return '💼 2. Lavoro, Stipendi & Diritti';
-          case 'zh': return '💼 2. 求职、薪资与法定权益';
-          default: return '💼 2. Jobs, Pay & Workers Rights';
+          case 'es': return '💼 2. Empleo, Certificados y Derechos';
+          case 'fr': return '💼 2. Emploi, Certificats & Droits';
+          case 'it': return '💼 2. Lavoro, Certificati & Diritti';
+          case 'zh': return '💼 2. 求职、上岗证书与法定权益';
+          default: return '💼 2. Jobs, Certificates & Rights';
         }
       case 'tax_medicare':
         switch (clean) {
-          case 'es': return '🏛️ 3. Hub Fiscal, Medicare & Vehículos';
-          case 'fr': return '🏛️ 3. Pôle Fiscal, Medicare & Véhicules';
-          case 'it': return '🏛️ 3. Hub Fiscale, Medicare & Veicoli';
-          case 'zh': return '🏛️ 3. 税务、Medicare 与车辆中心';
-          default: return '🏛️ 3. Tax Hub, Medicare & Vehicles';
+          case 'es': return '🏛️ 3. Hub Fiscal, Ahorro & Conducción';
+          case 'fr': return '🏛️ 3. Pôle Fiscal, Épargne & Conduite';
+          case 'it': return '🏛️ 3. Hub Fiscale, Risparmio & Guida';
+          case 'zh': return '🏛️ 3. 税务、省钱与驾照出行';
+          default: return '🏛️ 3. Tax Hub, Savings & Driving';
         }
       case 'regional_work':
+      case 'visa_departure':
       default:
         switch (clean) {
-          case 'es': return '🚜 4. Días Regionales (2º y 3r Año)';
-          case 'fr': return '🚜 4. Travail Régional (88 & 179 Jours)';
-          case 'it': return '🚜 4. Lavoro Regionale (88 & 179 Giorni)';
-          case 'zh': return '🚜 4. 偏远地区工时（88天与179天）';
-          default: return '🚜 4. Regional Work (88 & 179 Days)';
+          case 'es': return '🚜 4. Días Regionales (2º y 3r Año) & Salida';
+          case 'fr': return '🚜 4. Travail Régional (88 & 179 Jours) & Départ';
+          case 'it': return '🚜 4. Lavoro Regionale (88 & 179 Giorni) & Rientro';
+          case 'zh': return '🚜 4. 偏远地区工时（88天/179天）与离澳';
+          default: return '🚜 4. Regional Work (88 & 179 Days) & Exit';
         }
     }
   }
@@ -523,53 +525,107 @@ class AppStrings {
   static String guideCategoryLabel(String? lang, String categoryId) {
     final clean = _cleanLang(lang);
     switch (categoryId) {
+      case 'banking':
+        switch (clean) {
+          case 'es': return '🏦 Bancos y Transferencias (Wise)';
+          case 'fr': return '🏦 Banques & Transferts Wise';
+          case 'it': return '🏦 Banche & Bonifici Wise';
+          case 'zh': return '🏦 澳洲银行开户与 Wise 跨境汇款';
+          default: return '🏦 Aussie Banks & Wise Transfers';
+        }
       case 'telecom':
         switch (clean) {
           case 'es': return '📱 Tarjeta SIM y Telefonía Móvil';
           case 'fr': return '📱 Carte SIM & Téléphonie';
-          case 'it': return '📱 Scheda SIM & Piani Mobili';
+          case 'it': return '📱 Scheda SIM & Telefonia Mobile';
           case 'zh': return '📱 SIM卡与澳洲手机套餐';
           default: return '📱 SIM Card & Mobile Plans';
         }
-      case 'banking':
-        switch (clean) {
-          case 'es': return '🏦 Bancos y Transferencias';
-          case 'fr': return '🏦 Banques & Transferts';
-          case 'it': return '🏦 Banche & Bonifici Esteri';
-          case 'zh': return '🏦 澳洲银行开户与跨境汇款';
-          default: return '🏦 Aussie Banks & Transfers';
-        }
-      case 'tfn':
-        switch (clean) {
-          case 'es': return '📑 Número de Impuestos (TFN)';
-          case 'fr': return '📑 Numéro Fiscal (TFN)';
-          case 'it': return '📑 Codice Fiscale (TFN)';
-          case 'zh': return '📑 个人税号（TFN）申请';
-          default: return '📑 Tax File Number (TFN)';
-        }
       case 'housing':
         switch (clean) {
-          case 'es': return '🏠 Alojamiento y Hostels';
-          case 'fr': return '🏠 Logement & Auberges';
-          case 'it': return '🏠 Alloggio & Ostelli';
-          case 'zh': return '🏠 抵澳初期住宿与租房';
-          default: return '🏠 Housing, Hostels & Rentals';
+          case 'es': return '🏠 Alojamiento, Hostels y Fianza';
+          case 'fr': return '🏠 Logement, Auberges & Caution';
+          case 'it': return '🏠 Alloggio, Ostelli & Cauzione';
+          case 'zh': return '🏠 抵澳初期住宿与租房押金';
+          default: return '🏠 Housing, Hostels & Rental Bond';
         }
       case 'insurance':
         switch (clean) {
-          case 'es': return '🩺 Seguro Médico y Salud (OVHC)';
+          case 'es': return '🩺 Seguro Médico (OVHC) y Salud';
           case 'fr': return '🩺 Assurance Santé & OVHC';
           case 'it': return '🩺 Assicurazione Sanitaria OVHC';
           case 'zh': return '🩺 医疗健康保险（OVHC）';
           default: return '🩺 Health Cover & OVHC Insurance';
         }
+      case 'certifications':
+      case 'white_card_rsa':
+        switch (clean) {
+          case 'es': return '📜 Certificados: White Card y RSA';
+          case 'fr': return '📜 Certificats : White Card & RSA';
+          case 'it': return '📜 Patentini: White Card & RSA';
+          case 'zh': return '📜 上岗必备证书（白卡与RSA酒牌）';
+          default: return '📜 Mandatory Tickets: White Card & RSA';
+        }
+      case 'tax':
+      case 'tfn':
+        switch (clean) {
+          case 'es': return '🧾 Impuestos: TFN, ABN y Super (12%)';
+          case 'fr': return '🧾 Fiscalité : TFN, ABN & Retraite (12%)';
+          case 'it': return '🧾 Fisco: TFN, ABN & Pensione Super (12%)';
+          case 'zh': return '🧾 澳洲税务：TFN、ABN 与养老金（12%）';
+          default: return '🧾 Taxes: TFN, ABN & Super (12%)';
+        }
+      case 'savings':
+      case 'discounts':
+        switch (clean) {
+          case 'es': return '💰 Hacks de Ahorro y Deducciones ATO';
+          case 'fr': return '💰 Astuces Épargne & Déductions ATO';
+          case 'it': return '💰 Trucchi di Risparmio & Deduzioni ATO';
+          case 'zh': return '💰 省钱攻略与 ATO 税务抵扣技巧';
+          default: return '💰 Money Hacks & ATO Deductions';
+        }
       case 'international_license':
         switch (clean) {
-          case 'es': return '🚗 Carnet de Conducir Internacional';
-          case 'fr': return '🚗 Permis de Conduire International';
-          case 'it': return '🚗 Patente Internazionale di Guida';
-          case 'zh': return '🚗 国际驾照与翻译件认证';
-          default: return '🚗 International Driving Permit';
+          case 'es': return '🪪 Permiso Internacional (IDP) y NAATI';
+          case 'fr': return '🪪 Permis International (IDP) & NAATI';
+          case 'it': return '🪪 Patente Internazionale (IDP) & NAATI';
+          case 'zh': return '🪪 国际驾照（IDP）与 NAATI 翻译认证';
+          default: return '🪪 International Driving Permit & NAATI';
+        }
+      case 'australian_license':
+      case 'vehicle':
+        switch (clean) {
+          case 'es': return '🚗 Carnet de Conducir Australiano';
+          case 'fr': return '🚗 Permis de Conduire Australien';
+          case 'it': return '🚗 Patente di Guida Australiana';
+          case 'zh': return '🚗 换领澳洲本地驾照与18+身份证';
+          default: return '🚗 Australian Driver Licence (State by State)';
+        }
+      case 'visa_renewal':
+      case 'regional_88':
+        switch (clean) {
+          case 'es': return '🌾 88 Días: Extensión 2ª Visa';
+          case 'fr': return '🌾 88 Jours : Renouvellement 2e Visa';
+          case 'it': return '🌾 88 Giorni: Rinnovo 2° Anno Visto';
+          case 'zh': return '🌾 88天偏远地区工时（二签续签）';
+          default: return '🌾 88 Days: 2nd Year Visa Extension';
+        }
+      case 'visa_renewal_179':
+      case 'regional_179':
+        switch (clean) {
+          case 'es': return '⭐ 179 Días: Extensión 3ª Visa (6 Meses)';
+          case 'fr': return '⭐ 179 Jours : Renouvellement 3e Visa (6 Mois)';
+          case 'it': return '⭐ 179 Giorni: Rinnovo 3° Anno Visto (6 Mesi)';
+          case 'zh': return '⭐ 179天工时（三签续签，6个月）';
+          default: return '⭐ 179 Days: 3rd Year Visa Extension (6 Months)';
+        }
+      case 'departure':
+        switch (clean) {
+          case 'es': return '🛫 Vuelta a Casa y Rescate de Super (DASP)';
+          case 'fr': return '🛫 Retour & Récupération Super (DASP)';
+          case 'it': return '🛫 Rientro a Casa & Rimborso Super (DASP)';
+          case 'zh': return '🛫 离澳告别与养老金退款（DASP）';
+          default: return '🛫 Departure & Super Claim (DASP)';
         }
       case 'job_search':
         switch (clean) {
@@ -586,14 +642,6 @@ class AppStrings {
           case 'it': return '📄 CV Australiano & Cover Letter';
           case 'zh': return '📄 澳洲标准简历与求职信规范';
           default: return '📄 Aussie Resume & Cover Letter';
-        }
-      case 'white_card_rsa':
-        switch (clean) {
-          case 'es': return '🪪 Certificados (RSA, White Card)';
-          case 'fr': return '🪪 Certificats (RSA, White Card)';
-          case 'it': return '🪪 Patentini (RSA, White Card)';
-          case 'zh': return '🪪 上岗必备证书（RSA、白卡）';
-          default: return '🪪 Mandatory Tickets (RSA, White Card)';
         }
       case 'fair_work':
         switch (clean) {
@@ -627,38 +675,6 @@ class AppStrings {
           case 'zh': return '📊 年度个人退税（Tax Return）申报';
           default: return '📊 Annual Tax Return Lodge';
         }
-      case 'vehicle':
-        switch (clean) {
-          case 'es': return '🚙 Compra, Venta y Rego de Vehículo';
-          case 'fr': return '🚙 Achat, Vente & Rego de Véhicule';
-          case 'it': return '🚙 Compravendita Auto & Rego';
-          case 'zh': return '🚙 购车过户与车辆路费（Rego）';
-          default: return '🚙 Car Buying, Selling & Rego';
-        }
-      case 'discounts':
-        switch (clean) {
-          case 'es': return '🏷️ Descuentos OzAlert';
-          case 'fr': return '🏷️ Réductions Exclusives OzAlert';
-          case 'it': return '🏷️ Sconti Esclusivi OzAlert';
-          case 'zh': return '🏷️ OzAlert 独家优惠福利';
-          default: return '🏷️ OzAlert Exclusive Deals';
-        }
-      case 'regional_88':
-        switch (clean) {
-          case 'es': return '🌾 88 Días para el 2º Año';
-          case 'fr': return '🌾 88 Jours pour le 2e Visa';
-          case 'it': return '🌾 88 Giorni per il 2° Anno';
-          case 'zh': return '🌾 申请第二年签证的88天工时';
-          default: return '🌾 88 Days for 2nd Year Visa';
-        }
-      case 'regional_179':
-        switch (clean) {
-          case 'es': return '🤠 179 Días para el 3r Año';
-          case 'fr': return '🤠 179 Jours pour le 3e Visa';
-          case 'it': return '🤠 179 Giorni per il 3° Anno';
-          case 'zh': return '🤠 申请第三年签证的179天工时';
-          default: return '🤠 179 Days for 3rd Year Visa';
-        }
       case 'form_1263':
         switch (clean) {
           case 'es': return '📝 Formulario 1263 y Nóminas';
@@ -667,14 +683,13 @@ class AppStrings {
           case 'zh': return '📝 1263 表格与薪资单证据';
           default: return '📝 Form 1263 & Payslips Proof';
         }
-      case 'departure':
       default:
         switch (clean) {
-          case 'es': return '🛫 Vuelta & DASP';
-          case 'fr': return '🛫 Retour & Récupération DASP';
-          case 'it': return '🛫 Partenza & Richiesta DASP';
-          case 'zh': return '🛫 离澳告别与 DASP 养老金';
-          default: return '🛫 Exit & DASP Super Claim';
+          case 'es': return '📘 Guía Oficial de Trámite';
+          case 'fr': return '📘 Guide Officiel';
+          case 'it': return '📘 Guida Ufficiale';
+          case 'zh': return '📘 官方办事指南';
+          default: return '📘 Official Guide';
         }
     }
   }

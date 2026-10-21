@@ -22,7 +22,7 @@ class GuidesScreen extends ConsumerStatefulWidget {
 }
 
 class _GuidesScreenState extends ConsumerState<GuidesScreen> {
-  int _selectedThemeIndex = 0; // 0 = Llegada, 1 = Trabajo & Ahorro, 2 = Visa & Retorno
+  int _selectedThemeIndex = 0; // 0 = Llegada, 1 = Empleo, 2 = Fiscal & Auto, 3 = Regional & Salida
   String _selectedCategory = 'banking';
   int _selectedSubTab = 0; // 0 = Guía Paso a Paso, 1 = Comparativa, 2 = Servicios & Promos
 
@@ -56,28 +56,35 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
       'categories': [
         {'id': 'banking', 'label': '🏦 Bancos & Wise', 'labelEn': '🏦 Banks & Wise'},
         {'id': 'telecom', 'label': '📱 SIM & Red', 'labelEn': '📱 Mobile & SIM'},
-        {'id': 'insurance', 'label': '🏥 Medicare & Salud', 'labelEn': '🏥 Healthcare'},
         {'id': 'housing', 'label': '🏠 Alquiler & Fianza', 'labelEn': '🏠 Housing & Bond'},
+        {'id': 'insurance', 'label': '🏥 Medicare & Salud', 'labelEn': '🏥 Healthcare'},
+      ]
+    },
+    {
+      'id': 'employment',
+      'label': '💼 Empleo',
+      'labelEn': '💼 Employment',
+      'categories': [
+        {'id': 'certifications', 'label': '📜 White Card & RSA', 'labelEn': '📜 Certificates'},
+        {'id': 'tax', 'label': '🧾 TFN & Super (12%)', 'labelEn': '🧾 Tax & Super'},
+      ]
+    },
+    {
+      'id': 'tax_medicare',
+      'label': '🏛️ Fiscal & Auto',
+      'labelEn': '🏛️ Tax & Cars',
+      'categories': [
+        {'id': 'savings', 'label': '💰 Hacks de Ahorro', 'labelEn': '💰 Pro Money Hacks'},
         {'id': 'international_license', 'label': '🪪 Carnet Internacional', 'labelEn': '🪪 International Permit'},
         {'id': 'australian_license', 'label': '🚗 Carnet Australiano', 'labelEn': '🚗 Aussie Driver Licence'},
       ]
     },
     {
-      'id': 'work',
-      'label': '💼 Trabajo & Ahorro',
-      'labelEn': '💼 Work & Tax',
+      'id': 'regional_work',
+      'label': '🚜 Regional & Salida',
+      'labelEn': '🚜 Regional & Exit',
       'categories': [
-        {'id': 'tax', 'label': '🧾 TFN & Super (12%)', 'labelEn': '🧾 Tax & Super'},
-        {'id': 'certifications', 'label': '📜 White Card & RSA', 'labelEn': '📜 Certificates'},
-        {'id': 'savings', 'label': '💰 Hacks de Ahorro', 'labelEn': '💰 Pro Money Hacks'},
-      ]
-    },
-    {
-      'id': 'visa_departure',
-      'label': '🔄 Visa & Retorno',
-      'labelEn': '🔄 Visa & Exit',
-      'categories': [
-        {'id': 'visa_renewal', 'label': '🚜 88 Días (2ª Visa)', 'labelEn': '🚜 88 Days (2nd Visa)'},
+        {'id': 'visa_renewal', 'label': '🌾 88 Días (2ª Visa)', 'labelEn': '🌾 88 Days (2nd Visa)'},
         {'id': 'visa_renewal_179', 'label': '⭐ 179 Días (3ª Visa)', 'labelEn': '⭐ 179 Days (3rd Visa)'},
         {'id': 'departure', 'label': '🛫 Vuelta & DASP', 'labelEn': '🛫 Exit & DASP'},
       ]
