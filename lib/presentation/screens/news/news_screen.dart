@@ -187,7 +187,18 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
             error: (err, _) => _buildErrorState(err.toString()),
             data: (allNews) {
               if (allNews.isEmpty) {
-                return _buildEmptyState('Aún no se han capturado alertas de Google. El servidor está escaneando.');
+                final lang = Localizations.localeOf(context).languageCode;
+                final emptyMsg = () {
+                  switch (lang) {
+                    case 'fr': return 'Aucune alerte Google capturée pour le moment. Les serveurs scannent activement le web.';
+                    case 'it': return 'Nessuna allerta Google rilevata per ora. I server stanno scansionando attivamente.';
+                    case 'zh': return '暂未抓取到相关的 Google 移民预警资讯。后台正在全天候扫描中。';
+                    case 'es': return 'Aún no se han capturado alertas de Google. El servidor está escaneando.';
+                    case 'en':
+                    default: return 'No Google alerts captured yet. Servers are scanning actively.';
+                  }
+                }();
+                return _buildEmptyState(emptyMsg);
               }
               return Column(
                 children: allNews.map((item) => NewsCard(item: item)).toList(),

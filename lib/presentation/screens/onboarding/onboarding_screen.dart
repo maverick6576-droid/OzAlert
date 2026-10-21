@@ -81,13 +81,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    AppLocalizations.of(context)!.onboardingTitle,
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900,
-                      color: AppColors.textPrimary,
-                      letterSpacing: -0.5,
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      AppLocalizations.of(context)!.onboardingTitle,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.textPrimary,
+                        letterSpacing: -0.5,
+                      ),
                     ),
                   ).animate().fadeIn(duration: 400.ms).slideY(begin: -0.2, end: 0),
                   const SizedBox(height: 8),
@@ -191,7 +195,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                           maxCrossAxisExtent: 160,
                           mainAxisSpacing: 12,
                           crossAxisSpacing: 12,
-                          childAspectRatio: 2.5,
+                          childAspectRatio: 2.1,
                         ),
                         itemCount: _countries.length,
                         itemBuilder: (context, index) {
@@ -330,22 +334,30 @@ class _PassportChip extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  color: isSelected ? AppColors.secondary : AppColors.textPrimary,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
+                child: Center(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                        color: isSelected ? AppColors.secondary : AppColors.textPrimary,
+                        height: 1.15,
+                      ),
+                      maxLines: 2,
+                    ),
+                  ),
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
             ),
             if (isSelected)
               const Padding(
-                padding: EdgeInsets.only(right: 8.0),
-                child: Icon(CupertinoIcons.checkmark_alt, size: 16, color: AppColors.secondary),
+                padding: EdgeInsets.only(right: 6.0),
+                child: Icon(CupertinoIcons.checkmark_alt, size: 15, color: AppColors.secondary),
               ),
           ],
         ),

@@ -59,14 +59,20 @@ class _PaywallModalState extends ConsumerState<PaywallModal> {
         ),
       );
     } else {
-      final isEn = Localizations.localeOf(context).languageCode == 'en';
+      final lang = Localizations.localeOf(context).languageCode;
+      final errorMsg = () {
+        switch (lang) {
+          case 'es': return 'No se encontraron suscripciones activas';
+          case 'fr': return 'Aucun abonnement actif trouvé';
+          case 'it': return 'Nessun abbonamento attivo trovato';
+          case 'zh': return '未找到有效的订阅记录';
+          case 'en':
+          default: return 'No active subscriptions found';
+        }
+      }();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            isEn
-                ? 'No active subscriptions found'
-                : 'No se encontraron suscripciones activas',
-          ),
+          content: Text(errorMsg),
           backgroundColor: Colors.orange,
         ),
       );
@@ -75,6 +81,28 @@ class _PaywallModalState extends ConsumerState<PaywallModal> {
 
   @override
   Widget build(BuildContext context) {
+    final lang = Localizations.localeOf(context).languageCode;
+    final annualSuffix = () {
+      switch (lang) {
+        case 'es': return '/ año';
+        case 'fr': return '/ an';
+        case 'it': return '/ anno';
+        case 'zh': return '/ 年';
+        case 'en':
+        default: return '/ year';
+      }
+    }();
+    final monthlySuffix = () {
+      switch (lang) {
+        case 'es': return '/ mes';
+        case 'fr': return '/ mois';
+        case 'it': return '/ mese';
+        case 'zh': return '/ 月';
+        case 'en':
+        default: return '/ month';
+      }
+    }();
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: const BoxDecoration(
@@ -135,7 +163,7 @@ class _PaywallModalState extends ConsumerState<PaywallModal> {
 
             _buildPlanTile(
               title: AppLocalizations.of(context)!.paywallPlanAnnualTitle,
-              price: '\$14.99 / año',
+              price: '\$14.99 $annualSuffix',
               subtitle: AppLocalizations.of(context)!.paywallPlanAnnualDesc,
               isSelected: _selectedPlan == _SubscriptionPlan.annual,
               onTap: () => setState(() => _selectedPlan = _SubscriptionPlan.annual),
@@ -143,7 +171,7 @@ class _PaywallModalState extends ConsumerState<PaywallModal> {
             const SizedBox(height: 12),
             _buildPlanTile(
               title: AppLocalizations.of(context)!.paywallPlanMonthlyTitle,
-              price: '\$1.99 / mes',
+              price: '\$1.99 $monthlySuffix',
               subtitle: AppLocalizations.of(context)!.paywallPlanMonthlyDesc,
               isSelected: _selectedPlan == _SubscriptionPlan.monthly,
               onTap: () => setState(() => _selectedPlan = _SubscriptionPlan.monthly),

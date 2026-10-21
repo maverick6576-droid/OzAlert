@@ -9,6 +9,7 @@ import '../../providers/news_notifications_provider.dart';
 import '../../providers/user_provider.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../../core/localization/app_strings.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -16,7 +17,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentLocale = ref.watch(localeProvider) ?? Localizations.localeOf(context);
-    final isEn = currentLocale.languageCode == 'en';
+    final lang = currentLocale.languageCode;
     final l10n = AppLocalizations.of(context)!;
     final profile = ref.watch(userProfileProvider).value;
 
@@ -116,7 +117,7 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 32),
           Text(
-            isEn ? 'App Phase' : 'Fase de la aplicación',
+            AppStrings.appPhaseTitle(lang),
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -127,17 +128,15 @@ class SettingsScreen extends ConsumerWidget {
           ListTile(
             tileColor: AppColors.surface,
             title: Text(
-              isEn ? 'Switch to Phase 2 (I got my visa!)' : 'Pasar a la Fase 2 (¡Ya tengo mi visado!)',
+              AppStrings.switchToPhase2Tile(lang),
               style: const TextStyle(color: AppColors.textPrimary),
             ),
             subtitle: Text(
-              isEn
-                  ? 'Unlock Arrival Checklist, Guides, 88-Day Validator, Pay Calculator & Aussie CV'
-                  : 'Desbloquea Checklist de Aterrizaje, Guías en Australia, 88 Días, Sueldo y CV',
+              AppStrings.switchToPhase2Subtitle(lang),
               style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
             ),
             trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
-            onTap: () => _confirmSwitchToPhase2(context, ref, profile, isEn),
+            onTap: () => _confirmSwitchToPhase2(context, ref, profile, lang),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
               side: const BorderSide(color: AppColors.cardBorder),
@@ -255,19 +254,17 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  void _confirmSwitchToPhase2(BuildContext context, WidgetRef ref, dynamic profile, bool isEn) {
+  void _confirmSwitchToPhase2(BuildContext context, WidgetRef ref, dynamic profile, String lang) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(isEn ? 'Switch to Phase 2?' : '¿Pasar a la Fase 2?'),
+        title: Text(AppStrings.switchToPhase2DialogTitle(lang)),
         content: Text(
-          isEn
-              ? 'You will access the Australia mode (Arrival Checklist, Guides, 88-Day Validator, Pay Calculator & Aussie CV). You can return to Phase 1 anytime.'
-              : 'Activarás el modo Australia (Checklist de Aterrizaje, Guías, Validador de 88 Días, Sueldo y CV). Podrás volver a la Fase 1 en cualquier momento.',
+          AppStrings.switchToPhase2DialogContent(lang),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(isEn ? 'Cancel' : 'Cancelar')),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(AppStrings.cancelButton(lang))),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.secondary),
             onPressed: () async {
@@ -280,7 +277,7 @@ class SettingsScreen extends ConsumerWidget {
               NotificationService().syncPhaseNewsSubscription(2);
             },
             child: Text(
-              isEn ? 'Enter Phase 2' : 'Entrar a Fase 2',
+              AppStrings.enterPhase2Button(lang),
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),

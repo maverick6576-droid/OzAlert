@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../providers/phase2/phase2_providers.dart';
 import '../../../providers/locale_provider.dart';
+import '../../../../core/localization/app_strings.dart';
 import '../../../../domain/models/phase2/landing_task.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/phase2_app_bar.dart';
 import '../../../widgets/phase2/tax_and_vehicle_hub_modal.dart';
@@ -26,12 +27,13 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
   Widget build(BuildContext context) {
     final tasksAsync = ref.watch(landingTasksProvider);
     final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode != 'es';
+    final lang = locale?.languageCode ?? Localizations.localeOf(context).languageCode;
+    final isEn = lang != 'es';
 
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: Phase2AppBar(
-        title: isEn ? 'Arrival Hub' : 'Guía de Aterrizaje',
+        title: AppStrings.landingAppBarTitle(lang),
         isEn: isEn,
         infoTopic: 'arrival',
       ),
@@ -50,45 +52,45 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
 
           final stages = [
             {
-              'title': isEn ? '✈️ Pre-Flight' : '✈️ Pre-Vuelo',
-              'shortTitle': isEn ? 'Pre-Flight' : 'Pre-Vuelo',
-              'subtitle': isEn ? 'Before boarding' : 'Antes de despegar',
+              'title': AppStrings.stageTitle(lang, 0),
+              'shortTitle': AppStrings.stageShortTitle(lang, 0),
+              'subtitle': AppStrings.stageSubtitle(lang, 0),
               'icon': '🛫',
               'landmark': isEn ? 'Departure Gate' : 'Despegue',
               'aussieTheme': isEn ? 'Passport, Visa & Akubra Hat' : 'Pasaporte, Visa & Sombrero Akubra',
               'tasks': preDepartureTasks,
             },
             {
-              'title': isEn ? '🧳 Arrival' : '🧳 Llegada',
-              'shortTitle': isEn ? 'Arrival' : 'Llegada',
-              'subtitle': isEn ? 'First 48h & week' : 'Primeros días',
+              'title': AppStrings.stageTitle(lang, 1),
+              'shortTitle': AppStrings.stageShortTitle(lang, 1),
+              'subtitle': AppStrings.stageSubtitle(lang, 1),
               'icon': '🏄',
               'landmark': isEn ? 'Bondi Beach' : 'Sydney & Costa',
               'aussieTheme': isEn ? 'TFN, SIM & Flat White' : 'TFN, SIM & Buen Flat White',
               'tasks': arrivalTasks,
             },
             {
-              'title': isEn ? '🚜 88 Days (2nd Visa)' : '🚜 88 Días (2ª Visa)',
-              'shortTitle': isEn ? '88 Days' : '88 Días',
-              'subtitle': isEn ? 'Regional work & 2nd year' : 'Trabajo regional 2º año',
+              'title': AppStrings.stageTitle(lang, 2),
+              'shortTitle': AppStrings.stageShortTitle(lang, 2),
+              'subtitle': AppStrings.stageSubtitle(lang, 2),
               'icon': '🚜',
               'landmark': isEn ? 'Red Dirt Farm' : 'Outback & Granja',
               'aussieTheme': isEn ? 'Red Dust & 88 Days Work Log' : 'Tierra Roja & Faena de 88 Días',
               'tasks': renewal88Tasks,
             },
             {
-              'title': isEn ? '🌾 179 Days (3rd Visa)' : '🌾 179 Días (3ª Visa)',
-              'shortTitle': isEn ? '179 Days' : '179 Días',
-              'subtitle': isEn ? '6 months & 3rd year' : '6 meses & 3r año',
+              'title': AppStrings.stageTitle(lang, 3),
+              'shortTitle': AppStrings.stageShortTitle(lang, 3),
+              'subtitle': AppStrings.stageSubtitle(lang, 3),
               'icon': '🌾',
               'landmark': isEn ? 'Top End & Far North' : 'Top End & Outback Profundo',
               'aussieTheme': isEn ? '179 Days Log & Form 1263 Audit' : 'Registro 179 Días & Auditoría 1263',
               'tasks': renewal179Tasks,
             },
             {
-              'title': isEn ? '🛫 Departure' : '🛫 Salida',
-              'shortTitle': isEn ? 'Departure' : 'Salida',
-              'subtitle': isEn ? 'Reclaim DASP & cash' : 'Recuperar dinero',
+              'title': AppStrings.stageTitle(lang, 4),
+              'shortTitle': AppStrings.stageShortTitle(lang, 4),
+              'subtitle': AppStrings.stageSubtitle(lang, 4),
               'icon': '🪸',
               'landmark': isEn ? 'Reef & Departure' : 'Gran Barrera & Salida',
               'aussieTheme': isEn ? 'DASP Super Reclaim & Tax Return' : 'Rescate Super (DASP) & Tax Return',
@@ -117,6 +119,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                   stageIndex: stageIdx,
                   stage: stages[stageIdx],
                   isExpanded: _selectedStageIndex == stageIdx,
+                  lang: lang,
                   isEn: isEn,
                   onHeaderTap: () {
                     setState(() {
@@ -552,6 +555,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
     required int stageIndex,
     required Map<String, dynamic> stage,
     required bool isExpanded,
+    required String lang,
     required bool isEn,
     required VoidCallback onHeaderTap,
   }) {
@@ -678,7 +682,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                 children: [
                   if (stageIndex == 3) ...[
                     InkWell(
-                      onTap: () => TaxAndVehicleHubModal.show(context, isEn: isEn),
+                      onTap: () => TaxAndVehicleHubModal.show(context, lang: lang, isEn: isEn),
                       borderRadius: BorderRadius.circular(14),
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 10),
@@ -770,7 +774,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                       ),
                     ),
                   ],
-                  ...tasks.map((t) => _buildTaskTile(context, ref, t, isEn)),
+                  ...tasks.map((t) => _buildTaskTile(context, ref, t, lang, isEn)),
                 ],
               ),
             ),
@@ -780,7 +784,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
     );
   }
 
-  Widget _buildTaskTile(BuildContext context, WidgetRef ref, LandingTask task, bool isEn) {
+  Widget _buildTaskTile(BuildContext context, WidgetRef ref, LandingTask task, String lang, bool isEn) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 5),
       shape: RoundedRectangleBorder(
@@ -836,7 +840,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                 children: [
                   const SizedBox(height: 8),
                   Text(
-                    isEn ? task.titleEn : task.title,
+                    AppStrings.getTaskTitle(lang, task.id, task.title, task.titleEn),
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 14.5,
@@ -846,7 +850,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    isEn ? task.subtitleEn : task.subtitle,
+                    AppStrings.getTaskSubtitle(lang, task.id, task.subtitle, task.subtitleEn),
                     style: TextStyle(
                       fontSize: 12.5,
                       color: task.isCompleted ? AppColors.textMuted : AppColors.textSecondary,
@@ -862,7 +866,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                             task.id == 'dasp_super_refund_claim' ||
                             task.id == 'sell_car_rwc_rego' ||
                             task.id == 'medicare_levy_exemption') {
-                          TaxAndVehicleHubModal.show(context, isEn: isEn);
+                          TaxAndVehicleHubModal.show(context, lang: lang, isEn: isEn);
                           return;
                         }
                         final target = task.targetGuideCategory!;

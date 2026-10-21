@@ -6,6 +6,7 @@ import '../../../../core/services/affiliate_link_service.dart';
 import '../../../../core/services/url_launcher_service.dart';
 import '../../../providers/phase2/phase2_providers.dart';
 import '../../../providers/locale_provider.dart';
+import '../../../../core/localization/app_strings.dart';
 import '../../../../domain/models/phase2/affiliate_partner.dart';
 import '../../../../domain/models/phase2/guide_data.dart';
 import '../../../widgets/phase2/premium_feature_gate.dart';
@@ -86,7 +87,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
   Widget build(BuildContext context) {
     final navState = ref.watch(phase2NavigationProvider);
     final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode != 'es';
+    final lang = locale?.languageCode ?? Localizations.localeOf(context).languageCode;
+    final isEn = lang != 'es';
 
     // Redirección directa desde checklist de Aterrizaje
     if (navState.activeGuideCategory != null && navState.activeGuideCategory != _selectedCategory) {
@@ -112,7 +114,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: Phase2AppBar(
-        title: isEn ? 'Guides' : 'Guías',
+        title: AppStrings.guidesAppBarTitle(lang),
         isEn: isEn,
         infoTopic: _selectedCategory,
       ),
@@ -138,7 +140,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          isEn ? 'Return to checklist to mark step done' : 'Volver al checklist para marcar la tarea',
+                          AppStrings.guideReturnChecklist(lang),
                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.secondary),
                         ),
                       ),
@@ -149,7 +151,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             ),
 
           // 1. TARJETA EJECUTIVA DE CONTEXTO: ESTÁS CONSULTANDO [TEMA]
-          _buildActiveTopicHeaderCard(isEn, currentTheme, currentCategoryItem),
+          _buildActiveTopicHeaderCard(lang, isEn, currentTheme, currentCategoryItem),
 
           // 2. SUB-TABS SEGMENTADAS DE 1 SOLA LÍNEA (Paso a Paso / Comparativa / Descuentos & Apps)
           Padding(
@@ -165,15 +167,15 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 children: [
                   _buildSubTabItem(
                     index: 0,
-                    label: isEn ? '📘 Steps' : '📘 Pasos',
+                    label: AppStrings.guideSubTab(lang, 0),
                   ),
                   _buildSubTabItem(
                     index: 1,
-                    label: isEn ? '⚖️ Compare' : '⚖️ Comparar',
+                    label: AppStrings.guideSubTab(lang, 1),
                   ),
                   _buildSubTabItem(
                     index: 2,
-                    label: isEn ? '🎁 Deals' : '🎁 Descuentos',
+                    label: AppStrings.guideSubTab(lang, 2),
                   ),
                 ],
               ),
@@ -189,18 +191,18 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 if (guide == null) {
                   return Center(
                     child: Text(
-                      isEn ? 'Information coming soon' : 'Información en preparación',
+                      AppStrings.guideComingSoon(lang),
                       style: const TextStyle(color: AppColors.textMuted),
                     ),
                   );
                 }
 
                 if (_selectedSubTab == 0) {
-                  return _buildStepsView(guide, isEn);
+                  return _buildStepsView(guide, lang, isEn);
                 } else if (_selectedSubTab == 1) {
-                  return _buildComparisonsView(guide, isEn);
+                  return _buildComparisonsView(guide, lang, isEn);
                 } else {
-                  return _buildPartnersView(partnersAsync, isEn);
+                  return _buildPartnersView(partnersAsync, lang, isEn);
                 }
               },
               loading: () => const Center(child: CircularProgressIndicator(color: AppColors.primary)),
@@ -214,12 +216,13 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
 
   // 1. TARJETA EJECUTIVA DE CONTEXTO
   Widget _buildActiveTopicHeaderCard(
+    String lang,
     bool isEn,
     Map<String, dynamic> currentTheme,
     Map<String, String> currentCategoryItem,
   ) {
-    final themeLabel = isEn ? (currentTheme['labelEn'] as String) : (currentTheme['label'] as String);
-    final categoryLabel = isEn ? currentCategoryItem['labelEn']! : currentCategoryItem['label']!;
+    final themeLabel = AppStrings.guideThemeTitle(lang, currentTheme['id'] as String);
+    final categoryLabel = AppStrings.guideCategoryLabel(lang, currentCategoryItem['id']!);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -240,7 +243,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  (isEn ? 'STAGE: ' : 'ETAPA: ') + themeLabel.toUpperCase(),
+                  AppStrings.guideStagePrefix(lang) + themeLabel.toUpperCase(),
                   softWrap: true,
                   style: const TextStyle(
                     fontSize: 10,
@@ -264,7 +267,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
           ),
           const SizedBox(width: 8),
           InkWell(
-            onTap: () => _showGuidesCatalogModal(context, isEn),
+            onTap: () => _showGuidesCatalogModal(context, lang, isEn),
             borderRadius: BorderRadius.circular(10),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
@@ -279,7 +282,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   const Icon(CupertinoIcons.square_grid_2x2_fill, size: 13, color: AppColors.primary),
                   const SizedBox(width: 5),
                   Text(
-                    isEn ? 'All (11)' : 'Ver todas',
+                    AppStrings.guideAllTopics(lang),
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -298,7 +301,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
   }
 
   // 2. MODAL EXPLORADOR DE TODAS LAS GUÍAS AGRUPADAS POR ETAPA
-  void _showGuidesCatalogModal(BuildContext context, bool isEn) {
+  void _showGuidesCatalogModal(BuildContext context, String lang, bool isEn) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -331,13 +334,11 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            isEn ? 'Guides & Reviews Directory' : 'Catálogo de Guías & Revisiones',
+                            AppStrings.guideDirectoryTitle(lang),
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
                           ),
                           Text(
-                            isEn
-                                ? '11 essential topics organized by your journey stage'
-                                : '11 temas esenciales ordenados por etapa de tu estancia',
+                            AppStrings.guideDirectorySubtitle(lang),
                             style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
                           ),
                         ],
@@ -357,7 +358,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   itemCount: _themes.length,
                   itemBuilder: (context, themeIdx) {
                     final theme = _themes[themeIdx];
-                    final themeLabel = isEn ? (theme['labelEn'] as String) : (theme['label'] as String);
+                    final themeLabel = AppStrings.guideThemeTitle(lang, theme['id'] as String);
                     final categories = theme['categories'] as List<Map<String, String>>;
 
                     return Column(
@@ -377,8 +378,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                         ),
                         ...categories.map((cat) {
                           final isCurrent = cat['id'] == _selectedCategory;
-                          final label = isEn ? cat['labelEn']! : cat['label']!;
-                          final desc = _getCategoryDescription(cat['id']!, isEn);
+                          final label = AppStrings.guideCategoryLabel(lang, cat['id']!);
+                          final desc = AppStrings.guideCategoryDescription(lang, cat['id']!);
 
                           return Container(
                             margin: const EdgeInsets.only(bottom: 8),
@@ -429,7 +430,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                                                       borderRadius: BorderRadius.circular(8),
                                                     ),
                                                     child: Text(
-                                                      isEn ? 'ACTIVE' : 'ACTIVA',
+                                                      AppStrings.guideActiveBadge(lang),
                                                       style: const TextStyle(
                                                         fontSize: 9.5,
                                                         fontWeight: FontWeight.w900,
@@ -476,56 +477,6 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     );
   }
 
-  String _getCategoryDescription(String catId, bool isEn) {
-    switch (catId) {
-      case 'banking':
-        return isEn
-            ? 'Fee-free Australian bank accounts and low-spread Wise international transfers.'
-            : 'Cuentas bancarias sin comisiones de apertura y transferencias con Wise.';
-      case 'telecom':
-        return isEn
-            ? 'Telstra vs Optus mobile coverage, eSIMs and prepaid newcomer plans.'
-            : 'Comparativa de cobertura entre Telstra, Optus y SIMs prepago.';
-      case 'insurance':
-        return isEn
-            ? 'Reciprocal Medicare free healthcare card and OVHC private insurance.'
-            : 'Tarjeta Medicare gratuita (convenio RHCA) y seguros de salud.';
-      case 'housing':
-        return isEn
-            ? 'Finding rooms on Flatmates, lease agreements and official state bond lodgement.'
-            : 'Buscar habitación en Flatmates, contratos e ingreso oficial de fianza.';
-      case 'international_license':
-        return isEn
-            ? 'Country-by-country guide (462 & 417) to get your International Driving Permit (IDP) or NAATI translation.'
-            : 'Guía para todos los países (462 y 417): cómo sacar el Permiso Internacional (IDP) o traducción NAATI.';
-      case 'australian_license':
-        return isEn
-            ? 'Direct state licence conversion (Service NSW, VicRoads, TMR, DoT) for local +18 ID and driving.'
-            : 'Canje por el carnet australiano en cada estado (NSW, VIC, QLD, WA) para tener ID local y conducir.';
-      case 'tax':
-        return isEn
-            ? 'TFN & ABN registration, tax withholding rates and statutory 12% super.'
-            : 'Solicitud de TFN, ABN, retenciones IRPF y el 12% de Superannuation.';
-      case 'certifications':
-        return isEn
-            ? 'Mandatory certificates: White Card for construction and state RSA for bar/cafe.'
-            : 'Cursos obligatorios oficiales: White Card de obra y RSA de hostelería.';
-      case 'savings':
-        return isEn
-            ? 'ATO tax deduction tricks, grocery hacks and massive cash-saving strategies.'
-            : 'Estrategias y deducciones de impuestos ATO para ahorrar miles de dólares.';
-      case 'visa_renewal':
-        return isEn
-            ? '2nd and 3rd year requirements: 88 regional days and audit-proof dossier.'
-            : 'Requisitos para 2º y 3r año: 88 días regionales y expediente blindado.';
-      case 'departure':
-        return isEn
-            ? 'Exit checklist: DASP Superannuation refund, bond recovery and early tax return.'
-            : 'Protocolo de salida: reclamar Superannuation (DASP), fianza e impuestos.';
-      default:
-        return isEn ? 'Comprehensive guide with step-by-step instructions.' : 'Guía completa con instrucciones paso a paso.';
-    }
-  }
 
   Widget _buildSubTabItem({
     required int index,
@@ -563,7 +514,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
   }
 
   // 1. BANNER FLOTANTE INTELIGENTE: AUDITORÍA DE RIESGO FINANCIERO
-  Widget _buildFinancialRiskFloatingBanner(bool isEn) {
+  Widget _buildFinancialRiskFloatingBanner(String lang, bool isEn) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -597,18 +548,18 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  isEn ? 'Money at Risk in Australia' : 'Dinero en juego en Australia',
+                  AppStrings.calcBannerTitle(lang),
                   style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12, color: AppColors.textPrimary),
                 ),
                 Text(
-                  isEn ? 'Super, Bond, Taxes & Medicare' : 'Super, Fianza, Tax y Medicare',
+                  AppStrings.calcBannerSubtitle(lang),
                   style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
                 ),
               ],
             ),
           ),
           InkWell(
-            onTap: () => _showCalculatorModal(context, isEn),
+            onTap: () => _showCalculatorModal(context, lang, isEn),
             borderRadius: BorderRadius.circular(9),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
@@ -620,7 +571,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    isEn ? 'Audit' : 'Auditar',
+                    AppStrings.calcAuditButton(lang),
                     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 11),
                   ),
                   const SizedBox(width: 2),
@@ -634,7 +585,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     );
   }
 
-  void _showCalculatorModal(BuildContext context, bool isEn) {
+  void _showCalculatorModal(BuildContext context, String lang, bool isEn) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -666,7 +617,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            isEn ? 'Money Audit & Simulator' : 'Auditoría & Simulador de Dinero',
+                            AppStrings.calcModalTitle(lang),
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
                           ),
                         ),
@@ -681,7 +632,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   Expanded(
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.all(16),
-                      child: _buildInteractiveMoneyCalculator(isEn, setModalState),
+                      child: _buildInteractiveMoneyCalculator(lang, isEn, setModalState),
                     ),
                   ),
                 ],
@@ -694,7 +645,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
   }
 
   // --- 1. VISTA DE GUÍA PASO A PASO ---
-  Widget _buildStepsView(CategoryGuide guide, bool isEn) {
+  Widget _buildStepsView(CategoryGuide guide, String lang, bool isEn) {
     final isSavings = guide.id == 'savings';
     final isDeparture = guide.id == 'departure';
     final isVisaRenewal = guide.id == 'visa_renewal';
@@ -703,7 +654,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       children: [
         if (isSavings || isDeparture) ...[
-          _buildFinancialRiskFloatingBanner(isEn),
+          _buildFinancialRiskFloatingBanner(lang, isEn),
           const SizedBox(height: 12),
         ],
 
@@ -734,7 +685,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 child: OutlinedButton.icon(
                   icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 15, color: AppColors.secondary),
                   label: Text(
-                    isEn ? 'Consult Official Legal Regulations' : 'Consultar Normativa Oficial y Fuentes Legales',
+                    AppStrings.guideConsultLegal(lang),
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: AppColors.secondary),
                   ),
@@ -744,7 +695,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                   ),
                   onPressed: () {
-                    showOfficialSourcesModal(context, isEn: isEn, initialTopic: guide.id);
+                    showOfficialSourcesModal(context, lang: lang, isEn: isEn, initialTopic: guide.id);
                   },
                 ),
               ),
@@ -792,7 +743,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     );
   }
 
-  Widget _buildInteractiveMoneyCalculator(bool isEn, [void Function(void Function())? modalSetState]) {
+  Widget _buildInteractiveMoneyCalculator(String lang, bool isEn, [void Function(void Function())? modalSetState]) {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -820,11 +771,11 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      isEn ? '⚠️ Money at Risk Calculator' : '⚠️ Calculadora de Dinero en Juego',
+                      AppStrings.calcTitle(lang),
                       style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15, color: AppColors.textPrimary),
                     ),
                     Text(
-                      isEn ? 'Cash often lost by WHV newcomers' : 'Dinero que se suele perder por desconocimiento',
+                      AppStrings.calcSubtitle(lang),
                       style: const TextStyle(fontSize: 11.5, color: AppColors.textMuted),
                     ),
                   ],
@@ -855,12 +806,12 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        isEn ? 'TOTAL RECLAIMABLE / SHIELDED' : 'TOTAL RECLAMABLE / PROTEGIDO',
+                        AppStrings.calcTotalReclaimable(lang),
                         style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w800, color: AppColors.textSecondary, letterSpacing: 0.5),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        isEn ? 'Based on your selected options' : 'Según las opciones marcadas debajo',
+                        AppStrings.calcBasedOn(lang),
                         style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                       ),
                     ],
@@ -880,13 +831,13 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
           const SizedBox(height: 14),
 
           Text(
-            isEn ? 'Select your situations to calculate:' : 'Marca tu situación para auditar tu caso:',
+            AppStrings.calcSelectSituations(lang),
             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
           ),
           const SizedBox(height: 6),
 
           _buildCalcToggleRow(
-            title: isEn ? 'DASP: 12% Superannuation Exit Refund' : 'DASP: Devolución 12% Superannuation al salir',
+            title: AppStrings.calcDaspTitle(lang),
             amount: '+\$1,850 AUD',
             value: _calcSuperDasp,
             onChanged: (val) {
@@ -895,7 +846,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             },
           ),
           _buildCalcToggleRow(
-            title: isEn ? 'Official Bond Lodgement (Bond Board)' : 'Fianza blindada en organismo oficial estatal',
+            title: AppStrings.calcBondTitle(lang),
             amount: '+\$1,500 AUD',
             value: _calcBondRisk,
             onChanged: (val) {
@@ -904,7 +855,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             },
           ),
           _buildCalcToggleRow(
-            title: isEn ? 'Reciprocal Medicare (Free GP bulk-billing)' : 'Medicare Recíproco (Médico GP público gratis)',
+            title: AppStrings.calcMedicareTitle(lang),
             amount: '+\$600 AUD',
             value: _calcMedicareTreaty,
             onChanged: (val) {
@@ -913,7 +864,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             },
           ),
           _buildCalcToggleRow(
-            title: isEn ? 'ATO Tax Deductions (Boots, gear, RSA)' : 'Deducciones ATO (Botas, cursos y ropa)',
+            title: AppStrings.calcDeductBoots(lang),
             amount: '+\$500 AUD',
             value: _calcDeductBoots,
             onChanged: (val) {
@@ -922,7 +873,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             },
           ),
           _buildCalcToggleRow(
-            title: isEn ? 'Early Tax Return: Claim withholdings before July' : 'Early Tax Return: Devolución IRPF anticipada',
+            title: AppStrings.calcEarlyTax(lang),
             amount: '+\$800 AUD',
             value: _calcEarlyTaxReturn,
             onChanged: (val) {
@@ -931,7 +882,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             },
           ),
           _buildCalcToggleRow(
-            title: isEn ? 'Wise Transfer: Avoid 4% hidden bank SWIFT markup' : 'Transferencia Wise: Evita el 4% de spread bancario',
+            title: AppStrings.calcWiseTitle(lang),
             amount: '+\$450 AUD',
             value: _calcBankSpread,
             onChanged: (val) {
@@ -953,9 +904,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    isEn
-                        ? 'Pro guides explain exactly how to claim and shield every single dollar.'
-                        : 'Las guías Pro te explican con precisión cómo blindar y recuperar cada dólar.',
+                    AppStrings.calcProTip(lang),
                     style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
                   ),
                 ),
@@ -968,7 +917,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             child: OutlinedButton.icon(
               icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 14, color: AppColors.primary),
               label: Text(
-                isEn ? 'Consult Official Sources (ATO & Home Affairs)' : 'Consultar Fuentes Oficiales (ATO e Inmigración)',
+                AppStrings.calcConsultOfficial(lang),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.primary),
               ),
@@ -978,7 +927,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
               ),
               onPressed: () {
-                showOfficialSourcesModal(context, isEn: isEn, initialTopic: 'tax');
+                showOfficialSourcesModal(context, lang: lang, isEn: isEn, initialTopic: 'tax');
               },
             ),
           ),
@@ -1187,11 +1136,11 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
   }
 
   // --- 2. VISTA DE COMPARATIVAS ---
-  Widget _buildComparisonsView(CategoryGuide guide, bool isEn) {
+  Widget _buildComparisonsView(CategoryGuide guide, String lang, bool isEn) {
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       children: [
-        ...guide.comparisons.map((c) => _buildComparisonCard(c, isEn)),
+        ...guide.comparisons.map((c) => _buildComparisonCard(c, lang, isEn)),
         const SizedBox(height: 16),
         _buildTaxHackBanner(isEn),
         const SizedBox(height: 36),
@@ -1199,7 +1148,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     );
   }
 
-  Widget _buildComparisonCard(ServiceComparison item, bool isEn) {
+  Widget _buildComparisonCard(ServiceComparison item, String lang, bool isEn) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
       shape: RoundedRectangleBorder(
@@ -1295,7 +1244,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
 
             // Ventajas (Pros)
             Text(
-              isEn ? '✓ Key Strengths' : '✓ Puntos Fuertes',
+              AppStrings.compStrengths(lang),
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.secondary),
             ),
             const SizedBox(height: 4),
@@ -1317,7 +1266,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             // Desventajas (Cons)
             if ((isEn ? item.consEn : item.cons).isNotEmpty) ...[
               Text(
-                isEn ? '✗ Important Caveats' : '✗ A Tener en Cuenta',
+                AppStrings.compWeaknesses(lang),
                 style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.statusClosed),
               ),
               const SizedBox(height: 4),
@@ -1352,7 +1301,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      '${isEn ? "Verdict" : "Veredicto"}: ${isEn ? item.verdictEn : item.verdict}',
+                      '${AppStrings.compVerdict(lang)} ${isEn ? item.verdictEn : item.verdict}',
                       style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.textPrimary, height: 1.3),
                     ),
                   ),
@@ -1393,7 +1342,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
   }
 
   // --- 3. VISTA DE SERVICIOS & B2B PROMOS ---
-  Widget _buildPartnersView(AsyncValue<List<AffiliatePartner>> partnersAsync, bool isEn) {
+  Widget _buildPartnersView(AsyncValue<List<AffiliatePartner>> partnersAsync, String lang, bool isEn) {
     return partnersAsync.when(
       data: (partners) {
         // Filtro estricto: Solo mostrar partners con código de descuento / beneficio B2B real
@@ -1405,7 +1354,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
           return ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             children: [
-              _buildComingSoonDealsCard(isEn),
+              _buildComingSoonDealsCard(lang, isEn),
               const SizedBox(height: 16),
               _buildTaxHackBanner(isEn),
               const SizedBox(height: 36),
@@ -1428,7 +1377,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     );
   }
 
-  Widget _buildComingSoonDealsCard(bool isEn) {
+  Widget _buildComingSoonDealsCard(String lang, bool isEn) {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
@@ -1507,9 +1456,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            isEn
-                ? 'Coming Soon: Exclusive partnerships and discounts being negotiated with Australian partners for the OzAlert community.'
-                : 'Próximamente: Acuerdos y descuentos exclusivos en negociación con partners australianos para la comunidad OzAlert.',
+            AppStrings.dealsExclusiveTitle(lang),
             style: const TextStyle(
               fontSize: 14.5,
               fontWeight: FontWeight.w800,

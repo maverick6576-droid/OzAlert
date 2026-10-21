@@ -9,6 +9,7 @@ import '../../../../core/services/payslip_parser_service.dart';
 import '../../../../core/services/community_telemetry_service.dart';
 import '../../../../data/repositories/phase2/community_intel_repository.dart';
 import '../../../providers/locale_provider.dart';
+import '../../../../core/localization/app_strings.dart';
 import '../../../providers/user_provider.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../../domain/models/phase2/resume_data.dart';
@@ -29,6 +30,7 @@ class EmploymentHubScreen extends ConsumerStatefulWidget {
 
 class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  String get _currentLang => ref.watch(localeProvider)?.languageCode ?? 'es';
 
   // Datos del Generador de CV
   String _selectedIndustry = 'hospitality';
@@ -270,7 +272,8 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
   @override
   Widget build(BuildContext context) {
     final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode != 'es';
+    final lang = locale?.languageCode ?? Localizations.localeOf(context).languageCode;
+    final isEn = lang != 'es';
     final profile = ref.watch(userProfileProvider).value;
     final isPremium = profile?.isPremium ?? false;
     final authUser = ref.watch(authStateProvider).value;
@@ -284,7 +287,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: Phase2AppBar(
-        title: isEn ? 'Jobs & Documents' : 'Empleo & Formatos',
+        title: AppStrings.employmentAppBarTitle(lang),
         isEn: isEn,
         infoTopic: 'fair_work',
         bottom: TabBar(
@@ -295,8 +298,8 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
           indicatorWeight: 3,
           labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5),
           tabs: [
-            Tab(text: isEn ? '📄 Smart Resume' : '📄 Generador CV'),
-            Tab(text: isEn ? '💰 Fair Work Pay' : '💰 Calculadora Sueldo'),
+            Tab(text: AppStrings.tabResumeBuilder(lang)),
+            Tab(text: AppStrings.tabFairWork(lang)),
           ],
         ),
       ),
@@ -304,10 +307,10 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
         controller: _tabController,
         children: [
           // PESTAÑA 1: GENERADOR DE CV AUSTRALIANO
-          _buildResumeBuilderTab(isEn, isPremium),
+          _buildResumeBuilderTab(lang, isEn, isPremium),
 
           // PESTAÑA 2: CALCULADORA FAIR WORK
-          _buildFairWorkTab(isEn, isPremium),
+          _buildFairWorkTab(lang, isEn, isPremium),
         ],
       ),
     );
@@ -316,7 +319,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
   // ==========================================
   // PESTAÑA 1: SUITE DE DOCUMENTOS LABORALES Y VITALES
   // ==========================================
-  Widget _buildResumeBuilderTab(bool isEn, bool isPremium) {
+  Widget _buildResumeBuilderTab(String lang, bool isEn, bool isPremium) {
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       children: [
@@ -345,14 +348,12 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      isEn ? 'Australian Document Suite' : 'Suite Documental de Australia',
+                      AppStrings.docSuiteTitle(lang),
                       style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: AppColors.textPrimary),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      isEn
-                          ? 'Select a tool to configure and export recruiter-ready & legally compliant PDF documents.'
-                          : 'Selecciona una herramienta para configurar y exportar documentos PDF con formato oficial.',
+                      AppStrings.docSuiteSubtitle(lang),
                       style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.3),
                     ),
                   ],
@@ -586,7 +587,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          isEn ? 'Configure' : 'Configurar',
+                          AppStrings.docConfigure(_currentLang),
                           style: TextStyle(
                             fontSize: 12.5,
                             fontWeight: FontWeight.w800,
@@ -620,7 +621,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
         return StatefulBuilder(
           builder: (ctx, setModalState) {
             _activeModalSetState = setModalState;
-            final title = _getDocTitle(_selectedDocType, isEn);
+            final title = AppStrings.docModalTitle(_currentLang, _selectedDocType);
             final keyboardInset = MediaQuery.of(ctx).viewInsets.bottom;
             return AnimatedPadding(
               duration: const Duration(milliseconds: 100),
@@ -689,28 +690,6 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
     });
   }
 
-  String _getDocTitle(String docId, bool isEn) {
-    switch (docId) {
-      case 'resume':
-        return isEn ? 'Australian Resume (ATS)' : 'Currículum Australiano (ATS)';
-      case 'cover_letter':
-        return isEn ? 'Australian Cover Letter' : 'Cover Letter Australiana';
-      case 'rental_bio':
-        return isEn ? 'Rental & Flatmate Bio' : 'Perfil de Alquiler en Australia';
-      case 'fair_work_claim':
-        return isEn ? 'Fair Work Formal Claim' : 'Reclamación Salarial Fair Work';
-      case 'resignation':
-        return isEn ? '2-Week Resignation Letter' : 'Carta de Renuncia (2 Semanas)';
-      case 'rental_bond':
-        return isEn ? 'Rental Bond Receipt & Shield' : 'Recibo Legal de Fianza (Share-House)';
-      case 'vehicle_sale':
-        return isEn ? 'Vehicle & Camper Bill of Sale' : 'Contrato Compraventa Coche/Camper';
-      case 'condition_8547':
-        return isEn ? 'Condition 8547 Exemption Memo' : 'Memorando Exención Condición 8547';
-      default:
-        return isEn ? 'Document Assistant' : 'Asistente de Documentos';
-    }
-  }
 
   Widget _buildSelectedDocForm(bool isEn, bool isPremium) {
     if (_selectedDocType == 'resume') {
@@ -3084,7 +3063,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
   // ==========================================
   // PESTAÑA 2: CALCULADORA FAIR WORK & SUITE LEGAL
   // ==========================================
-  Widget _buildFairWorkTab(bool isEn, bool isPremium) {
+  Widget _buildFairWorkTab(String lang, bool isEn, bool isPremium) {
     final award = FairWorkService.getAwardById(_selectedAwardId);
     final payCalc = FairWorkService.calculateShiftPay(
       hours: _hoursWorked,
@@ -3138,7 +3117,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                 ),
               ),
               TextButton(
-                onPressed: () => TaxAndVehicleHubModal.show(context, isEn: isEn),
+                onPressed: () => TaxAndVehicleHubModal.show(context, lang: lang, isEn: isEn),
                 child: Text(isEn ? 'Open' : 'Abrir', style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF0D9488))),
               ),
             ],
@@ -3176,7 +3155,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                     ),
                   ),
                   InkWell(
-                    onTap: () => showOfficialSourcesModal(context, isEn: isEn, initialTopic: 'fair_work'),
+                    onTap: () => showOfficialSourcesModal(context, lang: lang, isEn: isEn, initialTopic: 'fair_work'),
                     borderRadius: BorderRadius.circular(12),
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),

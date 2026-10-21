@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/localization/app_strings.dart';
 import '../../screens/phase2/settings/phase2_settings_screen.dart';
 import 'official_sources_modal.dart';
 
@@ -25,6 +26,8 @@ class Phase2AppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lang = Localizations.localeOf(context).languageCode;
+
     return AppBar(
       backgroundColor: AppColors.background,
       elevation: 0,
@@ -67,15 +70,15 @@ class Phase2AppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         // Botón Información Oficial (i)
         IconButton(
-          tooltip: isEn ? 'Official Legal Sources' : 'Fuentes Oficiales y Marco Legal',
+          tooltip: AppStrings.officialSourcesTooltip(lang),
           icon: const Icon(CupertinoIcons.info_circle, color: AppColors.textPrimary, size: 22),
           onPressed: () {
-            showOfficialSourcesModal(context, isEn: isEn, initialTopic: infoTopic);
+            showOfficialSourcesModal(context, lang: lang, isEn: isEn, initialTopic: infoTopic);
           },
         ),
         // Botón Ajustes (⚙️) exactamente como en Fase 1
         IconButton(
-          tooltip: isEn ? 'Settings' : 'Ajustes',
+          tooltip: AppStrings.settingsTooltip(lang),
           icon: const Icon(CupertinoIcons.gear, color: AppColors.textPrimary, size: 22),
           onPressed: () {
             Navigator.of(context).push(

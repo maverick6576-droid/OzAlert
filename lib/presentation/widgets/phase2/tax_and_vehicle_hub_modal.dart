@@ -7,20 +7,23 @@ import '../../../core/services/community_telemetry_service.dart';
 
 class TaxAndVehicleHubModal extends StatefulWidget {
   final bool isEn;
+  final String? lang;
   final String userPassport;
 
   const TaxAndVehicleHubModal({
     super.key,
     required this.isEn,
+    this.lang,
     this.userPassport = 'Spain',
   });
 
-  static Future<void> show(BuildContext context, {required bool isEn, String userPassport = 'Spain'}) {
+  static Future<void> show(BuildContext context, {bool isEn = false, String? lang, String userPassport = 'Spain'}) {
+    final effectiveLang = lang ?? Localizations.localeOf(context).languageCode;
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (ctx) => TaxAndVehicleHubModal(isEn: isEn, userPassport: userPassport),
+      builder: (ctx) => TaxAndVehicleHubModal(isEn: isEn, lang: effectiveLang, userPassport: userPassport),
     );
   }
 
@@ -38,6 +41,15 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
   // Calculadora DASP
   double _accumulatedSuper = 5400.0;
   bool _isWhv = true;
+
+  String _t(String es, String en, {String? fr, String? it, String? zh}) {
+    final l = (widget.lang ?? Localizations.localeOf(context).languageCode).toLowerCase();
+    if (l.startsWith('fr')) return fr ?? en;
+    if (l.startsWith('it')) return it ?? en;
+    if (l.startsWith('zh')) return zh ?? en;
+    if (l.startsWith('es')) return es;
+    return en;
+  }
 
   @override
   void initState() {
@@ -110,11 +122,17 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              isEn ? 'Tax, Medicare & Rego Hub' : 'Hub Fiscal, Medicare & Vehículos',
+                              _t('Hub Fiscal, Medicare & Vehículos', 'Tax, Medicare & Rego Hub',
+                                 fr: 'Pôle Fiscal, Medicare & Véhicules',
+                                 it: 'Hub Fiscale, Medicare & Veicoli',
+                                 zh: '澳洲税务、Medicare 与车辆中心'),
                               style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15, color: AppColors.textPrimary),
                             ),
                             Text(
-                              isEn ? 'Australian Legal & Financial Suite' : 'Ahorro de impuestos y compras seguras',
+                              _t('Ahorro de impuestos y compras seguras', 'Australian Legal & Financial Suite',
+                                 fr: 'Économies d\'impôts et démarches sûres',
+                                 it: 'Risparmio fiscale e acquisti sicuri',
+                                 zh: '合法税务优化与车辆牌照安全指南'),
                               style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
                             ),
                           ],
@@ -141,10 +159,22 @@ class _TaxAndVehicleHubModalState extends State<TaxAndVehicleHubModal> with Sing
             labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5),
             tabAlignment: TabAlignment.start,
             tabs: [
-              Tab(text: isEn ? '🏥 Medicare 2% (MES)' : '🏥 Exención Medicare 2%'),
-              Tab(text: isEn ? '⚖️ Addy & Tax Return' : '⚖️ Doctrina Addy & ATO'),
-              Tab(text: isEn ? '💰 DASP Super Refund' : '💰 Devolución Super (DASP)'),
-              Tab(text: isEn ? '🚗 WA Rego & Tickets' : '🚗 WA Rego & Cursos'),
+              Tab(text: _t('🏥 Exención Medicare 2%', '🏥 Medicare 2% (MES)',
+                           fr: '🏥 Exemption Medicare 2%',
+                           it: '🏥 Esenzione Medicare 2%',
+                           zh: '🏥 Medicare 2% 医保免征')),
+              Tab(text: _t('⚖️ Doctrina Addy & ATO', '⚖️ Addy & Tax Return',
+                           fr: '⚖️ Traité Addy & Déclaration',
+                           it: '⚖️ Trattato Addy & Tasse',
+                           zh: '⚖️ Addy 条约与报税')),
+              Tab(text: _t('💰 Devolución Super (DASP)', '💰 DASP Super Refund',
+                           fr: '💰 Remboursement Retraite (DASP)',
+                           it: '💰 Rimborso Pensione (DASP)',
+                           zh: '💰 养老金退税 (DASP)')),
+              Tab(text: _t('🚗 WA Rego & Cursos', '🚗 WA Rego & Tickets',
+                           fr: '🚗 Immatriculation WA & Cours',
+                           it: '🚗 WA Rego & Corsi',
+                           zh: '🚗 西澳车牌与高薪执照')),
             ],
           ),
           Expanded(

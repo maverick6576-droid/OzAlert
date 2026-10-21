@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/localization/app_strings.dart';
 import '../providers/locale_provider.dart';
 import '../providers/phase2/phase2_providers.dart';
 import '../screens/phase2/landing/landing_checklist_screen.dart';
@@ -38,7 +39,7 @@ class _Phase2NavigationScreenState extends ConsumerState<Phase2NavigationScreen>
   Widget build(BuildContext context) {
     final navState = ref.watch(phase2NavigationProvider);
     final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode != 'es';
+    final lang = locale?.languageCode ?? Localizations.localeOf(context).languageCode;
 
     // Clamp currentTabIndex to max 3
     final activeIndex = navState.currentTabIndex.clamp(0, _screens.length - 1);
@@ -70,25 +71,25 @@ class _Phase2NavigationScreenState extends ConsumerState<Phase2NavigationScreen>
                   index: 0,
                   icon: CupertinoIcons.compass,
                   activeIcon: CupertinoIcons.compass_fill,
-                  label: isEn ? 'Arrival' : 'Aterrizaje',
+                  label: AppStrings.navArrival(lang),
                 ),
                 _buildNavItem(
                   index: 1,
                   icon: CupertinoIcons.book,
                   activeIcon: CupertinoIcons.book_fill,
-                  label: isEn ? 'Guides' : 'Guías',
+                  label: AppStrings.navGuides(lang),
                 ),
                 _buildNavItem(
                   index: 2,
                   icon: CupertinoIcons.briefcase,
                   activeIcon: CupertinoIcons.briefcase_fill,
-                  label: isEn ? 'Jobs' : 'Empleo',
+                  label: AppStrings.navJobs(lang),
                 ),
                 _buildNavItem(
                   index: 3,
                   icon: CupertinoIcons.calendar_badge_plus,
                   activeIcon: CupertinoIcons.calendar_badge_plus,
-                  label: isEn ? '88/179 Days' : '88/179 Días',
+                  label: AppStrings.navRegional(lang),
                 ),
               ],
             ),

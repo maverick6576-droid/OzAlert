@@ -11,6 +11,7 @@ import '../../providers/checklist_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/user_provider.dart';
 import '../settings/settings_screen.dart';
+import '../../../../core/localization/app_strings.dart';
 
 class ChecklistScreen extends ConsumerStatefulWidget {
   const ChecklistScreen({super.key});
@@ -109,7 +110,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
     });
   }
 
-  void _showSwitchToPhase2Dialog(BuildContext context, bool isEn) {
+  void _showSwitchToPhase2Dialog(BuildContext context, String lang) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -120,23 +121,21 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                isEn ? 'Switch to Phase 2! 🎉' : '¡Pasar a la Fase 2! 🎉',
+                AppStrings.switchToPhase2DialogTitle(lang),
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
           ],
         ),
         content: Text(
-          isEn
-              ? 'By switching to Phase 2, you will unlock the Australia Arrival Checklist, Step-by-Step Guides, 88-Day Regional Validator, Fair Work Pay Calculator, and Aussie CV Maker. Quota push alerts will be turned off.'
-              : 'Al pasar a la Fase 2, accederás al Checklist de Aterrizaje en Australia, Guías paso a paso, Validador de los 88 días, Calculadora de Sueldo Fair Work y generador de CV australiano. Además, apagaremos las alarmas push de apertura de cupos.',
+          AppStrings.switchToPhase2DialogContent(lang),
           style: const TextStyle(fontSize: 14, height: 1.4),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: Text(
-              isEn ? 'Cancel' : 'Cancelar',
+              AppStrings.cancelButton(lang),
               style: const TextStyle(color: AppColors.textMuted),
             ),
           ),
@@ -158,7 +157,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
               NotificationService().syncPassportSubscriptions([]);
             },
             child: Text(
-              isEn ? 'Enter Phase 2' : 'Entrar a la Fase 2',
+              AppStrings.enterPhase2Button(lang),
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
@@ -172,7 +171,8 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
     final checklist = ref.watch(checklistProvider);
     final progress = ref.watch(checklistProgressProvider);
     final locale = ref.watch(localeProvider);
-    final isEn = (locale?.languageCode ?? Localizations.localeOf(context).languageCode) == 'en';
+    final lang = locale?.languageCode ?? Localizations.localeOf(context).languageCode;
+    final isEn = lang != 'es';
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -213,12 +213,12 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
         ),
         actions: [
           IconButton(
-            tooltip: isEn ? 'Official Home Affairs Sources' : 'Fuentes Oficiales Home Affairs',
+            tooltip: AppStrings.officialSourcesTooltip(lang),
             icon: const Icon(CupertinoIcons.info_circle, color: AppColors.textPrimary, size: 21),
-            onPressed: () => _showOfficialVisaSourcesModal(context, isEn),
+            onPressed: () => _showOfficialVisaSourcesModal(context, isEn, lang),
           ),
           IconButton(
-            tooltip: isEn ? 'Settings' : 'Ajustes',
+            tooltip: AppStrings.settingsTooltip(lang),
             icon: const Icon(CupertinoIcons.gear, color: AppColors.textPrimary, size: 21),
             onPressed: () {
               Navigator.of(context).push(
@@ -270,7 +270,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                             const SizedBox(width: 6),
                             Flexible(
                               child: Text(
-                                isEn ? 'Visa Checklist' : 'Checklist Visado',
+                                AppStrings.checklistMainTabChecklist(lang),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w800,
@@ -308,7 +308,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                             const SizedBox(width: 6),
                             Flexible(
                               child: Text(
-                                isEn ? 'How to Apply (Guides)' : 'Guías de Solicitud',
+                                AppStrings.checklistMainTabGuides(lang),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w800,
@@ -330,7 +330,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
           // Contenido principal según la vista activa
           Expanded(
             child: _activeMainTab == 0
-                ? _buildChecklistTabView(context, checklist, progress, isEn)
+                ? _buildChecklistTabView(context, checklist, progress, isEn, lang)
                 : _buildGuidesTabView(context, isEn),
           ),
         ],
@@ -346,6 +346,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
     List<ChecklistItem> checklist,
     double progressPercent,
     bool isEn,
+    String lang,
   ) {
     ChecklistItem findOrFallback(String id, String fallbackTitle, String fallbackDesc) {
       return checklist.firstWhere(
@@ -383,26 +384,26 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
 
     final stages = [
       {
-        'title': isEn ? '1. Identity & ImmiAccount' : '1. Identidad & ImmiAccount',
-        'subtitle': isEn ? 'Account, passport & birth certificate' : 'Cuenta oficial, pasaporte y nacimiento',
+        'title': AppStrings.checklistTrailStageTitle(lang, 0),
+        'subtitle': AppStrings.checklistTrailStageSubtitle(lang, 0),
         'icon': '🛂',
         'tasks': stage0Items,
       },
       {
-        'title': isEn ? '2. English & Education' : '2. Inglés & Estudios',
-        'subtitle': isEn ? 'Accepted language tests & degrees' : 'Exámenes oficiales y títulos',
+        'title': AppStrings.checklistTrailStageTitle(lang, 1),
+        'subtitle': AppStrings.checklistTrailStageSubtitle(lang, 1),
         'icon': '🎓',
         'tasks': stage1Items,
       },
       {
-        'title': isEn ? '3. Funds & Background' : '3. Fondos & Antecedentes',
-        'subtitle': isEn ? '\$5,000 AUD bank proof, police & health' : '\$5.000 AUD, penales y salud',
+        'title': AppStrings.checklistTrailStageTitle(lang, 2),
+        'subtitle': AppStrings.checklistTrailStageSubtitle(lang, 2),
         'icon': '🏦',
         'tasks': stage2Items,
       },
       {
-        'title': isEn ? '4. Translations, Submit & Phase 2' : '4. Traducción, Envío y Fase 2',
-        'subtitle': isEn ? 'Translations, \$650 AUD fee & enter Phase 2' : 'Traducciones, pago \$650 AUD y pasar a Fase 2',
+        'title': AppStrings.checklistTrailStageTitle(lang, 3),
+        'subtitle': AppStrings.checklistTrailStageSubtitle(lang, 3),
         'icon': '🚀',
         'tasks': stage3Items,
       },
@@ -418,6 +419,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
           totalCount: totalCount,
           progressPercent: computedProgress,
           stages: stages,
+          lang: lang,
           isEn: isEn,
         ),
         const SizedBox(height: 16),
@@ -429,6 +431,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
             stageIndex: stageIdx,
             stage: stages[stageIdx],
             isExpanded: _selectedStageIndex == stageIdx,
+            lang: lang,
             isEn: isEn,
             onHeaderTap: () {
               setState(() {
@@ -483,6 +486,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
     required int totalCount,
     required double progressPercent,
     required List<Map<String, dynamic>> stages,
+    required String lang,
     required bool isEn,
   }) {
     final isDone = completedCount == totalCount && totalCount > 0;
@@ -526,7 +530,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            isEn ? 'VISA EXPEDITION TRAIL' : 'LA RUTA HACIA TU VISADO',
+                            AppStrings.checklistTrailBadge(lang),
                             style: const TextStyle(
                               fontSize: 9.5,
                               fontWeight: FontWeight.w900,
@@ -536,7 +540,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                           ),
                           const SizedBox(height: 1),
                           Text(
-                            isEn ? 'Work & Holiday Application Kit' : 'Preparación Work & Holiday (462 / 417)',
+                            AppStrings.checklistApplicationKitTitle(lang),
                             style: const TextStyle(
                               fontWeight: FontWeight.w800,
                               fontSize: 14,
@@ -795,6 +799,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
     required int stageIndex,
     required Map<String, dynamic> stage,
     required bool isExpanded,
+    required String lang,
     required bool isEn,
     required VoidCallback onHeaderTap,
   }) {
@@ -943,7 +948,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                         ],
                       ),
                     ),
-                  ...tasks.map((item) => _buildVisaChecklistTaskTile(context, item, isEn)),
+                  ...tasks.map((item) => _buildVisaChecklistTaskTile(context, item, isEn, lang)),
                 ],
               ),
             ),
@@ -1061,7 +1066,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
     }
   }
 
-  Widget _buildVisaChecklistTaskTile(BuildContext context, ChecklistItem item, bool isEn) {
+  Widget _buildVisaChecklistTaskTile(BuildContext context, ChecklistItem item, bool isEn, String lang) {
     final meta = _getTaskLocalizedMeta(context, item, isEn);
     final isPhase2Step = item.id == 'switch_to_phase2';
 
@@ -1094,7 +1099,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                 side: const BorderSide(color: AppColors.textMuted, width: 1.5),
                 onChanged: (_) {
                   if (isPhase2Step && !item.isChecked) {
-                    _showSwitchToPhase2Dialog(context, isEn);
+                    _showSwitchToPhase2Dialog(context, lang);
                   } else {
                     ref.read(checklistProvider.notifier).toggleItem(item.id);
                   }
@@ -1129,7 +1134,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                   InkWell(
                     onTap: () {
                       if (isPhase2Step) {
-                        _showSwitchToPhase2Dialog(context, isEn);
+                        _showSwitchToPhase2Dialog(context, lang);
                       } else {
                         _openGuideFromChecklist(meta['guideCategory']!);
                       }
@@ -2041,7 +2046,29 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
     );
   }
 
-  void _showOfficialVisaSourcesModal(BuildContext context, bool isEn) {
+  void _showOfficialVisaSourcesModal(BuildContext context, bool isEn, [String? lang]) {
+    final clean = lang != null && lang.length >= 2 ? lang.substring(0, 2).toLowerCase() : (isEn ? 'en' : 'es');
+    final titleText = () {
+      switch (clean) {
+        case 'fr': return 'Sources Officielles du Gouvernement Australien';
+        case 'it': return 'Fonti Ufficiali del Governo Australiano';
+        case 'zh': return '澳大利亚联邦政府官方信息来源';
+        case 'es': return 'Fuentes Oficiales del Gobierno de Australia';
+        case 'en':
+        default: return 'Official Australian Government Sources';
+      }
+    }();
+    final subtitleText = () {
+      switch (clean) {
+        case 'fr': return 'Toutes les exigences et démarches de visa dans OzAlert sont vérifiées directement auprès de la réglementation officielle du Department of Home Affairs :';
+        case 'it': return 'Tutti i requisiti e le guide per il visto su OzAlert sono verificati direttamente con le normative ufficiali del Department of Home Affairs:';
+        case 'zh': return 'OzAlert 中的所有签证申请要求与指南均严格核对澳大利亚内政部（Department of Home Affairs）最新官方法规：';
+        case 'es': return 'Todos los requisitos y guías de solicitud de visado están verificados directamente con la normativa oficial del Department of Home Affairs:';
+        case 'en':
+        default: return 'All visa application requirements in OzAlert are verified against the official Department of Home Affairs regulations:';
+      }
+    }();
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -2074,9 +2101,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        isEn
-                            ? 'Official Australian Government Sources'
-                            : 'Fuentes Oficiales del Gobierno de Australia',
+                        titleText,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w900,
@@ -2088,9 +2113,7 @@ class _ChecklistScreenState extends ConsumerState<ChecklistScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  isEn
-                      ? 'All visa application requirements in OzAlert are verified against the official Department of Home Affairs regulations:'
-                      : 'Todos los requisitos y guías de solicitud de visado están verificados directamente con la normativa oficial del Department of Home Affairs:',
+                  subtitleText,
                   style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.4),
                 ),
                 const SizedBox(height: 16),

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/localization/app_strings.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/paywall_provider.dart';
 
@@ -46,8 +47,8 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
     final monthlyPriceAsync = ref.watch(monthlyPriceProvider);
     final priceText = monthlyPriceAsync.value ?? '1,99 €';
     final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode != 'es';
-    final benefitText = (isEn && widget.featureBenefitEn != null && widget.featureBenefitEn!.isNotEmpty)
+    final lang = locale?.languageCode ?? Localizations.localeOf(context).languageCode;
+    final benefitText = (lang != 'es' && widget.featureBenefitEn != null && widget.featureBenefitEn!.isNotEmpty)
         ? widget.featureBenefitEn!
         : widget.featureBenefit;
 
@@ -125,15 +126,13 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        isEn ? 'Full OzAlert Pro Access' : 'Acceso Completo OzAlert Pro',
+                        AppStrings.paywallFullProAccess(lang),
                         softWrap: true,
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        isEn
-                            ? '24/7 Visa Open Alerts, unlimited PDF CVs, payslip checks & Form 1263'
-                            : 'Alertas 24/7 de Visado Abierto, CVs en PDF, comprobar nóminas y Form 1263',
+                        AppStrings.paywallFullProDesc(lang),
                         softWrap: true,
                         style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
                       ),
@@ -142,7 +141,7 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  isEn ? '$priceText/mo' : '$priceText/mes',
+                  AppStrings.paywallPerMonth(lang, priceText),
                   style: const TextStyle(
                     fontWeight: FontWeight.w900,
                     fontSize: 16,
@@ -172,9 +171,7 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
                             SnackBar(
                               backgroundColor: AppColors.secondary,
                               content: Text(
-                                isEn
-                                    ? 'Welcome to OzAlert Pro! All features unlocked.'
-                                    : '¡Bienvenido a OzAlert Pro! Todas las funciones están desbloqueadas.',
+                                AppStrings.paywallWelcomePro(lang),
                               ),
                             ),
                           );
@@ -191,7 +188,7 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
               child: _isLoading
                   ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
                   : Text(
-                      isEn ? 'Unlock for $priceText / month' : 'Desbloquear por $priceText / mes',
+                      AppStrings.paywallUnlockPriceMonthly(lang, priceText),
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
                     ),
             ),
@@ -208,7 +205,7 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
               }
             },
             child: Text(
-              isEn ? 'Restore previous purchases' : 'Restaurar compras previas',
+              AppStrings.paywallRestorePrevious(lang),
               style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
             ),
           ),

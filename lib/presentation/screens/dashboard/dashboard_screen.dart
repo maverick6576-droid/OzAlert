@@ -14,6 +14,8 @@ import '../../../../core/services/notification_service.dart';
 
 import '../settings/settings_screen.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
+import '../../../../core/localization/app_strings.dart';
+import '../../providers/locale_provider.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -280,7 +282,7 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
-  void _showPhase2ConfirmationDialog(BuildContext context, WidgetRef ref, bool isEn) {
+  void _showPhase2ConfirmationDialog(BuildContext context, WidgetRef ref, String lang) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -291,23 +293,21 @@ class DashboardScreen extends ConsumerWidget {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                isEn ? 'I got my visa! 🎉' : '¡Ya tengo mi visado! 🎉',
+                AppStrings.switchToPhase2DialogTitle(lang),
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
           ],
         ),
         content: Text(
-          isEn
-              ? 'By switching to Phase 2, you will unlock the Australia Arrival Checklist, Step-by-Step Guides, 88-Day Regional Validator, Fair Work Pay Calculator, and Aussie CV Maker. Quota push alerts will be turned off.'
-              : 'Al pasar a la Fase 2, activarás el modo Australia con el Checklist de Aterrizaje, Guías paso a paso, Validador de los 88 días, Calculadora de Sueldo y creador de CV australiano. Además, apagaremos las alarmas de apertura de cupos.',
+          AppStrings.switchToPhase2DialogContent(lang),
           style: const TextStyle(fontSize: 14, height: 1.4),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: Text(
-              isEn ? 'Cancel' : 'Cancelar',
+              AppStrings.cancelButton(lang),
               style: const TextStyle(color: AppColors.textMuted),
             ),
           ),
@@ -326,7 +326,7 @@ class DashboardScreen extends ConsumerWidget {
               NotificationService().syncPassportSubscriptions([]);
             },
             child: Text(
-              isEn ? 'Enter Phase 2' : 'Entrar a la Fase 2',
+              AppStrings.enterPhase2Button(lang),
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
@@ -336,7 +336,8 @@ class DashboardScreen extends ConsumerWidget {
   }
 
   Widget _buildPhase2TransitionCard(BuildContext context, WidgetRef ref) {
-    final isEn = Localizations.localeOf(context).languageCode == 'en';
+    final locale = ref.watch(localeProvider);
+    final lang = locale?.languageCode ?? Localizations.localeOf(context).languageCode;
 
     return Container(
       decoration: BoxDecoration(
@@ -361,7 +362,7 @@ class DashboardScreen extends ConsumerWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => _showPhase2ConfirmationDialog(context, ref, isEn),
+          onTap: () => _showPhase2ConfirmationDialog(context, ref, lang),
           borderRadius: BorderRadius.circular(22),
           child: Padding(
             padding: const EdgeInsets.all(18),
@@ -382,7 +383,7 @@ class DashboardScreen extends ConsumerWidget {
                           const Icon(Icons.flight_takeoff_rounded, color: Colors.white, size: 14),
                           const SizedBox(width: 5),
                           Text(
-                            isEn ? 'NEXT STEP • PHASE 2' : 'SIGUIENTE PASO • FASE 2',
+                            AppStrings.dashboardPhase2NextStep(lang),
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w900,
@@ -399,7 +400,7 @@ class DashboardScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  isEn ? 'Already got your visa? Switch to Phase 2!' : '¿Ya tienes el visado? ¡Pasa a la Fase 2!',
+                  AppStrings.dashboardAlreadyGotVisa(lang),
                   style: const TextStyle(
                     fontWeight: FontWeight.w900,
                     fontSize: 17.5,
@@ -409,9 +410,7 @@ class DashboardScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  isEn
-                      ? 'Tap the button below to continue using OzAlert in Australia: unlock your Arrival Checklist, Step-by-Step Guides, 88-Day Validator, Pay Calculator & Aussie CV.'
-                      : 'Pulsa este botón cuando te concedan el visado para seguir utilizando la app con la Fase 2: Checklist de Aterrizaje, Guías en Australia, 88 Días, Sueldo y CV.',
+                  AppStrings.switchToPhase2Subtitle(lang),
                   style: const TextStyle(
                     fontSize: 13,
                     color: AppColors.textPrimary,
@@ -422,10 +421,10 @@ class DashboardScreen extends ConsumerWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
-                    onPressed: () => _showPhase2ConfirmationDialog(context, ref, isEn),
+                    onPressed: () => _showPhase2ConfirmationDialog(context, ref, lang),
                     icon: const Icon(Icons.rocket_launch_rounded, color: Colors.white, size: 18),
                     label: Text(
-                      isEn ? 'Tap here to enter Phase 2' : 'Pulsar aquí para pasar a la Fase 2',
+                      AppStrings.dashboardTapToEnterPhase2(lang),
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,

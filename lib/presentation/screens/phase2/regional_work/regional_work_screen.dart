@@ -13,6 +13,7 @@ import '../../../../domain/models/phase2/regional_work_log.dart';
 import '../../../../domain/models/phase2/postcode_info.dart';
 import '../../../widgets/phase2/paywall_bottom_sheet.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/phase2_app_bar.dart';
+import 'package:ozvisa_alert/core/localization/app_strings.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/official_sources_modal.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/australia_regional_map_widget.dart';
 import '../../../../core/services/abr_service.dart';
@@ -209,7 +210,8 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
   @override
   Widget build(BuildContext context) {
     final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode != 'es';
+    final lang = locale?.languageCode ?? Localizations.localeOf(context).languageCode;
+    final isEn = lang != 'es';
     final profile = ref.watch(userProfileProvider).value;
     final authUser = ref.watch(authStateProvider).value;
     final userEmail = authUser?.email ?? 'Applicant';
@@ -230,9 +232,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: Phase2AppBar(
-        title: _targetVisaYear == 2
-            ? (isEn ? '88 Days Regional' : '88 Días Regionales')
-            : (isEn ? '179 Days Regional' : '179 Días Regionales'),
+        title: AppStrings.regionalAppBarTitle(lang, _targetVisaYear),
         isEn: isEn,
         infoTopic: 'regional',
         bottom: TabBar(
@@ -243,15 +243,9 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
           indicatorWeight: 3,
           labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5),
           tabs: [
-            Tab(text: isEn ? '📍 Postcode & Map' : '📍 Mapa & Códigos'),
+            Tab(text: AppStrings.tabPostcodeMap(lang)),
             Tab(
-              text: !isPremium
-                  ? (_targetVisaYear == 2
-                      ? (isEn ? '🗓️ 88 Days ($totalDays/10)' : '🗓️ 88 Días ($totalDays/10)')
-                      : (isEn ? '🗓️ 179 Days ($totalDays/10)' : '🗓️ 179 Días ($totalDays/10)'))
-                  : (isEn
-                      ? (_targetVisaYear == 2 ? '🗓️ 88 Days ($totalDays/88)' : '🗓️ 179 Days ($totalDays/179)')
-                      : (_targetVisaYear == 2 ? '🗓️ 88 Días ($totalDays/88)' : '🗓️ 179 Días ($totalDays/179)')),
+              text: AppStrings.tabDaysLog(lang, _targetVisaYear, totalDays, isPremium),
             ),
           ],
         ),
@@ -260,7 +254,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
         controller: _tabController,
         children: [
           // SUBMÓDULO 1: VALIDADOR DE CÓDIGOS POSTALES Y MAPA INTERACTIVO
-          _buildPostcodeValidatorTab(isEn, subclass),
+          _buildPostcodeValidatorTab(lang, isEn, subclass),
 
           // SUBMÓDULO 2: TRACKER DE DÍAS Y EXPORTACIÓN FORMULARIO 1263
           _buildWorkLogTab(isEn, isPremium, jobs, totalDays, userEmail, subclass, uid: uid),
@@ -269,7 +263,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     );
   }
 
-  Widget _buildPostcodeValidatorTab(bool isEn, String subclass) {
+  Widget _buildPostcodeValidatorTab(String lang, bool isEn, String subclass) {
     final currentState = _searchResult?.state ?? _deduceStateFromPostcode(_postcodeController.text);
     final currentZone = _searchResult?.zone ?? (_searchResult != null ? 'regional' : 'unknown');
 
@@ -302,14 +296,12 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                       children: [
                         Expanded(
                           child: Text(
-                            isEn
-                                ? 'Why check the postcode?'
-                                : '¿Por qué comprobar el código postal?',
+                            AppStrings.regionalWhyCheckTitle(lang),
                             style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: AppColors.textPrimary),
                           ),
                         ),
                         InkWell(
-                          onTap: () => showOfficialSourcesModal(context, isEn: isEn, initialTopic: 'regional'),
+                          onTap: () => showOfficialSourcesModal(context, lang: lang, isEn: isEn, initialTopic: 'regional'),
                           borderRadius: BorderRadius.circular(8),
                           child: Padding(
                             padding: const EdgeInsets.all(2.0),
@@ -330,9 +322,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      isEn
-                          ? 'Not all jobs in Australia count to renew your visa. Check the postcode before accepting a job to make sure that area and industry count towards your 88 days.'
-                          : 'No todos los trabajos en Australia sirven para renovar el visado. Comprueba el código postal antes de aceptar un empleo para asegurarte de que esa zona y sector cuentan para tus 88 días.',
+                      AppStrings.regionalWhyCheckDesc(lang),
                       style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.35),
                     ),
                   ],
@@ -391,6 +381,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
           activeLocation: _searchResult?.location,
           activePostcode: _postcodeController.text,
           isEn: isEn,
+          lang: lang,
           onRegionSelected: (postcode, state) {
             _postcodeController.text = postcode;
             _executePostcodeSearch(postcode);

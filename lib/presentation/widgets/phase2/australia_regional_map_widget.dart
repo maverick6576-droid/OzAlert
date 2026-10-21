@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/localization/app_strings.dart';
 
 class RegionalHub {
   final String name;
@@ -41,6 +42,7 @@ class AustraliaRegionalMapWidget extends StatelessWidget {
   final String? activeLocation;
   final String? activePostcode;
   final bool isEn;
+  final String? lang;
   final Function(String postcode, String state)? onRegionSelected;
   final Function(String state)? onStateTap;
 
@@ -51,6 +53,7 @@ class AustraliaRegionalMapWidget extends StatelessWidget {
     this.activeLocation,
     this.activePostcode,
     required this.isEn,
+    this.lang,
     this.onRegionSelected,
     this.onStateTap,
   });
@@ -148,11 +151,11 @@ class AustraliaRegionalMapWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      isEn ? 'Interactive Regional Map' : 'Mapa Regional Interactivo',
+                      AppStrings.regionalMapTitle(lang ?? (isEn ? 'en' : 'es')),
                       style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: AppColors.textPrimary),
                     ),
                     Text(
-                      isEn ? 'Tap any zone to view postcode & eligibility' : 'Toca el mapa para ver el código y normativa',
+                      AppStrings.regionalMapSubtitle(lang ?? (isEn ? 'en' : 'es')),
                       style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                     ),
                   ],
@@ -218,7 +221,7 @@ class AustraliaRegionalMapWidget extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            isEn ? '👆 Tap to explore' : '👆 Toca para explorar',
+                            AppStrings.regionalMapTapToExplore(lang ?? (isEn ? 'en' : 'es')),
                             style: const TextStyle(color: Colors.white, fontSize: 9.5, fontWeight: FontWeight.w600),
                           ),
                         ),

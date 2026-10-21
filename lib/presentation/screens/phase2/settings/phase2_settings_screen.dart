@@ -5,6 +5,7 @@ import 'package:ozvisa_alert/l10n/app_localizations.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/official_sources_modal.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/localization/app_strings.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../providers/locale_provider.dart';
 import '../../../providers/news_notifications_provider.dart';
@@ -19,7 +20,7 @@ class Phase2SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentLocale = ref.watch(localeProvider) ?? Localizations.localeOf(context);
-    final isEn = currentLocale.languageCode == 'en';
+    final lang = currentLocale.languageCode;
     final l10n = AppLocalizations.of(context)!;
     final profile = ref.watch(userProfileProvider).value;
     final currentSubclass = profile?.visaSubclass ?? '462';
@@ -95,7 +96,7 @@ class Phase2SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 32),
           // 2. Subclase de Visado (Específico de Fase 2)
           Text(
-            isEn ? 'Visa Subclass' : 'Subclase de Visado',
+            AppStrings.visaSubclassTitle(lang),
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -104,7 +105,7 @@ class Phase2SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           _SelectableSettingsTile(
-            title: isEn ? 'Work and Holiday (Subclass 462)' : 'Work and Holiday (Subclase 462)',
+            title: AppStrings.visaSubclass462(lang),
             isSelected: currentSubclass == '462',
             onTap: () {
               if (profile != null && currentSubclass != '462') {
@@ -115,7 +116,7 @@ class Phase2SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           _SelectableSettingsTile(
-            title: isEn ? 'Working Holiday (Subclass 417)' : 'Working Holiday (Subclase 417)',
+            title: AppStrings.visaSubclass417(lang),
             isSelected: currentSubclass == '417',
             onTap: () {
               if (profile != null && currentSubclass != '417') {
@@ -158,7 +159,7 @@ class Phase2SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 32),
           // 4. Fase de la aplicación y Colaboración
           Text(
-            isEn ? 'App Phase' : 'Fase de la aplicación',
+            AppStrings.appPhaseTitle(lang),
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -169,17 +170,15 @@ class Phase2SettingsScreen extends ConsumerWidget {
           ListTile(
             tileColor: AppColors.surface,
             title: Text(
-              isEn ? 'Return to Phase 1 (Visa Radar)' : 'Volver a Fase 1 (Radar de Visados)',
+              AppStrings.returnToPhase1Tile(lang),
               style: const TextStyle(color: AppColors.textPrimary),
             ),
             subtitle: Text(
-              isEn
-                  ? 'Check open quota spots and visa application guides'
-                  : 'Consultar el radar de cupos y las guías de solicitud del visado',
+              AppStrings.returnToPhase1Subtitle(lang),
               style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
             ),
             trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
-            onTap: () => _confirmReturnToPhase1(context, ref, profile, isEn),
+            onTap: () => _confirmReturnToPhase1(context, ref, profile, lang),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
               side: const BorderSide(color: AppColors.cardBorder),
@@ -190,13 +189,11 @@ class Phase2SettingsScreen extends ConsumerWidget {
             ListTile(
               tileColor: AppColors.surface,
               title: Text(
-                isEn ? 'Record your Visa Dates' : 'Registrar fechas de tu visado',
+                AppStrings.recordVisaDatesTile(lang),
                 style: const TextStyle(color: AppColors.textPrimary),
               ),
               subtitle: Text(
-                isEn
-                    ? 'Share wait times anonymously to help other applicants'
-                    : 'Comparte anónimamente cuánto tardaron en concedértela',
+                AppStrings.recordVisaDatesSubtitle(lang),
                 style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
               ),
               trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
@@ -243,9 +240,9 @@ class Phase2SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 8),
           ListTile(
             tileColor: AppColors.surface,
-            title: Text(isEn ? 'Official Government Sources' : 'Fuentes Oficiales del Gobierno'),
+            title: Text(AppStrings.officialGovSources(lang)),
             trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
-            onTap: () => showOfficialSourcesModal(context, isEn: isEn),
+            onTap: () => showOfficialSourcesModal(context, lang: lang, isEn: lang != 'es'),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
               side: const BorderSide(color: AppColors.cardBorder),
@@ -336,19 +333,17 @@ class Phase2SettingsScreen extends ConsumerWidget {
     );
   }
 
-  void _confirmReturnToPhase1(BuildContext context, WidgetRef ref, dynamic profile, bool isEn) {
+  void _confirmReturnToPhase1(BuildContext context, WidgetRef ref, dynamic profile, String lang) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(isEn ? 'Return to Visa Search?' : '¿Volver al Buscador de Visa?'),
+        title: Text(AppStrings.returnToPhase1DialogTitle(lang)),
         content: Text(
-          isEn
-              ? 'Your interface will switch back to Phase 1 (Quota Radar). You can return to Phase 2 at any time.'
-              : 'Tu pantalla volverá al Radar de cupos de la Fase 1. Podrás volver a la Fase 2 en cualquier momento.',
+          AppStrings.returnToPhase1DialogContent(lang),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(isEn ? 'Cancel' : 'Cancelar')),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(AppStrings.cancelButton(lang))),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
             onPressed: () async {
@@ -369,7 +364,7 @@ class Phase2SettingsScreen extends ConsumerWidget {
               }
             },
             child: Text(
-              isEn ? 'Switch to Phase 1' : 'Cambiar a Fase 1',
+              AppStrings.switchPhase1Button(lang),
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),

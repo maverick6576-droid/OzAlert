@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/localization/app_strings.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/user_provider.dart';
 
@@ -43,7 +44,7 @@ class _PhaseSelectionScreenState extends ConsumerState<PhaseSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     final locale = ref.watch(localeProvider);
-    final isEn = (locale?.languageCode ?? Localizations.localeOf(context).languageCode) != 'es';
+    final lang = locale?.languageCode ?? Localizations.localeOf(context).languageCode;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -71,7 +72,7 @@ class _PhaseSelectionScreenState extends ConsumerState<PhaseSelectionScreen> {
                       const Icon(CupertinoIcons.sparkles, size: 13, color: AppColors.primary),
                       const SizedBox(width: 6),
                       Text(
-                        isEn ? 'FINAL STEP: YOUR JOURNEY' : 'PASO FINAL: TU AVENTURA',
+                        AppStrings.phaseSelectionBadge(lang),
                         style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
@@ -88,7 +89,7 @@ class _PhaseSelectionScreenState extends ConsumerState<PhaseSelectionScreen> {
 
               // 2. Título Principal
               Text(
-                isEn ? 'Where are you in your visa journey?' : '¿En qué momento te encuentras?',
+                AppStrings.phaseSelectionTitle(lang),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 27,
@@ -103,9 +104,7 @@ class _PhaseSelectionScreenState extends ConsumerState<PhaseSelectionScreen> {
 
               // 3. Subtítulo Explicativo
               Text(
-                isEn
-                    ? 'Select your starting experience. Both phases are 100% free and you can switch anytime from Settings.'
-                    : 'Selecciona cómo quieres empezar en OzAlert. Ambas fases son gratuitas y podrás alternar cuando quieras desde Ajustes.',
+                AppStrings.phaseSelectionSubtitle(lang),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 14,
@@ -119,27 +118,14 @@ class _PhaseSelectionScreenState extends ConsumerState<PhaseSelectionScreen> {
               // 4. Tarjeta Opción 1: Fase 1 (Buscando / Preparando Visado)
               _buildPhaseCard(
                 phase: 1,
-                isEn: isEn,
-                badgeLabel: isEn ? 'LOOKING FOR VISA' : '🟡 BUSCANDO O PREPARANDO VISADO',
+                badgeLabel: AppStrings.phase1Badge(lang),
                 badgeColor: Colors.amber,
-                title: isEn ? 'Phase 1: Quota Radar & Prep' : 'Fase 1: Radar de Cupos & Requisitos',
-                subtitle: isEn
-                    ? 'I don\'t have my visa yet. I want to monitor country caps and prepare my application.'
-                    : 'Aún no tengo mi visado. Quiero vigilar la apertura de cupos en tiempo real y preparar mis documentos.',
+                title: AppStrings.phase1Title(lang),
+                subtitle: AppStrings.phase1Subtitle(lang),
                 icon: CupertinoIcons.compass_fill,
                 iconColor: Colors.amber,
-                features: isEn
-                    ? [
-                        '24/7 Official Immigration Quota Radar',
-                        'Interactive Step-by-Step Requirements Checklist',
-                        'Official ImmiAccount Application Guides',
-                      ]
-                    : [
-                        'Radar oficial de cupos de Inmigración 24/7',
-                        'Checklist interactivo de documentos y requisitos',
-                        'Guías paso a paso para solicitar en ImmiAccount',
-                      ],
-                buttonLabel: isEn ? 'Start in Phase 1 (Free)' : 'Empezar en Fase 1 (Gratis)',
+                features: AppStrings.phase1Features(lang),
+                buttonLabel: AppStrings.phase1Button(lang),
                 buttonColor: AppColors.primary,
                 delayMs: 350,
               ),
@@ -149,27 +135,14 @@ class _PhaseSelectionScreenState extends ConsumerState<PhaseSelectionScreen> {
               // 5. Tarjeta Opción 2: Fase 2 (Visado Concedido / Rumbo a Australia)
               _buildPhaseCard(
                 phase: 2,
-                isEn: isEn,
-                badgeLabel: isEn ? 'VISA GRANTED' : '🟢 ¡YA TENGO MI VISADO CONCEDIDO!',
+                badgeLabel: AppStrings.phase2Badge(lang),
                 badgeColor: AppColors.secondary,
-                title: isEn ? 'Phase 2: Australia Arrival & 88 Days' : 'Fase 2: Llegada a Australia & 88 Días',
-                subtitle: isEn
-                    ? 'I already have my visa! I am flying soon or already living in Australia.'
-                    : '¡Ya tengo mi visado concedido! Viajo pronto o ya estoy viviendo en Australia.',
+                title: AppStrings.phase2Title(lang),
+                subtitle: AppStrings.phase2Subtitle(lang),
                 icon: CupertinoIcons.airplane,
                 iconColor: AppColors.secondary,
-                features: isEn
-                    ? [
-                        'Landing Checklist (TFN, Aussie Banks, Medicare, SIM)',
-                        'Aussie Standard CV & Cover Letter Generator (PDF)',
-                        '88-Day Regional Work Validator & Fair Work Calculator',
-                      ]
-                    : [
-                        'Checklist de aterrizaje (TFN, bancos, Medicare, SIM)',
-                        'Generador de CV en formato australiano y Cover Letter (PDF)',
-                        'Validador oficial de 88 días por código postal y Sueldo Fair Work',
-                      ],
-                buttonLabel: isEn ? 'Start in Phase 2 (Free)' : 'Empezar en Fase 2 (Gratis)',
+                features: AppStrings.phase2Features(lang),
+                buttonLabel: AppStrings.phase2Button(lang),
                 buttonColor: AppColors.secondary,
                 delayMs: 450,
               ),
@@ -190,9 +163,7 @@ class _PhaseSelectionScreenState extends ConsumerState<PhaseSelectionScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        isEn
-                            ? 'You can easily switch back and forth between Phase 1 and Phase 2 anytime inside Settings.'
-                            : 'Podrás alternar entre la Fase 1 y la Fase 2 en cualquier momento desde Ajustes o el Radar.',
+                        AppStrings.phaseSelectionFooter(lang),
                         style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.3),
                       ),
                     ),
@@ -210,7 +181,6 @@ class _PhaseSelectionScreenState extends ConsumerState<PhaseSelectionScreen> {
 
   Widget _buildPhaseCard({
     required int phase,
-    required bool isEn,
     required String badgeLabel,
     required Color badgeColor,
     required String title,

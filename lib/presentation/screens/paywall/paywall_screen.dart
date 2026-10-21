@@ -8,6 +8,7 @@ import '../../providers/paywall_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../providers/locale_provider.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
+import '../../../../core/localization/app_strings.dart';
 
 class PaywallScreen extends ConsumerWidget {
   const PaywallScreen({super.key});
@@ -17,7 +18,7 @@ class PaywallScreen extends ConsumerWidget {
     // Escuchamos el estado del paywall por si se actualiza (ej: comprando)
     ref.watch(paywallProvider);
     final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode == 'en';
+    final lang = locale?.languageCode ?? Localizations.localeOf(context).languageCode;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -132,9 +133,7 @@ class PaywallScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     Text(
-                      isEn
-                          ? 'Already got your visa or traveling soon to Australia?'
-                          : '¿Ya tienes tu visado o viajas pronto a Australia?',
+                      AppStrings.paywallAlreadyGotVisa(lang),
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                     ),
@@ -144,7 +143,7 @@ class PaywallScreen extends ConsumerWidget {
                       child: OutlinedButton.icon(
                         icon: const Icon(CupertinoIcons.airplane, size: 16, color: AppColors.secondary),
                         label: Text(
-                          isEn ? 'Go to Phase 2: Australia Arrival (Free)' : 'Acceder a Fase 2: Llegada a Australia (Gratis)',
+                          AppStrings.paywallGoToPhase2(lang),
                           style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: AppColors.secondary),
                         ),
                         style: OutlinedButton.styleFrom(

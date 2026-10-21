@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/localization/app_strings.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/user_provider.dart';
@@ -40,7 +41,7 @@ class _VisaDatesSurveyDialogState extends ConsumerState<VisaDatesSurveyDialog> {
   Widget build(BuildContext context) {
     final dateFormat = DateFormat('dd/MM/yyyy');
     final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode != 'es';
+    final lang = locale?.languageCode ?? Localizations.localeOf(context).languageCode;
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -64,7 +65,7 @@ class _VisaDatesSurveyDialogState extends ConsumerState<VisaDatesSurveyDialog> {
               const SizedBox(height: 16),
 
               Text(
-                isEn ? 'Congrats on your Visa Grant! 🎉' : '¡Enhorabuena por tu Visado! 🎉',
+                AppStrings.visaSurveyCongrats(lang),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 20,
@@ -75,9 +76,7 @@ class _VisaDatesSurveyDialogState extends ConsumerState<VisaDatesSurveyDialog> {
               const SizedBox(height: 8),
 
               Text(
-                isEn
-                    ? 'Help the OzAlert community: tell us when you applied and when it was granted to compute real Immigration processing times.'
-                    : 'Ayuda a la comunidad de OzAlert: dinos cuándo aplicaste y cuándo te lo concedieron para calcular los plazos reales de Inmigración.',
+                AppStrings.visaSurveyBody(lang),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.4),
               ),
@@ -85,7 +84,7 @@ class _VisaDatesSurveyDialogState extends ConsumerState<VisaDatesSurveyDialog> {
 
               // Selector 1: Fecha de Solicitud (Lodgement)
               _buildDatePickerTile(
-                title: isEn ? 'When did you apply for the visa?' : '¿Cuándo solicitaste la visa?',
+                title: AppStrings.visaSurveyApplyDate(lang),
                 selectedDate: _lodgementDate,
                 dateFormat: dateFormat,
                 onTap: () async {
@@ -109,7 +108,7 @@ class _VisaDatesSurveyDialogState extends ConsumerState<VisaDatesSurveyDialog> {
 
               // Selector 2: Fecha de Concesión (Grant)
               _buildDatePickerTile(
-                title: isEn ? 'When was it granted?' : '¿Cuándo te la concedieron?',
+                title: AppStrings.visaSurveyGrantDate(lang),
                 selectedDate: _grantDate,
                 dateFormat: dateFormat,
                 onTap: () async {
@@ -135,9 +134,7 @@ class _VisaDatesSurveyDialogState extends ConsumerState<VisaDatesSurveyDialog> {
                   border: Border.all(color: AppColors.cardBorder),
                 ),
                 child: Text(
-                  isEn
-                      ? 'Your visa took $_processingDays ${_processingDays == 1 ? "day" : "days"} to be approved'
-                      : 'Tu visado tardó $_processingDays ${_processingDays == 1 ? "día" : "días"} en ser aprobado',
+                  AppStrings.visaSurveyTookDays(lang, _processingDays),
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primary),
                 ),
               ),
@@ -180,7 +177,7 @@ class _VisaDatesSurveyDialogState extends ConsumerState<VisaDatesSurveyDialog> {
                   child: _isSaving
                       ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
                       : Text(
-                          isEn ? 'Save & Share' : 'Guardar y compartir',
+                          AppStrings.visaSurveySave(lang),
                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white),
                         ),
                 ),
@@ -193,7 +190,7 @@ class _VisaDatesSurveyDialogState extends ConsumerState<VisaDatesSurveyDialog> {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  isEn ? 'Complete later' : 'Completar más tarde',
+                  AppStrings.visaSurveyLater(lang),
                   style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
                 ),
               ),

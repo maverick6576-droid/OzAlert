@@ -3,21 +3,24 @@ import 'package:flutter/material.dart';
 import '../../../core/services/url_launcher_service.dart';
 import '../../../core/theme/app_colors.dart';
 
-void showOfficialSourcesModal(BuildContext context, {bool isEn = false, String? initialTopic}) {
+void showOfficialSourcesModal(BuildContext context, {bool isEn = false, String? lang, String? initialTopic}) {
+  final cleanLang = lang != null && lang.length >= 2 ? lang.substring(0, 2).toLowerCase() : (isEn ? 'en' : 'es');
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (ctx) => _OfficialSourcesBottomSheet(isEn: isEn, initialTopic: initialTopic),
+    builder: (ctx) => _OfficialSourcesBottomSheet(isEn: isEn, lang: cleanLang, initialTopic: initialTopic),
   );
 }
 
 class _OfficialSourcesBottomSheet extends StatelessWidget {
   final bool isEn;
+  final String lang;
   final String? initialTopic;
 
   const _OfficialSourcesBottomSheet({
     required this.isEn,
+    this.lang = 'en',
     this.initialTopic,
   });
 
@@ -27,6 +30,44 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final titleText = () {
+      switch (lang) {
+        case 'fr': return 'Sources Légales Officielles';
+        case 'it': return 'Fonti Ufficiali & Quadro Legale';
+        case 'zh': return '官方权威法规与法律依据';
+        case 'es': return 'Fuentes Oficiales & Marco Legal';
+        case 'en':
+        default: return 'Official Government Sources';
+      }
+    }();
+
+    final subtitleText = () {
+      switch (lang) {
+        case 'fr': return 'Informations vérifiées du gouvernement australien';
+        case 'it': return 'Informazioni verificate del Governo Australiano';
+        case 'zh': return '澳大利亚联邦政府官方核实数据';
+        case 'es': return 'Información verificada del Gobierno de Australia';
+        case 'en':
+        default: return 'Verified Australian Government Data';
+      }
+    }();
+
+    final disclaimerText = () {
+      switch (lang) {
+        case 'fr':
+          return 'OzAlert référence rigoureusement les réglementations officielles des agences du gouvernement australien. Nous garantissons une transparence totale avec un accès direct aux sources primaires.';
+        case 'it':
+          return 'OzAlert fa riferimento rigoroso alle normative vigenti delle agenzie governative australiane. Garantiamo trasparenza totale con accesso diretto alle fonti primarie.';
+        case 'zh':
+          return 'OzAlert 严格引用澳大利亚联邦政府各行政机构的现行公开法规与法定标准。我们保证绝对透明度，并提供直达官方主源的权威链接。';
+        case 'es':
+          return 'OzAlert referencia rigurosamente las normativas vigentes de los organismos del Gobierno de Australia. Garantizamos total transparencia con acceso directo a las fuentes primarias.';
+        case 'en':
+        default:
+          return 'OzAlert references strictly public regulations from Australian Government agencies. We ensure absolute transparency with direct links to primary sources.';
+      }
+    }();
+
     return Container(
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.88,
@@ -67,7 +108,7 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        isEn ? 'Official Government Sources' : 'Fuentes Oficiales & Marco Legal',
+                        titleText,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w900,
@@ -76,7 +117,7 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        isEn ? 'Verified Australian Government Data' : 'Información verificada del Gobierno de Australia',
+                        subtitleText,
                         style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
                       ),
                     ],
@@ -111,9 +152,7 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          isEn
-                              ? 'OzAlert references strictly public regulations from Australian Government agencies. We ensure absolute transparency with direct links to primary sources.'
-                              : 'OzAlert referencia rigurosamente las normativas vigentes de los organismos del Gobierno de Australia. Garantizamos total transparencia con acceso directo a las fuentes primarias.',
+                          disclaimerText,
                           style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
                         ),
                       ),

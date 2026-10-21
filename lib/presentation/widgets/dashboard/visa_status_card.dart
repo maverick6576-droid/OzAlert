@@ -10,6 +10,8 @@ import '../../../../domain/models/country_config.dart';
 import '../phase2/paywall_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
+import '../../../../core/localization/app_strings.dart';
+import '../../providers/locale_provider.dart';
 
 class VisaStatusCard extends ConsumerStatefulWidget {
   final CountryConfig country;
@@ -33,15 +35,11 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
     });
   }
 
-  void _openProPaywall(BuildContext context, bool isEn) {
+  void _openProPaywall(BuildContext context, String lang) {
     showPhase2PaywallBottomSheet(
       context: context,
-      featureTitle: isEn
-          ? 'Instant Visa Open Notification 🔔'
-          : 'Notificación de Visado Abierto 🔔',
-      featureBenefit: isEn
-          ? 'Subscribe to OzAlert Pro to unlock the 24/7 emergency notification channel with sound alarm the exact second Immigration opens quota spots for your passport.'
-          : 'Suscríbete a OzAlert Pro para activar el canal de notificaciones 24/7 con alarma sonora en el segundo exacto en que Inmigración abra plazas para tu pasaporte.',
+      featureTitle: AppStrings.instantVisaAlertTitle(lang),
+      featureBenefit: AppStrings.instantVisaAlertBenefit(lang),
     );
   }
 
@@ -51,7 +49,8 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
     final isPaywallSubscribed = ref.watch(paywallProvider);
     final userProfile = ref.watch(userProfileProvider).value;
     final isPremium = isPaywallSubscribed || (userProfile?.isPremium ?? false);
-    final isEn = Localizations.localeOf(context).languageCode == 'en';
+    final locale = ref.watch(localeProvider);
+    final lang = locale?.languageCode ?? Localizations.localeOf(context).languageCode;
 
     final status = statusAsync.when(
       data: (val) => val,
@@ -124,7 +123,7 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                 }
               }
             } else if (!isPremium) {
-              _openProPaywall(context, isEn);
+              _openProPaywall(context, lang);
             }
           },
           child: Container(
@@ -228,7 +227,7 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                         .shimmer(duration: 1500.ms, color: AppColors.statusOpen),
                     if (!isPremium)
                       GestureDetector(
-                        onTap: () => _openProPaywall(context, isEn),
+                        onTap: () => _openProPaywall(context, lang),
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                           decoration: BoxDecoration(
@@ -304,7 +303,7 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                 // 6. ETIQUETA DE NOTIFICACIÓN DE VISADO ABIERTO (Con candado en parte gratuita para suscribirse a PRO)
                 if (!isPremium)
                   GestureDetector(
-                    onTap: () => _openProPaywall(context, isEn),
+                    onTap: () => _openProPaywall(context, lang),
                     child: Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -336,9 +335,7 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  isEn
-                                      ? 'Visa Open Notification'
-                                      : 'Notificación de Visado Abierto',
+                                  AppStrings.visaOpenNotification(lang),
                                   softWrap: true,
                                   style: const TextStyle(
                                     color: Colors.white,
@@ -348,9 +345,7 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  isEn
-                                      ? 'Subscribe to PRO to receive instant alert when visa opens'
-                                      : 'Suscríbete como PRO para recibir la notificación al abrirse',
+                                  AppStrings.subscribeProAlert(lang),
                                   softWrap: true,
                                   style: TextStyle(
                                     color: Colors.white.withValues(alpha: 0.88),
@@ -410,9 +405,7 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            isEn
-                                ? 'Visa Open Notification Active (24/7 Channel)'
-                                : 'Notificación de Visado Abierto Activa (Canal 24/7)',
+                            AppStrings.visaNotificationActive(lang),
                             softWrap: true,
                             style: const TextStyle(
                               color: Colors.white,
