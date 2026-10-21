@@ -2296,14 +2296,34 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
     await PdfGeneratorService.shareOrPrintPdf(pdfBytes, 'Condition_8547_Exemption_Memo.pdf');
   }
 
-  Future<void> _generateAndShareShamContractingClaim(BuildContext context, bool isEn, bool isPremium) async {
+  Future<void> _generateAndShareShamContractingClaim(BuildContext context, String lang, bool isEn, bool isPremium) async {
     if (!isPremium) {
+      String tr(String es, String en, {String? fr, String? it, String? zh}) {
+        switch (lang.toLowerCase()) {
+          case 'zh': return zh ?? en;
+          case 'fr': return fr ?? en;
+          case 'it': return it ?? en;
+          case 'es': return es;
+          case 'en':
+          default: return en;
+        }
+      }
       showPhase2PaywallBottomSheet(
         context: context,
-        featureTitle: isEn ? 'ABN Sham Contracting Demand' : 'Reclamación Falso Autónomo (ABN)',
-        featureBenefit: isEn
-            ? 'Legally enforce Section 15AA Fair Work Act to claim 25% casual loading and 12% super backpay.'
-            : 'Exige el cobro retroactivo del 25% de casual loading y el 12% de superannuation bajo las secciones 15AA y 357 de Fair Work.',
+        featureTitle: tr(
+          'Reclamación Falso Autónomo (ABN)',
+          'ABN Sham Contracting Demand',
+          fr: 'Réclamation Faux Statut d’Indépendant (ABN)',
+          it: 'Reclamo Falso Lavoratore Autonomo (ABN)',
+          zh: 'ABN 虚假自雇法定追索申诉书',
+        ),
+        featureBenefit: tr(
+          'Exige el cobro retroactivo del 25% de casual loading y el 12% de superannuation bajo las secciones 15AA y 357 de Fair Work.',
+          'Legally enforce Section 15AA Fair Work Act to claim 25% casual loading and 12% super backpay.',
+          fr: 'Exigez le paiement rétroactif de 25% de majoration et 12% de retraite sous les art. 15AA et 357.',
+          it: 'Richiedi il pagamento retroattivo del 25% di maggiorazione e del 12% di superannuation sotto le sezioni 15AA e 357.',
+          zh: '依据《公平工作法》第15AA及357条，依法向雇主追索25%临时工补贴与12%养老金欠款。',
+        ),
       );
       return;
     }
@@ -2779,7 +2799,18 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
     );
   }
 
-  void _showPayslipScannerSheet(BuildContext context, bool isEn) {
+  void _showPayslipScannerSheet(BuildContext context, String lang, bool isEn) {
+    String tr(String es, String en, {String? fr, String? it, String? zh}) {
+      switch (lang.toLowerCase()) {
+        case 'zh': return zh ?? en;
+        case 'fr': return fr ?? en;
+        case 'it': return it ?? en;
+        case 'es': return es;
+        case 'en':
+        default: return en;
+      }
+    }
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -2823,9 +2854,17 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                               children: [
                                 const Icon(CupertinoIcons.doc_text_search, color: AppColors.primary, size: 22),
                                 const SizedBox(width: 8),
-                                Text(
-                                  isEn ? 'Digital Payslip Scanner (Free)' : 'Escáner de Nómina (Gratuito)',
-                                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15, color: AppColors.textPrimary),
+                                Expanded(
+                                  child: Text(
+                                    tr(
+                                      'Escáner de Nómina (Gratuito)',
+                                      'Digital Payslip Scanner (Free)',
+                                      fr: 'Scanner Digital de Fiche de Paie (Gratuit)',
+                                      it: 'Scanner Digitale Busta Paga (Gratuito)',
+                                      zh: '工资单数字化智能扫描（免费）',
+                                    ),
+                                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15, color: AppColors.textPrimary),
+                                  ),
                                 ),
                               ],
                             ),
@@ -2845,9 +2884,13 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              isEn
-                                  ? 'Paste the text from your payslip PDF, email, Xero, MYOB or KeyPay:'
-                                  : 'Pega el texto de tu nómina en PDF, email, Xero, MYOB o KeyPay:',
+                              tr(
+                                'Pega el texto de tu nómina en PDF, email, Xero, MYOB o KeyPay:',
+                                'Paste the text from your payslip PDF, email, Xero, MYOB or KeyPay:',
+                                fr: 'Collez le texte de votre bulletin PDF, email, Xero, MYOB ou KeyPay :',
+                                it: 'Incolla il testo del cedolino da PDF, email, Xero, MYOB o KeyPay:',
+                                zh: '粘贴来自 PDF 工资单、电子邮件、Xero、MYOB 或 KeyPay 的文本：',
+                              ),
                               style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
                             ),
                             const SizedBox(height: 8),
@@ -2856,7 +2899,13 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                               maxLines: 5,
                               style: const TextStyle(fontSize: 12, fontFamily: 'monospace'),
                               decoration: InputDecoration(
-                                hintText: isEn ? 'Paste payslip text here...' : 'Pega el texto de la nómina aquí...',
+                                hintText: tr(
+                                  'Pega el texto de la nómina aquí...',
+                                  'Paste payslip text here...',
+                                  fr: 'Collez le texte du bulletin ici...',
+                                  it: 'Incolla il testo del cedolino qui...',
+                                  zh: '在此处粘贴工资单文本...',
+                                ),
                                 filled: true,
                                 fillColor: AppColors.surfaceElevated,
                                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
@@ -2868,7 +2917,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                                 Expanded(
                                   child: OutlinedButton.icon(
                                     icon: const Icon(CupertinoIcons.doc_on_clipboard, size: 16),
-                                    label: Text(isEn ? 'Paste' : 'Pegar'),
+                                    label: Text(tr('Pegar', 'Paste', fr: 'Coller', it: 'Incolla', zh: '粘贴')),
                                     onPressed: () async {
                                       final cdata = await Clipboard.getData(Clipboard.kTextPlain);
                                       if (cdata?.text != null) {
@@ -2886,7 +2935,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                                 Expanded(
                                   child: ElevatedButton.icon(
                                     icon: const Icon(CupertinoIcons.sparkles, size: 16),
-                                    label: Text(isEn ? 'Audit Now' : 'Auditar Nómina'),
+                                    label: Text(tr('Auditar Nómina', 'Audit Now', fr: 'Auditer Maintenant', it: 'Verifica Ora', zh: '立即审核')),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColors.primary,
                                       foregroundColor: Colors.white,
@@ -2931,7 +2980,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          isEn ? 'Extracted ABN:' : 'ABN Detectado:',
+                                          tr('ABN Detectado:', 'Extracted ABN:', fr: 'ABN Détecté :', it: 'ABN Rilevato:', zh: '提取的 ABN 商业代码：'),
                                           style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                                         ),
                                         Container(
@@ -2944,8 +2993,8 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                                           ),
                                           child: Text(
                                             parsed.abn != null
-                                                ? '${parsed.abn} (${parsed.isAbnChecksumValid ? "Válido" : "Inválido"})'
-                                                : (isEn ? 'Not found' : 'No detectado'),
+                                                ? '${parsed.abn} (${parsed.isAbnChecksumValid ? tr("Válido", "Valid", fr: "Valide", it: "Valido", zh: "有效") : tr("Inválido", "Invalid", fr: "Invalide", it: "Non valido", zh: "无效")})'
+                                                : tr('No detectado', 'Not found', fr: 'Non détecté', it: 'Non rilevato', zh: '未检测到'),
                                             style: TextStyle(
                                               fontSize: 11,
                                               fontWeight: FontWeight.bold,
@@ -2956,11 +3005,11 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                                       ],
                                     ),
                                     const Divider(height: 14),
-                                    _buildPayRow(isEn ? 'Gross Pay' : 'Salario Bruto', '\$${parsed.grossPay?.toStringAsFixed(2) ?? "---"} AUD'),
-                                    _buildPayRow(isEn ? 'Hours' : 'Horas', '${parsed.hoursWorked?.toStringAsFixed(1) ?? "---"} h'),
-                                    _buildPayRow(isEn ? 'Effective Rate' : 'Tarifa por Hora', '\$${parsed.hourlyRate?.toStringAsFixed(2) ?? "---"}/h'),
-                                    _buildPayRow(isEn ? 'Tax Withheld' : 'Impuesto Retenido (PAYG)', '\$${parsed.taxWithheld?.toStringAsFixed(2) ?? "---"} AUD'),
-                                    _buildPayRow(isEn ? 'Superannuation' : 'Superannuation (12%)', '\$${parsed.superannuation?.toStringAsFixed(2) ?? "---"} AUD'),
+                                    _buildPayRow(tr('Salario Bruto', 'Gross Pay', fr: 'Salaire Brut', it: 'Salario Lordo', zh: '税前薪资'), '\$${parsed.grossPay?.toStringAsFixed(2) ?? "---"} AUD'),
+                                    _buildPayRow(tr('Horas', 'Hours', fr: 'Heures', it: 'Ore', zh: '工时'), '${parsed.hoursWorked?.toStringAsFixed(1) ?? "---"} h'),
+                                    _buildPayRow(tr('Tarifa por Hora', 'Effective Rate', fr: 'Taux Horaire', it: 'Tariffa Oraria', zh: '实际时薪'), '\$${parsed.hourlyRate?.toStringAsFixed(2) ?? "---"}/h'),
+                                    _buildPayRow(tr('Impuesto Retenido (PAYG)', 'Tax Withheld', fr: 'Impôt Retenu (PAYG)', it: 'Imposta Trattenuta (PAYG)', zh: '代扣所得税 (PAYG)'), '\$${parsed.taxWithheld?.toStringAsFixed(2) ?? "---"} AUD'),
+                                    _buildPayRow(tr('Superannuation (12%)', 'Superannuation (12%)', fr: 'Retraite Superannuation (12%)', it: 'Superannuation (12%)', zh: '退休养老金 (12%)'), '\$${parsed.superannuation?.toStringAsFixed(2) ?? "---"} AUD'),
                                     if (parsed.fairWorkAudit != null) ...[
                                       const Divider(height: 14),
                                       if (parsed.fairWorkAudit!['isUnderpaid'] == true) ...[
@@ -2976,9 +3025,13 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                                               const SizedBox(width: 8),
                                               Expanded(
                                                 child: Text(
-                                                  isEn
-                                                      ? '⚠️ Underpayment of \$${parsed.fairWorkAudit!["underpaidAmount"].toStringAsFixed(2)} AUD detected!'
-                                                      : '⚠️ ¡Infrasueldo de \$${parsed.fairWorkAudit!["underpaidAmount"].toStringAsFixed(2)} AUD detectado!',
+                                                  tr(
+                                                    '⚠️ ¡Infrasueldo de \$${parsed.fairWorkAudit!["underpaidAmount"].toStringAsFixed(2)} AUD detectado!',
+                                                    '⚠️ Underpayment of \$${parsed.fairWorkAudit!["underpaidAmount"].toStringAsFixed(2)} AUD detected!',
+                                                    fr: '⚠️ Sous-paiement de ${parsed.fairWorkAudit!["underpaidAmount"].toStringAsFixed(2)} \$AUD détecté !',
+                                                    it: '⚠️ Sottopagamento di ${parsed.fairWorkAudit!["underpaidAmount"].toStringAsFixed(2)} \$AUD rilevato!',
+                                                    zh: '⚠️ 检测到欠薪 \$${parsed.fairWorkAudit!["underpaidAmount"].toStringAsFixed(2)} 澳元！',
+                                                  ),
                                                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.statusClosed),
                                                 ),
                                               ),
@@ -3001,7 +3054,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                                               Navigator.pop(modalCtx);
                                               _openDocumentAssistantModal(context, 'fair_work_claim', isEn, true);
                                             },
-                                            child: Text(isEn ? 'Transfer to Formal Wage Claim' : 'Llevar a Reclamación Formal'),
+                                            child: Text(tr('Llevar a Reclamación Formal', 'Transfer to Formal Wage Claim', fr: 'Transférer en Réclamation Formelle', it: 'Trasferisci a Reclamo Formale', zh: '导入正式欠薪申诉')),
                                           ),
                                         ),
                                       ] else ...[
@@ -3017,9 +3070,13 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                                               const SizedBox(width: 8),
                                               Expanded(
                                                 child: Text(
-                                                  isEn
-                                                      ? '✅ Payslip matches or exceeds legal Fair Work minimum award rates!'
-                                                      : '✅ ¡Tu nómina cumple o supera los mínimos legales de Fair Work!',
+                                                  tr(
+                                                    '✅ ¡Tu nómina cumple o supera los mínimos legales de Fair Work!',
+                                                    '✅ Payslip matches or exceeds legal Fair Work minimum award rates!',
+                                                    fr: '✅ Votre bulletin respecte ou dépasse les minima légaux Fair Work !',
+                                                    it: '✅ La tua busta paga rispetta o supera i minimi legali di Fair Work!',
+                                                    zh: '✅ 您的工资单符合或高于 Fair Work 法定最低费率！',
+                                                  ),
                                                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF0D9488)),
                                                 ),
                                               ),
@@ -3037,7 +3094,11 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                                           borderRadius: BorderRadius.circular(10),
                                         ),
                                         child: Text(
-                                          parsed.taxAudit!['warning'] ?? '',
+                                          FairWorkService.getLocalizedTaxWarning(
+                                            parsed.taxAudit!['issueType'] ?? '',
+                                            (parsed.taxAudit!['taxRatePercent'] as num?)?.toDouble() ?? 0.0,
+                                            lang,
+                                          ),
                                           style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.brown),
                                         ),
                                       ),
@@ -3064,6 +3125,17 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
   // PESTAÑA 2: CALCULADORA FAIR WORK & SUITE LEGAL
   // ==========================================
   Widget _buildFairWorkTab(String lang, bool isEn, bool isPremium) {
+    String tr(String es, String en, {String? fr, String? it, String? zh}) {
+      switch (lang.toLowerCase()) {
+        case 'zh': return zh ?? en;
+        case 'fr': return fr ?? en;
+        case 'it': return it ?? en;
+        case 'es': return es;
+        case 'en':
+        default: return en;
+      }
+    }
+
     final award = FairWorkService.getAwardById(_selectedAwardId);
     final payCalc = FairWorkService.calculateShiftPay(
       hours: _hoursWorked,
@@ -3105,12 +3177,24 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      isEn ? 'Tax Hub: 2% Medicare MES & WA Rego' : 'Hub Fiscal: Exención Medicare 2% & Coche WA',
+                      tr(
+                        'Hub Fiscal: Exención Medicare 2% & Coche WA',
+                        'Tax Hub: 2% Medicare MES & WA Rego',
+                        fr: 'Pôle Fiscal : Exemption Medicare 2% & Véhicule WA',
+                        it: 'Hub Fiscale: Esenzione Medicare 2% & Auto WA',
+                        zh: '税务中心：2% 医疗附加税豁免与西澳车辆登记',
+                      ),
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.textPrimary),
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      isEn ? 'Calculate your \$900+ refund & PPSR car checks' : 'Calcula tu devolución de +\$900 AUD y revisión de cargas PPSR',
+                      tr(
+                        'Calcula tu devolución de +\$900 AUD y revisión de cargas PPSR',
+                        'Calculate your \$900+ refund & PPSR car checks',
+                        fr: 'Calculez votre remboursement de 900+ \$AUD & vérification PPSR',
+                        it: 'Calcola il tuo rimborso di oltre 900 \$AUD e controlli PPSR',
+                        zh: '测算 \$900+ 澳元退税及车辆 PPSR 产权债务查验',
+                      ),
                       style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
                     ),
                   ],
@@ -3118,7 +3202,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
               ),
               TextButton(
                 onPressed: () => TaxAndVehicleHubModal.show(context, lang: lang, isEn: isEn),
-                child: Text(isEn ? 'Open' : 'Abrir', style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF0D9488))),
+                child: Text(tr('Abrir', 'Open', fr: 'Ouvrir', it: 'Apri', zh: '打开'), style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF0D9488))),
               ),
             ],
           ),
@@ -3144,11 +3228,17 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          isEn ? 'Modern Award 2026 (Fair Work)' : 'Convenio Colectivo Oficial 2026',
+                          tr(
+                            'Convenio Colectivo Oficial 2026',
+                            'Modern Award 2026 (Fair Work)',
+                            fr: 'Convention Collective Officielle 2026',
+                            it: 'Contratto Collettivo Ufficiale 2026',
+                            zh: '官方行业劳资裁定协议 2026',
+                          ),
                           style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.textPrimary),
                         ),
                         Text(
-                          'Award Code: ${award.code}',
+                          '${tr("Código", "Award Code", fr: "Code Accord", it: "Codice Contratto", zh: "裁定代码")}: ${award.code}',
                           style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.secondary),
                         ),
                       ],
@@ -3165,7 +3255,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                           const Icon(CupertinoIcons.info_circle_fill, size: 16, color: AppColors.secondary),
                           const SizedBox(width: 4),
                           Text(
-                            isEn ? 'Law' : 'Ley',
+                            tr('Ley', 'Law', fr: 'Loi', it: 'Legge', zh: '法规'),
                             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.secondary),
                           ),
                         ],
@@ -3187,7 +3277,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                 items: FairWorkService.officialAwards.map((aw) {
                   return DropdownMenuItem(
                     value: aw.id,
-                    child: Text(aw.name, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold)),
+                    child: Text(aw.getLocalizedName(lang), style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold)),
                   );
                 }).toList(),
                 onChanged: (val) {
@@ -3207,7 +3297,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        award.specialRuleNote,
+                        award.getLocalizedNote(lang),
                         style: const TextStyle(fontSize: 11, color: AppColors.textSecondary, height: 1.35),
                       ),
                     ),
@@ -3228,7 +3318,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            isEn ? 'Base Rate (FT/PT)' : 'Salario Base FT',
+                            tr('Salario Base FT', 'Base Rate (FT/PT)', fr: 'Taux de Base (FT/PT)', it: 'Tariffa Base (FT/PT)', zh: '全职/兼职基础时薪'),
                             style: const TextStyle(fontSize: 11, color: AppColors.textSecondary, fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(height: 2),
@@ -3252,9 +3342,9 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Casual (+25%)',
-                            style: TextStyle(fontSize: 11, color: AppColors.primary, fontWeight: FontWeight.bold),
+                          Text(
+                            tr('Casual (+25%)', 'Casual (+25%)', fr: 'Occasionnel (+25%)', it: 'Casual (+25%)', zh: '临时工 Casual (+25%)'),
+                            style: const TextStyle(fontSize: 11, color: AppColors.primary, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 2),
                           Text(
@@ -3296,11 +3386,17 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      isEn ? 'Free Payslip Scanner' : 'Escáner Digital de Nómina',
+                      tr('Escáner Digital de Nómina', 'Free Payslip Scanner', fr: 'Scanner Digital de Fiche de Paie', it: 'Scanner Digitale Busta Paga', zh: '免费工资单数字化扫描'),
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: AppColors.textPrimary),
                     ),
                     Text(
-                      isEn ? 'Audit ABN, 15% tax & 12% super offline' : 'Audita tu ABN, 15% IRPF y 12% super gratis',
+                      tr(
+                        'Audita tu ABN, 15% IRPF y 12% super gratis',
+                        'Audit ABN, 15% tax & 12% super offline',
+                        fr: 'Vérifiez ABN, taxe 15% et super 12% hors ligne',
+                        it: 'Controlla ABN, tassa 15% e super 12% offline',
+                        zh: '离线审核 ABN、15% 个人所得税及 12% 养老金',
+                      ),
                       style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
                     ),
                   ],
@@ -3313,8 +3409,8 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
-                onPressed: () => _showPayslipScannerSheet(context, isEn),
-                child: Text(isEn ? 'Scan' : 'Escanear', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                onPressed: () => _showPayslipScannerSheet(context, lang, isEn),
+                child: Text(tr('Escanear', 'Scan', fr: 'Scanner', it: 'Scansiona', zh: '扫描'), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
               ),
             ],
           ),
@@ -3323,7 +3419,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
 
         // 4. Tipo de Contrato
         Text(
-          isEn ? 'Contract Type' : 'Tipo de Contrato',
+          tr('Tipo de Contrato', 'Contract Type', fr: 'Type de Contrat', it: 'Tipo di Contratto', zh: '合同类型'),
           style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: AppColors.textPrimary),
         ),
         const SizedBox(height: 8),
@@ -3348,7 +3444,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                     ),
                     alignment: Alignment.center,
                     child: Text(
-                      'Casual (+25%)',
+                      tr('Casual (+25%)', 'Casual (+25%)', fr: 'Occasionnel (+25%)', it: 'Casual (+25%)', zh: '临时工 (+25%)'),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: _isCasualContract ? Colors.white : AppColors.textSecondary,
@@ -3370,7 +3466,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                     ),
                     alignment: Alignment.center,
                     child: Text(
-                      isEn ? 'Full / Part-Time' : 'Completa / Media',
+                      tr('Completa / Media', 'Full / Part-Time', fr: 'Temps Plein / Partiel', it: 'Tempo Pieno / Parziale', zh: '全职 / 兼职'),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: !_isCasualContract ? Colors.white : AppColors.textSecondary,
@@ -3388,7 +3484,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
 
         // Tipo de Turno / Penalizaciones
         Text(
-          isEn ? 'Shift Type & Penalty Rates' : 'Turno y Penalizaciones de Fin de Semana',
+          tr('Turno y Penalizaciones de Fin de Semana', 'Shift Type & Penalty Rates', fr: 'Type de Poste & Majorations du Week-end', it: 'Tipo di Turno & Maggiorazioni Weekend', zh: '班次类型与周末节假日加班津贴'),
           style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: AppColors.textPrimary),
         ),
         const SizedBox(height: 8),
@@ -3396,10 +3492,10 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
           spacing: 8,
           runSpacing: 8,
           children: [
-            _buildShiftChip('weekday', isEn ? 'Weekday (Normal)' : 'Entre Semana (100%)'),
-            _buildShiftChip('saturday', isEn ? 'Saturday (150%)' : 'Sábado (150%)'),
-            _buildShiftChip('sunday', isEn ? 'Sunday (175%)' : 'Domingo (175%)'),
-            _buildShiftChip('public_holiday', isEn ? 'Public Holiday (225%)' : 'Festivo (225%)'),
+            _buildShiftChip('weekday', tr('Entre Semana (100%)', 'Weekday (Normal)', fr: 'En semaine (Normal)', it: 'Feriale (Normale)', zh: '工作日班次 (标准)')),
+            _buildShiftChip('saturday', tr('Sábado (150%)', 'Saturday (150%)', fr: 'Samedi (150%)', it: 'Sabato (150%)', zh: '周六班次 (150%)')),
+            _buildShiftChip('sunday', tr('Domingo (175%)', 'Sunday (175%)', fr: 'Dimanche (175%)', it: 'Domenica (175%)', zh: '周日班次 (175%)')),
+            _buildShiftChip('public_holiday', tr('Festivo (225%)', 'Public Holiday (225%)', fr: 'Jour Férié (225%)', it: 'Festivo (225%)', zh: '法定节假日 (225%)')),
           ],
         ),
         const SizedBox(height: 18),
@@ -3409,7 +3505,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              isEn ? 'Hours Worked' : 'Horas Trabajadas',
+              tr('Horas Trabajadas', 'Hours Worked', fr: 'Heures Travaillées', it: 'Ore Lavorate', zh: '工作小时数'),
               style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: AppColors.textPrimary),
             ),
             Container(
@@ -3447,11 +3543,11 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
           ),
           child: Column(
             children: [
-              _buildPayRow(isEn ? 'Effective Hourly Rate' : 'Tarifa por Hora', '\$${payCalc['effectiveHourlyRate']!.toStringAsFixed(2)} AUD/h'),
+              _buildPayRow(tr('Tarifa por Hora', 'Effective Hourly Rate', fr: 'Taux Horaire Effectif', it: 'Tariffa Oraria Effettiva', zh: '实际执行时薪'), '\$${payCalc['effectiveHourlyRate']!.toStringAsFixed(2)} AUD/h'),
               const Divider(height: 16),
-              _buildPayRow(isEn ? 'Expected Gross Pay' : 'Salario Bruto Legal', '\$${payCalc['grossPay']!.toStringAsFixed(2)} AUD', isBold: true),
+              _buildPayRow(tr('Salario Bruto Legal', 'Expected Gross Pay', fr: 'Salaire Brut Légal Prévu', it: 'Retribuzione Lorda Prevista', zh: '法定应得税前总薪资'), '\$${payCalc['grossPay']!.toStringAsFixed(2)} AUD', isBold: true),
               const Divider(height: 16),
-              _buildPayRow(isEn ? 'Superannuation (12% Extra)' : 'Superannuation (12% Extra)', '\$${payCalc['superannuationPay']!.toStringAsFixed(2)} AUD', color: AppColors.secondary),
+              _buildPayRow(tr('Superannuation (12% Extra)', 'Superannuation (12% Extra)', fr: 'Retraite Superannuation (+12%)', it: 'Superannuation (+12% Extra)', zh: '退休养老金 Superannuation (额外12%)'), '\$${payCalc['superannuationPay']!.toStringAsFixed(2)} AUD', color: AppColors.secondary),
             ],
           ),
         ),
@@ -3491,11 +3587,23 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          isEn ? 'ABN Sham Contracting Shield' : 'Test Falso Autónomo (Ley 15AA)',
+                          tr(
+                            'Test Falso Autónomo (Ley 15AA)',
+                            'ABN Sham Contracting Shield',
+                            fr: 'Bouclier Faux Indépendant (Loi 15AA)',
+                            it: 'Test Falso Lavoratore Autonomo (Sez. 15AA)',
+                            zh: 'ABN 虚假自雇防欺诈测试（第15AA条）',
+                          ),
                           style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: AppColors.textPrimary),
                         ),
                         Text(
-                          isEn ? 'Fair Work Act 2026 - Whole of Relationship Test' : 'Detecta si te obligaron a abrir ABN ilegalmente',
+                          tr(
+                            'Detecta si te obligaron a abrir ABN ilegalmente',
+                            'Fair Work Act 2026 - Whole of Relationship Test',
+                            fr: 'Fair Work Act 2026 - Test Global de la Relation',
+                            it: 'Fair Work Act 2026 - Verifica Globale del Rapporto',
+                            zh: '澳大利亚公平工作法 2026 - 雇佣关系实质审查',
+                          ),
                           style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
                         ),
                       ],
@@ -3505,18 +3613,52 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
               ),
               const SizedBox(height: 12),
               Text(
-                isEn
-                    ? 'Answer these 5 questions based on your day-to-day work:'
-                    : 'Responde a estas 5 preguntas sobre tu día a día en el puesto:',
+                tr(
+                  'Responde a estas 5 preguntas sobre tu día a día en el puesto:',
+                  'Answer these 5 questions based on your day-to-day work:',
+                  fr: 'Répondez à ces 5 questions sur votre quotidien au travail :',
+                  it: 'Rispondi a queste 5 domande sulla tua attività quotidiana:',
+                  zh: '根据您的日常工作情况回答以下5个问题：',
+                ),
                 style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
               ),
               const SizedBox(height: 8),
               ...[
-                isEn ? '1. Boss decides your exact hours with no right of substitution?' : '1. ¿Tu jefe fija tu horario exacto y no puedes enviar a otro en tu lugar?',
-                isEn ? '2. Company provides all tools, equipment, or machinery?' : '2. ¿La empresa te proporciona todas las herramientas y maquinaria?',
-                isEn ? '3. Paid on an hourly rate instead of fixed quoted job price?' : '3. ¿Cobras una tarifa por hora en vez de un presupuesto por obra acabada?',
-                isEn ? '4. Directly supervised and managed by employer staff?' : '4. ¿Tu trabajo es supervisado y dirigido directamente por la empresa?',
-                isEn ? '5. You have no independent business or other direct clients?' : '5. ¿No tienes un negocio propio real con otros clientes en Australia?',
+                tr(
+                  '1. ¿Tu jefe fija tu horario exacto y no puedes enviar a otro en tu lugar?',
+                  '1. Boss decides your exact hours with no right of substitution?',
+                  fr: '1. Votre employeur impose vos horaires sans droit de substitution ?',
+                  it: '1. Il datore fissa l’orario esatto senza possibilità di sostituzione?',
+                  zh: '1. 雇主指定您的具体工作时间，且您无法指派他人代班？',
+                ),
+                tr(
+                  '2. ¿La empresa te proporciona todas las herramientas y maquinaria?',
+                  '2. Company provides all tools, equipment, or machinery?',
+                  fr: '2. L’entreprise fournit tous les outils et équipements ?',
+                  it: '2. L’azienda fornisce tutti gli strumenti, attrezzi e macchinari?',
+                  zh: '2. 公司提供所有作业工具、设备或机械？',
+                ),
+                tr(
+                  '3. ¿Cobras una tarifa por hora en vez de un presupuesto por obra acabada?',
+                  '3. Paid on an hourly rate instead of fixed quoted job price?',
+                  fr: '3. Payé à l’heure plutôt que sur devis forfaitaire ?',
+                  it: '3. Pagato a tariffa oraria invece che a preventivo a corpo finito?',
+                  zh: '3. 按小时计薪，而非按项目完成总价承包结算？',
+                ),
+                tr(
+                  '4. ¿Tu trabajo es supervisado y dirigido directamente por la empresa?',
+                  '4. Directly supervised and managed by employer staff?',
+                  fr: '4. Directement supervisé et géré par le personnel de l’employeur ?',
+                  it: '4. Supervisionato e diretto direttamente dal personale aziendale?',
+                  zh: '4. 受到雇主管理人员的直接监督与日常指令？',
+                ),
+                tr(
+                  '5. ¿No tienes un negocio propio real con otros clientes en Australia?',
+                  '5. You have no independent business or other direct clients?',
+                  fr: '5. Vous n’avez pas d’entreprise propre avec d’autres clients ?',
+                  it: '5. Non possiedi una vera attività indipendente con altri clienti?',
+                  zh: '5. 您在澳大利亚并无独立运营的商业实体或其他直接客户？',
+                ),
               ].asMap().entries.map((entry) {
                 final idx = entry.key;
                 final qText = entry.value;
@@ -3569,16 +3711,24 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        isEn
-                            ? '⚠️ HIGH RISK: ILLEGAL SHAM CONTRACTING DETECTED'
-                            : '⚠️ RIESGO ALTO: FALSO AUTÓNOMO DETECTADO',
+                        tr(
+                          '⚠️ RIESGO ALTO: FALSO AUTÓNOMO DETECTADO',
+                          '⚠️ HIGH RISK: ILLEGAL SHAM CONTRACTING DETECTED',
+                          fr: '⚠️ RISQUE ÉLEVÉ : FAUX STATUT D’INDÉPENDANT DÉTECTÉ',
+                          it: '⚠️ ALTO RISCHIO: FALSO LAVORATORE AUTONOMO RILEVATO',
+                          zh: '⚠️ 高风险警告：检测到非法虚假自雇',
+                        ),
                         style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12, color: AppColors.statusClosed),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        isEn
-                            ? 'Under Section 15AA, you are legally an employee! You are entitled to 25% casual loading and 12% superannuation backpay.'
-                            : 'Bajo la Sección 15AA de Fair Work, ¡eres legalmente un empleado! Tienes derecho a reclamar el +25% de casual loading y el 12% de superannuation impagados.',
+                        tr(
+                          'Bajo la Sección 15AA de Fair Work, ¡eres legalmente un empleado! Tienes derecho a reclamar el +25% de casual loading y el 12% de superannuation impagados.',
+                          'Under Section 15AA, you are legally an employee! You are entitled to 25% casual loading and 12% superannuation backpay.',
+                          fr: 'Selon l’article 15AA, vous êtes légalement salarié ! Vous avez droit aux 25% de majoration occasionnelle et 12% de retraite non payés.',
+                          it: 'Ai sensi della Sezione 15AA, sei legalmente un dipendente! Hai diritto al recupero del 25% di casual loading e del 12% di superannuation arretrata.',
+                          zh: '根据《公平工作法》第15AA条，您在法律上属于雇员！您有权追讨未支付的 +25% 临时工补贴及 12% 退休养老金。',
+                        ),
                         style: const TextStyle(fontSize: 11, color: AppColors.textPrimary, height: 1.35),
                       ),
                       const SizedBox(height: 10),
@@ -3587,7 +3737,13 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                         child: ElevatedButton.icon(
                           icon: const Icon(CupertinoIcons.arrow_down_doc_fill, size: 16),
                           label: Text(
-                            isEn ? 'Generate Section 15AA Claim (PDF)' : 'Generar Reclamación Falso Autónomo (PDF)',
+                            tr(
+                              'Generar Reclamación Falso Autónomo (PDF)',
+                              'Generate Section 15AA Claim (PDF)',
+                              fr: 'Générer Réclamation Faux Indépendant (PDF)',
+                              it: 'Genera Reclamo Falso Autonomo Sez. 15AA (PDF)',
+                              zh: '生成第15AA条虚假自雇维权追讨书 (PDF)',
+                            ),
                             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5),
                           ),
                           style: ElevatedButton.styleFrom(
@@ -3595,7 +3751,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           ),
-                          onPressed: () => _generateAndShareShamContractingClaim(context, isEn, isPremium),
+                          onPressed: () => _generateAndShareShamContractingClaim(context, lang, isEn, isPremium),
                         ),
                       ),
                     ],
@@ -3603,7 +3759,13 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                 ),
               ] else ...[
                 Text(
-                  isEn ? '✅ Low risk of sham contracting based on current answers.' : '✅ Riesgo bajo de falso autónomo según las respuestas seleccionadas.',
+                  tr(
+                    '✅ Riesgo bajo de falso autónomo según las respuestas seleccionadas.',
+                    '✅ Low risk of sham contracting based on current answers.',
+                    fr: '✅ Faible risque de faux statut d’indépendant selon vos réponses.',
+                    it: '✅ Basso rischio di falso autonomo in base alle risposte attuali.',
+                    zh: '✅ 根据当前选定的情况，虚假自雇风险较低。',
+                  ),
                   style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Color(0xFF0D9488)),
                 ),
               ],
@@ -3614,10 +3776,14 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
 
         // 6. Auditor Manual Rápido (Gross Pay)
         PremiumFeatureGate(
-          featureTitle: isEn ? 'Payslip Underpayment Auditor' : 'Auditor de Nóminas Anti-Fraude',
-          featureBenefit: isEn
-              ? 'Check if your employer is paying below the legal Fair Work award and auto-generate formal claim emails.'
-              : 'Detecta si tu empleador te está pagando por debajo de ley y genera un texto formal de reclamación legal ante Fair Work.',
+          featureTitle: tr('Auditor de Nóminas Anti-Fraude', 'Payslip Underpayment Auditor', fr: 'Auditeur Anti-Fraude de Fiche de Paie', it: 'Auditor Buste Paga Anti-Frode', zh: '工资单防欺诈审计器'),
+          featureBenefit: tr(
+            'Detecta si tu empleador te está pagando por debajo de ley y genera un texto formal de reclamación legal ante Fair Work.',
+            'Check if your employer is paying below the legal Fair Work award and auto-generate formal claim emails.',
+            fr: 'Vérifiez si votre employeur sous-paie et générez des réclamations officielles.',
+            it: 'Verifica se il datore ti sottopaga e genera contestazioni formali.',
+            zh: '检测雇主是否低于法定裁定薪酬，并自动生成正式法律维权通知书。',
+          ),
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -3629,11 +3795,11 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  isEn ? 'Payslip Checker: Enter your gross pay' : 'Comprobar Salario Bruto Percibido',
+                  tr('Comprobar Salario Bruto Percibido', 'Payslip Checker: Enter your gross pay', fr: 'Vérificateur : Entrez votre salaire brut', it: 'Verifica Lordo: Inserisci stipendio lordo', zh: '工资单核查：输入已领税前薪资'),
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.5, color: AppColors.textPrimary),
                 ),
                 const SizedBox(height: 8),
-                _buildTextField(_grossPaidController, isEn ? 'Gross Paid in AUD' : 'Importe bruto pagado en AUD'),
+                _buildTextField(_grossPaidController, tr('Importe bruto pagado en AUD', 'Gross Paid in AUD', fr: 'Montant brut payé en AUD', it: 'Importo lordo corrisposto in AUD', zh: '已支付税前金额 (AUD)')),
                 const SizedBox(height: 12),
                 SizedBox(
                   width: double.infinity,
@@ -3648,9 +3814,13 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                           SnackBar(
                             backgroundColor: AppColors.statusClosed,
                             content: Text(
-                              isEn
-                                  ? '⚠️ Underpayment detected! You are owed at least \$${diff.toStringAsFixed(2)} AUD under Fair Work award.'
-                                  : '⚠️ ¡Posible infrasueldo! Tu empleador te debe al menos \$${diff.toStringAsFixed(2)} AUD según las tablas oficiales.',
+                              tr(
+                                '⚠️ ¡Posible infrasueldo! Tu empleador te debe al menos \$${diff.toStringAsFixed(2)} AUD según las tablas oficiales.',
+                                '⚠️ Underpayment detected! You are owed at least \$${diff.toStringAsFixed(2)} AUD under Fair Work award.',
+                                fr: '⚠️ Sous-rémunération détectée ! On vous doit au moins ${diff.toStringAsFixed(2)} \$AUD selon le barème officiel.',
+                                it: '⚠️ Sottopagamento rilevato! Ti spettano almeno ${diff.toStringAsFixed(2)} \$AUD secondo le tabelle ufficiali.',
+                                zh: '⚠️ 检测到欠薪！根据官方劳资裁定，雇主至少应补发 \$${diff.toStringAsFixed(2)} 澳元。',
+                              ),
                             ),
                           ),
                         );
@@ -3659,9 +3829,13 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                           SnackBar(
                             backgroundColor: AppColors.statusOpen,
                             content: Text(
-                              isEn
-                                  ? '✅ Approved! The payslip matches or exceeds legal minimum rates.'
-                                  : '✅ ¡Correcto! Tu nómina cumple o supera los mínimos legales de Fair Work.',
+                              tr(
+                                '✅ ¡Correcto! Tu nómina cumple o supera los mínimos legales de Fair Work.',
+                                '✅ Approved! The payslip matches or exceeds legal minimum rates.',
+                                fr: '✅ Conforme ! La fiche de paie respecte ou dépasse les minima légaux.',
+                                it: '✅ Corretto! La busta paga rispetta o supera i minimi legali di Fair Work.',
+                                zh: '✅ 合规！该工资单符合或高于法定最低薪资标准。',
+                              ),
                             ),
                           ),
                         );
@@ -3671,7 +3845,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
                       backgroundColor: AppColors.primary,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: Text(isEn ? 'Check Payslip' : 'Comprobar Nómina'),
+                    child: Text(tr('Comprobar Nómina', 'Check Payslip', fr: 'Vérifier Fiche de Paie', it: 'Verifica Busta Paga', zh: '核查工资单')),
                   ),
                 ),
               ],

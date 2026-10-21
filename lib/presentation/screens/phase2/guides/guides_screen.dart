@@ -7,6 +7,7 @@ import '../../../../core/services/url_launcher_service.dart';
 import '../../../providers/phase2/phase2_providers.dart';
 import '../../../providers/locale_provider.dart';
 import '../../../../core/localization/app_strings.dart';
+import '../../../../core/localization/guide_translations.dart';
 import '../../../../domain/models/phase2/affiliate_partner.dart';
 import '../../../../domain/models/phase2/guide_data.dart';
 import '../../../widgets/phase2/premium_feature_gate.dart';
@@ -671,12 +672,12 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                isEn ? guide.titleEn : guide.title,
+                GuideTranslations.getCategoryTitle(guide.id, lang, guide.title, guide.titleEn),
                 style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
               ),
               const SizedBox(height: 6),
               Text(
-                isEn ? guide.subtitleEn : guide.subtitle,
+                GuideTranslations.getCategorySubtitle(guide.id, lang, guide.subtitle, guide.subtitleEn),
                 style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.4),
               ),
               const SizedBox(height: 12),
@@ -706,37 +707,29 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
 
         if (isSavings || isDeparture || isVisaRenewal) ...[
           // Paso 1 visible para todos (Free preview)
-          if (guide.steps.isNotEmpty) _buildStepCard(guide.steps.first, isEn),
+          if (guide.steps.isNotEmpty) _buildStepCard(guide.steps.first, guide.id, lang, isEn),
           const SizedBox(height: 4),
 
           // Pasos restantes protegidos con candado Premium
           if (guide.steps.length > 1)
             PremiumFeatureGate(
-              featureTitle: isDeparture
-                  ? (isEn ? 'Departure Cash Recovery' : 'Protocolo Pro de Salida')
-                  : (isVisaRenewal
-                      ? (isEn ? '2nd & 3rd Year Visa Dossier' : 'Expediente Pro 2ª y 3ª Visa')
-                      : (isEn ? 'Pro Money Hacks' : 'Hacks Pro de Ahorro Masivo')),
-              featureBenefit: isDeparture
-                  ? (isEn
-                      ? 'Unlock full guides for DASP early release trick, Early Tax Return, and 100% rental bond recovery.'
-                      : 'Desbloquea las guías completas para liberar el DASP de inmediato, Early Tax Return y blindar tu fianza al 100%.')
-                  : (isVisaRenewal
-                      ? (isEn
-                          ? 'Unlock step-by-step audit-proof guides for 88 days, 179 days, and section 56 RFI responses.'
-                          : 'Desbloquea la guía paso a paso para blindar tus 88 días, 179 días y superar requerimientos s56 de Inmigración.')
-                      : (isEn
-                          ? 'Unlock full guides for DASP Super refund, Medicare RHCA free public health, and state bond lodgement guarantees.'
-                          : 'Desbloquea las guías completas para reclamar la Superannuation (DASP), tarjeta Medicare gratuita y protección oficial de fianza.')),
+              featureTitle: GuideTranslations.getPaywallTitle(
+                isDeparture ? 'departure' : (isVisaRenewal ? 'visa_renewal' : 'savings'),
+                lang,
+              ),
+              featureBenefit: GuideTranslations.getPaywallBenefit(
+                isDeparture ? 'departure' : (isVisaRenewal ? 'visa_renewal' : 'savings'),
+                lang,
+              ),
               child: Column(
-                children: guide.steps.skip(1).map((s) => _buildStepCard(s, isEn)).toList(),
+                children: guide.steps.skip(1).map((s) => _buildStepCard(s, guide.id, lang, isEn)).toList(),
               ),
             ),
         ] else ...[
           // Listado de pasos estándar
-          ...guide.steps.map((s) => _buildStepCard(s, isEn)),
+          ...guide.steps.map((s) => _buildStepCard(s, guide.id, lang, isEn)),
           const SizedBox(height: 16),
-          _buildTaxHackBanner(isEn),
+          _buildTaxHackBanner(lang, isEn),
         ],
         const SizedBox(height: 36),
       ],
@@ -990,7 +983,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     );
   }
 
-  Widget _buildStepCard(GuideStep step, bool isEn) {
+  Widget _buildStepCard(GuideStep step, String guideId, String lang, bool isEn) {
     final isExpanded = _expandedSteps.contains(step.number);
 
     return Card(
@@ -1032,7 +1025,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      isEn ? step.titleEn : step.title,
+                      GuideTranslations.getStepTitle(guideId, step.number, lang, step.title, step.titleEn),
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textPrimary),
                     ),
                   ),
@@ -1040,7 +1033,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     IconButton(
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
-                      tooltip: isEn ? 'Open Official Link' : 'Abrir Web Oficial',
+                      tooltip: GuideTranslations.getOpenUrlTooltip(lang),
                       icon: const Icon(CupertinoIcons.arrow_up_right_circle_fill, size: 20, color: AppColors.primary),
                       onPressed: () {
                         UrlLauncherService.openUrl(context, step.officialUrl!);
@@ -1062,7 +1055,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 const Divider(height: 1, color: AppColors.cardBorder),
                 const SizedBox(height: 10),
                 Text(
-                  isEn ? step.descriptionEn : step.description,
+                  GuideTranslations.getStepDescription(guideId, step.number, lang, step.description, step.descriptionEn),
                   style: const TextStyle(fontSize: 13, color: AppColors.textSecondary, height: 1.45),
                 ),
                 if ((isEn ? step.tipEn : step.tip).isNotEmpty) ...[
@@ -1081,7 +1074,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            isEn ? step.tipEn : step.tip,
+                            GuideTranslations.getStepTip(guideId, step.number, lang, step.tip, step.tipEn),
                             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textPrimary, height: 1.35),
                           ),
                         ),
@@ -1096,8 +1089,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     child: ElevatedButton.icon(
                       icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 15),
                       label: Text(
-                        (isEn ? step.officialUrlLabelEn : step.officialUrlLabel) ??
-                            (isEn ? 'Consult Official Source' : 'Consultar Fuente Oficial'),
+                        GuideTranslations.getStepUrlLabel(guideId, step.number, lang, step.officialUrlLabel, step.officialUrlLabelEn) ??
+                            GuideTranslations.getDefaultStepUrlLabel(lang),
                         textAlign: TextAlign.center,
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, height: 1.3),
                       ),
@@ -1121,7 +1114,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     const SizedBox(width: 36),
                     Expanded(
                       child: Text(
-                        isEn ? 'Tap to view step-by-step instructions ▾' : 'Toca para ver instrucciones paso a paso ▾',
+                        GuideTranslations.getStepTapHint(lang),
                         style: const TextStyle(fontSize: 11.5, color: AppColors.textMuted, fontWeight: FontWeight.w500),
                       ),
                     ),
@@ -1140,15 +1133,15 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       children: [
-        ...guide.comparisons.map((c) => _buildComparisonCard(c, lang, isEn)),
+        ...guide.comparisons.map((c) => _buildComparisonCard(guide.id, c, lang, isEn)),
         const SizedBox(height: 16),
-        _buildTaxHackBanner(isEn),
+        _buildTaxHackBanner(lang, isEn),
         const SizedBox(height: 36),
       ],
     );
   }
 
-  Widget _buildComparisonCard(ServiceComparison item, String lang, bool isEn) {
+  Widget _buildComparisonCard(String guideId, ServiceComparison item, String lang, bool isEn) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
       shape: RoundedRectangleBorder(
@@ -1175,7 +1168,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
-                isEn ? item.taglineEn : item.tagline,
+                GuideTranslations.getComparisonTagline(guideId, item.id, lang, item.tagline, item.taglineEn),
                 style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11.5, color: AppColors.secondary),
               ),
             ),
@@ -1198,21 +1191,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     return const SizedBox.shrink();
                   }
 
-                  String displayKey = entry.key.replaceAll('En', '');
-                  if (displayKey == 'monthlyFee') displayKey = isEn ? 'Monthly Fee' : 'Comisión';
-                  if (displayKey == 'branchNetwork') displayKey = isEn ? 'Network' : 'Oficinas';
-                  if (displayKey == 'onlineOpening') displayKey = isEn ? 'Online Opening' : 'Apertura';
-                  if (displayKey == 'networkType') displayKey = isEn ? 'Network' : 'Red Móvil';
-                  if (displayKey == 'farmCoverage') displayKey = isEn ? 'Farm Signal' : 'En Granjas';
-                  if (displayKey == 'plans') displayKey = isEn ? 'Plans' : 'Tarifa';
-                  if (displayKey == 'coverageType') displayKey = isEn ? 'Coverage' : 'Cobertura';
-                  if (displayKey == 'ambulanceCover') displayKey = isEn ? 'Ambulance' : 'Ambulancia';
-                  if (displayKey == 'pricing') displayKey = isEn ? 'Price' : 'Precio';
-                  if (displayKey == 'security') displayKey = isEn ? 'Safety' : 'Seguridad';
-                  if (displayKey == 'fundType') displayKey = isEn ? 'Structure' : 'Tipo Fondo';
-                  if (displayKey == 'fees') displayKey = isEn ? 'Fees' : 'Comisiones';
-                  if (displayKey == 'format') displayKey = isEn ? 'Format' : 'Modalidad';
-                  if (displayKey == 'cost') displayKey = isEn ? 'Cost' : 'Precio';
+                  String displayKey = GuideTranslations.getAttributeLabel(entry.key, lang);
 
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 3),
@@ -1248,7 +1227,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.secondary),
             ),
             const SizedBox(height: 4),
-            ...(isEn ? item.prosEn : item.pros).map((p) => Padding(
+            ...GuideTranslations.getComparisonPros(guideId, item.id, lang, item.pros, item.prosEn).map((p) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1264,27 +1243,36 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             const SizedBox(height: 8),
 
             // Desventajas (Cons)
-            if ((isEn ? item.consEn : item.cons).isNotEmpty) ...[
-              Text(
-                AppStrings.compWeaknesses(lang),
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.statusClosed),
-              ),
-              const SizedBox(height: 4),
-              ...(isEn ? item.consEn : item.cons).map((c) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 2),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(CupertinoIcons.xmark, size: 14, color: AppColors.statusClosed),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: Text(c, style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.3)),
-                        ),
-                      ],
+            Builder(
+              builder: (context) {
+                final cons = GuideTranslations.getComparisonCons(guideId, item.id, lang, item.cons, item.consEn);
+                if (cons.isEmpty) return const SizedBox.shrink();
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppStrings.compWeaknesses(lang),
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.statusClosed),
                     ),
-                  )),
-              const SizedBox(height: 10),
-            ],
+                    const SizedBox(height: 4),
+                    ...cons.map((c) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Icon(CupertinoIcons.xmark, size: 14, color: AppColors.statusClosed),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Text(c, style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.3)),
+                              ),
+                            ],
+                          ),
+                        )),
+                    const SizedBox(height: 10),
+                  ],
+                );
+              },
+            ),
 
             // Veredicto final
             Container(
@@ -1301,7 +1289,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      '${AppStrings.compVerdict(lang)} ${isEn ? item.verdictEn : item.verdict}',
+                      '${AppStrings.compVerdict(lang)} ${GuideTranslations.getComparisonVerdict(guideId, item.id, lang, item.verdict, item.verdictEn)}',
                       style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.textPrimary, height: 1.3),
                     ),
                   ),
@@ -1317,8 +1305,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 child: ElevatedButton.icon(
                   icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 15),
                   label: Text(
-                    (isEn ? item.officialUrlLabelEn : item.officialUrlLabel) ??
-                        (isEn ? 'Consult Official Website' : 'Consultar Web Oficial'),
+                    GuideTranslations.getComparisonUrlLabel(guideId, item.id, lang, item.officialUrlLabel, item.officialUrlLabelEn) ??
+                        GuideTranslations.getDefaultCompUrlLabel(lang),
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, height: 1.3),
                   ),
@@ -1356,7 +1344,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             children: [
               _buildComingSoonDealsCard(lang, isEn),
               const SizedBox(height: 16),
-              _buildTaxHackBanner(isEn),
+              _buildTaxHackBanner(lang, isEn),
               const SizedBox(height: 36),
             ],
           );
@@ -1365,9 +1353,9 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
         return ListView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           children: [
-            ...activeDeals.map((p) => _buildPartnerCard(p, isEn)),
+            ...activeDeals.map((p) => _buildPartnerCard(p, lang, isEn)),
             const SizedBox(height: 16),
-            _buildTaxHackBanner(isEn),
+            _buildTaxHackBanner(lang, isEn),
             const SizedBox(height: 36),
           ],
         );
@@ -1431,7 +1419,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        isEn ? 'EXCLUSIVE OZALERT COMMUNITY' : 'COMUNIDAD OZALERT EXCLUSIVA',
+                        GuideTranslations.getExclusiveCommunityBadge(lang),
                         style: const TextStyle(
                           fontSize: 10.5,
                           fontWeight: FontWeight.w800,
@@ -1442,7 +1430,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      isEn ? 'B2B Partner Deals' : 'Acuerdos con Partners B2B',
+                      GuideTranslations.getB2BDealsTitle(lang),
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w900,
@@ -1466,9 +1454,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
           ),
           const SizedBox(height: 10),
           Text(
-            isEn
-                ? 'We are directly negotiating unique deals with verified Australian providers so you get 100% genuine benefits with our partner codes.'
-                : 'Estamos cerrando acuerdos directos con proveedores verificados para ofrecerte descuentos y condiciones exclusivas mediante códigos oficiales sin intermediarios.',
+            GuideTranslations.getB2BDealsDesc(lang),
             style: const TextStyle(
               fontSize: 12.5,
               height: 1.45,
@@ -1481,22 +1467,22 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
           _buildComingSoonPerkItem(
             icon: CupertinoIcons.shield_fill,
             color: const Color(0xFF0D9488),
-            title: isEn ? 'Travel & OVHC Health Insurance' : 'Seguro Médico Internacional & OVHC',
-            desc: isEn ? 'Exclusive % discounts on top visa-compliant policies' : 'Descuentos exclusivos en pólizas homologadas',
+            title: GuideTranslations.getPerkTitle(1, lang),
+            desc: GuideTranslations.getPerkDesc(1, lang),
           ),
           const SizedBox(height: 10),
           _buildComingSoonPerkItem(
             icon: CupertinoIcons.money_dollar_circle_fill,
             color: AppColors.secondary,
-            title: isEn ? 'Zero-Fee International Transfers' : 'Transferencias de Divisas sin Comisión',
-            desc: isEn ? 'Real mid-market rate savings for your funds' : 'Ahorro masivo de comisiones bancarias',
+            title: GuideTranslations.getPerkTitle(2, lang),
+            desc: GuideTranslations.getPerkDesc(2, lang),
           ),
           const SizedBox(height: 10),
           _buildComingSoonPerkItem(
             icon: CupertinoIcons.doc_checkmark_fill,
             color: AppColors.warning,
-            title: isEn ? 'Official Training Certificates (RSA & White Card)' : 'Cursos Homologados (RSA & White Card)',
-            desc: isEn ? 'Special community rates for hospitality and construction tickets' : 'Tarifas preferentes para certificados laborales',
+            title: GuideTranslations.getPerkTitle(3, lang),
+            desc: GuideTranslations.getPerkDesc(3, lang),
           ),
         ],
       ),
@@ -1533,7 +1519,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     );
   }
 
-  Widget _buildPartnerCard(AffiliatePartner partner, bool isEn) {
+  Widget _buildPartnerCard(AffiliatePartner partner, String lang, bool isEn) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
       shape: RoundedRectangleBorder(
@@ -1588,12 +1574,12 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        '${isEn ? "Code" : "Código"}: ${partner.promoCode}',
+                        '${GuideTranslations.getPartnerCodeLabel(lang)}: ${partner.promoCode}',
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.primary),
                       ),
                     ),
                     Text(
-                      isEn ? '(Auto-copied)' : '(Se copia al pulsar)',
+                      GuideTranslations.getPartnerAutoCopied(lang),
                       style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
                     ),
                   ],
@@ -1608,8 +1594,8 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 16),
                 label: Text(
                   partner.promoCode != null && partner.promoCode!.isNotEmpty
-                      ? (isEn ? 'Apply Code & Open Site' : 'Aplicar Código & Abrir Web')
-                      : (isEn ? 'Open Official Link' : 'Ir a la Web Oficial'),
+                      ? GuideTranslations.getPartnerApplyCode(lang)
+                      : GuideTranslations.getPartnerOpenSite(lang),
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, height: 1.3),
                 ),
@@ -1634,12 +1620,10 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
     );
   }
 
-  Widget _buildTaxHackBanner(bool isEn) {
+  Widget _buildTaxHackBanner(String lang, bool isEn) {
     return PremiumFeatureGate(
-      featureTitle: isEn ? 'Tax Return Secrets' : 'Secret Hacks Fiscales',
-      featureBenefit: isEn
-          ? 'Deduct work boots, RSA courses and gear on your ATO tax return to get up to \$1,000 AUD refund.'
-          : 'Aprende a deducir botas de seguridad, cursos RSA y ropa de trabajo en la ATO para recuperar hasta \$1.000 AUD.',
+      featureTitle: GuideTranslations.getTaxHackBannerTitle(lang),
+      featureBenefit: GuideTranslations.getTaxHackBannerBenefit(lang),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -1656,7 +1640,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    isEn ? 'Pro Tax Deductions Guide' : 'Guía Pro de Deducciones Fiscales',
+                    GuideTranslations.getTaxHackGuideTitle(lang),
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColors.textPrimary),
                   ),
                 ),
@@ -1664,9 +1648,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              isEn
-                  ? 'How to claim back expenses from your farm, hospitality or construction jobs at end of financial year.'
-                  : 'Cómo desgravar gastos de herramientas, visados y cursos de formación en la declaración de impuestos.',
+              GuideTranslations.getTaxHackGuideDesc(lang),
               style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
             ),
             const SizedBox(height: 12),
@@ -1681,7 +1663,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     },
                     icon: const Icon(CupertinoIcons.sparkles, size: 14),
                     label: Text(
-                      isEn ? 'Savings Guide' : 'Guía de Ahorro',
+                      GuideTranslations.getTaxHackSavingsBtn(lang),
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     ),
@@ -1705,7 +1687,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
                     },
                     icon: const Icon(CupertinoIcons.arrow_up_right_square, size: 14, color: AppColors.primary),
                     label: Text(
-                      isEn ? 'Official ATO Web' : 'Web Oficial ATO',
+                      GuideTranslations.getTaxHackAtoBtn(lang),
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primary),
                     ),

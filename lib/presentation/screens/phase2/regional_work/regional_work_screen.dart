@@ -14,6 +14,7 @@ import '../../../../domain/models/phase2/postcode_info.dart';
 import '../../../widgets/phase2/paywall_bottom_sheet.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/phase2_app_bar.dart';
 import 'package:ozvisa_alert/core/localization/app_strings.dart';
+import 'package:ozvisa_alert/core/localization/industry_translations.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/official_sources_modal.dart';
 import 'package:ozvisa_alert/presentation/widgets/phase2/australia_regional_map_widget.dart';
 import '../../../../core/services/abr_service.dart';
@@ -257,7 +258,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
           _buildPostcodeValidatorTab(lang, isEn, subclass),
 
           // SUBMÓDULO 2: TRACKER DE DÍAS Y EXPORTACIÓN FORMULARIO 1263
-          _buildWorkLogTab(isEn, isPremium, jobs, totalDays, userEmail, subclass, uid: uid),
+          _buildWorkLogTab(lang, isEn, isPremium, jobs, totalDays, userEmail, subclass, uid: uid),
         ],
       ),
     );
@@ -364,14 +365,14 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 elevation: 0,
               ),
               onPressed: () => _executePostcodeSearch(_postcodeController.text),
-              child: Text(isEn ? 'Check' : 'Validar', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5)),
+              child: Text(IndustryTranslations.getSearchButton(lang), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5)),
             ),
           ],
         ),
         const SizedBox(height: 12),
 
         // TARJETA DE RESULTADO DE BÚSQUEDA DESTACADA (Feedback visual inmediato)
-        _buildSearchFeedbackCard(isEn, subclass, _searchResult),
+        _buildSearchFeedbackCard(lang, isEn, subclass, _searchResult),
         const SizedBox(height: 14),
 
         // MAPA REGIONAL DE AUSTRALIA
@@ -391,14 +392,14 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
         const SizedBox(height: 18),
 
         // RESUMEN EJECUTIVO DE ELEGIBILIDAD POR INDUSTRIA (Home Affairs Specified Work)
-        _buildCompactIndustrySummaryCard(isEn, subclass, _searchResult),
+        _buildCompactIndustrySummaryCard(lang, isEn, subclass, _searchResult),
 
         const SizedBox(height: 36),
       ],
     );
   }
 
-  Widget _buildSearchFeedbackCard(bool isEn, String subclass, PostcodeInfo? result) {
+  Widget _buildSearchFeedbackCard(String lang, bool isEn, String subclass, PostcodeInfo? result) {
     if (result == null) {
       return Container(
         padding: const EdgeInsets.all(12),
@@ -413,9 +414,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                isEn
-                    ? 'Enter any 4-digit postcode or tap the map to check official Home Affairs rules.'
-                    : 'Introduce un código postal de 4 dígitos o pulsa en el mapa para validar la normativa de Home Affairs.',
+                IndustryTranslations.getNoResultSearchHelper(lang),
                 style: const TextStyle(fontSize: 11.5, color: AppColors.textMuted),
               ),
             ),
@@ -477,7 +476,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '${_getStateFullName(result.state, isEn)} • Zona: ${isNorthern ? (isEn ? 'Northern Australia (Table 3)' : 'Norte de Australia (Tabla 3)') : isRemote ? (isEn ? 'Remote / Very Remote (Tables 1 & 2)' : 'Remota / Muy Remota (Tablas 1 y 2)') : isRegional ? (isEn ? 'Regional Australia (Table 4)' : 'Australia Regional (Tabla 4)') : (isEn ? 'Metropolitan / Non-Regional' : 'Área Metropolitana / No Regional')}',
+                      '${IndustryTranslations.getStateFullName(result.state, lang)} • ${IndustryTranslations.getZoneLabel(lang)}: ${IndustryTranslations.getZoneName(result.zone, lang)}',
                       style: TextStyle(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w700,
@@ -494,9 +493,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  isRegional
-                      ? (isEn ? '✓ REGIONAL' : '✓ REGIONAL VÁLIDO')
-                      : (isEn ? '✕ METRO' : '✕ METRO'),
+                  IndustryTranslations.getRegionalBadge(isRegional, lang),
                   style: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w900,
@@ -516,53 +513,43 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             children: [
               _buildSearchChip(
                 icon: '🌾',
-                label: isEn ? 'Agriculture' : 'Agricultura',
+                label: IndustryTranslations.getSearchChipLabel('agriculture', lang),
                 isValid: agriValid,
               ),
               _buildSearchChip(
                 icon: '🏗️',
-                label: isEn ? 'Construction' : 'Construcción',
+                label: IndustryTranslations.getSearchChipLabel('construction', lang),
                 isValid: constValid,
               ),
               _buildSearchChip(
                 icon: '☕',
-                label: isEn ? 'Hospitality & Tourism' : 'Hostelería y Turismo',
+                label: IndustryTranslations.getSearchChipLabel('hospitality', lang),
                 isValid: hospValid,
-                note: subclass == '417' ? (isEn ? '462 only' : 'Solo 462') : (!isNorthern && !isRemote ? (isEn ? 'North/Remote only' : 'Solo Norte/Remoto') : null),
+                note: IndustryTranslations.getHospitalityChipNote(subclass, isNorthern, isRemote, lang),
               ),
               _buildSearchChip(
                 icon: '🎣',
-                label: isEn ? 'Fishing & Forestry' : 'Pesca y Silvicultura',
+                label: IndustryTranslations.getSearchChipLabel('fishing_forestry', lang),
                 isValid: fishForestValid,
-                note: subclass == '462' && !isNorthern ? (isEn ? 'North only' : 'Solo Norte') : null,
+                note: IndustryTranslations.getFishingChipNote(subclass, isNorthern, lang),
               ),
               if (bushfireValid)
                 _buildSearchChip(
                   icon: '🔥',
-                  label: isEn ? 'Bushfire (Table 5)' : 'Incendios (Tabla 5)',
+                  label: IndustryTranslations.getSearchChipLabel('bushfire', lang),
                   isValid: true,
                 ),
               if (floodValid)
                 _buildSearchChip(
                   icon: '🌊',
-                  label: isEn ? 'Flood/Disaster (Table 6)' : 'Inundaciones (Tabla 6)',
+                  label: IndustryTranslations.getSearchChipLabel('flood', lang),
                   isValid: true,
                 ),
             ],
           ),
           const SizedBox(height: 8),
           Text(
-            isRegional
-                ? (isEn
-                    ? 'Official eligible regional postcode under Home Affairs Specified Work tables. Days worked in valid industries count towards your 88 or 179 days.'
-                    : 'Código postal regional oficial de Home Affairs. Los días trabajados en las industrias marcadas en verde computan para tus 88 o 179 días.')
-                : ((bushfireValid || floodValid)
-                    ? (isEn
-                        ? 'Metropolitan postcode: regular farming/hospitality/construction DOES NOT count here, EXCEPT declared Disaster/Bushfire Recovery (Tables 5/6) or COVID-19 Healthcare.'
-                        : 'Código metropolitano: agricultura, obra u hostelería ordinaria NO computan aquí, EXCEPTO recuperación oficial de desastres/incendios (Tablas 5/6) o salud COVID-19.')
-                    : (isEn
-                        ? 'Metropolitan area: standard work performed here DOES NOT count towards 88/179 day visa renewal (only critical COVID-19 medical work applies nationwide).'
-                        : 'Zona metropolitana: el trabajo ordinario aquí NO computa para renovar tus 88/179 días (únicamente salud crítica COVID-19 aplica en todo el país).')),
+            IndustryTranslations.getPostcodeEligibilityDescription(isRegional, (bushfireValid || floodValid), lang),
             style: TextStyle(
               fontSize: 11,
               color: isRegional ? AppColors.textSecondary : const Color(0xFFC0392B),
@@ -617,217 +604,41 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     );
   }
 
-  String _getStateFullName(String code, bool isEn) {
-    switch (code.toUpperCase()) {
-      case 'QLD':
-        return 'Queensland (QLD)';
-      case 'NSW':
-        return isEn ? 'New South Wales (NSW)' : 'Nueva Gales del Sur (NSW)';
-      case 'VIC':
-        return 'Victoria (VIC)';
-      case 'WA':
-        return isEn ? 'Western Australia (WA)' : 'Australia Occidental (WA)';
-      case 'SA':
-        return isEn ? 'South Australia (SA)' : 'Australia Meridional (SA)';
-      case 'TAS':
-        return 'Tasmania (TAS)';
-      case 'NT':
-        return isEn ? 'Northern Territory (NT)' : 'Territorio del Norte (NT)';
-      case 'ACT':
-        return isEn ? 'Australian Capital Territory (ACT)' : 'Territorio Capital (ACT)';
-      default:
-        return code;
-    }
-  }
-
-  List<Map<String, dynamic>> _getIndustriesList(bool isEn, String subclass, PostcodeInfo? postcode) {
-    return [
-      {
-        'id': 'tourism_hospitality',
-        'icon': '☕',
-        'name': isEn ? 'Tourism & Hospitality' : 'Turismo y Hostelería',
-        'tableRef': isEn ? 'Tables 1, 2 & 3 (Northern & Remote/Very Remote)' : 'Tablas 1, 2 y 3 (Norte y Zonas Remotas / Muy Remotas)',
-        'desc': isEn
-            ? '• Accommodation: hotels, motels, B&Bs, backpacker hostels, caravan parks, camping grounds, commercial housekeeping, boarding houses & reception centres.\n• Food & Beverage: cafes, restaurants, takeaway food services, catering, pubs, taverns, bars and hospitality clubs.\n• Tourist Services: tour guides/operators, outdoor adventure or dive instructors, tourist transport/bus drivers, gallery/museum workers, travel agencies & event/entertainment venues.'
-            : '• Alojamiento: hoteles, moteles, B&B, hostels de mochileros, caravan parks, campings, housekeeping comercial y centros de recepción.\n• Comida y Bebida: cafeterías, restaurantes, comida para llevar, catering, pubs, tabernas, bares y clubes de hostelería.\n• Servicios Turísticos: guías y operadores de tours, instructores de buceo o aventura, transporte/autobuses turísticos, museos/galerías, agencias de viajes y eventos.',
-        'exclusions': isEn
-            ? 'Does NOT include: wineries/breweries/distilleries that do not predominantly provide tourist services; general cleaning, retail, transport or security companies not primarily serving tourists; schools/student residences.'
-            : 'NO incluye: bodegas, cervecerías o destilerías que no presten principalmente servicios turísticos (ej. cata/cellar door); empresas generales de limpieza, tiendas, transporte o seguridad; residencias estudiantiles.',
-        'eligible': postcode != null && postcode.isEligible(subclass, 'tourism_hospitality'),
-        'legalTip': subclass == '462'
-            ? (postcode?.isEligible(subclass, 'tourism_hospitality') == true
-                ? (isEn
-                    ? 'ELIGIBLE: Postcode is in Northern Australia (Table 3) or Remote / Very Remote Australia (Tables 1 & 2).'
-                    : 'VÁLIDO: El código postal pertenece al Norte de Australia (Tabla 3) o a Australia Remota / Muy Remota (Tablas 1 y 2).')
-                : (isEn
-                    ? 'INELIGIBLE HERE: For Subclass 462, tourism & hospitality ONLY qualifies in Northern Australia (Table 3) or Remote & Very Remote Australia (Tables 1 & 2).'
-                    : 'NO VÁLIDO AQUÍ: En la Subclase 462, turismo y hostelería SOLO computa en el Norte de Australia (Tabla 3) o en áreas Remotas y Muy Remotas (Tablas 1 y 2).'))
-            : (isEn
-                ? 'NOTE (417): Verify Northern/Remote postcode eligibility under your subclass.'
-                : 'NOTA (417): En nuestro filtro diferenciamos la ventaja clave de la Subclase 462 en Norte y Zonas Remotas.'),
-      },
-      {
-        'id': 'agriculture',
-        'icon': '🌾',
-        'name': isEn ? 'Plant & Animal Cultivation' : 'Cultivo de Plantas y Ganadería',
-        'tableRef': isEn ? 'Tables 3 & 4 (Northern & Regional Australia)' : 'Tablas 3 y 4 (Norte de Australia y Australia Regional)',
-        'desc': isEn
-            ? '• Harvesting and/or packing fruit and vegetable crops.\n• Pruning and trimming vines and trees (must be commercial horticultural activities and your primary task).\n• General crop maintenance, cultivating/propagating plants or fungi.\n• Maintaining animals for commercial sale or bodily produce, horse breeding/stud farming, cattle herding & feedlots.\n• Immediate processing of animal products (shearing, butchery, packing, tanning) and manufacturing dairy products from raw material.\n• Conservation, environmental reforestation and zoo plant/animal cultivation.'
-            : '• Cosecha (picking) y/o empaquetado (packing) de frutas y verduras.\n• Poda y recorte de viñedos y árboles (debe ser horticultura comercial y tu tarea principal, no jardinería doméstica).\n• Mantenimiento general de cultivos, propagación de plantas u hongos.\n• Cría de animales para venta comercial o sus productos, cría de caballos, pastoreo de ganado (cattle herding) y feedlots.\n• Procesamiento inmediato de productos animales (esquila, carnicería primaria, empaquetado, curtido) y fabricación de lácteos desde materia prima.\n• Conservación ambiental, reforestación y cuidado de fauna/flora en zoológicos.',
-        'exclusions': isEn
-            ? 'Does NOT include: secondary processing (winemaking, brewing, distillation, milling, manufacturing small goods, or retail of dairy/butchery products) or domestic garden maintenance.'
-            : 'NO incluye: procesamiento secundario (elaboración de vino, cerveza, destilación, molienda, embutidos o venta minorista de lácteos/carnicería) ni jardinería doméstica.',
-        'eligible': postcode != null && postcode.isEligible(subclass, 'agriculture'),
-        'legalTip': postcode?.isEligible(subclass, 'agriculture') == true
-            ? (isEn
-                ? 'ELIGIBLE: Postcode is approved in Northern Australia (Table 3) or Regional Australia (Table 4) for both 462 and 417.'
-                : 'VÁLIDO: Código postal aprobado en Norte de Australia (Tabla 3) o Australia Regional (Tabla 4) para subclases 462 y 417.')
-            : (isEn
-                ? 'INELIGIBLE HERE: Metropolitan postcode outside Table 3 and Table 4.'
-                : 'NO VÁLIDO AQUÍ: Código postal metropolitano fuera de las Tablas 3 y 4.'),
-      },
-      {
-        'id': 'construction',
-        'icon': '🏗️',
-        'name': isEn ? 'Construction' : 'Construcción y Obras',
-        'tableRef': isEn ? 'Tables 3 & 4 (Northern & Regional Australia)' : 'Tablas 3 y 4 (Norte de Australia y Australia Regional)',
-        'desc': isEn
-            ? '• Residential and non-residential building construction.\n• Heavy and civil engineering construction.\n• Land development and site preparation services.\n• Building structure, installation and completion services: landscaping on construction sites, painting new buildings, erecting fences on construction sites, scaffolding, and site support/cleaning services.'
-            : '• Construcción de edificios residenciales y no residenciales.\n• Ingeniería civil y construcción pesada.\n• Urbanización de terrenos y preparación de solares.\n• Estructura, instalación y acabado de obra: paisajismo en solares en construcción, pintura de obra nueva, vallado de obras, andamiaje (scaffolding) y servicios de apoyo/limpieza de obra.',
-        'exclusions': isEn
-            ? 'Does NOT include: ship or boat building; manufacturing materials used in construction (such as steel or concrete manufacturing); mining operations.'
-            : 'NO incluye: construcción naval o de barcos; fabricación en planta de materiales de construcción (como acero u hormigón); ni operaciones mineras.',
-        'eligible': postcode != null && postcode.isEligible(subclass, 'construction'),
-        'legalTip': postcode?.isEligible(subclass, 'construction') == true
-            ? (isEn
-                ? 'ELIGIBLE: Approved in Northern Australia (Table 3) and Regional Australia (Table 4).'
-                : 'VÁLIDO: Aprobado en Norte de Australia (Tabla 3) y Australia Regional (Tabla 4).')
-            : (isEn
-                ? 'INELIGIBLE HERE: Metropolitan postcode outside Table 3 and Table 4.'
-                : 'NO VÁLIDO AQUÍ: Código postal metropolitano fuera de las Tablas 3 y 4.'),
-      },
-      {
-        'id': 'fishing',
-        'icon': '🎣',
-        'name': isEn ? 'Fishing & Pearling' : 'Pesca y Perlas',
-        'tableRef': subclass == '462'
-            ? (isEn ? 'Table 3 ONLY (Northern Australia)' : 'SOLO Tabla 3 (Norte de Australia)')
-            : (isEn ? 'Tables 3 & 4 (Regional Australia)' : 'Tablas 3 y 4 (Australia Regional)'),
-        'desc': isEn
-            ? '• Conducting operations relating directly to taking or catching fish and other aquatic species.\n• Taking or culturing pearls or pearl shell.'
-            : '• Operaciones directamente relacionadas con la captura o pesca comercial de peces y otras especies acuáticas.\n• Extracción o cultivo de perlas y nácar (pearling).',
-        'exclusions': isEn
-            ? 'For Subclass 462, Fishing & Pearling is strictly restricted to Northern Australia (Table 3: all of NT, plus approved northern postcodes in QLD and WA).'
-            : 'Para la Subclase 462, la pesca y cultivo de perlas solo es válida en el Norte de Australia (Tabla 3: todo NT y códigos del norte de QLD y WA).',
-        'eligible': postcode != null && postcode.isEligible(subclass, 'fishing'),
-        'legalTip': subclass == '462'
-            ? (postcode?.isEligible(subclass, 'fishing') == true
-                ? (isEn ? 'ELIGIBLE: Located in Northern Australia (Table 3).' : 'VÁLIDO: Ubicado en el Norte de Australia (Tabla 3).')
-                : (isEn ? 'INELIGIBLE HERE: Under Subclass 462, fishing & pearling ONLY counts in Northern Australia (Table 3).' : 'NO VÁLIDO AQUÍ: En la Subclase 462, pesca y perlas SOLO computa en el Norte de Australia (Tabla 3).'))
-            : (postcode?.isEligible(subclass, 'fishing') == true
-                ? (isEn ? 'ELIGIBLE: Approved across Regional Australia for Subclass 417.' : 'VÁLIDO: Aprobado en Australia Regional para Subclase 417.')
-                : (isEn ? 'INELIGIBLE HERE: Metropolitan area.' : 'NO VÁLIDO AQUÍ: Área metropolitana.')),
-      },
-      {
-        'id': 'forestry',
-        'icon': '🌲',
-        'name': isEn ? 'Tree Farming & Felling' : 'Silvicultura y Tala',
-        'tableRef': subclass == '462'
-            ? (isEn ? 'Table 3 ONLY (Northern Australia)' : 'SOLO Tabla 3 (Norte de Australia)')
-            : (isEn ? 'Tables 3 & 4 (Regional Australia)' : 'Tablas 3 y 4 (Australia Regional)'),
-        'desc': isEn
-            ? '• Planting or tending trees in a plantation or forest that are intended to be felled.\n• Felling trees in a plantation or forest.\n• Transporting felled trees or parts of trees from the plantation/forest to where they are first milled or processed.'
-            : '• Plantación o cuidado de árboles en plantaciones o bosques destinados a la tala.\n• Tala de árboles en plantaciones o bosques.\n• Transporte de troncos talados desde el bosque hasta su primera serrería o planta de procesado.',
-        'exclusions': isEn
-            ? 'For Subclass 462, Tree Farming & Felling is strictly restricted to Northern Australia (Table 3).'
-            : 'Para la Subclase 462, la silvicultura y tala de árboles solo es válida en el Norte de Australia (Tabla 3).',
-        'eligible': postcode != null && postcode.isEligible(subclass, 'forestry'),
-        'legalTip': subclass == '462'
-            ? (postcode?.isEligible(subclass, 'forestry') == true
-                ? (isEn ? 'ELIGIBLE: Located in Northern Australia (Table 3).' : 'VÁLIDO: Ubicado en el Norte de Australia (Tabla 3).')
-                : (isEn ? 'INELIGIBLE HERE: Under Subclass 462, tree farming & felling ONLY counts in Northern Australia (Table 3).' : 'NO VÁLIDO AQUÍ: En la Subclase 462, silvicultura y tala SOLO computa en el Norte de Australia (Tabla 3).'))
-            : (postcode?.isEligible(subclass, 'forestry') == true
-                ? (isEn ? 'ELIGIBLE: Approved across Regional Australia for Subclass 417.' : 'VÁLIDO: Aprobado en Australia Regional para Subclase 417.')
-                : (isEn ? 'INELIGIBLE HERE: Metropolitan area.' : 'NO VÁLIDO AQUÍ: Área metropolitana.')),
-      },
-      {
-        'id': 'bushfire_recovery',
-        'icon': '🔥',
-        'name': isEn ? 'Bushfire Recovery' : 'Recuperación de Incendios',
-        'tableRef': isEn ? 'Table 5 (Bushfire Declared Areas - post 31 Jul 2019)' : 'Tabla 5 (Áreas Declaradas de Incendio - desde 31 jul 2019)',
-        'desc': isEn
-            ? '• Paid or volunteer recovery work carried out after 31 July 2019 in Table 5 declared areas (updated 5 April 2025).\n• Construction, farming, or any work in association with restitution/restoration of land, property, farm animals or wildlife.\n• Providing support services or assistance to people living, working or volunteering in affected areas.'
-            : '• Trabajo remunerado o voluntario realizado tras el 31 de julio de 2019 en las zonas declaradas de la Tabla 5 (actualizada el 5 de abril de 2025).\n• Construcción, agricultura o cualquier labor de restitución y restauración de tierras, propiedades, ganado o fauna silvestre.\n• Servicios de apoyo y asistencia a personas que viven, trabajan o son voluntarias en las zonas afectadas.',
-        'exclusions': isEn
-            ? 'Does NOT include: hospitality, cleaning or administrative work for a business that is not directly affected by a bushfire or where work is not a direct consequence of bushfire damage.'
-            : 'NO incluye: trabajo de hostelería, limpieza o administración para negocios que no hayan sido afectados directamente por el incendio forestal.',
-        'eligible': postcode != null && postcode.isEligible(subclass, 'bushfire_recovery'),
-        'legalTip': postcode?.isEligible(subclass, 'bushfire_recovery') == true
-            ? (isEn
-                ? 'ELIGIBLE (Table 5): This postcode is an official Bushfire Declared Area.'
-                : 'VÁLIDO (Tabla 5): Este código postal está incluido en la Tabla 5 oficial de zonas declaradas de incendio.')
-            : (isEn
-                ? 'INELIGIBLE HERE: Postcode is not listed in Table 5 (Bushfire declared areas).'
-                : 'NO VÁLIDO AQUÍ: Este código postal no figura en la Tabla 5 de zonas declaradas por incendio.'),
-      },
-      {
-        'id': 'flood_recovery',
-        'icon': '🌊',
-        'name': isEn ? 'Flood & Disaster Recovery' : 'Inundaciones y Desastres',
-        'tableRef': isEn ? 'Table 6 (Natural Disaster Declared Areas - post 31 Dec 2021)' : 'Tabla 6 (Zonas de Desastre Natural - desde 31 dic 2021)',
-        'desc': isEn
-            ? '• Paid or volunteer recovery work from 31 Dec 2021 in areas affected by flood, cyclone or severe weather (Table 6, effective 5 April 2025).\n• Clean-up, rubbish transport, building demolition, trench digging, tree removal and earth moving.\n• Construction/repair of buildings, roads, footpaths, bridges, utilities and fences.\n• Charity, administrative, call-centre, customer service, coordination & delivery support for affected communities.\n• Caring for, transporting and rehabilitating affected animals.\n• In ImmiAccount select "flood recovery - paid" or "flood recovery - volunteer".'
-            : '• Trabajo remunerado o voluntario desde el 31 de diciembre de 2021 en zonas afectadas por inundaciones, ciclones o clima severo (Tabla 6, vigente desde el 5 de abril de 2025).\n• Limpieza general, retirada de escombros, demolición, excavación de zanjas, retirada de árboles y movimiento de tierras.\n• Reparación o reconstrucción de viviendas, carreteras, puentes, suministros y vallas.\n• Apoyo caritativo, administrativo, call-centre, atención al afectado, coordinación y entregas en comunidades damnificadas, así como rescate de animales.\n• En ImmiAccount debes seleccionar "flood recovery - paid" o "flood recovery - volunteer".',
-        'exclusions': isEn
-            ? 'Does NOT include: hospitality, cleaning or administrative work for a business not affected by a natural disaster.'
-            : 'NO incluye: hostelería, limpieza o administración en empresas que no hayan sido afectadas por el desastre natural.',
-        'eligible': postcode != null && postcode.isEligible(subclass, 'flood_recovery'),
-        'legalTip': postcode?.isEligible(subclass, 'flood_recovery') == true
-            ? (isEn
-                ? 'ELIGIBLE (Table 6): This postcode is an official Natural Disaster Declared Area.'
-                : 'VÁLIDO (Tabla 6): Este código postal está incluido en la Tabla 6 oficial de zonas declaradas por desastre natural / inundación.')
-            : (isEn
-                ? 'INELIGIBLE HERE: Postcode is not listed in Table 6 (Natural disaster declared areas).'
-                : 'NO VÁLIDO AQUÍ: Este código postal no figura en la Tabla 6 de desastres naturales.'),
-      },
-      {
-        'id': 'healthcare_covid',
-        'icon': '🏥',
-        'name': isEn ? 'COVID-19 Healthcare & Medical' : 'Salud y Sector Médico COVID-19',
-        'tableRef': isEn ? 'Anywhere in Australia (All Postcodes - post 31 Jan 2020)' : 'En toda Australia (Todos los CP - desde 31 ene 2020)',
-        'desc': isEn
-            ? '• Medical treatment, nursing, contact tracing, testing and research directly involved in the response to COVID-19.\n• Support services such as cleaning of medical and healthcare facilities and equipment directly involved in responding to COVID-19.'
-            : '• Tratamiento médico, enfermería, rastreo de contactos, pruebas diagnósticas e investigación en respuesta directa al COVID-19.\n• Servicios de soporte como limpieza de centros médicos, hospitales y equipamiento sanitario vinculados a la respuesta COVID-19.',
-        'exclusions': isEn
-            ? 'Does NOT include: General Allied Health (physiotherapy, speech pathology, chiropractic), mental health not related to COVID-19, aged/disability care not responding to a COVID-19 outbreak, medical/vet manufacturing, medical reception/admin, or cleaning non-medical facilities.'
-            : 'NO incluye: fisioterapia, logopedia, quiropráctica, cuidado de mayores/discapacidad sin brote de COVID-19, fabricación farmacéutica, recepción/administración médica ni limpieza de centros no médicos.',
-        'eligible': true,
-        'legalTip': isEn
-            ? 'ELIGIBLE NATIONWIDE: Critical COVID-19 medical and healthcare work qualifies anywhere in Australia (including metropolitan cities).'
-            : 'VÁLIDO EN TODA AUSTRALIA: El trabajo sanitario crítico COVID-19 computa en cualquier código postal de Australia (incluidas capitales metropolitanas).',
-      },
-      if (subclass == '417')
-        {
-          'id': 'mining',
-          'icon': '⛏️',
-          'name': isEn ? 'Mining (Subclass 417 Only)' : 'Minería (Solo Subclase 417)',
-          'tableRef': isEn ? 'Tables 3 & 4 (Regional Australia - 417 Only)' : 'Tablas 3 y 4 (Australia Regional - Exclusivo 417)',
-          'desc': isEn
-              ? '• Coal mining, oil and gas extraction, metal ore mining, construction material mining, exploración and mining support services.'
-              : '• Extracción de carbón, petróleo y gas, minerales metálicos, canteras, exploración y servicios de soporte minero.',
-          'exclusions': isEn
-              ? 'IMPORTANT: Mining is ONLY approved for Working Holiday Subclass 417. It is NOT an eligible industry for Work and Holiday Subclass 462.'
-              : 'IMPORTANTE: La minería está aprobada ÚNICAMENTE para la Subclase 417. NO es una industria válida para la Subclase 462 según Home Affairs.',
-          'eligible': postcode != null && postcode.isEligible(subclass, 'mining'),
-          'legalTip': postcode?.isEligible(subclass, 'mining') == true
-              ? (isEn ? 'ELIGIBLE: Approved for Subclass 417 in Regional Australia.' : 'VÁLIDO: Aprobado para la Subclase 417 en Australia Regional.')
-              : (isEn ? 'INELIGIBLE: Metropolitan area.' : 'NO VÁLIDO: En áreas metropolitanas.'),
-        },
+  List<Map<String, dynamic>> _getIndustriesList(String lang, bool isEn, String subclass, PostcodeInfo? postcode) {
+    final industryIds = [
+      {'id': 'tourism_hospitality', 'icon': '☕'},
+      {'id': 'agriculture', 'icon': '🌾'},
+      {'id': 'construction', 'icon': '🏗️'},
+      {'id': 'fishing', 'icon': '🎣'},
+      {'id': 'forestry', 'icon': '🌲'},
+      {'id': 'bushfire_recovery', 'icon': '🔥'},
+      {'id': 'flood_recovery', 'icon': '🌊'},
+      {'id': 'healthcare_covid', 'icon': '🏥'},
+      if (subclass == '417') {'id': 'mining', 'icon': '⛏️'},
     ];
+
+    return industryIds.map((item) {
+      final id = item['id']!;
+      final icon = item['icon']!;
+      final isEligible = id == 'healthcare_covid'
+          ? true
+          : (postcode != null && postcode.isEligible(subclass, id));
+
+      return {
+        'id': id,
+        'icon': icon,
+        'name': IndustryTranslations.getName(id, lang),
+        'tableRef': IndustryTranslations.getTableRef(id, subclass, lang),
+        'desc': IndustryTranslations.getDesc(id, lang),
+        'exclusions': IndustryTranslations.getExclusions(id, subclass, lang),
+        'eligible': isEligible,
+        'legalTip': IndustryTranslations.getLegalTip(id, subclass, isEligible, lang),
+      };
+    }).toList();
   }
 
-  Widget _buildCompactIndustrySummaryCard(bool isEn, String subclass, PostcodeInfo? postcode) {
-    final industries = _getIndustriesList(isEn, subclass, postcode);
+  Widget _buildCompactIndustrySummaryCard(String lang, bool isEn, String subclass, PostcodeInfo? postcode) {
+    final industries = _getIndustriesList(lang, isEn, subclass, postcode);
     final eligibleCount = industries.where((i) => i['eligible'] as bool).length;
 
     return Container(
@@ -851,7 +662,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        isEn ? 'Official Industry Eligibility (Home Affairs)' : 'Elegibilidad por Industria (Home Affairs)',
+                        IndustryTranslations.getSummaryTitle(lang),
                         style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: AppColors.textPrimary),
                       ),
                     ),
@@ -866,7 +677,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  isEn ? '$eligibleCount/${industries.length} Valid' : '$eligibleCount/${industries.length} Válidos',
+                  IndustryTranslations.getValidBadge(eligibleCount, industries.length, lang),
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w900,
@@ -878,9 +689,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
           ),
           const SizedBox(height: 10),
           Text(
-            isEn
-                ? 'Approved industries for postcode ${_postcodeController.text} under Visa Subclass $subclass (tap any sector in the guide below for full role lists and exclusions):'
-                : 'Sectores aprobados para el CP ${_postcodeController.text} bajo la Subclase $subclass (incluye las 8 industrias oficiales de Specified Subclass 462 Work):',
+            IndustryTranslations.getSummaryIntro(_postcodeController.text, subclass, lang),
             style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.35),
           ),
           const SizedBox(height: 10),
@@ -892,7 +701,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
               final icon = ind['icon'] as String;
               final fullName = ind['name'] as String;
               return InkWell(
-                onTap: () => _showIndustryDetailsModal(context, ind, isEn, isEligible, subclass),
+                onTap: () => _showIndustryDetailsModal(context, ind, lang, isEn, isEligible, subclass),
                 borderRadius: BorderRadius.circular(10),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
@@ -949,9 +758,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    isEn
-                        ? 'Home Affairs Flexibility Rule: Work supporting the ongoing operations of a specified industry (such as administrative or cleaning support services at an eligible farm, hotel or construction site) in an eligible postcode may be accepted.'
-                        : 'Criterio de Flexibilidad de Home Affairs: El trabajo de apoyo a las operaciones de una industria elegible (como soporte administrativo o limpieza dentro de una granja, hotel u obra en un código postal válido) también puede ser aceptado.',
+                    IndustryTranslations.getFlexibilityRule(lang),
                     style: const TextStyle(fontSize: 11, color: AppColors.textSecondary, height: 1.35),
                   ),
                 ),
@@ -964,9 +771,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             child: ElevatedButton.icon(
               icon: const Icon(CupertinoIcons.doc_text_search, size: 16),
               label: Text(
-                isEn
-                    ? 'View All Industries, Tables 1–6 & Official Rules'
-                    : 'Ver Detalle de Industrias, Tablas 1–6 y Normativa',
+                IndustryTranslations.getViewAllButton(lang),
                 style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold),
               ),
               style: ElevatedButton.styleFrom(
@@ -976,7 +781,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 elevation: 0,
               ),
-              onPressed: () => _showAllIndustriesModal(context, isEn, subclass, postcode),
+              onPressed: () => _showAllIndustriesModal(context, lang, isEn, subclass, postcode),
             ),
           ),
         ],
@@ -984,7 +789,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     );
   }
 
-  void _showAllIndustriesModal(BuildContext context, bool isEn, String subclass, PostcodeInfo? postcode) {
+  void _showAllIndustriesModal(BuildContext context, String lang, bool isEn, String subclass, PostcodeInfo? postcode) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -1017,13 +822,11 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            isEn ? 'Specified Subclass 462 Work (Home Affairs)' : 'Trabajo Especificado Subclase 462 (Home Affairs)',
+                            IndustryTranslations.getModalTitle(lang),
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary),
                           ),
                           Text(
-                            isEn
-                                ? 'Postcode ${_postcodeController.text} • Visa Subclass $subclass • Tables 1 to 6'
-                                : 'Código Postal ${_postcodeController.text} • Subclase $subclass • Tablas 1 a 6',
+                            IndustryTranslations.getModalSubtitle(_postcodeController.text, subclass, lang),
                             style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
                           ),
                         ],
@@ -1043,7 +846,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildIndustryEligibilityMatrix(isEn, subclass, postcode),
+                      _buildIndustryEligibilityMatrix(lang, isEn, subclass, postcode),
                       const SizedBox(height: 16),
                       Container(
                         padding: const EdgeInsets.all(14),
@@ -1056,16 +859,12 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              isEn
-                                  ? '📋 Key Official Rules (Specified Subclass 462 Work)'
-                                  : '📋 Resumen Oficial de Requisitos (Home Affairs)',
+                              IndustryTranslations.getKeyRulesTitle(subclass, lang),
                               style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5, color: AppColors.textPrimary),
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              isEn
-                                  ? '• 2nd Visa: Minimum 3 months (88 calendar days) of specified work.\n• 3rd Visa: Minimum 6 months (179 calendar days) of specified work on or after 1 July 2019.\n• Full-time equivalent: Working the standard full-time days/hours for that industry in a week (e.g. 5 days / 35–38h) counts as 7 calendar days.\n• Paid work & payslips: All specified work must be paid in accordance with Australian workplace law (except approved Bushfire/Flood recovery volunteer work).\n• Mining Note: Mining is ONLY eligible for Subclass 417, NOT Subclass 462.'
-                                  : '• 2º Visado: Mínimo 3 meses (88 días naturales) de trabajo especificado.\n• 3r Visado: Mínimo 6 meses (179 días naturales) de trabajo especificado.\n• Regla de Semana Completa: Si trabajas la jornada semanal completa estándar de la industria (ej. 5 días / 35–38h), computan los 7 días de la semana.\n• Trabajo Remunerado: Debe pagarse según la ley australiana con nóminas/payslips (solo se admite voluntariado en recuperación oficial de incendios o inundaciones).\n• Nota sobre Minería: La minería SOLO computa para la Subclase 417, NO para la Subclase 462.',
+                              IndustryTranslations.getKeyRulesBody(subclass, lang),
                               style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, height: 1.45),
                             ),
                           ],
@@ -1077,9 +876,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                         child: OutlinedButton.icon(
                           icon: const Icon(CupertinoIcons.link, size: 15, color: AppColors.primary),
                           label: Text(
-                            isEn
-                                ? 'Open Official Home Affairs Specified 462 Work Page'
-                                : 'Abrir Web Oficial de Home Affairs (Specified 462 Work)',
+                            IndustryTranslations.getOpenOfficialPageLabel(subclass, lang),
                             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: AppColors.primary),
                           ),
                           style: OutlinedButton.styleFrom(
@@ -1107,8 +904,8 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     );
   }
 
-  Widget _buildIndustryEligibilityMatrix(bool isEn, String subclass, PostcodeInfo? postcode) {
-    final industries = _getIndustriesList(isEn, subclass, postcode);
+  Widget _buildIndustryEligibilityMatrix(String lang, bool isEn, String subclass, PostcodeInfo? postcode) {
+    final industries = _getIndustriesList(lang, isEn, subclass, postcode);
 
     return GridView.builder(
       shrinkWrap: true,
@@ -1127,7 +924,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
         final name = ind['name'] as String;
 
         return InkWell(
-          onTap: () => _showIndustryDetailsModal(context, ind, isEn, isEligible, subclass),
+          onTap: () => _showIndustryDetailsModal(context, ind, lang, isEn, isEligible, subclass),
           borderRadius: BorderRadius.circular(16),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -1170,7 +967,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           ),
                           const SizedBox(width: 3),
                           Text(
-                            isEligible ? (isEn ? 'VALID' : 'SÍ VALE') : (isEn ? 'INVALID' : 'NO VALE'),
+                            IndustryTranslations.getMatrixValidBadge(isEligible, lang),
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w900,
@@ -1197,7 +994,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
-                        isEn ? 'Tap for rules & roles' : 'Toca para ver puestos',
+                        IndustryTranslations.getTapForRulesHint(lang),
                         style: const TextStyle(fontSize: 10, color: AppColors.textMuted, fontWeight: FontWeight.w500),
                       ),
                     ),
@@ -1211,7 +1008,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     );
   }
 
-  void _showIndustryDetailsModal(BuildContext context, Map<String, dynamic> ind, bool isEn, bool isEligible, String subclass) {
+  void _showIndustryDetailsModal(BuildContext context, Map<String, dynamic> ind, String lang, bool isEn, bool isEligible, String subclass) {
     final icon = ind['icon'] as String;
     final name = ind['name'] as String;
     final tableRef = (ind['tableRef'] as String?) ?? '';
@@ -1281,7 +1078,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
-                        isEligible ? (isEn ? '✓ ELIGIBLE' : '✓ VÁLIDO') : (isEn ? '✗ INELIGIBLE' : '✗ NO VÁLIDO'),
+                        IndustryTranslations.getEligibilityBadge(isEligible, lang),
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w900,
@@ -1293,7 +1090,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  isEn ? 'Approved Roles & Activities (Home Affairs):' : 'Puestos y Actividades Aprobadas (Home Affairs):',
+                  IndustryTranslations.getApprovedRolesHeader(lang),
                   style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12.5, color: AppColors.textPrimary),
                 ),
                 const SizedBox(height: 6),
@@ -1314,7 +1111,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          isEn ? '⚠️ Official Exclusions (Does Not Count):' : '⚠️ Exclusiones Oficiales (No Computa):',
+                          IndustryTranslations.getExclusionsHeader(lang),
                           style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 11.5, color: AppColors.statusClosed),
                         ),
                         const SizedBox(height: 4),
@@ -1367,9 +1164,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                   child: OutlinedButton.icon(
                     icon: const Icon(CupertinoIcons.link, size: 15, color: AppColors.primary),
                     label: Text(
-                      isEn
-                          ? 'Verify on Official Home Affairs Website'
-                          : 'Consultar Web Oficial de Home Affairs (Specified 462 Work)',
+                      IndustryTranslations.getOfficialVerifyButton(subclass, lang),
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: AppColors.primary),
                     ),
                     style: OutlinedButton.styleFrom(
@@ -1396,7 +1191,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                       elevation: 0,
                     ),
                     onPressed: () => Navigator.pop(ctx),
-                    child: Text(isEn ? 'Got It' : 'Entendido', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    child: Text(IndustryTranslations.getGotItButton(lang), style: const TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ),
               ],
@@ -1408,6 +1203,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
   }
 
   Widget _buildWorkLogTab(
+    String lang,
     bool isEn,
     bool isPremium,
     List<RegionalJobEntry> jobs,
@@ -1451,9 +1247,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
         Padding(
           padding: const EdgeInsets.only(bottom: 10, left: 4),
           child: Text(
-            _targetVisaYear == 2
-                ? (isEn ? '🗓️ 88 Days Regional Tracker (2nd Year)' : '🗓️ Registro de 88 Días Regionales (2º Año)')
-                : (isEn ? '🗓️ 179 Days Regional Tracker (3rd Year)' : '🗓️ Registro de 179 Días Regionales (3r Año)'),
+            IndustryTranslations.getTrackerTitle(_targetVisaYear, lang),
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w800,
@@ -1492,7 +1286,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          isEn ? '2nd Year Visa' : '2º Año de Visa',
+                          IndustryTranslations.getYearSelectorTitle(2, lang),
                           style: TextStyle(
                             fontSize: 12.5,
                             fontWeight: FontWeight.w800,
@@ -1501,7 +1295,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                         ),
                         const SizedBox(height: 1),
                         Text(
-                          isEn ? '88 Days Requirement' : 'Requisito: 88 Días',
+                          IndustryTranslations.getYearSelectorSubtitle(2, lang),
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w500,
@@ -1532,7 +1326,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          isEn ? '3rd Year Visa' : '3r Año de Visa',
+                          IndustryTranslations.getYearSelectorTitle(3, lang),
                           style: TextStyle(
                             fontSize: 12.5,
                             fontWeight: FontWeight.w800,
@@ -1541,7 +1335,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                         ),
                         const SizedBox(height: 1),
                         Text(
-                          isEn ? '179 Days (6 Months)' : 'Requisito: 179 Días (6 Meses)',
+                          IndustryTranslations.getYearSelectorSubtitle(3, lang),
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w500,
@@ -1574,17 +1368,11 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    !isPremium
-                        ? (_targetVisaYear == 2
-                            ? (isEn ? 'Free Trial Progress (10-Day Cap)' : 'Progreso Gratuito (Límite 10 Días)')
-                            : (isEn ? '3rd Year Trial (10-Day Cap)' : 'Prueba 3r Año (Límite 10 Días)'))
-                        : (_targetVisaYear == 2
-                            ? (isEn ? '2nd Year Visa Progress (88 Days)' : 'Progreso 2º Año: 88 Días')
-                            : (isEn ? '3rd Year Visa Progress (179 Days)' : 'Progreso 3r Año: 179 Días')),
+                    IndustryTranslations.getProgressTitle(isPremium, _targetVisaYear, lang),
                     style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.textPrimary),
                   ),
                   Text(
-                    !isPremium ? '$totalDays / 10' : '$totalDays / $targetRequirement ${isEn ? "days" : "días"}',
+                    !isPremium ? '$totalDays / 10' : '$totalDays / $targetRequirement ${IndustryTranslations.getDaysSuffix(lang)}',
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 16,
@@ -1651,7 +1439,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                               ? 'Track all $targetRequirement days, verify employer ABNs, and export official Form 1263 immigration dossiers.'
                               : 'Registra los $targetRequirement días al completo y descarga el Formulario 1263 oficial listo para ImmiAccount.',
                         ),
-                        child: Text(isEn ? 'Unlock' : 'Desbloquear', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.primary)),
+                        child: Text(IndustryTranslations.getUnlockButton(lang), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppColors.primary)),
                       ),
                     ],
                   ),
@@ -1668,7 +1456,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
           child: OutlinedButton.icon(
             icon: const Icon(CupertinoIcons.plus_circle_fill, color: AppColors.secondary, size: 18),
             label: Text(
-              isEn ? 'Add Regional Job Entry' : 'Añadir Registro de Trabajo',
+              IndustryTranslations.getAddJobButton(lang),
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: AppColors.secondary),
             ),
             style: OutlinedButton.styleFrom(
@@ -1680,14 +1468,14 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
               if (!isPremium && totalDays >= 10) {
                 showPhase2PaywallBottomSheet(
                   context: context,
-                  featureTitle: isEn ? '10-Day Free Limit Reached' : 'Límite Gratuito de 10 Días',
+                  featureTitle: IndustryTranslations.getTrialLimitReachedTitle(lang),
                   featureBenefit: isEn
                       ? 'You have recorded 10 free trial days. Upgrade to Premium to log the complete $targetRequirement days and generate your Form 1263 dossier.'
                       : 'Has registrado los 10 días de prueba gratuitos. Pasa a Premium para registrar los $targetRequirement días completos y generar el Formulario 1263 oficial.',
                 );
                 return;
               }
-              _showAddJobDialog(isEn, isPremium, totalDays, visaSubclass, uid: uid);
+              _showAddJobDialog(lang, isEn, isPremium, totalDays, visaSubclass, uid: uid);
             },
           ),
         ),
@@ -1710,7 +1498,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        isEn ? '🌾 Horticulture Award Level 2 Unlocked (+90 days)' : '🌾 Nivel 2 Horticultura Concedido (+90 días)',
+                        IndustryTranslations.getHorticultureLevel2Title(lang),
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: AppColors.secondary),
                       ),
                       const SizedBox(height: 2),
@@ -1745,7 +1533,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        isEn ? '⏱️ Condition 8547: 6-Month Limit Near' : '⏱️ Condición 8547: Límite de 6 Meses Próximo',
+                        IndustryTranslations.getCondition8547Title(lang),
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: Colors.brown),
                       ),
                       const SizedBox(height: 2),
@@ -1768,7 +1556,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
             child: Padding(
               padding: const EdgeInsets.all(28.0),
               child: Text(
-                isEn ? 'No jobs recorded yet. Tap above to add your first job.' : 'Aún no has registrado ningún trabajo regional.',
+                IndustryTranslations.getEmptyJobsMessage(lang),
                 style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
               ),
             ),
@@ -1810,7 +1598,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          isEn ? '⚠️ <7h/day risk' : '⚠️ <7h/d (Riesgo)',
+                          IndustryTranslations.getHoursRiskBadge(lang),
                           style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.orange),
                         ),
                       )
@@ -1822,7 +1610,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          isEn ? '⚠️ ABN issue' : '⚠️ ABN irregular ATO',
+                          IndustryTranslations.getAbnIssueBadge(lang),
                           style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.statusClosed),
                         ),
                       )
@@ -1834,7 +1622,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          isEn ? '✓ ATO Verified' : '✓ ABN Verificado ATO',
+                          IndustryTranslations.getAtoVerifiedBadge(lang),
                           style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.secondary),
                         ),
                       ),
@@ -1853,7 +1641,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                       children: [
                         Expanded(
                           child: Text(
-                            '${job.totalDaysCounted} días • ${job.totalHours.toStringAsFixed(1)}h (${avgHours.toStringAsFixed(1)}h/día)',
+                            IndustryTranslations.getDaysHoursSummary(job.totalDaysCounted, job.totalHours, avgHours, lang),
                             style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
                           ),
                         ),
@@ -1888,7 +1676,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Bruto: \$${job.grossEarningsAud.toStringAsFixed(0)} AUD${job.isFullTimeWeekly ? ' • Full-Time (7d)' : ''}${job.hasPieceworkAgreement ? ' • Destajo/Piecework' : ''}${job.payslipFileRef != null && job.payslipFileRef!.isNotEmpty ? ' • Ref: ${job.payslipFileRef}' : ''}',
+                      '${IndustryTranslations.getGrossPayLabel(lang)}: \$${job.grossEarningsAud.toStringAsFixed(0)} AUD${job.isFullTimeWeekly ? IndustryTranslations.getFullTimeTag(lang) : ''}${job.hasPieceworkAgreement ? IndustryTranslations.getPieceworkTag(lang) : ''}${job.payslipFileRef != null && job.payslipFileRef!.isNotEmpty ? ' • Ref: ${job.payslipFileRef}' : ''}',
                       style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                     ),
                   ],
@@ -1909,7 +1697,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
           child: ElevatedButton.icon(
             icon: const Icon(CupertinoIcons.doc_checkmark_fill, size: 18),
             label: Text(
-              isEn ? 'Export Form 1263 PDF Dossier' : 'Generar Formulario 1263 Oficial (PDF)',
+              IndustryTranslations.getExport1263Button(lang),
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
             style: ElevatedButton.styleFrom(
@@ -1922,24 +1710,21 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
               if (!isPremium) {
                 showPhase2PaywallBottomSheet(
                   context: context,
-                  featureTitle: isEn
-                      ? (_targetVisaYear == 2 ? 'Form 1263 Immigration Dossier (2nd Year)' : 'Form 1263 Immigration Dossier (3rd Year)')
-                      : (_targetVisaYear == 2 ? 'Dossier Formulario 1263 (2º Año)' : 'Dossier Formulario 1263 (3r Año)'),
-                  featureBenefit: isEn
-                      ? 'Generate an audit-proof Form 1263 PDF dossier with ABNs, hours, and pay slips ready for ImmiAccount.'
-                      : 'Genera el dossier en PDF del Formulario 1263 con ABNs, horas y recibos listo para adjuntar en ImmiAccount.',
+                  featureTitle: IndustryTranslations.getPaywallTitle(_targetVisaYear, lang),
+                  featureBenefit: IndustryTranslations.getPaywallBenefit(lang),
                 );
                 return;
               }
 
               if (jobs.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(isEn ? 'Add at least one job first' : 'Añade al menos un trabajo primero')),
+                  SnackBar(content: Text(IndustryTranslations.getEmptyJobsSnackbar(lang))),
                 );
                 return;
               }
 
               _showDossierExportSheet(
+                lang: lang,
                 isEn: isEn,
                 jobs: jobs,
                 totalDays: totalDays,
@@ -1969,14 +1754,12 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      isEn ? 'Immigration Audit Protection' : 'Protección Frente a Auditorías de Inmigración',
+                      IndustryTranslations.getAuditProtectionTitle(lang),
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppColors.textPrimary),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      isEn
-                          ? 'Home Affairs audits ~23% of 2nd year applications. An invalid ABN or postcode leads to refusal and loss of the non-refundable \$650 AUD visa fee.'
-                          : 'Inmigración audita ~23% de solicitudes de 2º año. Un ABN o código erróneo provoca denegación inmediata y la pérdida de la tasa oficial de \$650 AUD.',
+                      IndustryTranslations.getAuditProtectionDesc(lang),
                       style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary, height: 1.35),
                     ),
                   ],
@@ -1991,6 +1774,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
   }
 
   void _showAddJobDialog(
+    String lang,
     bool isEn,
     bool isPremium,
     int currentTotalDays,
@@ -2005,7 +1789,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
     final postcodeCtrl = TextEditingController(
       text: _postcodeController.text.isNotEmpty ? _postcodeController.text : '4870',
     );
-    final roleCtrl = TextEditingController(text: isEn ? 'Fruit Picker / Farm Hand' : 'Recolector / Peón Agrícola');
+    final roleCtrl = TextEditingController(text: IndustryTranslations.getDefaultRole(lang));
     final locationCtrl = TextEditingController(
       text: _searchResult?.location ?? 'Cairns Regional Area',
     );
@@ -2072,108 +1856,93 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
           // 1. Nombre de la empresa
           final nameClean = nameCtrl.text.trim();
           if (nameClean.isEmpty) {
-            blockingErrors.add(isEn ? 'Employer / Business Name is required.' : 'El nombre de la empresa es obligatorio.');
+            blockingErrors.add(IndustryTranslations.getValidationError('name_required', lang));
           }
 
           // 2. ABN (11 dígitos numéricos + Algoritmo ATO + Registro ABR)
           final abnClean = AbrService.cleanAbn(abnCtrl.text);
           final isChecksumValid = abnClean.length == 11 && AbrService.isValidAbnChecksum(abnClean);
           if (abnClean.isEmpty) {
-            blockingErrors.add(isEn ? 'ABN is required for Form 1263 verification.' : 'El ABN es obligatorio para el Formulario 1263.');
+            blockingErrors.add(IndustryTranslations.getValidationError('abn_required', lang));
           } else if (abnClean.length != 11) {
-            blockingErrors.add(isEn ? 'ABN must contain exactly 11 digits (e.g., 51 824 753 556).' : 'El ABN debe tener exactamente 11 dígitos numéricos (ej: 51 824 753 556).');
+            blockingErrors.add(IndustryTranslations.getValidationError('abn_11_digits', lang));
           } else if (!isChecksumValid) {
-            blockingErrors.add(isEn
-                ? 'Invalid ABN: Fails official ATO checksum algorithm (fictitious or mistyped number).'
-                : 'ABN Inválido: No cumple el algoritmo matemático de la ATO (ficticio o erróneo).');
+            blockingErrors.add(IndustryTranslations.getValidationError('abn_checksum_invalid', lang));
           } else if (abnDetails != null && abnDetails!.isCancelled) {
-            blockingErrors.add(isEn
-                ? 'ABN Cancelled: Employer is inactive on official registry. Home Affairs will reject these days.'
-                : 'ABN Cancelado: El empleador está inactivo en el registro de la ATO. Inmigración denegará tu visa.');
+            blockingErrors.add(IndustryTranslations.getValidationError('abn_cancelled', lang));
           }
 
           // 3. Código Postal & LIN 22/050
           final pCode = postcodeCtrl.text.trim();
           PostcodeInfo? resolvedPostcode;
           if (pCode.length != 4 || int.tryParse(pCode) == null) {
-            blockingErrors.add(isEn ? 'Postcode must be a 4-digit Australian code.' : 'El código postal debe tener 4 dígitos australianos.');
+            blockingErrors.add(IndustryTranslations.getValidationError('postcode_invalid', lang));
           } else {
             final repo = ref.read(postcodeRepositoryProvider);
             resolvedPostcode = repo.findPostcode(pCode);
             if (resolvedPostcode == null) {
-              blockingErrors.add(isEn
-                  ? 'Postcode $pCode is NOT regional under LIN 22/050. Home Affairs will reject these days.'
-                  : 'El código postal $pCode NO figura en las zonas regionales de LIN 22/050. Inmigración rechazará estos días.');
+              blockingErrors.add(IndustryTranslations.getValidationError('postcode_not_regional', lang, p1: pCode));
             } else {
               final isIndEligible = resolvedPostcode.isEligible(visaSubclass, selectedIndustry);
               if (!isIndEligible) {
-                blockingErrors.add(isEn
-                    ? 'Activity not valid for visa $visaSubclass in $pCode (e.g. hospitality only counts in Northern Australia).'
-                    : 'La industria no es computable en $pCode para tu visado $visaSubclass (ej. hostelería solo computa en el Norte de Australia).');
+                blockingErrors.add(IndustryTranslations.getValidationError('industry_not_valid_here', lang, p1: visaSubclass, p2: pCode));
               }
             }
           }
 
           // 4. Ubicación y Puesto
           if (locationCtrl.text.trim().isEmpty) {
-            blockingErrors.add(isEn ? 'Work site location / town is required.' : 'La localidad o ubicación de la granja es obligatoria.');
+            blockingErrors.add(IndustryTranslations.getValidationError('location_required', lang));
           }
           if (roleCtrl.text.trim().isEmpty) {
-            blockingErrors.add(isEn ? 'Job role / position is required.' : 'El puesto o rol desempeñado es obligatorio.');
+            blockingErrors.add(IndustryTranslations.getValidationError('role_required', lang));
           }
 
           // 5. Fechas y Span de Calendario
           final calendarSpan = endDate.difference(startDate).inDays + 1;
           if (startDate.isAfter(endDate)) {
-            blockingErrors.add(isEn ? 'Start date cannot be after end date.' : 'La fecha de inicio no puede ser posterior a la de fin.');
+            blockingErrors.add(IndustryTranslations.getValidationError('dates_inverted', lang));
           }
           if (endDate.isAfter(DateTime.now().add(const Duration(days: 1)))) {
-            blockingErrors.add(isEn ? 'Future dates are not permitted. Only completed days count.' : 'No puedes indicar fechas futuras. Solo computan periodos ya trabajados.');
+            blockingErrors.add(IndustryTranslations.getValidationError('dates_future', lang));
           }
 
           // 6. Días Computados
           final days = int.tryParse(daysCtrl.text.trim()) ?? 0;
           if (days <= 0) {
-            blockingErrors.add(isEn ? 'Days counted must be greater than 0.' : 'Los días deben ser mayores a cero.');
+            blockingErrors.add(IndustryTranslations.getValidationError('days_zero', lang));
           } else if (calendarSpan > 0 && days > calendarSpan) {
-            blockingErrors.add(isEn
-                ? 'Inconsistency: $days days entered in a span of only $calendarSpan calendar days.'
-                : 'Inconsistencia: Has puesto $days días trabajados en un periodo de solo $calendarSpan días naturales.');
+            blockingErrors.add(IndustryTranslations.getValidationError('days_exceed_span', lang, p1: '$days', p2: '$calendarSpan'));
           } else if (!isPremium && (currentTotalDays + days > 10)) {
-            blockingErrors.add(isEn
-                ? 'Free Limit: Exceeds 10-day trial (${currentTotalDays + days}/10). Upgrade to Pro to unlock.'
-                : 'Límite Free: Supera los 10 días de prueba (${currentTotalDays + days}/10). Requiere versión Pro.');
+            blockingErrors.add(IndustryTranslations.getValidationError('trial_cap_exceeded', lang, p1: '${currentTotalDays + days}'));
           }
 
           // 7. Horas Totales y Ratio Home Affairs
           final hours = double.tryParse(hoursCtrl.text.trim()) ?? 0.0;
           final double avgHoursPerDay = days > 0 ? (hours / days) : 0.0;
           if (hours <= 0) {
-            blockingErrors.add(isEn ? 'Total hours must be greater than 0.' : 'Las horas totales deben ser mayores a cero.');
+            blockingErrors.add(IndustryTranslations.getValidationError('hours_zero', lang));
           } else if (days > 0) {
             if (avgHoursPerDay < 7.0) {
-              riskWarnings.add(isEn
-                  ? 'Home Affairs Risk (${avgHoursPerDay.toStringAsFixed(1)}h/day average): Standard full-time is 7–7.6h/day (35–38h/week). Below 7h/day risks being deemed part-time and refused.'
-                  : 'Riesgo Home Affairs (media de ${avgHoursPerDay.toStringAsFixed(1)}h/día): Inmigración exige jornada completa estándar (7–7.6h/día o 35–38h/semana). Menos de 7h/día corre riesgo de ser catalogado como media jornada y anulado.');
+              riskWarnings.add(IndustryTranslations.getHoursWarning(avgHoursPerDay, false, lang));
             } else if (avgHoursPerDay > 16.0) {
-              riskWarnings.add(isEn
-                  ? 'Excessive Hours (${avgHoursPerDay.toStringAsFixed(1)}h/day): Declaring >16h daily triggers ATO anti-fraud audits.'
-                  : 'Horas Inverosímiles (${avgHoursPerDay.toStringAsFixed(1)}h/día): Declarar más de 16h/día dispara auditorías de la ATO e Inmigración por sospecha de fraude.');
+              riskWarnings.add(IndustryTranslations.getHoursWarning(avgHoursPerDay, true, lang));
             }
           }
 
           final estGross = hours * 33.05;
 
           final industryOptions = [
-            {'id': 'agriculture', 'label': isEn ? '🌾 Plant & Animal Cultivation' : '🌾 Cultivo de Plantas y Ganadería'},
-            {'id': 'tourism_hospitality', 'label': isEn ? '☕ Hospitality & Tourism' : '☕ Hostelería y Turismo'},
-            {'id': 'construction', 'label': isEn ? '🏗️ Construction' : '🏗️ Construcción y Obras'},
-            {'id': 'forestry_fishing', 'label': isEn ? '🎣 Fishing, Pearling & Forestry' : '🎣 Pesca, Perlas y Silvicultura'},
-            {'id': 'bushfire_recovery', 'label': isEn ? '🔥 Bushfire Recovery (Table 5)' : '🔥 Recuperación de Incendios (Tabla 5)'},
-            {'id': 'flood_recovery', 'label': isEn ? '🌊 Flood & Disaster Recovery (Table 6)' : '🌊 Inundaciones y Desastres (Tabla 6)'},
-            {'id': 'healthcare_covid', 'label': isEn ? '🏥 COVID-19 Healthcare & Medical' : '🏥 Salud y Sector Médico COVID-19'},
+            {'id': 'agriculture', 'label': '🌾 ${IndustryTranslations.getName('agriculture', lang)}'},
+            {'id': 'tourism_hospitality', 'label': '☕ ${IndustryTranslations.getName('tourism_hospitality', lang)}'},
+            {'id': 'construction', 'label': '🏗️ ${IndustryTranslations.getName('construction', lang)}'},
+            {'id': 'fishing', 'label': '🎣 ${IndustryTranslations.getName('fishing', lang)}'},
+            {'id': 'forestry', 'label': '🌲 ${IndustryTranslations.getName('forestry', lang)}'},
+            {'id': 'bushfire_recovery', 'label': '🔥 ${IndustryTranslations.getName('bushfire_recovery', lang)}'},
+            {'id': 'flood_recovery', 'label': '🌊 ${IndustryTranslations.getName('flood_recovery', lang)}'},
+            {'id': 'healthcare_covid', 'label': '🏥 ${IndustryTranslations.getName('healthcare_covid', lang)}'},
             if (visaSubclass == '417')
-              {'id': 'mining', 'label': isEn ? '⛏️ Mining (417 Only)' : '⛏️ Minería (Solo 417)'},
+              {'id': 'mining', 'label': '⛏️ ${IndustryTranslations.getName('mining', lang)}'},
           ];
 
           return Padding(
@@ -2218,11 +1987,11 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              isEn ? 'Smart Regional Job Entry' : 'Registro Inteligente de Empleo',
+                              IndustryTranslations.getAddJobModalTitle(lang),
                               style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: AppColors.textPrimary),
                             ),
                             Text(
-                              isEn ? 'Validated against LIN 22/050 & Fair Work' : 'Validado según LIN 22/050 y Fair Work',
+                              IndustryTranslations.getAddJobModalSubtitle(lang),
                               style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
                             ),
                           ],
@@ -2237,7 +2006,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     controller: nameCtrl,
                     onChanged: (_) => setModalState(() {}),
                     decoration: InputDecoration(
-                      labelText: isEn ? 'Employer / Business Name *' : 'Nombre de la Empresa o Granja *',
+                      labelText: IndustryTranslations.getFieldLabel('employer_name', lang),
                       hintText: isEn ? 'e.g. Queensland Berry Farms Pty Ltd' : 'ej: Queensland Berry Farms Pty Ltd',
                       prefixIcon: const Icon(CupertinoIcons.building_2_fill, size: 18),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -2271,7 +2040,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                             }
                           },
                           decoration: InputDecoration(
-                            labelText: isEn ? 'ABN (11 digits) *' : 'ABN (11 dígitos) *',
+                            labelText: IndustryTranslations.getFieldLabel('abn', lang),
                             hintText: '51 824 753 556',
                             prefixIcon: const Icon(CupertinoIcons.number, size: 18),
                             suffixIcon: isVerifyingAbn
@@ -2312,7 +2081,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                             setModalState(() {});
                           },
                           decoration: InputDecoration(
-                            labelText: isEn ? 'Postcode *' : 'Cód. Postal *',
+                            labelText: IndustryTranslations.getFieldLabel('postcode', lang),
                             hintText: '4870',
                             prefixIcon: const Icon(CupertinoIcons.location_solid, size: 18),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -2337,7 +2106,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            isEn ? 'Connecting to abr.business.gov.au...' : 'Consultando abr.business.gov.au...',
+                            IndustryTranslations.getAbnConnecting(lang),
                             style: const TextStyle(fontSize: 11, fontStyle: FontStyle.italic, color: AppColors.textSecondary),
                           ),
                         ],
@@ -2358,9 +2127,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           const SizedBox(width: 6),
                           Expanded(
                             child: Text(
-                              isEn
-                                  ? 'ABN fails official ATO Modulo-89 check (fake/mistyped).'
-                                  : 'ABN no supera el algoritmo ATO (ficticio o mal escrito).',
+                              IndustryTranslations.getAbnChecksumFail(lang),
                               style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.statusClosed),
                             ),
                           ),
@@ -2386,14 +2153,12 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    isEn ? '🚨 ABN CANCELLED in Official Registry' : '🚨 ABN CANCELADO en Registro Oficial',
+                                    IndustryTranslations.getAbnCancelledTitle(lang),
                                     style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: AppColors.statusClosed),
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    isEn
-                                        ? '${abnDetails!.preferredName} is CANCELLED. Immigration will reject your days.'
-                                        : '${abnDetails!.preferredName} figura CANCELADO. Inmigración denegará tus 88 días.',
+                                    IndustryTranslations.getAbnCancelledBody(abnDetails!.preferredName, lang),
                                     style: const TextStyle(fontSize: 10.5, color: AppColors.statusClosed),
                                   ),
                                 ],
@@ -2424,7 +2189,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                             const SizedBox(width: 6),
                             Expanded(
                               child: Text(
-                                isEn ? '✓ ATO Checksum Valid (11 digits)' : '✓ Checksum Oficial ATO Válido',
+                                IndustryTranslations.getAbnChecksumValid(lang),
                                 style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: AppColors.secondary),
                               ),
                             ),
@@ -2441,7 +2206,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
-                                      isEn ? 'Verify ABR' : 'Verificar ABR',
+                                      IndustryTranslations.getVerifyAbrButton(lang),
                                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary),
                                     ),
                                     const SizedBox(width: 3),
@@ -2471,7 +2236,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                                 const SizedBox(width: 6),
                                 Expanded(
                                   child: Text(
-                                    isEn ? '✓ Verified by ABR Government API' : '✓ Verificado en Registro Oficial ABR',
+                                    IndustryTranslations.getVerifiedAbrApi(lang),
                                     style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: AppColors.secondary),
                                   ),
                                 ),
@@ -2488,7 +2253,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text(
-                                          isEn ? 'Official File' : 'Ficha Oficial',
+                                          IndustryTranslations.getOfficialFileButton(lang),
                                           style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary),
                                         ),
                                         const SizedBox(width: 3),
@@ -2529,7 +2294,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           controller: locationCtrl,
                           onChanged: (_) => setModalState(() {}),
                           decoration: InputDecoration(
-                            labelText: isEn ? 'Town / Work Location *' : 'Localidad / Granja *',
+                            labelText: IndustryTranslations.getFieldLabel('location', lang),
                             hintText: isEn ? 'e.g. Mareeba, QLD' : 'ej: Mareeba, QLD',
                             prefixIcon: const Icon(CupertinoIcons.location_circle_fill, size: 18),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -2543,7 +2308,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           controller: roleCtrl,
                           onChanged: (_) => setModalState(() {}),
                           decoration: InputDecoration(
-                            labelText: isEn ? 'Job Role / Position *' : 'Puesto / Rol Desempeñado *',
+                            labelText: IndustryTranslations.getFieldLabel('role', lang),
                             hintText: isEn ? 'e.g. Fruit Picker' : 'ej: Fruit Picker / Peón',
                             prefixIcon: const Icon(CupertinoIcons.briefcase_fill, size: 18),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -2558,7 +2323,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     Padding(
                       padding: const EdgeInsets.only(left: 4),
                       child: Text(
-                        '📍 ${resolvedPostcode.location} (${resolvedPostcode.state}) - Zona elegible LIN 22/050',
+                        IndustryTranslations.getEligibleZoneTag(resolvedPostcode.location, resolvedPostcode.state, lang),
                         style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.secondary),
                       ),
                     ),
@@ -2567,7 +2332,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
 
                   // 4. Selector de Industria
                   Text(
-                    isEn ? 'Industry / Activity Sector:' : 'Sector de Actividad:',
+                    IndustryTranslations.getFieldLabel('industry', lang),
                     style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.textSecondary),
                   ),
                   const SizedBox(height: 6),
@@ -2628,7 +2393,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(isEn ? 'Start Date' : 'Fecha Inicio', style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
+                                Text(IndustryTranslations.getFieldLabel('start_date', lang), style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
                                 const SizedBox(height: 2),
                                 Text(
                                   '${startDate.day}/${startDate.month}/${startDate.year}',
@@ -2664,7 +2429,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(isEn ? 'End Date' : 'Fecha Fin', style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
+                                Text(IndustryTranslations.getFieldLabel('end_date', lang), style: const TextStyle(fontSize: 10, color: AppColors.textMuted)),
                                 const SizedBox(height: 2),
                                 Text(
                                   '${endDate.day}/${endDate.month}/${endDate.year}',
@@ -2688,7 +2453,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           keyboardType: TextInputType.number,
                           onChanged: (_) => setModalState(() {}),
                           decoration: InputDecoration(
-                            labelText: isEn ? 'Days to Count *' : 'Días a Computar *',
+                            labelText: IndustryTranslations.getFieldLabel('days_counted', lang),
                             hintText: '10',
                             prefixIcon: const Icon(CupertinoIcons.calendar, size: 18),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -2709,7 +2474,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                             setModalState(() {});
                           },
                           decoration: InputDecoration(
-                            labelText: isEn ? 'Total Hours *' : 'Horas Totales *',
+                            labelText: IndustryTranslations.getFieldLabel('total_hours', lang),
                             hintText: '76',
                             prefixIcon: const Icon(CupertinoIcons.clock, size: 18),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -2730,7 +2495,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           keyboardType: const TextInputType.numberWithOptions(decimal: true),
                           onChanged: (_) => setModalState(() {}),
                           decoration: InputDecoration(
-                            labelText: isEn ? 'Gross Earnings (\$ AUD) *' : 'Salario Bruto Real (\$ AUD) *',
+                            labelText: IndustryTranslations.getFieldLabel('gross_earnings', lang),
                             hintText: estGross.toStringAsFixed(0),
                             prefixIcon: const Icon(CupertinoIcons.money_dollar, size: 18),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -2743,7 +2508,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                         child: TextField(
                           controller: payslipRefCtrl,
                           decoration: InputDecoration(
-                            labelText: isEn ? 'Payslips Ref / Evidence' : 'Ref. Nóminas / Recibos',
+                            labelText: IndustryTranslations.getFieldLabel('payslip_ref', lang),
                             hintText: isEn ? 'e.g. Payslips #1-4' : 'ej: Nóminas #1 a #4',
                             prefixIcon: const Icon(CupertinoIcons.doc_text, size: 18),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -2758,9 +2523,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     Padding(
                       padding: const EdgeInsets.only(left: 4),
                       child: Text(
-                        isEn
-                            ? 'Average: ${avgHoursPerDay.toStringAsFixed(1)}h/day • Fair Work benchmark (~33.05/h): \$${estGross.toStringAsFixed(0)} AUD'
-                            : 'Media: ${avgHoursPerDay.toStringAsFixed(1)}h/día • Referencia legal Fair Work: \$${estGross.toStringAsFixed(0)} AUD',
+                        IndustryTranslations.getAverageBenchmarkText(avgHoursPerDay, estGross, lang),
                         style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary),
                       ),
                     ),
@@ -2779,13 +2542,11 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           dense: true,
                           contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                           title: Text(
-                            isEn ? 'Full-Time Weekly Rule (5 days = 7 days count)' : 'Jornada Semanal Completa (5 días = 7 días computables)',
+                            IndustryTranslations.getFullTimeRuleTitle(lang),
                             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
                           ),
                           subtitle: Text(
-                            isEn
-                                ? 'Under LIN 22/050, working >=35h in 5 days allows counting all 7 days of the week.'
-                                : 'Según LIN 22/050, trabajar >=35h en 5 días permite computar los 7 días de la semana completa.',
+                            IndustryTranslations.getFullTimeRuleSubtitle(lang),
                             style: const TextStyle(fontSize: 10.5, color: AppColors.textSecondary),
                           ),
                           activeTrackColor: AppColors.secondary,
@@ -2804,13 +2565,11 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           dense: true,
                           contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                           title: Text(
-                            isEn ? 'Signed Piecework Agreement' : 'Contrato a Destajo Firmado (Piecework Agreement)',
+                            IndustryTranslations.getPieceworkRuleTitle(lang),
                             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
                           ),
                           subtitle: Text(
-                            isEn
-                                ? 'Required by Fair Work for piece rate picking/packing jobs to ensure floor rate compliance.'
-                                : 'Exigido por Fair Work en tareas a destajo para certificar el suelo legal salarial.',
+                            IndustryTranslations.getPieceworkRuleSubtitle(lang),
                             style: const TextStyle(fontSize: 10.5, color: AppColors.textSecondary),
                           ),
                           activeTrackColor: AppColors.secondary,
@@ -2839,7 +2598,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                               const Icon(CupertinoIcons.exclamationmark_triangle_fill, color: AppColors.statusClosed, size: 17),
                               const SizedBox(width: 6),
                               Text(
-                                isEn ? 'Blocking Validation Issues Detected:' : 'Errores que Home Affairs Rechazará:',
+                                IndustryTranslations.getBlockingIssuesTitle(lang),
                                 style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12.5, color: AppColors.statusClosed),
                               ),
                             ],
@@ -2879,7 +2638,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                               const Icon(CupertinoIcons.exclamationmark_shield_fill, color: Colors.orange, size: 17),
                               const SizedBox(width: 6),
                               Text(
-                                isEn ? 'Immigration Audit Warning:' : 'Aviso de Riesgo ante Inmigración:',
+                                IndustryTranslations.getAuditWarningTitle(lang),
                                 style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12.5, color: Colors.orange),
                               ),
                             ],
@@ -2906,9 +2665,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              isEn
-                                  ? '✓ Audit-Proof Entry: Verified LIN 22/050 code, 11-digit ABN, and full-time compliant shift (~${avgHoursPerDay.toStringAsFixed(1)}h/day).'
-                                  : '✓ Registro Blindado: Código regional LIN 22/050 conforme, ABN válido de 11 dígitos y ratio horario legal (~${avgHoursPerDay.toStringAsFixed(1)}h/día).',
+                              IndustryTranslations.getAuditProofEntryText(avgHoursPerDay, lang),
                               style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: AppColors.secondary, height: 1.3),
                             ),
                           ),
@@ -2928,7 +2685,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                           ),
                           child: Text(
-                            isEn ? 'Cancel' : 'Cancelar',
+                            IndustryTranslations.getFieldLabel('cancel', lang),
                             style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.textSecondary),
                           ),
                         ),
@@ -2961,10 +2718,8 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                               Navigator.pop(ctx);
                               showPhase2PaywallBottomSheet(
                                 context: context,
-                                featureTitle: isEn ? '10-Day Free Limit Reached' : 'Límite Gratuito de 10 Días',
-                                featureBenefit: isEn
-                                    ? 'Free tier includes tracking up to 10 days. Upgrade to Premium to log all ${_targetVisaYear == 2 ? 88 : 179} days and export Form 1263.'
-                                    : 'Superas los 10 días gratuitos. Pasa a Premium para registrar los ${_targetVisaYear == 2 ? 88 : 179} días completos y generar el Formulario 1263.',
+                                featureTitle: IndustryTranslations.getTrialLimitReachedTitle(lang),
+                                featureBenefit: IndustryTranslations.getTrialLimitReachedBenefit(_targetVisaYear, lang),
                               );
                               return;
                             }
@@ -3005,14 +2760,14 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                               SnackBar(
                                 backgroundColor: AppColors.secondary,
                                 content: Text(
-                                  isEn ? '✓ Regional job entry recorded and audit-verified!' : '✓ Empleo regional registrado y validado para auditoría!',
+                                  IndustryTranslations.getJobRecordedSnackbar(lang),
                                   style: const TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
                             );
                           },
                           child: Text(
-                            isEn ? 'Save & Audit Job' : 'Guardar y Validar Empleo',
+                            IndustryTranslations.getSaveAndAuditButton(lang),
                             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: Colors.white),
                           ),
                         ),
@@ -3029,6 +2784,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
   }
 
   void _showDossierExportSheet({
+    required String lang,
     required bool isEn,
     required List<RegionalJobEntry> jobs,
     required int totalDays,
@@ -3094,15 +2850,11 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              isEn
-                                  ? (_targetVisaYear == 2 ? 'Form 1263 Dossier (2nd Year)' : 'Form 1263 Dossier (3rd Year)')
-                                  : (_targetVisaYear == 2 ? 'Dossier Formulario 1263 (2º Año)' : 'Dossier Formulario 1263 (3r Año)'),
+                              IndustryTranslations.getDossierSheetTitle(_targetVisaYear, lang),
                               style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: AppColors.textPrimary),
                             ),
                             Text(
-                              isEn
-                                  ? 'Enter your official applicant details for ImmiAccount verification'
-                                  : 'Introduce tus datos oficiales reales para la verificación en Inmigración',
+                              IndustryTranslations.getDossierSheetSubtitle(lang),
                               style: const TextStyle(fontSize: 11.5, color: AppColors.textSecondary),
                             ),
                           ],
@@ -3115,7 +2867,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     controller: nameCtrl,
                     onChanged: (_) => setSheetState(() {}),
                     decoration: InputDecoration(
-                      labelText: isEn ? 'Full Legal Name (as in Passport) *' : 'Nombre Legal Completo (según Pasaporte) *',
+                      labelText: IndustryTranslations.getDossierFieldLabel('full_name', lang),
                       prefixIcon: const Icon(CupertinoIcons.person_fill, size: 18),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -3127,7 +2879,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     textCapitalization: TextCapitalization.characters,
                     onChanged: (_) => setSheetState(() {}),
                     decoration: InputDecoration(
-                      labelText: isEn ? 'Passport Number *' : 'Número de Pasaporte *',
+                      labelText: IndustryTranslations.getDossierFieldLabel('passport', lang),
                       hintText: isEn ? 'e.g. YB1234567' : 'ej: YB1234567',
                       prefixIcon: const Icon(CupertinoIcons.creditcard_fill, size: 18),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -3141,7 +2893,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                         child: TextField(
                           controller: grantCtrl,
                           decoration: InputDecoration(
-                            labelText: isEn ? 'Visa Grant No. (Optional)' : 'Nº Concesión Visado (Opcional)',
+                            labelText: IndustryTranslations.getDossierFieldLabel('grant_number', lang),
                             hintText: 'ej: 1398247012',
                             prefixIcon: const Icon(CupertinoIcons.shield_lefthalf_fill, size: 18),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -3155,7 +2907,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                           controller: phoneCtrl,
                           keyboardType: TextInputType.phone,
                           decoration: InputDecoration(
-                            labelText: isEn ? 'Australian Phone' : 'Teléfono Australiano',
+                            labelText: IndustryTranslations.getDossierFieldLabel('phone', lang),
                             hintText: '+61 412 345 678',
                             prefixIcon: const Icon(CupertinoIcons.phone_fill, size: 18),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -3170,7 +2922,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                     controller: emailCtrl,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      labelText: isEn ? 'Contact Email (ImmiAccount)' : 'Email de Contacto (ImmiAccount)',
+                      labelText: IndustryTranslations.getDossierFieldLabel('email', lang),
                       prefixIcon: const Icon(CupertinoIcons.mail_solid, size: 18),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -3194,16 +2946,14 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                             const Icon(CupertinoIcons.pen, size: 16, color: AppColors.primary),
                             const SizedBox(width: 6),
                             Text(
-                              isEn ? 'Supervisor / Employer Signature (Form 1263)' : 'Firma del Supervisor / Empleador (Form 1263)',
+                              IndustryTranslations.getDossierFieldLabel('supervisor_signature_title', lang),
                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: AppColors.textPrimary),
                             ),
                           ],
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          isEn
-                              ? 'Optional: Hand your phone to your farm supervisor on your last day to sign on screen.'
-                              : 'Opcional: Pásale el móvil a tu supervisor en tu último día de trabajo para firmar en pantalla.',
+                          IndustryTranslations.getDossierFieldLabel('supervisor_signature_hint', lang),
                           style: const TextStyle(fontSize: 10.5, color: AppColors.textSecondary),
                         ),
                         const SizedBox(height: 8),
@@ -3224,13 +2974,13 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                               const Icon(CupertinoIcons.checkmark_seal_fill, color: AppColors.secondary, size: 16),
                               const SizedBox(width: 4),
                               Text(
-                                isEn ? 'Signed on screen' : 'Firmado en pantalla',
+                                IndustryTranslations.getDossierFieldLabel('signed_badge', lang),
                                 style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.secondary),
                               ),
                               const Spacer(),
                               TextButton(
                                 onPressed: () => setSheetState(() => supervisorSignatureBytes = null),
-                                child: Text(isEn ? 'Clear' : 'Borrar', style: const TextStyle(fontSize: 11, color: AppColors.statusClosed)),
+                                child: Text(IndustryTranslations.getDossierFieldLabel('clear', lang), style: const TextStyle(fontSize: 11, color: AppColors.statusClosed)),
                               ),
                             ],
                           )
@@ -3240,7 +2990,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                             child: OutlinedButton.icon(
                               icon: const Icon(CupertinoIcons.signature, size: 16),
                               label: Text(
-                                isEn ? 'Sign with Finger on Screen' : 'Firmar con el Dedo en Pantalla',
+                                IndustryTranslations.getDossierFieldLabel('sign_button', lang),
                                 style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                               ),
                               style: OutlinedButton.styleFrom(
@@ -3251,8 +3001,8 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                                 final signed = await showDialog<Uint8List?>(
                                   context: context,
                                   builder: (_) => SignaturePadDialog(
-                                    title: isEn ? 'Supervisor Signature' : 'Firma del Encargado / Granja',
-                                    subtitle: isEn ? 'Ask your supervisor to sign inside the box' : 'Pídele a tu supervisor que firme dentro del recuadro',
+                                    title: IndustryTranslations.getSignatureDialogTitle(lang),
+                                    subtitle: IndustryTranslations.getSignatureDialogSubtitle(lang),
                                   ),
                                 );
                                 if (signed != null) {
@@ -3293,9 +3043,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            isEn
-                                ? '✓ Audit-Proof & <5 MB ImmiAccount Ready: Validated LIN 22/050 postcodes, official ABNs and zero mock data.'
-                                : '✓ Formato Blindado (<5 MB): Códigos LIN 22/050 conformes, ABNs verificados y peso óptimo para adjuntar en ImmiAccount.',
+                            IndustryTranslations.getDossierFieldLabel('audit_proof_badge', lang),
                             style: const TextStyle(fontSize: 11, color: AppColors.secondary, fontWeight: FontWeight.w600),
                           ),
                         ),
@@ -3308,7 +3056,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                       Expanded(
                         child: TextButton(
                           onPressed: () => Navigator.pop(sheetCtx),
-                          child: Text(isEn ? 'Cancel' : 'Cancelar', style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.textSecondary)),
+                          child: Text(IndustryTranslations.getFieldLabel('cancel', lang), style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.textSecondary)),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -3316,7 +3064,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                         flex: 2,
                         child: ElevatedButton.icon(
                           icon: const Icon(CupertinoIcons.printer_fill, size: 18),
-                          label: Text(isEn ? 'Generate Official PDF' : 'Generar PDF Oficial', style: const TextStyle(fontWeight: FontWeight.bold)),
+                          label: Text(IndustryTranslations.getDossierFieldLabel('generate_pdf', lang), style: const TextStyle(fontWeight: FontWeight.bold)),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: isFormValid ? AppColors.primary : AppColors.textMuted,
                             foregroundColor: Colors.white,
@@ -3332,9 +3080,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
                                   String? discrepancyNote;
                                   final hasRegionalJobs = jobs.any((j) => j.workSitePostcode.length == 4);
                                   if (hasRegionalJobs) {
-                                    discrepancyNote = isEn
-                                        ? 'Applicant performed all recorded specified work physically on-site within eligible regional postcodes under Migration Instrument LIN 22/050. Where an employer headquarters or payroll entity is registered under an administrative metropolitan ABN address, all practical duties and hours were performed at the specified regional farm/worksite location.'
-                                        : 'El solicitante realizó todo el trabajo especificado físicamente en códigos postales regionales elegibles bajo el Instrumento LIN 22/050. Cuando la sede fiscal de la empresa figure en una dirección metropolitana, todas las labores prácticas se desempeñaron en la ubicación regional certificada.';
+                                    discrepancyNote = IndustryTranslations.getDiscrepancyNote(lang);
                                   }
 
                                   final pdfBytes = await PdfGeneratorService.generateRegionalDossier(

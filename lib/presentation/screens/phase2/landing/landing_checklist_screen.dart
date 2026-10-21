@@ -50,14 +50,25 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
           final renewal179Tasks = tasks.where((t) => t.phase == 'visa_renewal_179' || t.id.contains('179') || t.id.contains('third')).toList();
           final departureTasks = tasks.where((t) => t.phase == 'departure_exit').toList();
 
+          String tr(String es, String en, {String? fr, String? it, String? zh}) {
+            switch (lang.toLowerCase()) {
+              case 'zh': return zh ?? en;
+              case 'fr': return fr ?? en;
+              case 'it': return it ?? en;
+              case 'es': return es;
+              case 'en':
+              default: return en;
+            }
+          }
+
           final stages = [
             {
               'title': AppStrings.stageTitle(lang, 0),
               'shortTitle': AppStrings.stageShortTitle(lang, 0),
               'subtitle': AppStrings.stageSubtitle(lang, 0),
               'icon': '🛫',
-              'landmark': isEn ? 'Departure Gate' : 'Despegue',
-              'aussieTheme': isEn ? 'Passport, Visa & Akubra Hat' : 'Pasaporte, Visa & Sombrero Akubra',
+              'landmark': tr('Despegue', 'Departure Gate', fr: 'Porte d’embarquement', it: 'Partenza', zh: '登机启程'),
+              'aussieTheme': tr('Pasaporte, Visa & Sombrero Akubra', 'Passport, Visa & Akubra Hat', fr: 'Passeport, Visa & Chapeau Akubra', it: 'Passaporto, Visto & Cappello Akubra', zh: '护照、下签信与澳洲探险帽'),
               'tasks': preDepartureTasks,
             },
             {
@@ -65,8 +76,8 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
               'shortTitle': AppStrings.stageShortTitle(lang, 1),
               'subtitle': AppStrings.stageSubtitle(lang, 1),
               'icon': '🏄',
-              'landmark': isEn ? 'Bondi Beach' : 'Sydney & Costa',
-              'aussieTheme': isEn ? 'TFN, SIM & Flat White' : 'TFN, SIM & Buen Flat White',
+              'landmark': tr('Sydney & Costa', 'Bondi Beach', fr: 'Plage de Bondi', it: 'Bondi Beach & Costa', zh: '邦迪海滩与东海岸'),
+              'aussieTheme': tr('TFN, SIM & Buen Flat White', 'TFN, SIM & Flat White', fr: 'TFN, Carte SIM & Flat White', it: 'TFN, SIM & Caffè Flat White', zh: '税号TFN、电话卡与澳白咖啡'),
               'tasks': arrivalTasks,
             },
             {
@@ -74,8 +85,8 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
               'shortTitle': AppStrings.stageShortTitle(lang, 2),
               'subtitle': AppStrings.stageSubtitle(lang, 2),
               'icon': '🚜',
-              'landmark': isEn ? 'Red Dirt Farm' : 'Outback & Granja',
-              'aussieTheme': isEn ? 'Red Dust & 88 Days Work Log' : 'Tierra Roja & Faena de 88 Días',
+              'landmark': tr('Outback & Granja', 'Red Dirt Farm', fr: 'Ferme des Terres Rouges', it: 'Fattoria Terra Rossa', zh: '红土地农场与内陆'),
+              'aussieTheme': tr('Tierra Roja & Faena de 88 Días', 'Red Dust & 88 Days Work Log', fr: 'Poussière Rouge & Journal de 88 Jours', it: 'Polvere Rossa & Registro 88 Giorni', zh: '红土地与88天二签集签日志'),
               'tasks': renewal88Tasks,
             },
             {
@@ -83,8 +94,8 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
               'shortTitle': AppStrings.stageShortTitle(lang, 3),
               'subtitle': AppStrings.stageSubtitle(lang, 3),
               'icon': '🌾',
-              'landmark': isEn ? 'Top End & Far North' : 'Top End & Outback Profundo',
-              'aussieTheme': isEn ? '179 Days Log & Form 1263 Audit' : 'Registro 179 Días & Auditoría 1263',
+              'landmark': tr('Top End & Outback Profundo', 'Top End & Far North', fr: 'Top End & Grand Nord', it: 'Top End & Grande Nord', zh: '北领地 Top End 与偏远极北'),
+              'aussieTheme': tr('Registro 179 Días & Auditoría 1263', '179 Days Log & Form 1263 Audit', fr: 'Suivi 179 Jours & Audit Formulaire 1263', it: 'Registro 179 Giorni & Audit Modulo 1263', zh: '179天三签日志与1263表格核查'),
               'tasks': renewal179Tasks,
             },
             {
@@ -92,8 +103,8 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
               'shortTitle': AppStrings.stageShortTitle(lang, 4),
               'subtitle': AppStrings.stageSubtitle(lang, 4),
               'icon': '🪸',
-              'landmark': isEn ? 'Reef & Departure' : 'Gran Barrera & Salida',
-              'aussieTheme': isEn ? 'DASP Super Reclaim & Tax Return' : 'Rescate Super (DASP) & Tax Return',
+              'landmark': tr('Gran Barrera & Salida', 'Reef & Departure', fr: 'Récif & Départ', it: 'Grande Barriera & Partenza', zh: '大堡礁与圆满离澳'),
+              'aussieTheme': tr('Rescate Super (DASP) & Tax Return', 'DASP Super Reclaim & Tax Return', fr: 'Rapatriement Super (DASP) & Tax Return', it: 'Recupero Super (DASP) & Dichiarazione Fiscale', zh: '离境退休金 (DASP) 退还与年度退税'),
               'tasks': departureTasks,
             },
           ];
@@ -895,7 +906,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
                             const SizedBox(width: 6),
                             Flexible(
                               child: Text(
-                                _getTaskActionLabel(task.targetGuideCategory!, isEn, taskId: task.id),
+                                _getTaskActionLabel(task.targetGuideCategory!, lang, isEn, taskId: task.id),
                                 softWrap: true,
                                 style: const TextStyle(
                                   fontSize: 12,
@@ -936,59 +947,70 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
     );
   }
 
-  String _getTaskActionLabel(String target, bool isEn, {String? taskId}) {
+  String _getTaskActionLabel(String target, String lang, bool isEn, {String? taskId}) {
+    String tr(String es, String en, {String? fr, String? it, String? zh}) {
+      switch (lang.toLowerCase()) {
+        case 'zh': return zh ?? en;
+        case 'fr': return fr ?? en;
+        case 'it': return it ?? en;
+        case 'es': return es;
+        case 'en':
+        default: return en;
+      }
+    }
+
     if (taskId == 'early_tax_return_ato') {
-      return isEn ? 'Tax Return & MES 2% Calculator 💵' : 'Simulador Tax Return & MES 2% 💵';
+      return tr('Simulador Tax Return & MES 2% 💵', 'Tax Return & MES 2% Calculator 💵', fr: 'Simulateur Tax Return & MES 2% 💵', it: 'Simulatore Tax Return & MES 2% 💵', zh: '个人所得税退税与 2% 医疗税减免模拟器 💵');
     }
     if (taskId == 'dasp_super_refund_claim') {
-      return isEn ? 'DASP Super Refund Simulator 💰' : 'Simulador Devolución DASP (12%) 💰';
+      return tr('Simulador Devolución DASP (12%) 💰', 'DASP Super Refund Simulator 💰', fr: 'Simulateur Remboursement DASP (12%) 💰', it: 'Simulatore Rimborso Super DASP (12%) 💰', zh: '离澳养老金 DASP (12%) 退款测算 💰');
     }
     if (taskId == 'sell_car_rwc_rego') {
-      return isEn ? 'WA Rego & PPSR Check 🚗' : 'Guía Rego WA & Chequeo PPSR 🚗';
+      return tr('Guía Rego WA & Chequeo PPSR 🚗', 'WA Rego & PPSR Check 🚗', fr: 'Guide Rego WA & Contrôle PPSR 🚗', it: 'Guida Rego WA & Verifica PPSR 🚗', zh: '西澳车辆登记指南与 PPSR 产权债务查验 🚗');
     }
     if (taskId == 'medicare_levy_exemption') {
-      return isEn ? 'Medicare MES 2% Calculator 💵' : 'Calculadora Exención MES 2% 💵';
+      return tr('Calculadora Exención MES 2% 💵', 'Medicare MES 2% Calculator 💵', fr: 'Calculateur Exemption MES 2% 💵', it: 'Calcolatore Esenzione MES 2% 💵', zh: '2% 医疗附加税豁免计算器 💵');
     }
     if (taskId == 'sham_contracting_shield') {
-      return isEn ? 'Sham Contracting Test & Claim 🛡️' : 'Test Falso Autónomo & Reclamación 🛡️';
+      return tr('Test Falso Autónomo & Reclamación 🛡️', 'Sham Contracting Test & Claim 🛡️', fr: 'Test Faux Indépendant & Réclamation 🛡️', it: 'Test Falso Autonomo & Reclamo 🛡️', zh: '虚假自雇防骗审查与申诉 🛡️');
     }
     if (taskId == 'condition_8547_work_extension') {
-      return isEn ? 'Condition 8547 Exemption Memo 📄' : 'Memo Exención Condición 8547 📄';
+      return tr('Memo Exención Condición 8547 📄', 'Condition 8547 Exemption Memo 📄', fr: 'Mémo d’Exemption Condition 8547 📄', it: 'Memo Esenzione Condizione 8547 📄', zh: '8547工作条款豁免备忘录 📄');
     }
     if (taskId == 'rental_bond_receipt') {
-      return isEn ? 'Rental Bond Receipt Generator 🏠' : 'Generador Recibo de Fianza 🏠';
+      return tr('Generador Recibo de Fianza 🏠', 'Rental Bond Receipt Generator 🏠', fr: 'Générateur de Reçu de Caution 🏠', it: 'Generatore Ricevuta Cauzione 🏠', zh: '房屋押金正式收据生成器 🏠');
     }
     if (taskId == 'verify_88_days_second_visa' || taskId == 'sign_form_1263_third_visa') {
-      return isEn ? 'Form 1263 & Touch Signature ✍️' : 'Form 1263 & Firma en Pantalla ✍️';
+      return tr('Form 1263 & Firma en Pantalla ✍️', 'Form 1263 & Touch Signature ✍️', fr: 'Formulaire 1263 & Signature Tactile ✍️', it: 'Modulo 1263 & Firma su Schermo ✍️', zh: '1263表格与电子屏幕签名 ✍️');
     }
     if (taskId == 'plan_third_visa_regional' || taskId == 'verify_179_days_postcodes_industry') {
-      return isEn ? '179-Day Tracker & Map 🌾' : 'Contador 179 Días & Mapa 🌾';
+      return tr('Contador 179 Días & Mapa 🌾', '179-Day Tracker & Map 🌾', fr: 'Suivi 179 Jours & Carte 🌾', it: 'Tracciatore 179 Giorni & Mappa 🌾', zh: '179天二续三集签追踪与地图 🌾');
     }
     if (taskId == 'audit_179_days_payslips_bank') {
-      return isEn ? 'Payslip Scanner & Auditor 🧾' : 'Auditor de Nóminas & Fair Work 🧾';
+      return tr('Auditor de Nóminas & Fair Work 🧾', 'Payslip Scanner & Auditor 🧾', fr: 'Scanner & Audit Fiches de Paie 🧾', it: 'Scanner Buste Paga & Fair Work 🧾', zh: '工资单智能审查与公平工作核验 🧾');
     }
     switch (target) {
       case 'employment':
-        return isEn ? 'Resume & Document Suite 📄' : 'Generador CV & Documentos 📄';
+        return tr('Generador CV & Documentos 📄', 'Resume & Document Suite 📄', fr: 'Générateur CV & Documents 📄', it: 'Generatore CV & Documenti 📄', zh: '澳规简历与工作文档套件 📄');
       case 'fair_work':
-        return isEn ? 'Fair Work Pay Calculator 💰' : 'Calcular Sueldo Fair Work 💰';
+        return tr('Calcular Sueldo Fair Work 💰', 'Fair Work Pay Calculator 💰', fr: 'Calculateur Salarial Fair Work 💰', it: 'Calcolo Stipendio Fair Work 💰', zh: '公平工作法定薪资计算器 💰');
       case '88days':
       case 'regional_work':
-        return isEn ? 'Regional Map & 88-Day Log 📍' : 'Mapa Oficial & 88 Días 📍';
+        return tr('Mapa Oficial & 88 Días 📍', 'Regional Map & 88-Day Log 📍', fr: 'Carte Régionale & 88 Jours 📍', it: 'Mappa Regionale & 88 Giorni 📍', zh: '官方偏远地区地图与88天日志 📍');
       case 'savings':
-        return isEn ? 'Pro Money & Tax Hacks 💵' : 'Hacks Pro de Ahorro Masivo 💵';
+        return tr('Hacks Pro de Ahorro Masivo 💵', 'Pro Money & Tax Hacks 💵', fr: 'Astuces Pro d’Épargne & Fiscalité 💵', it: 'Trucchi Pro di Risparmio & Fisco 💵', zh: '省钱与税务实操技巧 💵');
       case 'visa_renewal':
-        return isEn ? '2nd Year Visa Guide (88 Days) 🚜' : 'Guía 2ª Visa (88 Días) 🚜';
+        return tr('Guía 2ª Visa (88 Días) 🚜', '2nd Year Visa Guide (88 Days) 🚜', fr: 'Guide 2e Visa (88 Jours) 🚜', it: 'Guida 2° Visto (88 Giorni) 🚜', zh: '二签指南（88天） 🚜');
       case 'visa_renewal_179':
-        return isEn ? '3rd Year Visa Guide (179 Days) 🌾' : 'Guía 3ª Visa (179 Días) 🌾';
+        return tr('Guía 3ª Visa (179 Días) 🌾', '3rd Year Visa Guide (179 Days) 🌾', fr: 'Guide 3e Visa (179 Jours) 🌾', it: 'Guida 3° Visto (179 Giorni) 🌾', zh: '三签指南（179天） 🌾');
       case 'international_license':
-        return isEn ? 'International Permit & NAATI Guide 🪪' : 'Guía Carnet Internacional & NAATI 🪪';
+        return tr('Guía Carnet Internacional & NAATI 🪪', 'International Permit & NAATI Guide 🪪', fr: 'Permis International & Guide NAATI 🪪', it: 'Patente Internazionale & Guida NAATI 🪪', zh: '国际驾照与 NAATI 翻译指南 🪪');
       case 'australian_license':
-        return isEn ? 'Australian Driver Licence Guide 🚗' : 'Guía Carnet Australiano 🚗';
+        return tr('Guía Carnet Australiano 🚗', 'Australian Driver Licence Guide 🚗', fr: 'Permis de Conduire Australien 🚗', it: 'Guida Patente Australiana 🚗', zh: '澳洲本土正式驾照指南 🚗');
       case 'departure':
-        return isEn ? 'Exit Protocol & Reclaim Cash 🛫' : 'Protocolo Salida & Recuperar Dinero 🛫';
+        return tr('Protocolo Salida & Recuperar Dinero 🛫', 'Exit Protocol & Reclaim Cash 🛫', fr: 'Protocole de Départ & Récupération 🛫', it: 'Protocollo Partenza & Recupero Soldi 🛫', zh: '离澳流程与资金全额退回 🛫');
       default:
-        return isEn ? 'View Guide & Comparisons' : 'Ver Guía y Comparativa';
+        return tr('Ver Guía y Comparativa', 'View Guide & Comparisons', fr: 'Voir le Guide & Comparatif', it: 'Visualizza Guida & Confronti', zh: '查看指南与方案对比');
     }
   }
 }
