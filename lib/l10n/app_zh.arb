@@ -1,0 +1,216 @@
+{
+  "@@locale": "zh",
+  "loginTitle": "OzAlert",
+  "loginSubtitle": "助你抢先获取澳洲打工度假签证的必备神器。",
+  "loginError": "登录失败：",
+  "loginGoogle": "使用 Google 登录",
+  "loginApple": "使用 Apple 登录",
+  "welcomeTitle": "你的澳洲打工度假之旅，\n从这里启程与成长",
+  "welcomeSubtitle": "你的全能澳洲助手：从24/7全天候签证名额开放预警，到抵澳求职、官方简历、88天与179天工时记录，以及省心办理各项官方手续。",
+  "welcomeBullet1": "24/7 实时雷达：打工度假签证（462/417）名额即时推送",
+  "welcomeBullet2": "抵澳清单：行前及落地48小时官方指南（TFN、SIM卡、银行卡）",
+  "welcomeBullet3": "求职与澳洲简历：符合招聘标准的PDF简历与Fair Work法定薪资计算",
+  "welcomeBullet4": "偏远地区工时：邮编资格查询、88/179天工时记录与Form 1263电子签名",
+  "welcomeBullet5": "税务与省钱中心：退税模拟器、Medicare 2%医保免征与DASP养老金申领",
+  "welcomeButton": "开启我的澳洲之旅",
+  "onboardingTitle": "定制你的签证雷达",
+  "onboardingSubtitle": "设置你的个人资料，仅接收与你的护照匹配的签证名额通知。",
+  "onboardingLanguage": "偏好语言",
+  "onboardingPassports": "选择你的护照所属国",
+  "onboardingErrorEmpty": "请至少选择一本护照",
+  "onboardingErrorSave": "保存失败：",
+  "onboardingNext": "下一步",
+  "paywallTitle": "开启名额预警雷达",
+  "paywallSubtitle": "一旦签证名额开放，立即接收秒级推送与邮件通知。订阅即可开启。",
+  "paywallSubscribeMonthly": "订阅 {price} / 月",
+  "@paywallSubscribeMonthly": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallSubscribeOnly": "立即订阅",
+  "paywallRestore": "恢复已购项目",
+  "dashboardTitle": "OzVisa 签证雷达",
+  "dashboardSettings": "设置",
+  "settingsTitle": "设置",
+  "settingsLanguage": "应用语言",
+  "settingsLanguageEnglish": "英语 (English)",
+  "settingsLanguageSpanish": "西班牙语 (Español)",
+  "settingsLanguageFrench": "法语 (Français)",
+  "settingsLanguageItalian": "意大利语 (Italiano)",
+  "settingsLanguageChinese": "中文 (简体)",
+  "settingsLogout": "退出登录",
+  "settingsDeleteAccount": "注销账户",
+  "settingsDeleteAccountConfirmTitle": "确定注销吗？",
+  "settingsDeleteAccountConfirmMessage": "此操作不可逆，将永久删除你的所有数据。是否继续？",
+  "settingsDeleteAccountConfirmButton": "确认注销",
+  "settingsDeleteAccountCancelButton": "取消",
+  "visaStatusOpen": "开放申请",
+  "visaStatusClosed": "名额已满",
+  "visaStatusPaused": "暂时暂停",
+  "visaSourceButton": "查看官方数据源",
+  "settingsLegal": "法律条款",
+  "settingsPrivacyPolicy": "隐私政策",
+  "settingsTerms": "服务条款",
+  "checklistTitle": "行前准备清单",
+  "checklistProgress": "材料准备进度",
+  "checklistDescription": "提前备齐材料与存款证明，确保名额开放时能第一时间递交申请。",
+  "checklistKeyDocs": "核心材料清单：",
+  "checklistInstructions": "每准备好一项材料，勾选相应条目：",
+  "checklistTip": "经验贴士：签证名额往往几分钟内被抢空，提前整理好PDF材料至关重要。",
+  "dashboardSafeExpedition": "雷达监控中",
+  "dashboardSafeExpeditionDesc": "目前暂无新名额。一旦澳大利亚移民局为你的护照开放申请，我们将第一时间向你发送信号。",
+  "newsTitle": "签证资讯雷达",
+  "newsTabOfficial": "官方来源",
+  "newsTabAlerts": "实时动态",
+  "newsEmptyState": "官方雷达静默中，暂无最新通告。",
+  "newsGlobalAlerts": "正在全球监控官方动态。",
+  "newsError": "雷达信号异常。\n无法加载最新资讯。\n{errorText}",
+  "@newsError": {
+    "placeholders": {
+      "errorText": {
+        "type": "String"
+      }
+    }
+  },
+  "radarScanning": "服务器正在24/7全天候追踪澳大利亚移民局官网",
+  "passportSelectorTitle": "选择你的护照 (WHV 417 & 462)",
+  "passportSubclass": "{subclass} 类别 • 澳大利亚打工度假签证",
+  "@passportSubclass": {
+    "placeholders": {
+      "subclass": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallModalTitle": "解锁 24/7 签证名额秒级雷达",
+  "paywallModalDesc": "在澳大利亚内政部开放你所在国家名额的同一秒，立即收到App弹窗与邮件双重警报。",
+  "paywallPlanAnnualTitle": "全季年卡 (Annual)",
+  "paywallPlanAnnualDesc": "最具性价比 • 立省 37%",
+  "paywallPlanMonthlyTitle": "灵活月卡",
+  "paywallPlanMonthlyDesc": "随时可一键取消订阅",
+  "paywallActivateAnnual": "开启全季通卡 ($14.99)",
+  "paywallActivateMonthly": "按月订阅开启",
+  "paywallDisclaimer": "确认购买后，款项将通过您的 Apple 或 Google 账户扣除。除非在当前周期结束前至少 24 小时取消，否则订阅将自动续订。购买后可随时在账户设置中管理或取消订阅。",
+  "paywallTermsOfUse": "使用条款",
+  "paywallPrivacyPolicy": "隐私政策",
+  "visaStatusOpenDesc": "名额正式开放，立即前往递交申请！",
+  "visaStatusPausedDesc": "处理暂时搁置，请密切保持关注。",
+  "visaStatusClosedDesc": "当前名额为 0，正在持续雷达轮询。",
+  "errorOpeningLink": "无法打开该链接。",
+  "tooltipScanRadar": "立即扫描官方雷达",
+  "newsSourceOfficial": "官方信源",
+  "newsSourceMarket": "汇率 / 签证行情",
+  "partnerAffiliate": "官方合作伙伴 • 专属 85 折",
+  "partnerDescription": "悉尼或墨尔本通关必备入境保险，涵盖全面医疗、运动与工伤保障。",
+  "partnerActivate": "领取保险 85 折优惠",
+  "testAlertSending": "⚡ 正在向 {countryNames} 发送测试警报... 2秒内送达。",
+  "@testAlertSending": {
+    "placeholders": {
+      "countryNames": {
+        "type": "String"
+      }
+    }
+  },
+  "checklistCompletedDescription": "准备就绪！你的行前清单已100%完成。",
+  "partnerTitle": "需要澳洲境外旅行医疗险？通过 Chapka / IATI 享 85 折专属优惠",
+  "paywallSuccessMessage": "✅ VIP 权益已激活！24/7 即时通知已开启或已成功恢复购买。",
+  "navRadar": "雷达",
+  "navEquipment": "行前准备",
+  "navNews": "资讯日志",
+  "checklistIdentityDocumentsTitle": "身份证明材料",
+  "checklistIdentityDocumentsDesc": "护照个人信息页（清晰彩照、个人信息及有效期）。出生证明公证件。如曾改名须提供证明。",
+  "checklistEducationTitle": "学历证明",
+  "checklistEducationDesc": "高等教育文凭、学位证或官方在读证明（根据所属国家具体要求而定）。",
+  "checklistEnglishLanguageTitle": "英语能力证明",
+  "checklistEnglishLanguageDesc": "12个月内通过的官方语言考试成绩单（雅思4.5、PTE 30、剑桥147、托福iBT 32）或官方全英文教学证明。",
+  "checklistGovernmentSupportTitle": "政府支持信",
+  "checklistGovernmentSupportDesc": "本国相关主管部门出具的签证支持信（部分国家如秘鲁、厄瓜多尔等适用）。",
+  "checklistEnoughMoneyTitle": "充足的资金与离澳返程机票证明",
+  "checklistEnoughMoneyDesc": "证明拥有在澳基本生活费用（通常为 5,000 澳元）以及离澳机票或等额购买资金。",
+  "checklistCharacterDocumentsTitle": "无犯罪记录证明（品行证明）",
+  "checklistCharacterDocumentsDesc": "自16周岁起，在过去10年内累计居住满12个月的所有国家/地区的官方无犯罪证明。",
+  "checklistGettingHelpTitle": "代理中介授权表格",
+  "checklistGettingHelpDesc": "如聘请持牌移民代理或授权第三方代为递交材料，需填写 Form 956A 或 956。",
+  "checklistPrepareDocumentsTitle": "整理及翻译所有申请材料",
+  "checklistPrepareDocumentsDesc": "非英文文件须经由资质翻译人员翻译成英文，并彩色高清扫描原件与翻译件。",
+  "radarLastChecked": "最近检查：{seconds} 秒前（监控频率：每 60 秒轮询）",
+  "@radarLastChecked": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "newsExplore": "查看详情",
+  "newsUpdated": "已更新",
+  "countryAR": "阿根廷",
+  "countryAT": "奥地利",
+  "countryBR": "巴西",
+  "countryCL": "智利",
+  "countryCN": "中国",
+  "countryCZ": "捷克",
+  "countryEC": "厄瓜多尔",
+  "countryGR": "希腊",
+  "countryHU": "匈牙利",
+  "countryIN": "印度",
+  "countryID": "印度尼西亚",
+  "countryIL": "以色列",
+  "countryLU": "卢森堡",
+  "countryMY": "马来西亚",
+  "countryMN": "蒙古",
+  "countryPG": "巴布亚新几内亚",
+  "countryPE": "秘鲁",
+  "countryPL": "波兰",
+  "countryPT": "葡萄牙",
+  "countrySM": "圣马力诺",
+  "countrySG": "新加坡",
+  "countrySK": "斯洛伐克",
+  "countrySI": "斯洛文尼亚",
+  "countryES": "西班牙",
+  "countryCH": "瑞士",
+  "countryTH": "泰国",
+  "countryTR": "土耳其",
+  "countryUY": "乌拉圭",
+  "countryVN": "越南",
+  "notificationTestTitle": "🔔 测试警报：OzVisa 签证雷达已激活 ({countryName})",
+  "@notificationTestTitle": {
+    "placeholders": {
+      "countryName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationTestBody": "✅ 通道连接正常：服务器正在 24/7 实时监控移民局官方名额。",
+  "notificationTestLongBody": "OzVisa Alert 针对 {countryName} 的监控已生效！一旦澳大利亚内政部开放名额，将在第一时间通知你。",
+  "@notificationTestLongBody": {
+    "placeholders": {
+      "countryName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationChannelName": "OzVisa 签证名额警报",
+  "notificationChannelDesc": "澳大利亚打工度假签证名额开放即时推送",
+  "notificationTestTicker": "OzVisa 测试警报",
+  "settingsNotifications": "消息通知",
+  "settingsNewsNotifs": "接收澳洲政策动态与求职攻略",
+  "referralTitle": "你是通过什么渠道了解到我们的？",
+  "referralSubtitle": "这能帮助我们更好地优化服务体验。",
+  "referralFriend": "朋友推荐",
+  "referralGroups": "微信 / WhatsApp 社群",
+  "referralOthers": "其他渠道",
+  "statsOfficialData": "官方数据（打工度假签证）",
+  "statsVolume": "申请量统计",
+  "statsSourceTooltip": "点击查看官方数据源",
+  "dndNoticeTitle": "如何确保第一时间听到签证报警？",
+  "dndDialogTitle": "提示音与免打扰设置指南",
+  "dndDialogIntro": "为了确保 OzAlert 能及时唤醒你抢占名额，请正确配置手机。若开启静音或免打扰模式，可能错过名额开放。",
+  "dndDialogIosTitle": "🍏 苹果 iPhone (iOS) 用户",
+  "dndDialogIosSteps": "1. 前往「设置」>「OzAlert」>「通知」。\n2. 确保开启「允许通知」并打开「声音」。\n3. 若使用「勿扰模式」或「睡眠专注模式」，请在专注模式设置中将 OzAlert 添加至「允许的应用」。",
+  "dndDialogAndroidTitle": "🤖 安卓 Android 用户",
+  "dndDialogAndroidSteps": "1. 前往「设置」>「应用管理」>「OzAlert」>「通知管理」。\n2. 点击通知类别，将提示音设置为响亮的高优先级铃声。\n3. 若开启免打扰，请将 OzAlert 设为免打扰白名单应用。",
+  "dndDialogClose": "我知道了"
+}

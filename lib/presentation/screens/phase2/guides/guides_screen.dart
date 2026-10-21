@@ -86,7 +86,7 @@ class _GuidesScreenState extends ConsumerState<GuidesScreen> {
   Widget build(BuildContext context) {
     final navState = ref.watch(phase2NavigationProvider);
     final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode == 'en';
+    final isEn = locale?.languageCode != 'es';
 
     // Redirección directa desde checklist de Aterrizaje
     if (navState.activeGuideCategory != null && navState.activeGuideCategory != _selectedCategory) {

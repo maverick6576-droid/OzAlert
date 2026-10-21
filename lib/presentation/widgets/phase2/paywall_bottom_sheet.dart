@@ -46,7 +46,7 @@ class _Phase2PaywallSheetState extends ConsumerState<_Phase2PaywallSheet> {
     final monthlyPriceAsync = ref.watch(monthlyPriceProvider);
     final priceText = monthlyPriceAsync.value ?? '1,99 €';
     final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode == 'en';
+    final isEn = locale?.languageCode != 'es';
     final benefitText = (isEn && widget.featureBenefitEn != null && widget.featureBenefitEn!.isNotEmpty)
         ? widget.featureBenefitEn!
         : widget.featureBenefit;

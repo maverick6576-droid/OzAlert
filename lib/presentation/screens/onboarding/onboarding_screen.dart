@@ -123,26 +123,44 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          Row(
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
                             children: [
-                              Expanded(
-                                child: _LanguageOption(
-                                  title: 'Español',
-                                  isSelected: currentLocale == 'es',
-                                  onTap: () {
-                                    ref.read(localeProvider.notifier).setLocale(const Locale('es'));
-                                  },
-                                ),
+                              _LanguageOption(
+                                title: 'Español 🇪🇸',
+                                isSelected: currentLocale == 'es',
+                                onTap: () {
+                                  ref.read(localeProvider.notifier).setLocale(const Locale('es'));
+                                },
                               ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: _LanguageOption(
-                                  title: 'English',
-                                  isSelected: currentLocale == 'en',
-                                  onTap: () {
-                                    ref.read(localeProvider.notifier).setLocale(const Locale('en'));
-                                  },
-                                ),
+                              _LanguageOption(
+                                title: 'English 🇬🇧',
+                                isSelected: currentLocale == 'en',
+                                onTap: () {
+                                  ref.read(localeProvider.notifier).setLocale(const Locale('en'));
+                                },
+                              ),
+                              _LanguageOption(
+                                title: 'Français 🇫🇷',
+                                isSelected: currentLocale == 'fr',
+                                onTap: () {
+                                  ref.read(localeProvider.notifier).setLocale(const Locale('fr'));
+                                },
+                              ),
+                              _LanguageOption(
+                                title: 'Italiano 🇮🇹',
+                                isSelected: currentLocale == 'it',
+                                onTap: () {
+                                  ref.read(localeProvider.notifier).setLocale(const Locale('it'));
+                                },
+                              ),
+                              _LanguageOption(
+                                title: '中文 🇨🇳',
+                                isSelected: currentLocale == 'zh',
+                                onTap: () {
+                                  ref.read(localeProvider.notifier).setLocale(const Locale('zh'));
+                                },
                               ),
                             ],
                           ),
@@ -256,13 +274,13 @@ class _LanguageOption extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: 200.ms,
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 16),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primary : AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: isSelected ? AppColors.primary : AppColors.cardBorder,
-            width: 2,
+            width: isSelected ? 2 : 1.2,
           ),
           boxShadow: isSelected
               ? [BoxShadow(color: AppColors.primary.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 4))]

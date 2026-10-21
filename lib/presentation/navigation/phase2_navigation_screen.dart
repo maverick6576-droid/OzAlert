@@ -38,7 +38,7 @@ class _Phase2NavigationScreenState extends ConsumerState<Phase2NavigationScreen>
   Widget build(BuildContext context) {
     final navState = ref.watch(phase2NavigationProvider);
     final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode == 'en';
+    final isEn = locale?.languageCode != 'es';
 
     // Clamp currentTabIndex to max 3
     final activeIndex = navState.currentTabIndex.clamp(0, _screens.length - 1);

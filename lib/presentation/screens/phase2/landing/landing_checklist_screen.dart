@@ -26,7 +26,7 @@ class _LandingChecklistScreenState extends ConsumerState<LandingChecklistScreen>
   Widget build(BuildContext context) {
     final tasksAsync = ref.watch(landingTasksProvider);
     final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode == 'en';
+    final isEn = locale?.languageCode != 'es';
 
     return Scaffold(
       backgroundColor: AppColors.background,

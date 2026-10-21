@@ -113,6 +113,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLanguageSpanish => 'Spanish';
 
   @override
+  String get settingsLanguageFrench => 'French (Français)';
+
+  @override
+  String get settingsLanguageItalian => 'Italian (Italiano)';
+
+  @override
+  String get settingsLanguageChinese => 'Chinese (中文)';
+
+  @override
   String get settingsLogout => 'Log out';
 
   @override

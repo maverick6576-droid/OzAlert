@@ -40,7 +40,7 @@ class _VisaDatesSurveyDialogState extends ConsumerState<VisaDatesSurveyDialog> {
   Widget build(BuildContext context) {
     final dateFormat = DateFormat('dd/MM/yyyy');
     final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode == 'en';
+    final isEn = locale?.languageCode != 'es';
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),

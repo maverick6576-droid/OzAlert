@@ -62,6 +62,30 @@ class SettingsScreen extends ConsumerWidget {
               ref.read(localeProvider.notifier).setLocale(const Locale('en'));
             },
           ),
+          const SizedBox(height: 8),
+          _LanguageTile(
+            title: l10n.settingsLanguageFrench,
+            isSelected: currentLocale.languageCode == 'fr',
+            onTap: () {
+              ref.read(localeProvider.notifier).setLocale(const Locale('fr'));
+            },
+          ),
+          const SizedBox(height: 8),
+          _LanguageTile(
+            title: l10n.settingsLanguageItalian,
+            isSelected: currentLocale.languageCode == 'it',
+            onTap: () {
+              ref.read(localeProvider.notifier).setLocale(const Locale('it'));
+            },
+          ),
+          const SizedBox(height: 8),
+          _LanguageTile(
+            title: l10n.settingsLanguageChinese,
+            isSelected: currentLocale.languageCode == 'zh',
+            onTap: () {
+              ref.read(localeProvider.notifier).setLocale(const Locale('zh'));
+            },
+          ),
           const SizedBox(height: 32),
           Text(
             l10n.settingsNotifications,

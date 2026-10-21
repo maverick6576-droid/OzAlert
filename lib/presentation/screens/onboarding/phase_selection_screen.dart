@@ -43,7 +43,7 @@ class _PhaseSelectionScreenState extends ConsumerState<PhaseSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     final locale = ref.watch(localeProvider);
-    final isEn = (locale?.languageCode ?? Localizations.localeOf(context).languageCode) == 'en';
+    final isEn = (locale?.languageCode ?? Localizations.localeOf(context).languageCode) != 'es';
 
     return Scaffold(
       backgroundColor: AppColors.background,

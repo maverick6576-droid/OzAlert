@@ -73,23 +73,66 @@ void main() {
       expect(buttonFinder, findsOneWidget);
     });
 
-    testWidgets('Toggles language between ES and EN seamlessly', (tester) async {
+    testWidgets('Toggles language across all 5 languages seamlessly (ES, EN, FR, IT, ZH)', (tester) async {
       await tester.binding.setSurfaceSize(const Size(390, 844));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
       await tester.pumpWidget(createWelcomeTestWidget(initialLocale: const Locale('es')));
       await tester.pumpAndSettle();
 
-      // Cambiamos a inglés tocando 'EN'
-      final enButton = find.text('EN');
-      expect(enButton, findsOneWidget);
-      await tester.tap(enButton);
+      // 1. English
+      await tester.tap(find.text('EN'));
       await tester.pumpAndSettle();
-
-      // Verificamos que los textos cambian al inglés
+      expect(tester.takeException(), isNull);
       expect(find.text('Start My Journey'), findsOneWidget);
       expect(find.text('Instant Visa Opening Alerts'), findsOneWidget);
-      expect(find.text('Arrival & First Days Roadmap'), findsOneWidget);
+
+      // 2. French
+      await tester.tap(find.text('FR'));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(find.text('Commencer Mon Aventure'), findsOneWidget);
+      expect(find.text('Alertes d’Ouverture de Visa'), findsOneWidget);
+
+      // 3. Italian
+      await tester.tap(find.text('IT'));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(find.text('Inizia la Mia Avventura'), findsOneWidget);
+      expect(find.text('Avvisi Apertura Visto'), findsOneWidget);
+
+      // 4. Chinese
+      await tester.tap(find.text('ZH'));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(find.text('开启我的澳洲之旅'), findsOneWidget);
+      expect(find.text('即时签证开放提醒'), findsOneWidget);
+
+      // 5. Back to Spanish
+      await tester.tap(find.text('ES'));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(find.text('Empezar mi Aventura'), findsOneWidget);
+      expect(find.text('Alertas de Visas al Instante'), findsOneWidget);
+    });
+
+    testWidgets('Renders all languages on compact screen (360x580) with zero RenderFlex overflow', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(360, 580));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final testLocales = [
+        const Locale('es'),
+        const Locale('en'),
+        const Locale('fr'),
+        const Locale('it'),
+        const Locale('zh'),
+      ];
+
+      for (final loc in testLocales) {
+        await tester.pumpWidget(createWelcomeTestWidget(initialLocale: loc));
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull, reason: 'Failed with overflow for locale: ${loc.languageCode}');
+      }
     });
   });
 }

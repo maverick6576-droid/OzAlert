@@ -1,0 +1,216 @@
+{
+  "@@locale": "fr",
+  "loginTitle": "OzAlert",
+  "loginSubtitle": "Le radar ultime pour votre visa Working Holiday en Australie.",
+  "loginError": "Erreur lors de la connexion :",
+  "loginGoogle": "Continuer avec Google",
+  "loginApple": "Continuer avec Apple",
+  "welcomeTitle": "Votre Aventure en Australie,\nCommence et Grandit Ici",
+  "welcomeSubtitle": "Votre copilote tout-en-un : des alertes 24/7 d'ouverture de visas à votre vie en Australie avec emploi, CV officiel, 88 jours et démarches sans stress.",
+  "welcomeBullet1": "Radar 24/7 : Alertes officielles pour visas WHV ouverts (462/417)",
+  "welcomeBullet2": "Checklist d'Arrivée : Guide pas à pas (TFN, SIM, Banque)",
+  "welcomeBullet3": "Emploi & CV Australien : Format recruteur en PDF et salaire Fair Work",
+  "welcomeBullet4": "Jours Régionaux : Validateur de code postal et Form 1263 avec signature",
+  "welcomeBullet5": "Pôle Fiscal & Épargne : Déclaration d'impôts, exonération Medicare 2% et DASP",
+  "welcomeButton": "Commencer Mon Aventure",
+  "onboardingTitle": "Personnalisez votre Radar",
+  "onboardingSubtitle": "Configurez votre profil pour recevoir des alertes de visas correspondant à votre passeport.",
+  "onboardingLanguage": "Langue préférée",
+  "onboardingPassports": "Sélectionnez vos passeports",
+  "onboardingErrorEmpty": "Veuillez sélectionner au moins un passeport",
+  "onboardingErrorSave": "Erreur lors de l'enregistrement :",
+  "onboardingNext": "Étape suivante",
+  "paywallTitle": "Activez le Radar",
+  "paywallSubtitle": "Recevez des notifications immédiates dès que votre visa est disponible. Abonnez-vous pour y accéder.",
+  "paywallSubscribeMonthly": "S'abonner {price} / mois",
+  "@paywallSubscribeMonthly": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallSubscribeOnly": "S'abonner",
+  "paywallRestore": "Restaurer les achats",
+  "dashboardTitle": "Radar OzVisa",
+  "dashboardSettings": "Paramètres",
+  "settingsTitle": "Paramètres",
+  "settingsLanguage": "Langue de l'application",
+  "settingsLanguageEnglish": "Anglais (English)",
+  "settingsLanguageSpanish": "Espagnol (Español)",
+  "settingsLanguageFrench": "Français",
+  "settingsLanguageItalian": "Italien (Italiano)",
+  "settingsLanguageChinese": "Chinois (中文)",
+  "settingsLogout": "Se déconnecter",
+  "settingsDeleteAccount": "Supprimer le compte",
+  "settingsDeleteAccountConfirmTitle": "Êtes-vous sûr ?",
+  "settingsDeleteAccountConfirmMessage": "Cette action est irréversible et supprimera toutes vos données. Voulez-vous continuer ?",
+  "settingsDeleteAccountConfirmButton": "Supprimer",
+  "settingsDeleteAccountCancelButton": "Annuler",
+  "visaStatusOpen": "OUVERT",
+  "visaStatusClosed": "FERMÉ",
+  "visaStatusPaused": "EN PAUSE",
+  "visaSourceButton": "Voir la source officielle",
+  "settingsLegal": "Mentions Légales",
+  "settingsPrivacyPolicy": "Politique de Confidentialité",
+  "settingsTerms": "Conditions Générales",
+  "checklistTitle": "Kit d'Expédition",
+  "checklistProgress": "Progression de l'Équipement",
+  "checklistDescription": "Préparez votre sac (certificats et économies) à l'avance pour être prêt dès le début de l'aventure.",
+  "checklistKeyDocs": "Documents Clés :",
+  "checklistInstructions": "Cochez chaque élément au fur et à mesure que vous l'obtenez :",
+  "checklistTip": "Conseil d'Explorateur : Les quotas disparaissent très vite. Organiser vos PDF est essentiel.",
+  "dashboardSafeExpedition": "Expédition Sécurisée",
+  "dashboardSafeExpeditionDesc": "L'horizon est dégagé. Nous vous enverrons une alerte dès que le Ministère ouvrira des places pour vos passeports.",
+  "newsTitle": "Radar d'Actualités",
+  "newsTabOfficial": "Sources Officielles",
+  "newsTabAlerts": "Alertes Google",
+  "newsEmptyState": "Radar officiel silencieux. Aucune actualité.",
+  "newsGlobalAlerts": "Alertes mondiales surveillées.",
+  "newsError": "Interférence radar.\nImpossible de charger les actualités.\n{errorText}",
+  "@newsError": {
+    "placeholders": {
+      "errorText": {
+        "type": "String"
+      }
+    }
+  },
+  "radarScanning": "Serveurs surveillant le site officiel de l'immigration australienne",
+  "passportSelectorTitle": "Sélectionnez votre passeport (WHV 417 & 462)",
+  "passportSubclass": "Sous-classe {subclass} • WHV Australie",
+  "@passportSubclass": {
+    "placeholders": {
+      "subclass": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallModalTitle": "Débloquez le Radar Visa 24/7",
+  "paywallModalDesc": "Recevez une alerte Push immédiate et un e-mail à la seconde exacte où le Ministère ouvre des places pour votre pays.",
+  "paywallPlanAnnualTitle": "Passe Saison (Annuel)",
+  "paywallPlanAnnualDesc": "Meilleure offre • Économisez 37%",
+  "paywallPlanMonthlyTitle": "Forfait Mensuel Flex",
+  "paywallPlanMonthlyDesc": "Résiliez à tout moment en 1 clic",
+  "paywallActivateAnnual": "Activer le Passe Saison (14,99 $)",
+  "paywallActivateMonthly": "Continuer avec le forfait mensuel",
+  "paywallDisclaimer": "Le paiement sera débité de votre compte Apple ou Google lors de la confirmation d'achat. L'abonnement se renouvelle automatiquement sauf annulation au moins 24 heures avant la fin de la période en cours. Vous pouvez gérer et résilier votre abonnement dans les paramètres de votre compte après l'achat.",
+  "paywallTermsOfUse": "Conditions d'utilisation",
+  "paywallPrivacyPolicy": "Politique de confidentialité",
+  "visaStatusOpenDesc": "Visas disponibles. Commencez l'expédition !",
+  "visaStatusPausedDesc": "En attente. Traitement temporairement suspendu.",
+  "visaStatusClosedDesc": "Camp fermé. 0 place actuellement.",
+  "errorOpeningLink": "Impossible d'ouvrir le lien.",
+  "tooltipScanRadar": "Scanner le radar en direct",
+  "newsSourceOfficial": "SOURCE OFFICIELLE",
+  "newsSourceMarket": "MARCHÉ / DEVISES",
+  "partnerAffiliate": "PARTENAIRE • -15%",
+  "partnerDescription": "Indispensable pour activer votre visa aux douanes de Sydney ou Melbourne. Couverture COVID, sports et travail.",
+  "partnerActivate": "Activer la promo assurance (-15%)",
+  "testAlertSending": "⚡ Envoi de l'alerte test pour {countryNames}... Arrivée dans 2 secondes.",
+  "@testAlertSending": {
+    "placeholders": {
+      "countryNames": {
+        "type": "String"
+      }
+    }
+  },
+  "checklistCompletedDescription": "Tout est prêt ! Sac à dos 100% préparé.",
+  "partnerTitle": "Besoin d'une assurance santé pour l'Australie ? Obtenez -15% avec Chapka / IATI",
+  "paywallSuccessMessage": "✅ Accès VIP activé ! Alertes immédiates 24/7 activées ou achats restaurés avec succès.",
+  "navRadar": "Radar",
+  "navEquipment": "Équipement",
+  "navNews": "Journal",
+  "checklistIdentityDocumentsTitle": "Documents d'identité",
+  "checklistIdentityDocumentsDesc": "Pages du passeport (photo, données, validité). Acte de naissance. Justificatif de changement de nom (le cas échéant).",
+  "checklistEducationTitle": "Études et diplômes",
+  "checklistEducationDesc": "Preuve de qualifications (diplôme universitaire, années validées selon les exigences de votre pays).",
+  "checklistEnglishLanguageTitle": "Niveau d'anglais",
+  "checklistEnglishLanguageDesc": "Preuve d'études en anglais ou test certifié datant de moins de 12 mois (IELTS 4.5, PTE 30, Cambridge 147, TOEFL 32).",
+  "checklistGovernmentSupportTitle": "Soutien gouvernemental",
+  "checklistGovernmentSupportDesc": "Lettre de soutien de votre gouvernement (requis pour certains pays comme le Pérou, l'Équateur, etc.).",
+  "checklistEnoughMoneyTitle": "Fonds suffisants pour le séjour et le retour",
+  "checklistEnoughMoneyDesc": "Preuve de fonds pour votre séjour (environ 5 000 $ AUD) et pour un billet de sortie d'Australie (ou billet déjà réservé).",
+  "checklistCharacterDocumentsTitle": "Documents de bonne conduite (Casier judiciaire)",
+  "checklistCharacterDocumentsDesc": "Extraits de casier judiciaire de chaque pays où vous avez séjourné 12+ mois depuis l'âge de 16 ans.",
+  "checklistGettingHelpTitle": "Recours à un agent",
+  "checklistGettingHelpDesc": "Formulaire 956A ou 956 si vous faites appel à un agent d'immigration ou autorisez un tiers.",
+  "checklistPrepareDocumentsTitle": "Préparer vos documents",
+  "checklistPrepareDocumentsDesc": "Traduire tous les documents en anglais par un traducteur certifié et numériser originaux et traductions en couleur.",
+  "radarLastChecked": "Dernière vérification : il y a {seconds} secondes (Fréquence : toutes les 60s)",
+  "@radarLastChecked": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "newsExplore": "Explorer",
+  "newsUpdated": "ACTUALISÉ",
+  "countryAR": "Argentine",
+  "countryAT": "Autriche",
+  "countryBR": "Brésil",
+  "countryCL": "Chili",
+  "countryCN": "Chine",
+  "countryCZ": "République tchèque",
+  "countryEC": "Équateur",
+  "countryGR": "Grèce",
+  "countryHU": "Hongrie",
+  "countryIN": "Inde",
+  "countryID": "Indonésie",
+  "countryIL": "Israël",
+  "countryLU": "Luxembourg",
+  "countryMY": "Malaisie",
+  "countryMN": "Mongolie",
+  "countryPG": "Papouasie-Nouvelle-Guinée",
+  "countryPE": "Pérou",
+  "countryPL": "Pologne",
+  "countryPT": "Portugal",
+  "countrySM": "Saint-Marin",
+  "countrySG": "Singapour",
+  "countrySK": "Slovaquie",
+  "countrySI": "Slovénie",
+  "countryES": "Espagne",
+  "countryCH": "Suisse",
+  "countryTH": "Thaïlande",
+  "countryTR": "Turquie",
+  "countryUY": "Uruguay",
+  "countryVN": "Vietnam",
+  "notificationTestTitle": "🔔 ALERTE TEST : Radar OzVisa Actif ({countryName})",
+  "@notificationTestTitle": {
+    "placeholders": {
+      "countryName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationTestBody": "✅ Connexion vérifiée : Serveurs surveillant les visas 24/7 en temps réel.",
+  "notificationTestLongBody": "Le système de suivi OzVisa Alert est maintenant actif pour {countryName} ! Nous vous alerterons à la seconde exacte où le Ministère ouvrira de nouvelles places.",
+  "@notificationTestLongBody": {
+    "placeholders": {
+      "countryName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationChannelName": "Alertes d'Ouverture OzVisa",
+  "notificationChannelDesc": "Notifications immédiates d'ouverture de places pour le visa Work & Holiday",
+  "notificationTestTicker": "Alerte Test OzVisa",
+  "settingsNotifications": "Notifications",
+  "settingsNewsNotifs": "Recevoir actualités et conseils",
+  "referralTitle": "Où nous avez-vous trouvés ?",
+  "referralSubtitle": "Cela nous aide beaucoup à nous améliorer.",
+  "referralFriend": "Recommandation d'un ami",
+  "referralGroups": "Groupes WhatsApp",
+  "referralOthers": "Autre",
+  "statsOfficialData": "Données Officielles (Work & Holiday)",
+  "statsVolume": "Volume de demandes",
+  "statsSourceTooltip": "Voir la source officielle",
+  "dndNoticeTitle": "Comment entendre l'alarme ?",
+  "dndDialogTitle": "Configuration du son et de l'alarme",
+  "dndDialogIntro": "Pour qu'OzAlert puisse vous réveiller à temps, vous devez configurer correctement votre téléphone. En mode silencieux ou 'Ne pas déranger', vous risquez de manquer l'ouverture.",
+  "dndDialogIosTitle": "🍏 Utilisateurs iPhone (iOS)",
+  "dndDialogIosSteps": "1. Allez dans Réglages > OzAlert > Notifications.\n2. Assurez-vous que 'Autoriser les notifications' et 'Sons' sont activés.\n3. Si vous utilisez le mode 'Ne pas déranger' ou 'Sommeil', ajoutez OzAlert aux applications autorisées.",
+  "dndDialogAndroidTitle": "🤖 Utilisateurs Android",
+  "dndDialogAndroidSteps": "1. Allez dans Paramètres > Applications > OzAlert > Notifications.\n2. Appuyez sur les catégories de notification et sélectionnez une sonnerie forte.\n3. Si vous utilisez le mode 'Ne pas déranger', ajoutez OzAlert comme exception.",
+  "dndDialogClose": "Compris"
+}

@@ -75,7 +75,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
 
     if (showFeedback && mounted) {
       final isRegional = result != null && result.zone != 'metro' && result.zone != 'unknown';
-      final isEn = ref.read(localeProvider)?.languageCode == 'en';
+      final isEn = ref.read(localeProvider)?.languageCode != 'es';
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
       if (result != null && isRegional) {
@@ -209,7 +209,7 @@ class _RegionalWorkScreenState extends ConsumerState<RegionalWorkScreen> with Si
   @override
   Widget build(BuildContext context) {
     final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode == 'en';
+    final isEn = locale?.languageCode != 'es';
     final profile = ref.watch(userProfileProvider).value;
     final authUser = ref.watch(authStateProvider).value;
     final userEmail = authUser?.email ?? 'Applicant';

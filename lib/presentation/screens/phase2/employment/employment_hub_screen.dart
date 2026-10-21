@@ -270,7 +270,7 @@ class _EmploymentHubScreenState extends ConsumerState<EmploymentHubScreen> with 
   @override
   Widget build(BuildContext context) {
     final locale = ref.watch(localeProvider);
-    final isEn = locale?.languageCode == 'en';
+    final isEn = locale?.languageCode != 'es';
     final profile = ref.watch(userProfileProvider).value;
     final isPremium = profile?.isPremium ?? false;
     final authUser = ref.watch(authStateProvider).value;
