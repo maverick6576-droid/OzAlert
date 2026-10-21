@@ -51,13 +51,13 @@ class ChecklistTile extends StatelessWidget {
         decoration: BoxDecoration(
           color:
               item.isChecked
-                  ? AppColors.statusOpen.withOpacity(0.06)
+                  ? AppColors.statusOpen.withValues(alpha: 0.06)
                   : AppColors.surface,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color:
                 item.isChecked
-                    ? AppColors.statusOpen.withOpacity(0.6)
+                    ? AppColors.statusOpen.withValues(alpha: 0.6)
                     : AppColors.cardBorder,
             width: item.isChecked ? 1.5 : 1,
           ),
@@ -65,7 +65,7 @@ class ChecklistTile extends StatelessWidget {
               item.isChecked
                   ? [
                     BoxShadow(
-                      color: AppColors.statusOpen.withOpacity(0.08),
+                      color: AppColors.statusOpen.withValues(alpha: 0.08),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -129,7 +129,7 @@ class ChecklistTile extends StatelessWidget {
                     style: TextStyle(
                       color:
                           item.isChecked
-                              ? AppColors.textSecondary.withOpacity(0.7)
+                              ? AppColors.textSecondary.withValues(alpha: 0.7)
                               : AppColors.textSecondary,
                       fontSize: 13,
                       height: 1.35,

@@ -70,7 +70,7 @@ class PaywallRepositoryImpl implements PaywallRepository {
       final offerings = await Purchases.getOfferings();
       final monthly = offerings.current?.monthly;
       if (monthly != null) {
-        final info = await Purchases.purchasePackage(monthly);
+        final info = await Purchases.purchase(PurchaseParams.package(monthly));
         final active =
             info.customerInfo.entitlements.all[AppConstants.rcEntitlementId]?.isActive ??
             false;
@@ -98,7 +98,7 @@ class PaywallRepositoryImpl implements PaywallRepository {
       final offerings = await Purchases.getOfferings();
       final annual = offerings.current?.annual;
       if (annual != null) {
-        final info = await Purchases.purchasePackage(annual);
+        final info = await Purchases.purchase(PurchaseParams.package(annual));
         final active =
             info.customerInfo.entitlements.all[AppConstants.rcEntitlementId]?.isActive ??
             false;

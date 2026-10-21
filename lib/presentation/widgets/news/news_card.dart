@@ -46,7 +46,7 @@ class NewsCard extends ConsumerWidget {
         border: Border.all(color: AppColors.cardBorder, width: 1),
         boxShadow: [
           BoxShadow(
-            color: AppColors.background.withOpacity(0.5),
+            color: AppColors.background.withValues(alpha: 0.5),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -64,7 +64,7 @@ class NewsCard extends ConsumerWidget {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: catColor.withOpacity(0.18),
+                  color: catColor.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(

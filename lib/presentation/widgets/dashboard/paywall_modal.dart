@@ -42,6 +42,37 @@ class _PaywallModalState extends ConsumerState<PaywallModal> {
     }
   }
 
+  Future<void> _handleRestore() async {
+    setState(() => _isLoading = true);
+    final success = await ref.read(paywallProvider.notifier).restorePurchases();
+    if (!mounted) return;
+    setState(() => _isLoading = false);
+
+    if (success) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.paywallSuccessMessage,
+          ),
+          backgroundColor: AppColors.statusOpen,
+        ),
+      );
+    } else {
+      final isEn = Localizations.localeOf(context).languageCode == 'en';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            isEn
+                ? 'No active subscriptions found'
+                : 'No se encontraron suscripciones activas',
+          ),
+          backgroundColor: Colors.orange,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -57,7 +88,17 @@ class _PaywallModalState extends ConsumerState<PaywallModal> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const SizedBox(width: 48), // Placeholder to keep alignment if needed
+                TextButton(
+                  onPressed: _isLoading ? null : _handleRestore,
+                  child: Text(
+                    AppLocalizations.of(context)!.paywallRestore,
+                    style: const TextStyle(
+                      color: AppColors.statusOpen,
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
 
                 IconButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -147,7 +188,7 @@ class _PaywallModalState extends ConsumerState<PaywallModal> {
             Text(
               AppLocalizations.of(context)!.paywallDisclaimer,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColors.textMuted,
                 fontSize: 11,
                 height: 1.3,
@@ -206,7 +247,7 @@ class _PaywallModalState extends ConsumerState<PaywallModal> {
         decoration: BoxDecoration(
           color:
               isSelected
-                  ? AppColors.statusOpen.withOpacity(0.08)
+                  ? AppColors.statusOpen.withValues(alpha: 0.08)
                   : AppColors.surfaceElevated,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(

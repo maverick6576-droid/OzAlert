@@ -201,7 +201,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 color: AppColors.surface,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     offset: const Offset(0, -4),
                     blurRadius: 16,
                   )
@@ -265,7 +265,7 @@ class _LanguageOption extends StatelessWidget {
             width: 2,
           ),
           boxShadow: isSelected
-              ? [BoxShadow(color: AppColors.primary.withOpacity(0.3), blurRadius: 8, offset: const Offset(0, 4))]
+              ? [BoxShadow(color: AppColors.primary.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 4))]
               : [],
         ),
         child: Center(
@@ -301,7 +301,7 @@ class _PassportChip extends StatelessWidget {
       child: AnimatedContainer(
         duration: 150.ms,
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.secondary.withOpacity(0.1) : AppColors.surface,
+          color: isSelected ? AppColors.secondary.withValues(alpha: 0.1) : AppColors.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected ? AppColors.secondary : AppColors.cardBorder,

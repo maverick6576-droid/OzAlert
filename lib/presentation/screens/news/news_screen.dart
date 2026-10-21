@@ -144,13 +144,13 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
             padding: const EdgeInsets.all(12),
             margin: const EdgeInsets.only(bottom: 16),
             decoration: BoxDecoration(
-              color: AppColors.warning.withOpacity(0.1),
+              color: AppColors.warning.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.warning.withOpacity(0.3)),
+              border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
             ),
             child: Row(
               children: [
-                Icon(CupertinoIcons.bell_fill, color: AppColors.warning, size: 20),
+                const Icon(CupertinoIcons.bell_fill, color: AppColors.warning, size: 20),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Wrap(

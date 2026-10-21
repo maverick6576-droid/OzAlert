@@ -78,7 +78,7 @@ class SettingsScreen extends ConsumerWidget {
               return SwitchListTile.adaptive(
                 title: Text(l10n.settingsNewsNotifs),
                 value: newsEnabled,
-                activeColor: AppColors.primary,
+                activeTrackColor: AppColors.primary,
                 tileColor: AppColors.surface,
                 onChanged: (bool value) {
                   ref.read(newsNotificationsProvider.notifier).toggle(value);
@@ -218,7 +218,7 @@ class SettingsScreen extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
-                side: BorderSide(color: Colors.redAccent.withOpacity(0.3)),
+                side: BorderSide(color: Colors.redAccent.withValues(alpha: 0.3)),
               ),
             ),
             child: Text(
@@ -295,7 +295,7 @@ class _LanguageTile extends StatelessWidget {
           width: isSelected ? 2 : 1,
         ),
       ),
-      tileColor: isSelected ? AppColors.primary.withOpacity(0.1) : AppColors.surface,
+      tileColor: isSelected ? AppColors.primary.withValues(alpha: 0.1) : AppColors.surface,
       title: Text(
         title,
         style: TextStyle(

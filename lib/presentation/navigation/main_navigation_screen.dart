@@ -90,12 +90,12 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color:
-              isSelected ? AppColors.secondary.withOpacity(0.12) : Colors.transparent,
+              isSelected ? AppColors.secondary.withValues(alpha: 0.12) : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border:
               isSelected
                   ? Border.all(
-                    color: AppColors.secondary.withOpacity(0.4),
+                    color: AppColors.secondary.withValues(alpha: 0.4),
                     width: 1,
                   )
                   : null,

@@ -38,7 +38,7 @@ class _StatisticsCardState extends State<StatisticsCard> {
         border: Border.all(color: AppColors.cardBorder),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -110,7 +110,7 @@ class _StatisticsCardState extends State<StatisticsCard> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
-                        color: isSelected ? color.withOpacity(0.15) : Colors.transparent,
+                        color: isSelected ? color.withValues(alpha: 0.15) : Colors.transparent,
                         border: Border.all(
                           color: isSelected ? color : AppColors.cardBorder,
                         ),
@@ -156,7 +156,7 @@ class _StatisticsCardState extends State<StatisticsCard> {
                 barTouchData: BarTouchData(
                   enabled: true,
                   touchTooltipData: BarTouchTooltipData(
-                    getTooltipColor: (group) => AppColors.textPrimary.withOpacity(0.9),
+                    getTooltipColor: (group) => AppColors.textPrimary.withValues(alpha: 0.9),
                     tooltipPadding: const EdgeInsets.all(8),
                     tooltipMargin: 8,
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
@@ -182,7 +182,7 @@ class _StatisticsCardState extends State<StatisticsCard> {
                           return Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: Text(
-                              selectedYear.substring(2, 4) + "/" + selectedYear.substring(7, 9) + " " + currentData[value.toInt()]['quarter'],
+                              '${selectedYear.substring(2, 4)}/${selectedYear.substring(7, 9)} ${currentData[value.toInt()]['quarter']}',
                               style: const TextStyle(
                                 color: AppColors.textSecondary, 
                                 fontSize: 10, 
@@ -202,7 +202,7 @@ class _StatisticsCardState extends State<StatisticsCard> {
                 gridData: const FlGridData(show: false),
                 borderData: FlBorderData(show: false),
                 barGroups: currentData.asMap().entries.map((entry) {
-                  final barColor = selectedYear == '2023-2024' ? Colors.orange.shade400 : AppColors.primary.withOpacity(0.7);
+                  final barColor = selectedYear == '2023-2024' ? Colors.orange.shade400 : AppColors.primary.withValues(alpha: 0.7);
                   return BarChartGroupData(
                     x: entry.key,
                     barRods: [
@@ -214,7 +214,7 @@ class _StatisticsCardState extends State<StatisticsCard> {
                         backDrawRodData: BackgroundBarChartRodData(
                           show: true,
                           toY: 100000,
-                          color: AppColors.primary.withOpacity(0.05),
+                          color: AppColors.primary.withValues(alpha: 0.05),
                         ),
                       ),
                     ],

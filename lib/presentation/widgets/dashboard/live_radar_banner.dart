@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
@@ -49,12 +48,12 @@ class _LiveRadarBannerState extends State<LiveRadarBanner> {
         color: AppColors.surfaceElevated,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppColors.statusOpen.withOpacity(0.3),
+          color: AppColors.statusOpen.withValues(alpha: 0.3),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.statusOpen.withOpacity(0.06),
+            color: AppColors.statusOpen.withValues(alpha: 0.06),
             blurRadius: 15,
             spreadRadius: 2,
           ),
@@ -96,7 +95,7 @@ class _LiveRadarBannerState extends State<LiveRadarBanner> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
+              const Icon(
                 CupertinoIcons.checkmark_shield_fill,
                 color: AppColors.statusOpen,
                 size: 12,

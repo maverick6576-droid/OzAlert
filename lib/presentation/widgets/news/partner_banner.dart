@@ -17,17 +17,17 @@ class PartnerBanner extends ConsumerWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppColors.primary.withOpacity(0.25),
-            const Color(0xFF1B3B6F).withOpacity(0.4),
+            AppColors.primary.withValues(alpha: 0.25),
+            const Color(0xFF1B3B6F).withValues(alpha: 0.4),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: AppColors.primary.withOpacity(0.5), width: 1),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.5), width: 1),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.12),
+            color: AppColors.primary.withValues(alpha: 0.12),
             blurRadius: 18,
             offset: const Offset(0, 6),
           ),
