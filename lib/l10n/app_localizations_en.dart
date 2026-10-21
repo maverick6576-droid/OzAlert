@@ -25,23 +25,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginApple => 'Continue with Apple';
 
   @override
-  String get welcomeTitle => 'Australian visas\nfly away\nin minutes.';
+  String get welcomeTitle => 'Your Australian Journey,\nStarts & Grows Here';
 
   @override
   String get welcomeSubtitle =>
-      'Every year, thousands miss out because they don\'t find out in time when spots open. Our system tracks official sources 24/7 and alerts you instantly so you can be the first to apply.';
+      'Your all-in-one companion: from 24/7 visa opening alerts to living in Australia with jobs, official resume, regional days, and stress-free paperwork.';
 
   @override
-  String get welcomeBullet1 => 'Real instant notifications';
+  String get welcomeBullet1 =>
+      '24/7 Radar: Official instant alerts for open WHV visas (462/417)';
 
   @override
-  String get welcomeBullet2 => 'Gain an advantage over other applicants';
+  String get welcomeBullet2 =>
+      'Arrival Checklist: Step-by-step guided setup (TFN, SIM, Bank)';
 
   @override
-  String get welcomeBullet3 => 'Official government sources (Immigration)';
+  String get welcomeBullet3 =>
+      'Jobs & Aussie CV: Recruiter-standard PDF resume and Fair Work calculator';
 
   @override
-  String get welcomeButton => 'Set up my Radar now';
+  String get welcomeBullet4 =>
+      'Regional Days: Postcode checker, 88/179 days log, and Form 1263 with sign';
+
+  @override
+  String get welcomeBullet5 =>
+      'Tax & Money Hub: Tax Return, Medicare 2% exemption, and DASP refund';
+
+  @override
+  String get welcomeButton => 'Start My Journey';
 
   @override
   String get onboardingTitle => 'Customize your Radar';

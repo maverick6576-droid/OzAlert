@@ -25,23 +25,34 @@ class AppLocalizationsEs extends AppLocalizations {
   String get loginApple => 'Continuar con Apple';
 
   @override
-  String get welcomeTitle => 'Las visas de\nAustralia vuelan\nen minutos.';
+  String get welcomeTitle => 'Tu Aventura en Australia,\nComienza y Crece Aquí';
 
   @override
   String get welcomeSubtitle =>
-      'Cada año, miles de personas se quedan fuera por no enterarse a tiempo de la apertura de cupos. Nuestro sistema rastrea las fuentes oficiales 24/7 y te avisa al instante para que seas el primero en aplicar.';
+      'Tu copiloto integral: desde alertas 24/7 de apertura de visados hasta tu vida en Australia con empleo, CV oficial, 88 días y trámites sin estrés.';
 
   @override
-  String get welcomeBullet1 => 'Notificaciones instantáneas reales';
+  String get welcomeBullet1 =>
+      'Radar 24/7: Alertas oficiales de apertura de visas WHV (462/417)';
 
   @override
-  String get welcomeBullet2 => 'Gana ventaja sobre otros aplicantes';
+  String get welcomeBullet2 =>
+      'Checklist de Llegada: Trámites guiados paso a paso (TFN, SIM, Banco)';
 
   @override
-  String get welcomeBullet3 => 'Fuentes oficiales del gobierno (Inmigración)';
+  String get welcomeBullet3 =>
+      'Empleo & CV Australiano: Formato recruiter en PDF y calculadora Fair Work';
 
   @override
-  String get welcomeButton => 'Configurar mi Radar ahora';
+  String get welcomeBullet4 =>
+      'Días Regionales: Validador de códigos postales y Form 1263 con firma';
+
+  @override
+  String get welcomeBullet5 =>
+      'Hub Fiscal & Ahorro: Tax Return, exención Medicare 2% y rescate DASP';
+
+  @override
+  String get welcomeButton => 'Empezar mi Aventura';
 
   @override
   String get onboardingTitle => 'Personaliza tu Radar';

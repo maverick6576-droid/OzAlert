@@ -131,37 +131,49 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Australian visas\nfly away\nin minutes.'**
+  /// **'Your Australian Journey,\nStarts & Grows Here'**
   String get welcomeTitle;
 
   /// No description provided for @welcomeSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Every year, thousands miss out because they don\'t find out in time when spots open. Our system tracks official sources 24/7 and alerts you instantly so you can be the first to apply.'**
+  /// **'Your all-in-one companion: from 24/7 visa opening alerts to living in Australia with jobs, official resume, regional days, and stress-free paperwork.'**
   String get welcomeSubtitle;
 
   /// No description provided for @welcomeBullet1.
   ///
   /// In en, this message translates to:
-  /// **'Real instant notifications'**
+  /// **'24/7 Radar: Official instant alerts for open WHV visas (462/417)'**
   String get welcomeBullet1;
 
   /// No description provided for @welcomeBullet2.
   ///
   /// In en, this message translates to:
-  /// **'Gain an advantage over other applicants'**
+  /// **'Arrival Checklist: Step-by-step guided setup (TFN, SIM, Bank)'**
   String get welcomeBullet2;
 
   /// No description provided for @welcomeBullet3.
   ///
   /// In en, this message translates to:
-  /// **'Official government sources (Immigration)'**
+  /// **'Jobs & Aussie CV: Recruiter-standard PDF resume and Fair Work calculator'**
   String get welcomeBullet3;
+
+  /// No description provided for @welcomeBullet4.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional Days: Postcode checker, 88/179 days log, and Form 1263 with sign'**
+  String get welcomeBullet4;
+
+  /// No description provided for @welcomeBullet5.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax & Money Hub: Tax Return, Medicare 2% exemption, and DASP refund'**
+  String get welcomeBullet5;
 
   /// No description provided for @welcomeButton.
   ///
   /// In en, this message translates to:
-  /// **'Set up my Radar now'**
+  /// **'Start My Journey'**
   String get welcomeButton;
 
   /// No description provided for @onboardingTitle.
