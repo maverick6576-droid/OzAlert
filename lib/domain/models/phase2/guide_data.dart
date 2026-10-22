@@ -37,6 +37,31 @@ class GuideStep {
       officialUrlLabelEn: json['officialUrlLabelEn'] as String?,
     );
   }
+  GuideStep copyWith({
+    int? number,
+    String? title,
+    String? titleEn,
+    String? description,
+    String? descriptionEn,
+    String? tip,
+    String? tipEn,
+    String? officialUrl,
+    String? officialUrlLabel,
+    String? officialUrlLabelEn,
+  }) {
+    return GuideStep(
+      number: number ?? this.number,
+      title: title ?? this.title,
+      titleEn: titleEn ?? this.titleEn,
+      description: description ?? this.description,
+      descriptionEn: descriptionEn ?? this.descriptionEn,
+      tip: tip ?? this.tip,
+      tipEn: tipEn ?? this.tipEn,
+      officialUrl: officialUrl ?? this.officialUrl,
+      officialUrlLabel: officialUrlLabel ?? this.officialUrlLabel,
+      officialUrlLabelEn: officialUrlLabelEn ?? this.officialUrlLabelEn,
+    );
+  }
 }
 
 class ServiceComparison {
@@ -102,6 +127,39 @@ class ServiceComparison {
       officialUrlLabelEn: json['officialUrlLabelEn'] as String?,
     );
   }
+  ServiceComparison copyWith({
+    String? id,
+    String? name,
+    String? tagline,
+    String? taglineEn,
+    Map<String, String>? keyAttributes,
+    List<String>? pros,
+    List<String>? prosEn,
+    List<String>? cons,
+    List<String>? consEn,
+    String? verdict,
+    String? verdictEn,
+    String? officialUrl,
+    String? officialUrlLabel,
+    String? officialUrlLabelEn,
+  }) {
+    return ServiceComparison(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      tagline: tagline ?? this.tagline,
+      taglineEn: taglineEn ?? this.taglineEn,
+      keyAttributes: keyAttributes ?? this.keyAttributes,
+      pros: pros ?? this.pros,
+      prosEn: prosEn ?? this.prosEn,
+      cons: cons ?? this.cons,
+      consEn: consEn ?? this.consEn,
+      verdict: verdict ?? this.verdict,
+      verdictEn: verdictEn ?? this.verdictEn,
+      officialUrl: officialUrl ?? this.officialUrl,
+      officialUrlLabel: officialUrlLabel ?? this.officialUrlLabel,
+      officialUrlLabelEn: officialUrlLabelEn ?? this.officialUrlLabelEn,
+    );
+  }
 }
 
 class CategoryGuide {
@@ -138,6 +196,25 @@ class CategoryGuide {
               ?.map((e) => ServiceComparison.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
+    );
+  }
+  CategoryGuide copyWith({
+    String? id,
+    String? title,
+    String? titleEn,
+    String? subtitle,
+    String? subtitleEn,
+    List<GuideStep>? steps,
+    List<ServiceComparison>? comparisons,
+  }) {
+    return CategoryGuide(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      titleEn: titleEn ?? this.titleEn,
+      subtitle: subtitle ?? this.subtitle,
+      subtitleEn: subtitleEn ?? this.subtitleEn,
+      steps: steps ?? this.steps,
+      comparisons: comparisons ?? this.comparisons,
     );
   }
 }

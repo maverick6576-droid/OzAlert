@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Visas: Consulta pública de plazas y estados (Coste $0)
+    match /visas/{countryCode} {
+      allow read: if true;
+      allow write: if false; // Solo actualizable por Cloud Function / Scraper oficial
+    }
+
+    // 2. Noticias y alertas oficiales (Consumo público $0)
+    match /noticias/{newsId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // 3. Enlaces Oficiales Dinámicos de Guías (Phase 2):
+    // Acceso de lectura público para que cualquier usuario tenga siempre los enlaces vigentes sin coste.
+    // Solo modificable desde Firebase Console o Cloud Admin.
+    match /official_links/{categoryId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // 4. Perfiles y preferencias de usuario (Privado y seguro)
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // Subcolección de días de trabajo regional
+      match /regional_jobs/{jobId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // 5. Inteligencia comunitaria y telemetría anónima
+    match /community_reports/{reportId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false;
+    }
+
+    match /community_telemetry/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}

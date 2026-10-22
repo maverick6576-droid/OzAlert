@@ -1,0 +1,558 @@
+{
+  "banking": {
+    "categoryId": "banking",
+    "updatedAt": "2026-10-22T09:20:48.776361+00:00",
+    "steps": {
+      "1": {
+        "officialUrl": "https://www.commbank.com.au/moving-to-australia.html",
+        "officialUrlLabel": "CommBank - Apertura Pre-Llegada Oficial",
+        "officialUrlLabelEn": "CommBank - Official Pre-Arrival Account Opening"
+      },
+      "2": {
+        "officialUrl": "https://wise.com/au/compare/",
+        "officialUrlLabel": "Wise - Comparador de Tipos de Cambio Reales",
+        "officialUrlLabelEn": "Wise - Real Mid-Market Exchange Rate Comparator"
+      },
+      "3": {
+        "officialUrl": "https://www.commbank.com.au/digital/locate-us/",
+        "officialUrlLabel": "CommBank - Localizador Oficial de Sucursales y Cajeros",
+        "officialUrlLabelEn": "CommBank - Official Branch & ATM Locator"
+      },
+      "4": {
+        "officialUrl": "https://payid.com.au/",
+        "officialUrlLabel": "PayID Australia - Red Oficial de Pagos Instantáneos",
+        "officialUrlLabelEn": "PayID Australia - Official Instant Payment System"
+      }
+    },
+    "comparisons": {
+      "commbank": {
+        "officialUrl": "https://www.commbank.com.au/moving-to-australia.html",
+        "officialUrlLabel": "CommBank - Apertura Pre-Llegada Oficial (Everyday Account)",
+        "officialUrlLabelEn": "CommBank - Official Pre-Arrival Everyday Account"
+      },
+      "nab": {
+        "officialUrl": "https://www.nab.com.au/personal/bank-accounts",
+        "officialUrlLabel": "NAB - Cuentas Bancarias Oficiales Sin Comisiones",
+        "officialUrlLabelEn": "NAB - Official Fee-Free Bank Accounts"
+      },
+      "wise": {
+        "officialUrl": "https://wise.com/au/compare/",
+        "officialUrlLabel": "Wise - Comparador de Tipos de Cambio Reales y Comisiones",
+        "officialUrlLabelEn": "Wise - Real Mid-Market Exchange Rates & Fees Comparator"
+      }
+    }
+  },
+  "telecom": {
+    "categoryId": "telecom",
+    "updatedAt": "2026-10-22T09:20:48.776361+00:00",
+    "steps": {
+      "1": {
+        "officialUrl": "https://www.acma.gov.au/identity-checks-prepaid-mobiles",
+        "officialUrlLabel": "ACMA - Normativa Oficial de Verificación Móvil",
+        "officialUrlLabelEn": "ACMA - Official Mobile Identity Check Rules"
+      },
+      "2": {
+        "officialUrl": "https://www.telstra.com.au/coverage-networks/our-coverage",
+        "officialUrlLabel": "Telstra - Mapa Oficial de Cobertura en Australia",
+        "officialUrlLabelEn": "Telstra - Official Australia Coverage Map"
+      },
+      "3": {
+        "officialUrl": "https://mobile.woolworths.com.au/prepaid",
+        "officialUrlLabel": "Everyday Mobile from Woolworths - Ofertas Prepago Oficiales",
+        "officialUrlLabelEn": "Everyday Mobile from Woolworths - Official Prepaid Offers"
+      }
+    },
+    "comparisons": {
+      "boost": {
+        "officialUrl": "https://boost.com.au/prepaid-plans",
+        "officialUrlLabel": "Boost Mobile - Planes Prepago Oficiales (Red Telstra)",
+        "officialUrlLabelEn": "Boost Mobile - Official Prepaid Plans (Telstra Full Network)"
+      },
+      "optus": {
+        "officialUrl": "https://www.optus.com.au/prepaid",
+        "officialUrlLabel": "Optus - Tarifas Prepago Oficiales",
+        "officialUrlLabelEn": "Optus - Official Prepaid Plans"
+      },
+      "felix": {
+        "officialUrl": "https://felixmobile.com.au/",
+        "officialUrlLabel": "Felix Mobile - Planes Móviles Oficiales",
+        "officialUrlLabelEn": "Felix Mobile - Official Mobile Plans"
+      }
+    }
+  },
+  "insurance": {
+    "categoryId": "insurance",
+    "updatedAt": "2026-10-22T09:20:48.776361+00:00",
+    "steps": {
+      "1": {
+        "officialUrl": "https://www.privatehealth.gov.au/health_insurance/overseas/overseas_visitors_health_cover.htm",
+        "officialUrlLabel": "PrivateHealth.gov.au - Comparador Sanitario del Gobierno",
+        "officialUrlLabelEn": "PrivateHealth.gov.au - Official Government Health Comparison"
+      },
+      "2": {
+        "officialUrl": "https://www.servicesaustralia.gov.au/enrolling-medicare-if-youre-visiting-from-reciprocal-health-care-agreement-country",
+        "officialUrlLabel": "Services Australia - Inscripción en Medicare (Convenio Recíproco RHCA)",
+        "officialUrlLabelEn": "Services Australia - Enrol in Medicare (Reciprocal Agreement RHCA)"
+      },
+      "3": {
+        "officialUrl": "https://www.privatehealth.gov.au/health_insurance/what_is_covered/ambulance.htm",
+        "officialUrlLabel": "PrivateHealth.gov.au - Cobertura de Ambulancias en Australia",
+        "officialUrlLabelEn": "PrivateHealth.gov.au - Ambulance Coverage Rules in Australia"
+      }
+    },
+    "comparisons": {
+      "bupa": {
+        "officialUrl": "https://www.bupa.com.au/health-insurance/cover/overseas-visitors",
+        "officialUrlLabel": "Bupa - Seguro Oficial para Visitantes (OVHC)",
+        "officialUrlLabelEn": "Bupa - Official Short Stay Visitor Cover (OVHC)"
+      },
+      "allianz": {
+        "officialUrl": "https://www.allianzcare.com.au/en/overseas-visitors-health-cover.html",
+        "officialUrlLabel": "Allianz Care - Cobertura OVHC Oficial para Working Holiday",
+        "officialUrlLabelEn": "Allianz Care - Official Working Holiday OVHC Cover"
+      },
+      "travel_insurance": {
+        "officialUrl": "https://www.smartraveller.gov.au/before-you-go/the-basics/insurance",
+        "officialUrlLabel": "Smartraveller - Guía Oficial de Seguros del Gobierno",
+        "officialUrlLabelEn": "Smartraveller - Official Travel Insurance Guide"
+      }
+    }
+  },
+  "housing": {
+    "categoryId": "housing",
+    "updatedAt": "2026-10-22T09:20:48.776361+00:00",
+    "steps": {
+      "1": {
+        "officialUrl": "https://www.accc.gov.au/consumers/buying-products-and-services/accommodation",
+        "officialUrlLabel": "ACCC - Derechos del Consumidor en Alojamientos",
+        "officialUrlLabelEn": "ACCC - Consumer Rights in Accommodation"
+      },
+      "2": {
+        "officialUrl": "https://flatmates.com.au/",
+        "officialUrlLabel": "Flatmates.com.au - Portal de Habitaciones Verificadas",
+        "officialUrlLabelEn": "Flatmates.com.au - Verified Room Rentals"
+      },
+      "3": {
+        "officialUrl": "https://www.scamwatch.gov.au/types-of-scams/rental-scams",
+        "officialUrlLabel": "Scamwatch (ACCC) - Prevención de Fraudes de Alquiler",
+        "officialUrlLabelEn": "Scamwatch (ACCC) - Rental Scam Prevention Alerts"
+      },
+      "4": {
+        "officialUrl": "https://www.nsw.gov.au/housing-and-construction/renting-a-place-to-live/residential-rental-bonds/rental-bonds-online-for-tenants",
+        "officialUrlLabel": "NSW Government - Rental Bonds Online Oficial para Inquilinos",
+        "officialUrlLabelEn": "NSW Government - Official Rental Bonds Online for Tenants"
+      },
+      "5": {
+        "officialUrl": "https://www.nsw.gov.au/housing-and-construction/renting-a-place-to-live/residential-rental-bonds",
+        "officialUrlLabel": "NSW Government - Organismo Oficial de Fianza de Alquiler",
+        "officialUrlLabelEn": "NSW Government - Official Residential Rental Bonds Authority"
+      }
+    },
+    "comparisons": {
+      "flatmates": {
+        "officialUrl": "https://flatmates.com.au/",
+        "officialUrlLabel": "Flatmates.com.au - Portal Oficial de Habitaciones",
+        "officialUrlLabelEn": "Flatmates.com.au - Official Room Search Portal"
+      },
+      "hostels": {
+        "officialUrl": "https://www.yha.com.au/",
+        "officialUrlLabel": "YHA Australia - Red Oficial de Hostels Certificados",
+        "officialUrlLabelEn": "YHA Australia - Official Certified Hostels"
+      },
+      "facebook_groups": {
+        "officialUrl": "https://www.scamwatch.gov.au/types-of-scams/rental-scams",
+        "officialUrlLabel": "Scamwatch - Advertencia Oficial de Estafas de Alquiler",
+        "officialUrlLabelEn": "Scamwatch - Official Rental Scam Protection"
+      }
+    }
+  },
+  "tax": {
+    "categoryId": "tax",
+    "updatedAt": "2026-10-22T09:20:48.776361+00:00",
+    "steps": {
+      "1": {
+        "officialUrl": "https://www.ato.gov.au/individuals-and-families/tax-file-number/what-is-a-tfn",
+        "officialUrlLabel": "ATO - Guía Oficial del Tax File Number (TFN)",
+        "officialUrlLabelEn": "ATO - Official Tax File Number (TFN) Guide"
+      },
+      "2": {
+        "officialUrl": "https://www.ato.gov.au/individuals-and-families/tax-file-number/apply-for-a-tfn/foreign-passport-holders-permanent-migrants-and-temporary-visitors-tfn-application",
+        "officialUrlLabel": "ATO - Solicitud de TFN para Titulares de Visado (Gratis)",
+        "officialUrlLabelEn": "ATO - Free TFN Application for Visa Holders"
+      },
+      "3": {
+        "officialUrl": "https://www.ato.gov.au/individuals-and-families/tax-file-number/apply-for-a-tfn/tracking-your-tfn-application-or-enquiring-about-your-tfn",
+        "officialUrlLabel": "ATO - Seguimiento Oficial de Estado del TFN",
+        "officialUrlLabelEn": "ATO - Official TFN Application Tracking"
+      },
+      "4": {
+        "officialUrl": "https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/growing-and-keeping-track-of-your-super/how-much-super-should-you-get",
+        "officialUrlLabel": "ATO - Porcentajes Legales de Superannuation (12%)",
+        "officialUrlLabelEn": "ATO - Statutory Superannuation Rates (12%)"
+      },
+      "5": {
+        "officialUrl": "https://calculate.fairwork.gov.au/",
+        "officialUrlLabel": "Fair Work Ombudsman - Calculadora Oficial PACT de Salarios",
+        "officialUrlLabelEn": "Fair Work Ombudsman - Official Pay & Conditions Tool (PACT)"
+      },
+      "6": {
+        "officialUrl": "https://www.ato.gov.au/about-ato/new-legislation/in-detail/superannuation/payday-super",
+        "officialUrlLabel": "ATO - Nueva Legislación Oficial Payday Super (Pago en 7 Días)",
+        "officialUrlLabelEn": "ATO - Official Payday Superannuation Legislation"
+      }
+    },
+    "comparisons": {
+      "hostplus": {
+        "officialUrl": "https://hostplus.com.au/",
+        "officialUrlLabel": "Hostplus - Fondo Oficial Industry Super",
+        "officialUrlLabelEn": "Hostplus - Official Industry Super Fund"
+      },
+      "australiansuper": {
+        "officialUrl": "https://www.australiansuper.com/",
+        "officialUrlLabel": "AustralianSuper - Mayor Fondo de Pensiones Oficial",
+        "officialUrlLabelEn": "AustralianSuper - Australia's Largest Super Fund"
+      },
+      "ato_portal": {
+        "officialUrl": "https://www.ato.gov.au/individuals-and-families/tax-file-number/apply-for-a-tfn/foreign-passport-holders-permanent-migrants-and-temporary-visitors-tfn-application",
+        "officialUrlLabel": "ATO - Solicitud Oficial de TFN para Titulares de Visado (100% Gratis)",
+        "officialUrlLabelEn": "ATO - Official Free TFN Application for Visa Holders"
+      }
+    }
+  },
+  "certifications": {
+    "categoryId": "certifications",
+    "updatedAt": "2026-10-22T09:20:48.776361+00:00",
+    "steps": {
+      "1": {
+        "officialUrl": "https://training.gov.au/Training/Details/SITHFAB021",
+        "officialUrlLabel": "training.gov.au - Estándar Nacional Oficial del Título RSA (SITHFAB021)",
+        "officialUrlLabelEn": "training.gov.au - Official National RSA Unit Standard (SITHFAB021)"
+      },
+      "2": {
+        "officialUrl": "https://www.nsw.gov.au/business-and-economy/liquor-and-gaming/training/rsa",
+        "officialUrlLabel": "Liquor & Gaming NSW - Normativa y Curso Oficial de RSA en NSW",
+        "officialUrlLabelEn": "Liquor & Gaming NSW - Official NSW RSA Training & Licensing"
+      },
+      "3": {
+        "officialUrl": "https://www.safework.nsw.gov.au/licences-and-registrations/white-cards",
+        "officialUrlLabel": "SafeWork NSW - Acreditación Oficial White Card",
+        "officialUrlLabelEn": "SafeWork NSW - Official White Card Induction"
+      },
+      "4": {
+        "officialUrl": "https://www.usi.gov.au/students/get-a-usi",
+        "officialUrlLabel": "USI.gov.au - Obtención Gratuita del Identificador USI para Estudiantes",
+        "officialUrlLabelEn": "USI.gov.au - Free USI Application for Students"
+      }
+    },
+    "comparisons": {
+      "rsa_national": {
+        "officialUrl": "https://cleartowork.com.au/",
+        "officialUrlLabel": "Clear To Work - Curso Oficial Homologado de RSA",
+        "officialUrlLabelEn": "Clear To Work - Official Accredited RSA Course"
+      },
+      "white_card_safework": {
+        "officialUrl": "https://www.safework.nsw.gov.au/licences-and-registrations/white-cards",
+        "officialUrlLabel": "SafeWork NSW - Acreditación Oficial White Card",
+        "officialUrlLabelEn": "SafeWork NSW - Official White Card Induction"
+      },
+      "barista_course": {
+        "officialUrl": "https://www.coffeeschool.com.au/",
+        "officialUrlLabel": "Coffee School - Cursos Oficiales de Barista",
+        "officialUrlLabelEn": "Coffee School - Official Barista Training"
+      }
+    }
+  },
+  "savings": {
+    "categoryId": "savings",
+    "updatedAt": "2026-10-22T09:20:48.776361+00:00",
+    "steps": {
+      "1": {
+        "officialUrl": "https://www.ato.gov.au/individuals-and-families/income-deductions-offsets-and-records/deductions-you-can-claim",
+        "officialUrlLabel": "ATO - Guía Oficial de Deducciones Laborales Reclamables",
+        "officialUrlLabelEn": "ATO - Official Deductions You Can Claim Guidelines"
+      },
+      "2": {
+        "officialUrl": "https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/temporary-residents-and-superannuation/departing-australia-superannuation-payment-dasp",
+        "officialUrlLabel": "ATO - Guía Oficial DASP para Residentes Temporales",
+        "officialUrlLabelEn": "ATO - Official DASP Guide for Temporary Residents"
+      },
+      "3": {
+        "officialUrl": "https://www.servicesaustralia.gov.au/enrolling-medicare-if-youre-visiting-from-reciprocal-health-care-agreement-country",
+        "officialUrlLabel": "Services Australia - Inscripción en Medicare (Convenio Recíproco RHCA)",
+        "officialUrlLabelEn": "Services Australia - Enrol in Medicare (Reciprocal Agreement RHCA)"
+      },
+      "4": {
+        "officialUrl": "https://www.nsw.gov.au/housing-and-construction/renting-a-place-to-live/residential-rental-bonds/rental-bonds-online-for-tenants",
+        "officialUrlLabel": "NSW Government - Rental Bonds Online Oficial",
+        "officialUrlLabelEn": "NSW Government - Official Rental Bonds Online"
+      },
+      "5": {
+        "officialUrl": "https://www.servicesaustralia.gov.au/medicare-entitlement-statement",
+        "officialUrlLabel": "Services Australia - Solicitud de Certificado MES Oficial",
+        "officialUrlLabelEn": "Services Australia - Official MES Entitlement Statement"
+      },
+      "6": {
+        "officialUrl": "https://www.ato.gov.au/individuals-and-families/coming-to-australia-or-going-overseas/coming-to-australia/working-holiday-makers/working-holiday-maker-tax-rates",
+        "officialUrlLabel": "ATO - Jurisprudencia Addy y Tipos Impositivos WHM",
+        "officialUrlLabelEn": "ATO - Addy Ruling and WHM Tax Rates"
+      }
+    },
+    "comparisons": {
+      "ato_tax_return": {
+        "officialUrl": "https://www.ato.gov.au/individuals-and-families/your-tax-return",
+        "officialUrlLabel": "ATO - Guía Oficial de Declaración de la Renta",
+        "officialUrlLabelEn": "ATO - Official Tax Return Guidelines"
+      },
+      "dasp_super_refund": {
+        "officialUrl": "https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/temporary-residents-and-superannuation/departing-australia-superannuation-payment-dasp",
+        "officialUrlLabel": "ATO - Procedimiento Oficial DASP para Residentes Temporales",
+        "officialUrlLabelEn": "ATO - Official DASP Procedure for Temporary Residents"
+      },
+      "medicare_rhca_card": {
+        "officialUrl": "https://www.servicesaustralia.gov.au/enrolling-medicare-if-youre-visiting-from-reciprocal-health-care-agreement-country",
+        "officialUrlLabel": "Services Australia - Inscripción Oficial en Medicare RHCA",
+        "officialUrlLabelEn": "Services Australia - Official Medicare RHCA Enrolment"
+      }
+    }
+  },
+  "visa_renewal": {
+    "categoryId": "visa_renewal",
+    "updatedAt": "2026-10-22T09:20:48.776361+00:00",
+    "steps": {
+      "1": {
+        "officialUrl": "https://www.legislation.gov.au/F2022L00445/latest/text",
+        "officialUrlLabel": "Federal Register of Legislation - Texto Oficial LIN 22/050",
+        "officialUrlLabelEn": "Federal Register of Legislation - Official LIN 22/050 Legal Text"
+      },
+      "2": {
+        "officialUrl": "https://immi.homeaffairs.gov.au/form-listing/forms/1263.pdf",
+        "officialUrlLabel": "Home Affairs - Formulario 1263 Oficial de Trabajo Regional",
+        "officialUrlLabelEn": "Home Affairs - Official Form 1263 Specified Work"
+      },
+      "3": {
+        "officialUrl": "https://online.immi.gov.au/lusc/login",
+        "officialUrlLabel": "ImmiAccount - Portal Oficial de Solicitud del Gobierno",
+        "officialUrlLabelEn": "ImmiAccount - Official Visa Lodgement Portal"
+      },
+      "4": {
+        "officialUrl": "https://portal.mara.gov.au/search-the-register-of-migration-agents/",
+        "officialUrlLabel": "OMARA - Buscador Oficial de Agentes de Migración Colegiados",
+        "officialUrlLabelEn": "OMARA - Official Search the Register of Migration Agents"
+      }
+    },
+    "comparisons": {
+      "onshore_vs_offshore": {
+        "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462/second-work-holiday-462",
+        "officialUrlLabel": "Home Affairs - Subclase 462 Segunda Visa Oficial",
+        "officialUrlLabelEn": "Home Affairs - Official Second Work and Holiday Visa (Subclass 462)"
+      },
+      "alternative_pathways": {
+        "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing",
+        "officialUrlLabel": "Home Affairs - Directorio Oficial de Tipos de Visado",
+        "officialUrlLabelEn": "Home Affairs - Official Visa Options Directory"
+      }
+    }
+  },
+  "visa_renewal_179": {
+    "categoryId": "visa_renewal_179",
+    "updatedAt": "2026-10-22T09:20:48.776361+00:00",
+    "steps": {
+      "1": {
+        "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462/specified-462-work",
+        "officialUrlLabel": "Home Affairs - Requisitos de Trabajo Específico para 3er Año",
+        "officialUrlLabelEn": "Home Affairs - 3rd Year Specified Work Requirements"
+      },
+      "2": {
+        "officialUrl": "https://www.legislation.gov.au/F2022L00445/latest/text",
+        "officialUrlLabel": "Federal Register of Legislation - Texto Oficial LIN 22/050",
+        "officialUrlLabelEn": "Federal Register of Legislation - Official LIN 22/050 Legal Text"
+      },
+      "3": {
+        "officialUrl": "https://www.fairwork.gov.au/pay-and-wages/paying-wages/pay-slips",
+        "officialUrlLabel": "Fair Work Ombudsman - Requisitos Legales de Nóminas (Pay Slips)",
+        "officialUrlLabelEn": "Fair Work Ombudsman - Official Pay Slip Legal Requirements"
+      },
+      "4": {
+        "officialUrl": "https://immi.homeaffairs.gov.au/form-listing/forms/1263.pdf",
+        "officialUrlLabel": "Home Affairs - Formulario 1263 Oficial de Trabajo Regional",
+        "officialUrlLabelEn": "Home Affairs - Official Form 1263 Specified Work"
+      },
+      "5": {
+        "officialUrl": "https://online.immi.gov.au/lusc/login",
+        "officialUrlLabel": "ImmiAccount - Portal Oficial de Solicitud del Gobierno",
+        "officialUrlLabelEn": "ImmiAccount - Official Visa Lodgement Portal"
+      }
+    },
+    "comparisons": {
+      "year2_vs_year3_comparison": {
+        "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462/specified-462-work",
+        "officialUrlLabel": "Home Affairs - Guía Oficial de Trabajo para 3er Año",
+        "officialUrlLabelEn": "Home Affairs - Official 3rd Year Work Specification"
+      },
+      "post_third_year_pathways": {
+        "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skills-in-demand-visa-subclass-482",
+        "officialUrlLabel": "Home Affairs - Visado Skills in Demand (Subclase 482)",
+        "officialUrlLabelEn": "Home Affairs - Official Skills in Demand Visa (Subclass 482)"
+      }
+    }
+  },
+  "departure": {
+    "categoryId": "departure",
+    "updatedAt": "2026-10-22T09:20:48.776361+00:00",
+    "steps": {
+      "1": {
+        "officialUrl": "https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/temporary-residents-and-superannuation/departing-australia-superannuation-payment-dasp",
+        "officialUrlLabel": "ATO - Guía Oficial DASP para Retirada de Fondos al Salir",
+        "officialUrlLabelEn": "ATO - Official DASP Guidance for Departing Australia"
+      },
+      "2": {
+        "officialUrl": "https://immi.homeaffairs.gov.au/visas/cancelling-a-visa",
+        "officialUrlLabel": "Home Affairs - Procedimiento Oficial de Cancelación de Visado",
+        "officialUrlLabelEn": "Home Affairs - Official Visa Cancellation Procedure"
+      },
+      "3": {
+        "officialUrl": "https://www.ato.gov.au/individuals-and-families/your-tax-return/how-to-lodge-your-tax-return/lodge-your-tax-return-before-leaving-australia",
+        "officialUrlLabel": "ATO - Declaración Fiscal Anticipada para Quien Abandona Australia",
+        "officialUrlLabelEn": "ATO - Early Tax Return Lodgement Guidelines"
+      },
+      "4": {
+        "officialUrl": "https://www.nsw.gov.au/housing-and-construction/renting-a-place-to-live/ending-a-residential-tenancy",
+        "officialUrlLabel": "NSW Government - Finalización de Alquiler y Devolución del Bond",
+        "officialUrlLabelEn": "NSW Government - Ending a Residential Tenancy Official Guide"
+      },
+      "5": {
+        "officialUrl": "https://www.service.nsw.gov.au/transaction/submit-a-notice-of-disposal-for-a-vehicle",
+        "officialUrlLabel": "Service NSW - Notificación Oficial de Venta de Vehículo (Rego)",
+        "officialUrlLabelEn": "Service NSW - Official Notice of Disposal of a Vehicle"
+      },
+      "6": {
+        "officialUrl": "https://wise.com/au/compare/",
+        "officialUrlLabel": "Wise - Comparador de Tipos de Cambio Reales",
+        "officialUrlLabelEn": "Wise - Real Mid-Market Exchange Rate Comparator"
+      },
+      "7": {
+        "officialUrl": "https://www.ppsr.gov.au/",
+        "officialUrlLabel": "PPSR - Registro Oficial de Cargas de Vehículos ($2 AUD)",
+        "officialUrlLabelEn": "PPSR - Official Personal Property Securities Register ($2 AUD)"
+      },
+      "8": {
+        "officialUrl": "https://immi.homeaffairs.gov.au/what-we-do/whm-program/status-of-country-caps",
+        "officialUrlLabel": "Home Affairs - Estado Oficial de Cupos de Visado",
+        "officialUrlLabelEn": "Home Affairs - Official Visa Quota Status"
+      }
+    },
+    "comparisons": {
+      "wise_vs_traditional_banks": {
+        "officialUrl": "https://wise.com/au/compare/",
+        "officialUrlLabel": "Wise - Comparador de Tipos de Cambio Reales",
+        "officialUrlLabelEn": "Wise - Mid-Market Exchange Rate Comparator"
+      },
+      "ato_cheque_vs_direct_deposit": {
+        "officialUrl": "https://www.ato.gov.au/individuals-and-families/your-tax-return/how-to-lodge-your-tax-return/lodge-your-tax-return-before-leaving-australia",
+        "officialUrlLabel": "ATO - Procedimiento Oficial de Cobro al Dejar Australia",
+        "officialUrlLabelEn": "ATO - Early Tax Refund Official Procedure"
+      }
+    }
+  },
+  "international_license": {
+    "categoryId": "international_license",
+    "updatedAt": "2026-10-22T09:20:48.776361+00:00",
+    "steps": {
+      "1": {
+        "officialUrl": "https://austroads.com.au/drivers-and-vehicles/overseas-drivers",
+        "officialUrlLabel": "Austroads - Normativa Oficial para Conductores Extranjeros",
+        "officialUrlLabelEn": "Austroads - Official Visiting Overseas Drivers Rules"
+      },
+      "2": {
+        "officialUrl": "https://internationaldrivingpermit.org/",
+        "officialUrlLabel": "FIA - Buscador Oficial de Emisores del Permiso Internacional por País",
+        "officialUrlLabelEn": "FIA - Official Global International Driving Permit Directory"
+      },
+      "3": {
+        "officialUrl": "https://sede.dgt.gob.es/es/permisos-de-conducir/permiso-internacional/",
+        "officialUrlLabel": "DGT España - Solicitud Oficial del Permiso Internacional de Conducir",
+        "officialUrlLabelEn": "DGT Spain - Official International Driving Permit Application"
+      },
+      "4": {
+        "officialUrl": "https://internationaldrivingpermit.org/",
+        "officialUrlLabel": "Directorio Oficial FIA / ANTS / ACI / ANWB por País",
+        "officialUrlLabelEn": "Official FIA / European IDP Issuing Authorities"
+      },
+      "5": {
+        "officialUrl": "https://immi.homeaffairs.gov.au/what-we-do/whm-program/overview",
+        "officialUrlLabel": "Home Affairs - Lista Oficial de Países Participantes 417 y 462",
+        "officialUrlLabelEn": "Home Affairs - Official 417 & 462 Participating Countries"
+      },
+      "6": {
+        "officialUrl": "https://directory.naati.com.au/",
+        "officialUrlLabel": "NAATI - Buscador Oficial de Traductores Certificados",
+        "officialUrlLabelEn": "NAATI - Official Certified Translators Directory"
+      }
+    },
+    "comparisons": {
+      "idp_1949_all_countries": {
+        "officialUrl": "https://internationaldrivingpermit.org/",
+        "officialUrlLabel": "FIA - Directorio Mundial Oficial de Emisores por País",
+        "officialUrlLabelEn": "FIA - Official Country-by-Country IDP Directory"
+      },
+      "naati_official_translation": {
+        "officialUrl": "https://directory.naati.com.au/",
+        "officialUrlLabel": "NAATI - Directorio Oficial de Traductores Certificados",
+        "officialUrlLabelEn": "NAATI - Official Certified Translators Directory"
+      },
+      "multicultural_nsw_translation": {
+        "officialUrl": "https://www.service.nsw.gov.au/transaction/apply-for-document-translation-services",
+        "officialUrlLabel": "Service NSW / Multicultural NSW - Servicio Oficial de Traducción",
+        "officialUrlLabelEn": "Service NSW / Multicultural NSW - Official Document Translation Services"
+      }
+    }
+  },
+  "australian_license": {
+    "categoryId": "australian_license",
+    "updatedAt": "2026-10-22T09:20:48.776361+00:00",
+    "steps": {
+      "1": {
+        "officialUrl": "https://austroads.com.au/drivers-and-vehicles/overseas-drivers",
+        "officialUrlLabel": "Austroads - Normativa Oficial de Conducción con Licencia Extranjera",
+        "officialUrlLabelEn": "Austroads - Official Driving with Overseas Licence Rules"
+      },
+      "2": {
+        "officialUrl": "https://www.nsw.gov.au/driving-boating-and-transport/driver-and-rider-licences/visiting-or-moving-to-nsw/moving-your-overseas-licence/knowledge-and-driving-test-exemptions",
+        "officialUrlLabel": "Transport for NSW - Exenciones Oficiales de Examen por País (Reconocidos A y B)",
+        "officialUrlLabelEn": "Transport for NSW - Official Test Exemptions by Country (Recognised A & B)"
+      },
+      "3": {
+        "officialUrl": "https://www.service.nsw.gov.au/transaction/transfer-an-overseas-driver-licence",
+        "officialUrlLabel": "Service NSW - Requisitos Oficiales para Transferir Licencia",
+        "officialUrlLabelEn": "Service NSW - Official Overseas Licence Transfer Requirements"
+      },
+      "4": {
+        "officialUrl": "https://www.vicroads.vic.gov.au/licences/new-to-victoria/convert-your-overseas-licence",
+        "officialUrlLabel": "VicRoads Victoria - Guía Oficial de Conversión y Licencia Digital",
+        "officialUrlLabelEn": "VicRoads Victoria - Official Licence Conversion & Digital ID"
+      }
+    },
+    "comparisons": {
+      "service_nsw_conversion": {
+        "officialUrl": "https://www.service.nsw.gov.au/transaction/transfer-an-overseas-driver-licence",
+        "officialUrlLabel": "Service NSW - Transferir Licencia de Conducir Extranjera",
+        "officialUrlLabelEn": "Service NSW - Transfer an Overseas Driver Licence"
+      },
+      "vicroads_conversion": {
+        "officialUrl": "https://www.vicroads.vic.gov.au/licences/new-to-victoria/convert-your-overseas-licence",
+        "officialUrlLabel": "VicRoads - Convertir Licencia Extranjera en Victoria",
+        "officialUrlLabelEn": "VicRoads - Convert Your Overseas Licence in Victoria"
+      },
+      "tmr_qld_conversion": {
+        "officialUrl": "https://www.qld.gov.au/transport/licensing/driver-licensing/overseas/transfer",
+        "officialUrlLabel": "TMR Queensland - Transferir Licencia de Conducir Extranjera",
+        "officialUrlLabelEn": "TMR Queensland - Transfer Overseas Driver Licence"
+      },
+      "dot_wa_sa_conversion": {
+        "officialUrl": "https://www.transport.wa.gov.au/licensing/drivers-licence/visit-move-wa/moving-from-overseas",
+        "officialUrlLabel": "DoT Western Australia - Transferencia Oficial de Licencia Extranjera",
+        "officialUrlLabelEn": "DoT Western Australia - Official Transfer Overseas Driver Licence"
+      }
+    }
+  }
+}
