@@ -149,4 +149,26 @@ class GuideRepositoryImpl implements GuideRepository {
       comparisons: updatedComps,
     );
   }
+
+  @override
+  Future<bool> syncOfficialLinksToFirestore() async {
+    try {
+      final jsonStr = await rootBundle.loadString('assets/data/official_links_seed.json');
+      final data = json.decode(jsonStr) as Map<String, dynamic>;
+      final fs = _firestore ?? FirebaseFirestore.instance;
+      final batch = fs.batch();
+
+      for (final entry in data.entries) {
+        final docRef = fs.collection(_collectionName).doc(entry.key);
+        batch.set(docRef, entry.value as Map<String, dynamic>, SetOptions(merge: true));
+      }
+
+      await batch.commit();
+      debugPrint('Sincronizados exitosamente los 12 documentos de official_links en Firestore');
+      return true;
+    } catch (e) {
+      debugPrint('Error sincronizando official_links en Firestore: ');
+      return false;
+    }
+  }
 }

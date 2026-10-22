@@ -15,11 +15,14 @@ service cloud.firestore {
     }
 
     // 3. Enlaces Oficiales Dinámicos de Guías (Phase 2):
-    // Acceso de lectura público para que cualquier usuario tenga siempre los enlaces vigentes sin coste.
-    // Solo modificable desde Firebase Console o Cloud Admin.
+    // Acceso de lectura público para que cualquier usuario tenga siempre los enlaces vigentes sin coste ($0).
+    // Escritura protegida para administradores autorizados y Firebase Console.
     match /official_links/{categoryId} {
       allow read: if true;
-      allow write: if false;
+      allow write: if request.auth != null && (
+        request.auth.token.email == 'maverick6576@gmail.com' ||
+        request.auth.token.email == 'juditmaynou2000@gmail.com'
+      );
     }
 
     // 4. Perfiles y preferencias de usuario (Privado y seguro)

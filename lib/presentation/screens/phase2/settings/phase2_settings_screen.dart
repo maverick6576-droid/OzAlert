@@ -1,3 +1,4 @@
+import '../../../providers/phase2/phase2_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,6 +25,8 @@ class Phase2SettingsScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final profile = ref.watch(userProfileProvider).value;
     final currentSubclass = profile?.visaSubclass ?? '462';
+    final userEmail = ref.watch(authStateProvider).value?.email;
+    final isAdmin = userEmail == 'maverick6576@gmail.com' || userEmail == 'juditmaynou2000@gmail.com';
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -248,6 +251,46 @@ class Phase2SettingsScreen extends ConsumerWidget {
               side: const BorderSide(color: AppColors.cardBorder),
             ),
           ),
+
+          if (isAdmin) ...[
+            const SizedBox(height: 32),
+            const Text(
+              'Administración Cloud',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ListTile(
+              tileColor: AppColors.surface,
+              leading: const Icon(CupertinoIcons.cloud_upload_fill, color: AppColors.primary),
+              title: const Text('Sincronizar Enlaces Oficiales con Firebase'),
+              subtitle: const Text('Crea o actualiza la colección official_links en Firestore'),
+              trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
+              onTap: () async {
+                final scaffold = ScaffoldMessenger.of(context);
+                scaffold.showSnackBar(
+                  const SnackBar(content: Text('Sincronizando 12 guías con Firebase Firestore...')),
+                );
+                final ok = await ref.read(guideRepositoryProvider).syncOfficialLinksToFirestore();
+                scaffold.clearSnackBars();
+                scaffold.showSnackBar(
+                  SnackBar(
+                    backgroundColor: ok ? AppColors.statusOpen : AppColors.statusClosed,
+                    content: Text(ok
+                        ? '✅ Colección official_links creada y actualizada en Firebase con éxito.'
+                        : '❌ Error al sincronizar. Revisa conexión o permisos de Firestore.'),
+                  ),
+                );
+              },
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: const BorderSide(color: AppColors.cardBorder),
+              ),
+            ),
+          ],
 
           const SizedBox(height: 48),
           // 6. Cerrar sesión
