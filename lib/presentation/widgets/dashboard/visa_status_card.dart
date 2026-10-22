@@ -155,7 +155,7 @@ class _VisaStatusCardState extends ConsumerState<VisaStatusCard> {
                     Flexible(
                       child: ElevatedButton.icon(
                         onPressed: () async {
-                          final uri = Uri.parse('https://immi.homeaffairs.gov.au/what-we-do/whm-program/status-of-country-caps?utm_source=chatgpt.com');
+                          final uri = Uri.parse('https://immi.homeaffairs.gov.au/what-we-do/whm-program/status-of-country-caps');
                           if (!await launchUrl(uri)) {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(

@@ -39,8 +39,8 @@
           "descriptionEn": "Within your first 48 hours in Australia, visit any branch with your original passport and visa grant letter. The staff will verify your ID on the spot and hand you your physical debit card.",
           "tip": "Consejo: Pide al asesor que active de inmediato Apple Pay / Google Pay en tu teléfono para empezar a pagar sin esperar al correo.",
           "tipEn": "Tip: Ask the banker to link Apple Pay / Google Pay right away so you can pay instantly.",
-          "officialUrl": "https://www.commbank.com.au/locate-us.html",
-          "officialUrlLabel": "CommBank - Localizador Oficial de Sucursales",
+          "officialUrl": "https://www.commbank.com.au/digital/locate-us/",
+          "officialUrlLabel": "CommBank - Localizador Oficial de Sucursales y Cajeros",
           "officialUrlLabelEn": "CommBank - Official Branch & ATM Locator"
         },
         {
@@ -86,9 +86,9 @@
           ],
           "verdict": "La opción recomendada para la gran mayoría de viajeros por su red de oficinas y fiabilidad.",
           "verdictEn": "Top recommendation for most travelers due to unmatched branch coverage and app reliability.",
-          "officialUrl": "https://www.commbank.com.au/travel/moving-to-australia.html",
-          "officialUrlLabel": "CommBank - Web Oficial & Apertura de Cuenta",
-          "officialUrlLabelEn": "CommBank - Official Website & Account Opening"
+          "officialUrl": "https://www.commbank.com.au/moving-to-australia.html",
+          "officialUrlLabel": "CommBank - Apertura Pre-Llegada Oficial (Everyday Account)",
+          "officialUrlLabelEn": "CommBank - Official Pre-Arrival Everyday Account"
         },
         {
           "id": "nab",
@@ -120,8 +120,8 @@
           "verdict": "La mejor opción para quienes buscan despreocuparse al 100% de comisiones bancarias.",
           "verdictEn": "Best choice if you want zero monthly fees without worrying about salary thresholds.",
           "officialUrl": "https://www.nab.com.au/personal/bank-accounts",
-          "officialUrlLabel": "NAB - Web Oficial de Cuentas Sin Comisión",
-          "officialUrlLabelEn": "NAB - Official No-Fee Accounts"
+          "officialUrlLabel": "NAB - Cuentas Bancarias Oficiales Sin Comisiones",
+          "officialUrlLabelEn": "NAB - Official Fee-Free Bank Accounts"
         },
         {
           "id": "wise",
@@ -153,8 +153,8 @@
           "verdict": "Complemento imprescindible para mover tus ahorros a Australia sin perder cientos de dólares.",
           "verdictEn": "Essential tool to move your savings into Australia without losing hundreds in bank margins.",
           "officialUrl": "https://wise.com/au/compare/",
-          "officialUrlLabel": "Wise - Portal Oficial de Transferencias Internacionales",
-          "officialUrlLabelEn": "Wise - Official International Transfers"
+          "officialUrlLabel": "Wise - Comparador de Tipos de Cambio Reales y Comisiones",
+          "officialUrlLabelEn": "Wise - Real Mid-Market Exchange Rates & Fees Comparator"
         }
       ]
     },
@@ -197,9 +197,9 @@
           "descriptionEn": "Coles and Woolworths rotate weekly 50% discount specials on prepaid Starter Packs (e.g. $35-40 plans with 30-50GB for just $15-20 AUD).",
           "tip": "Consejo: Nunca compres planes con contratos de permanencia de 12 o 24 meses; usa siempre planes prepago mensuales recargables.",
           "tipEn": "Tip: Never sign 12/24 month postpaid contracts; stick to flexible 28-day prepaid recharges.",
-          "officialUrl": "https://www.woolworths.com.au/shop/browse/electronics/mobile-phones-plans",
-          "officialUrlLabel": "Woolworths Mobile - Ofertas Oficiales de Prepago",
-          "officialUrlLabelEn": "Woolworths Mobile - Official Prepaid Offers"
+          "officialUrl": "https://mobile.woolworths.com.au/prepaid",
+          "officialUrlLabel": "Everyday Mobile from Woolworths - Ofertas Prepago Oficiales",
+          "officialUrlLabelEn": "Everyday Mobile from Woolworths - Official Prepaid Offers"
         }
       ],
       "comparisons": [
@@ -232,9 +232,9 @@
           ],
           "verdict": "La opción número 1 recomendada para cualquier Working Holiday Visa que planee hacer días de granja.",
           "verdictEn": "#1 undisputed recommendation for WHV backpackers planning to do regional work.",
-          "officialUrl": "https://boost.com.au/pages/prepaid-plans",
+          "officialUrl": "https://boost.com.au/prepaid-plans",
           "officialUrlLabel": "Boost Mobile - Planes Prepago Oficiales (Red Telstra)",
-          "officialUrlLabelEn": "Boost Mobile - Official Prepaid Plans"
+          "officialUrlLabelEn": "Boost Mobile - Official Prepaid Plans (Telstra Full Network)"
         },
         {
           "id": "optus",
@@ -266,7 +266,7 @@
           "verdict": "Gran opción si tu plan es vivir y trabajar exclusivamente en grandes ciudades costeras.",
           "verdictEn": "Solid pick if you plan to stay strictly in major metropolitan coastal hubs.",
           "officialUrl": "https://www.optus.com.au/prepaid",
-          "officialUrlLabel": "Optus - Tarifas Oficiales de Telefonía Prepago",
+          "officialUrlLabel": "Optus - Tarifas Prepago Oficiales",
           "officialUrlLabelEn": "Optus - Official Prepaid Plans"
         },
         {
@@ -299,8 +299,8 @@
           "verdict": "Buena opción urbana si buscas datos ilimitados y no viajas a zonas remotas.",
           "verdictEn": "Viable urban alternative if unlimited data matters more than outback reach.",
           "officialUrl": "https://felixmobile.com.au/",
-          "officialUrlLabel": "Felix Mobile - Planes Ilimitados Oficiales",
-          "officialUrlLabelEn": "Felix Mobile - Official Unlimited Plans"
+          "officialUrlLabel": "Felix Mobile - Planes Móviles Oficiales",
+          "officialUrlLabelEn": "Felix Mobile - Official Mobile Plans"
         }
       ]
     },
@@ -331,9 +331,9 @@
           "descriptionEn": "Passport holders from Spain, Italy, the UK, Ireland and others have reciprocal Medicare access for essential care in public hospitals and bulk-billed GPs. Citizens from Latin America have zero reciprocal coverage and must pay 100% of medical bills.",
           "tip": "Consejo: Incluso con convenio, Medicare NO cubre el servicio de ambulancia, repatriación ni odontología.",
           "tipEn": "Tip: Even with reciprocal Medicare, ambulance transport, dental and medical evacuation are NOT covered.",
-          "officialUrl": "https://www.servicesaustralia.gov.au/reciprocal-health-care-agreements",
-          "officialUrlLabel": "Services Australia - Convenios Recíprocos de Medicare",
-          "officialUrlLabelEn": "Services Australia - Medicare Reciprocal Health Agreements"
+          "officialUrl": "https://www.servicesaustralia.gov.au/enrolling-medicare-if-youre-visiting-from-reciprocal-health-care-agreement-country",
+          "officialUrlLabel": "Services Australia - Inscripción en Medicare (Convenio Recíproco RHCA)",
+          "officialUrlLabelEn": "Services Australia - Enrol in Medicare (Reciprocal Agreement RHCA)"
         },
         {
           "number": 3,
@@ -378,9 +378,9 @@
           ],
           "verdict": "La mejor opción para cobertura médica local directa sin tener que adelantar dinero.",
           "verdictEn": "Best choice for seamless in-country medical treatment without out-of-pocket fronting.",
-          "officialUrl": "https://www.bupa.com.au/health-insurance/overseas-visitors",
+          "officialUrl": "https://www.bupa.com.au/health-insurance/cover/overseas-visitors",
           "officialUrlLabel": "Bupa - Seguro Oficial para Visitantes (OVHC)",
-          "officialUrlLabelEn": "Bupa - Official Visitor Health Cover"
+          "officialUrlLabelEn": "Bupa - Official Short Stay Visitor Cover (OVHC)"
         },
         {
           "id": "allianz",
@@ -411,9 +411,9 @@
           ],
           "verdict": "Alternativa sólida y prestigiosa para estancias de 1 a 2 años en Australia.",
           "verdictEn": "Robust and reliable option for 1 to 2 year working holiday stays.",
-          "officialUrl": "https://www.allianzcare.com.au/en/visitors-visa-cop.html",
-          "officialUrlLabel": "Allianz Care - Cobertura Médica Oficial de Visados",
-          "officialUrlLabelEn": "Allianz Care - Official Visitor Cover"
+          "officialUrl": "https://www.allianzcare.com.au/en/overseas-visitors-health-cover.html",
+          "officialUrlLabel": "Allianz Care - Cobertura OVHC Oficial para Working Holiday",
+          "officialUrlLabelEn": "Allianz Care - Official Working Holiday OVHC Cover"
         },
         {
           "id": "travel_insurance",
@@ -501,9 +501,9 @@
           "descriptionEn": "Bond is the legal security deposit, typically 2 to 4 weeks' rent. By Australian law, landlords must lodge this bond with the state tenancy authority (e.g. RTA in QLD, RTBA in VIC, NSW Fair Trading) and provide an official receipt number.",
           "tip": "Consejo: Exige siempre un recibo por escrito firmado al entregar cualquier cantidad de fianza.",
           "tipEn": "Tip: Always demand a signed written receipt upon handing over any bond money.",
-          "officialUrl": "https://www.fairtrading.nsw.gov.au/housing-and-property/renting/rental-bonds-online",
-          "officialUrlLabel": "NSW Fair Trading - Rental Bonds Online Oficial",
-          "officialUrlLabelEn": "NSW Fair Trading - Official Rental Bonds Online"
+          "officialUrl": "https://www.nsw.gov.au/housing-and-construction/renting-a-place-to-live/residential-rental-bonds/rental-bonds-online-for-tenants",
+          "officialUrlLabel": "NSW Government - Rental Bonds Online Oficial para Inquilinos",
+          "officialUrlLabelEn": "NSW Government - Official Rental Bonds Online for Tenants"
         },
         {
           "number": 5,
@@ -513,9 +513,9 @@
           "descriptionEn": "In shared apartments or private rooms, landlords frequently take cash or private bank transfer deposits and refuse refunds upon departure. State law requires all rental bonds to be lodged with official authorities (RBO NSW, RTBA VIC, RTA QLD) within 7-14 days. Always demand a signed legal receipt.",
           "tip": "Herramienta en la App: Genera el Recibo Oficial de Fianza de Alquiler en la Suite Documental de Empleo y exporta tu Perfil de Flatmate con solvencia demostrable.",
           "tipEn": "App Tool: Generate the Official Rental Bond Receipt in the Jobs tab Document Suite and export your verified Flatmate Bio.",
-          "officialUrl": "https://www.fairtrading.nsw.gov.au/housing-and-property/renting/rental-bonds-online",
-          "officialUrlLabel": "Fair Trading - Organismo Estatal de Fianzas",
-          "officialUrlLabelEn": "Fair Trading - Official State Tenancy Authority"
+          "officialUrl": "https://www.nsw.gov.au/housing-and-construction/renting-a-place-to-live/residential-rental-bonds",
+          "officialUrlLabel": "NSW Government - Organismo Oficial de Fianza de Alquiler",
+          "officialUrlLabelEn": "NSW Government - Official Residential Rental Bonds Authority"
         }
       ],
       "comparisons": [
@@ -679,9 +679,9 @@
           "descriptionEn": "In 2026, the Horticulture Award casual minimum is $32.18 AUD/hr (Level 1), increasing mandatorily to $33.05 AUD/hr (Level 2) once you reach 90 days in agricultural work. Viticulture casual base is $32.24 AUD/hr (+20% piecework benchmark). As a WHV holder, your PAYG tax rate is 15% flat up to $45,000 AUD. A 30% tax withholding means your employer failed to register with the ATO as a WHM employer. A 47% withholding indicates a missing TFN.",
           "tip": "Herramienta en la App: Usa el Escáner Digital Offline y la Calculadora Fair Work en la pestaña Empleo de OzAlert para auditar tus nóminas y detectar si te están pagando de menos.",
           "tipEn": "App Tool: Use the offline Payslip Scanner and Fair Work Calculator in the Jobs tab of OzAlert to audit your payslips and detect underpayments.",
-          "officialUrl": "https://www.fairwork.gov.au/pay-and-wages/minimum-wages",
-          "officialUrlLabel": "Fair Work Ombudsman - Salarios Mínimos Oficiales 2026",
-          "officialUrlLabelEn": "Fair Work Ombudsman - Official 2026 Minimum Wage Rates"
+          "officialUrl": "https://calculate.fairwork.gov.au/",
+          "officialUrlLabel": "Fair Work Ombudsman - Calculadora Oficial PACT de Salarios",
+          "officialUrlLabelEn": "Fair Work Ombudsman - Official Pay & Conditions Tool (PACT)"
         },
         {
           "number": 6,
@@ -691,9 +691,9 @@
           "descriptionEn": "Under statutory rules, employers must deposit your 12% Superannuation with each pay run or within a strict 7-business-day statutory deadline. Do not allow employers to delay contributions.",
           "tip": "Herramienta en la App: La Calculadora Fair Work de OzAlert calcula automáticamente tu aportación del 12% y programa recordatorios a 7 días hábiles.",
           "tipEn": "App Tool: The OzAlert Fair Work Calculator computes your 12% super and schedules reminders for the 7-day deadline.",
-          "officialUrl": "https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/growing-and-keeping-track-of-your-super/how-much-super-should-you-get",
-          "officialUrlLabel": "ATO - Ley de Pago de Superannuation (Payday Super)",
-          "officialUrlLabelEn": "ATO - Payday Superannuation Legislation"
+          "officialUrl": "https://www.ato.gov.au/about-ato/new-legislation/in-detail/superannuation/payday-super",
+          "officialUrlLabel": "ATO - Nueva Legislación Oficial Payday Super (Pago en 7 Días)",
+          "officialUrlLabelEn": "ATO - Official Payday Superannuation Legislation"
         }
       ],
       "comparisons": [
@@ -786,9 +786,9 @@
           ],
           "verdict": "La única forma legítima y segura de solicitar tu número fiscal TFN.",
           "verdictEn": "The sole legitimate and safe platform to secure your Australian tax file number.",
-          "officialUrl": "https://www.ato.gov.au/individuals-and-families/tax-file-number/apply-for-a-tfn",
-          "officialUrlLabel": "ATO - Portal Oficial de Solicitud de TFN",
-          "officialUrlLabelEn": "ATO - Official TFN Application Portal"
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/tax-file-number/apply-for-a-tfn/foreign-passport-holders-permanent-migrants-and-temporary-visitors-tfn-application",
+          "officialUrlLabel": "ATO - Solicitud Oficial de TFN para Titulares de Visado (100% Gratis)",
+          "officialUrlLabelEn": "ATO - Official Free TFN Application for Visa Holders"
         }
       ]
     },
@@ -807,9 +807,9 @@
           "descriptionEn": "If you plan to work as a waiter, bartender, bar-back, or in licensed cafes and stadium events, Australian liquor laws require an active RSA certificate before your first shift. Heavy fines apply to businesses employing uncertified staff.",
           "tip": "Consejo: En QLD, WA, SA, NT y TAS puedes hacer el curso 100% online en unas horas con una entidad RTO homologada.",
           "tipEn": "Tip: In QLD, WA, SA, NT and TAS you can complete the RSA 100% online in a few hours through an accredited RTO.",
-          "officialUrl": "https://www.australia.gov.au/information-and-services/business-and-industry/hospitality-and-tourism",
-          "officialUrlLabel": "Australia.gov.au - Normativa de Certificados de Hostelería",
-          "officialUrlLabelEn": "Australia.gov.au - Hospitality Licensing Rules"
+          "officialUrl": "https://training.gov.au/Training/Details/SITHFAB021",
+          "officialUrlLabel": "training.gov.au - Estándar Nacional Oficial del Título RSA (SITHFAB021)",
+          "officialUrlLabelEn": "training.gov.au - Official National RSA Unit Standard (SITHFAB021)"
         },
         {
           "number": 2,
@@ -819,9 +819,9 @@
           "descriptionEn": "New South Wales (NSW / Sydney) has the strictest liquor regulations administered by Liquor & Gaming NSW. It requires a dedicated NSW-specific curriculum. You get a temporary Interim Certificate to collect a photo Competency Card at Service NSW.",
           "tip": "Consejo: El RSA de NSW es el más cotizado y te permite convalidarlo más fácilmente en otros estados.",
           "tipEn": "Tip: The NSW RSA is the most widely recognized and easiest to bridge across other states.",
-          "officialUrl": "https://www.liquorandgaming.nsw.gov.au/working-in-the-industry/training-to-work-in-the-industry/getting-trained/responsible-service-of-alcohol-rsa",
-          "officialUrlLabel": "Liquor & Gaming NSW - Licencia Oficial de RSA",
-          "officialUrlLabelEn": "Liquor & Gaming NSW - Official RSA Licensing"
+          "officialUrl": "https://www.nsw.gov.au/business-and-economy/liquor-and-gaming/training/rsa",
+          "officialUrlLabel": "Liquor & Gaming NSW - Normativa y Curso Oficial de RSA en NSW",
+          "officialUrlLabelEn": "Liquor & Gaming NSW - Official NSW RSA Training & Licensing"
         },
         {
           "number": 3,
@@ -843,9 +843,9 @@
           "descriptionEn": "Australia boasts one of the most sophisticated specialty coffee cultures in the world. Mastering silky microfoam texturing for Flat Whites, alternative milks (oat/soy/almond) and grinder calibration opens immediate cafe jobs paying $30 to $38 AUD/hour.",
           "tip": "Consejo: Hacer un curso intensivo de Barista de 3 a 5 horas al llegar te dará la práctica necesaria con máquinas de café industriales para superar pruebas laborales.",
           "tipEn": "Tip: Taking a hands-on 3-5 hour intensive Barista class upon landing gives you the machine muscle memory needed to pass cafe trials.",
-          "officialUrl": "https://www.usi.gov.au/",
-          "officialUrlLabel": "USI.gov.au - Portal Único de Identificación del Estudiante",
-          "officialUrlLabelEn": "USI.gov.au - Unique Student Identifier Portal"
+          "officialUrl": "https://www.usi.gov.au/students/get-a-usi",
+          "officialUrlLabel": "USI.gov.au - Obtención Gratuita del Identificador USI para Estudiantes",
+          "officialUrlLabelEn": "USI.gov.au - Free USI Application for Students"
         }
       ],
       "comparisons": [
@@ -959,9 +959,9 @@
           "descriptionEn": "WHV tax rate is 15% up to $45,000 AUD. You can legally deduct direct work-related expenses: mandatory logo uniforms, steel cap work boots, SPF50+ sunscreen and sunglasses for outdoor work, required tickets (RSA/White Card), and business mobile phone usage.",
           "tip": "Consejo: Guarda todas las fotos de tickets y facturas en la app MyGov / ATO para declararlas entre julio y octubre.",
           "tipEn": "Tip: Keep photos of all receipts and invoices in MyGov ATO app to lodge between July and October.",
-          "officialUrl": "https://www.ato.gov.au/individuals-and-families/income-deductions-offsets-and-records/deductions-you-can-claim/clothing-laundry-and-dry-cleaning-expenses",
-          "officialUrlLabel": "ATO - Guía Oficial de Deducciones por Ropa y Uniformes",
-          "officialUrlLabelEn": "ATO - Official Clothing & Work Deduction Guidelines"
+          "officialUrl": "https://www.ato.gov.au/individuals-and-families/income-deductions-offsets-and-records/deductions-you-can-claim",
+          "officialUrlLabel": "ATO - Guía Oficial de Deducciones Laborales Reclamables",
+          "officialUrlLabelEn": "ATO - Official Deductions You Can Claim Guidelines"
         },
         {
           "number": 2,
@@ -972,8 +972,8 @@
           "tip": "Consejo: En visados WHV (417/462) la tasa de retención DASP es del 65%, pero aun así recuperas cientos o miles de dólares limpios que te corresponden.",
           "tipEn": "Tip: WHV DASP tax is 65%, but you still walk away with hundreds or thousands of clean dollars that belong to you.",
           "officialUrl": "https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/temporary-residents-and-superannuation/departing-australia-superannuation-payment-dasp",
-          "officialUrlLabel": "ATO - Solicitud de DASP para Residentes Temporales",
-          "officialUrlLabelEn": "ATO - DASP Portal for Temporary Residents"
+          "officialUrlLabel": "ATO - Guía Oficial DASP para Residentes Temporales",
+          "officialUrlLabelEn": "ATO - Official DASP Guide for Temporary Residents"
         },
         {
           "number": 3,
@@ -983,9 +983,9 @@
           "descriptionEn": "Citizens of Spain, Italy, the UK, Ireland, Belgium, Netherlands, Norway, Finland and Sweden are eligible for Medicare reciprocal agreements. Covers free GP visits (bulk-billing) and public hospital emergencies.",
           "tip": "Consejo: Solicítala en cualquier oficina de Services Australia con tu pasaporte y tarjeta sanitaria de tu país de origen.",
           "tipEn": "Tip: Apply at any Services Australia service centre with your passport and national health card.",
-          "officialUrl": "https://www.servicesaustralia.gov.au/enrol-reciprocal-health-care-agreements-medicare",
-          "officialUrlLabel": "Services Australia - Inscripción en Medicare Recíproco",
-          "officialUrlLabelEn": "Services Australia - Medicare Reciprocal Enrolment"
+          "officialUrl": "https://www.servicesaustralia.gov.au/enrolling-medicare-if-youre-visiting-from-reciprocal-health-care-agreement-country",
+          "officialUrlLabel": "Services Australia - Inscripción en Medicare (Convenio Recíproco RHCA)",
+          "officialUrlLabelEn": "Services Australia - Enrol in Medicare (Reciprocal Agreement RHCA)"
         },
         {
           "number": 4,
@@ -995,9 +995,9 @@
           "descriptionEn": "NEVER transfer a rental bond directly into a private landlord's bank account without an official lodgement notice. By law in NSW (RBO), VIC (RTBA) and QLD (RTA), your bond must be lodged with the state tenancy authority.",
           "tip": "Consejo: Exige siempre el número de depósito de fianza (Bond Lodgement Number) oficial en un plazo máximo de 7 días tras mudarte.",
           "tipEn": "Tip: Always demand your official State Bond Lodgement Receipt number within 7 days of moving in.",
-          "officialUrl": "https://www.fairtrading.nsw.gov.au/housing-and-property/renting/rental-bonds-online",
-          "officialUrlLabel": "Fair Trading - Ley de Depósito Estatal de Fianzas",
-          "officialUrlLabelEn": "Fair Trading - State Bond Protection Legislation"
+          "officialUrl": "https://www.nsw.gov.au/housing-and-construction/renting-a-place-to-live/residential-rental-bonds/rental-bonds-online-for-tenants",
+          "officialUrlLabel": "NSW Government - Rental Bonds Online Oficial",
+          "officialUrlLabelEn": "NSW Government - Official Rental Bonds Online"
         },
         {
           "number": 5,
@@ -1080,8 +1080,8 @@
           "verdict": "Un ahorro final de entre $800 y $3,000 AUD limpios al terminar tu estancia.",
           "verdictEn": "A clean exit windfall of $800 to $3,000+ AUD when leaving Australia.",
           "officialUrl": "https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/temporary-residents-and-superannuation/departing-australia-superannuation-payment-dasp",
-          "officialUrlLabel": "ATO - Sistema Oficial de Cobro DASP Online",
-          "officialUrlLabelEn": "ATO - Official Online DASP System"
+          "officialUrlLabel": "ATO - Procedimiento Oficial DASP para Residentes Temporales",
+          "officialUrlLabelEn": "ATO - Official DASP Procedure for Temporary Residents"
         },
         {
           "id": "medicare_rhca_card",
@@ -1108,8 +1108,8 @@
           ],
           "verdict": "La mayor ventaja oculta para españoles, italianos y británicos en Australia.",
           "verdictEn": "The biggest hidden gem for Spanish, Italian, British and European WHV travelers.",
-          "officialUrl": "https://www.servicesaustralia.gov.au/reciprocal-health-care-agreements",
-          "officialUrlLabel": "Services Australia - Inscripción en Medicare Recíproco",
+          "officialUrl": "https://www.servicesaustralia.gov.au/enrolling-medicare-if-youre-visiting-from-reciprocal-health-care-agreement-country",
+          "officialUrlLabel": "Services Australia - Inscripción Oficial en Medicare RHCA",
           "officialUrlLabelEn": "Services Australia - Official Medicare RHCA Enrolment"
         }
       ]
@@ -1129,9 +1129,9 @@
           "descriptionEn": "You need 88 calendar days of full-time specified work (usually 35-38 hrs/week or industry norm). A full 5-day week counts as 7 days including rest days. For part-time/casual irregular shifts, count only days actually worked.",
           "tip": "Consejo: Guarda siempre los horarios semanales firmados y las hojas de control de turnos (timesheets) de cada semana.",
           "tipEn": "Tip: Always keep signed weekly shift rosters and timesheet summaries for every single week.",
-          "officialUrl": "https://www.legislation.gov.au/Details/F2022L00445",
-          "officialUrlLabel": "Federal Register of Legislation - LIN 22/050 Oficial",
-          "officialUrlLabelEn": "Federal Register of Legislation - Official LIN 22/050"
+          "officialUrl": "https://www.legislation.gov.au/F2022L00445/latest/text",
+          "officialUrlLabel": "Federal Register of Legislation - Texto Oficial LIN 22/050",
+          "officialUrlLabelEn": "Federal Register of Legislation - Official LIN 22/050 Legal Text"
         },
         {
           "number": 2,
@@ -1165,9 +1165,9 @@
           "descriptionEn": "If you receive an s56 RFI notice, you have exactly 28 days to provide extra proof. Immigration officers cross-check ATO and ASIC registers. Never fabricate ABNs or work records; penalties include a 3-year Australia entry ban under PIC 4020.",
           "tip": "Consejo: Ante cualquier duda en casos complejos, consulta a un Agente Migratorio Registrado (MARA).",
           "tipEn": "Tip: For complex or borderline eligibility inquiries, always consult a Registered MARA Migration Agent.",
-          "officialUrl": "https://portal.mara.gov.au/",
-          "officialUrlLabel": "OMARA - Registro Oficial de Agentes de Migración Registrados",
-          "officialUrlLabelEn": "OMARA - Official Register of Migration Agents"
+          "officialUrl": "https://portal.mara.gov.au/search-the-register-of-migration-agents/",
+          "officialUrlLabel": "OMARA - Buscador Oficial de Agentes de Migración Colegiados",
+          "officialUrlLabelEn": "OMARA - Official Search the Register of Migration Agents"
         }
       ],
       "comparisons": [
@@ -1198,9 +1198,9 @@
           ],
           "verdict": "Si estás trabajando en Australia, solicita Onshore al menos 3-4 semanas antes de la expiración de tu primer año.",
           "verdictEn": "If currently in Australia, lodge onshore 3-4 weeks before 1st year expiry for uninterrupted work rights.",
-          "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462",
-          "officialUrlLabel": "Home Affairs - Normativa Oficial de Concesión de Visados",
-          "officialUrlLabelEn": "Home Affairs - Official Visa Grant Rules"
+          "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/work-holiday-462/second-work-holiday-462",
+          "officialUrlLabel": "Home Affairs - Subclase 462 Segunda Visa Oficial",
+          "officialUrlLabelEn": "Home Affairs - Official Second Work and Holiday Visa (Subclass 462)"
         },
         {
           "id": "alternative_pathways",
@@ -1264,9 +1264,9 @@
           "descriptionEn": "Work must take place in designated postcodes. Approved industries: regional agriculture, forestry, fishing and plant cultivation nationwide; construction; mining (417 only); and tourism/hospitality in Northern & remote Australia (462). Always verify postcodes on the app map.",
           "tip": "Consejo: En hostelería para la 462, solo cuentan establecimientos ubicados al norte del Trópico de Capricornio o en zonas remotas designadas.",
           "tipEn": "Tip: For 462 hospitality, jobs only qualify if located north of the Tropic of Capricorn or designated remote zones.",
-          "officialUrl": "https://www.legislation.gov.au/Details/F2022L00445",
-          "officialUrlLabel": "Federal Register of Legislation - LIN 22/050 Oficial",
-          "officialUrlLabelEn": "Federal Register of Legislation - Official LIN 22/050"
+          "officialUrl": "https://www.legislation.gov.au/F2022L00445/latest/text",
+          "officialUrlLabel": "Federal Register of Legislation - Texto Oficial LIN 22/050",
+          "officialUrlLabelEn": "Federal Register of Legislation - Official LIN 22/050 Legal Text"
         },
         {
           "number": 3,
@@ -1276,9 +1276,9 @@
           "descriptionEn": "Home Affairs rigorously audits 3rd year applications. You need at least 26 weekly payslips with hour breakdowns, wages above Fair Work minimum ($30.15/h casual), 15% WHM tax, and 12% super. Every single payslip must match your bank statement deposits to the cent. Cash-in-hand triggers immediate rejection.",
           "tip": "Consejo: Usa el Escáner de Nóminas de OzAlert en la pestaña Empleo para auditar cada nómina antes de guardarla en tu expediente.",
           "tipEn": "Tip: Use OzAlert's Payslip Scanner in the Jobs tab to audit each payslip before filing it.",
-          "officialUrl": "https://www.fairwork.gov.au/pay-and-wages/minimum-wages",
-          "officialUrlLabel": "Fair Work Ombudsman - Salarios Mínimos Legales 2026",
-          "officialUrlLabelEn": "Fair Work Ombudsman - Official Minimum Wages 2026"
+          "officialUrl": "https://www.fairwork.gov.au/pay-and-wages/paying-wages/pay-slips",
+          "officialUrlLabel": "Fair Work Ombudsman - Requisitos Legales de Nóminas (Pay Slips)",
+          "officialUrlLabelEn": "Fair Work Ombudsman - Official Pay Slip Legal Requirements"
         },
         {
           "number": 4,
@@ -1370,9 +1370,9 @@
           ],
           "verdict": "Aprovecha tus 3 años de WHV para conseguir experiencia local y contactos con empresas dispuestas a patrocinarte.",
           "verdictEn": "Leverage your 3 WHV years to gain local experience and relationships with sponsoring employers.",
-          "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/temporary-skill-shortage-482",
-          "officialUrlLabel": "Home Affairs - Visa de Patrocinio Laboral TSS 482",
-          "officialUrlLabelEn": "Home Affairs - TSS 482 Employer Sponsorship Visa"
+          "officialUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skills-in-demand-visa-subclass-482",
+          "officialUrlLabel": "Home Affairs - Visado Skills in Demand (Subclase 482)",
+          "officialUrlLabelEn": "Home Affairs - Official Skills in Demand Visa (Subclass 482)"
         }
       ]
     },
@@ -1392,8 +1392,8 @@
           "tip": "Consejo: Solicita que te ingresen el DASP por transferencia a tu cuenta bancaria australiana o en tu cuenta AUD de Wise para evitar gastos de cheques en papel.",
           "tipEn": "Tip: Request DASP payout into your Australian bank or Wise AUD account to avoid lost international cheques.",
           "officialUrl": "https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/temporary-residents-and-superannuation/departing-australia-superannuation-payment-dasp",
-          "officialUrlLabel": "ATO - Sistema Oficial DASP Online para Retirada de Fondos",
-          "officialUrlLabelEn": "ATO - Official Online DASP Claim System"
+          "officialUrlLabel": "ATO - Guía Oficial DASP para Retirada de Fondos al Salir",
+          "officialUrlLabelEn": "ATO - Official DASP Guidance for Departing Australia"
         },
         {
           "number": 2,
@@ -1403,9 +1403,9 @@
           "descriptionEn": "The ATO cannot issue DASP payments while your visa is active. If returning home 2-3 months early, funds freeze until your grant expiry date. Solution: once your flight takes off from Australia, submit 'Request to Cancel Visa' in ImmiAccount. They cancel it in 24-48 hrs, unlocking instant ATO payout.",
           "tip": "Consejo: Haz esto SOLO después de haber salido físicamente de Australia y no planees regresar con esa misma visa.",
           "tipEn": "Tip: Submit this ONLY after physically passing Australian border security outbound.",
-          "officialUrl": "https://immi.homeaffairs.gov.au/change-in-situation/cancel-your-visa",
-          "officialUrlLabel": "Home Affairs - Solicitud de Cancelación Voluntaria de Visa",
-          "officialUrlLabelEn": "Home Affairs - Voluntary Visa Cancellation Request"
+          "officialUrl": "https://immi.homeaffairs.gov.au/visas/cancelling-a-visa",
+          "officialUrlLabel": "Home Affairs - Procedimiento Oficial de Cancelación de Visado",
+          "officialUrlLabelEn": "Home Affairs - Official Visa Cancellation Procedure"
         },
         {
           "number": 3,
@@ -1427,9 +1427,9 @@
           "descriptionEn": "Landlords frequently attempt to withhold rental bonds ($1,500-$3,000 AUD) claiming minor dust when they know tenants are boarding flights. Strategy: lodge the 100% refund yourself on the official state bond portal (RBO NSW, RTBA VIC, RTA QLD) the moment keys are handed over. The agent has only 14 days to formally dispute.",
           "tip": "Consejo: Contrata siempre una empresa de limpieza de final de alquiler con 'Bond Back Guarantee' (garantía por escrito).",
           "tipEn": "Tip: Book end-of-lease cleaners with a written 'Bond Back Guarantee' receipt.",
-          "officialUrl": "https://www.fairtrading.nsw.gov.au/housing-and-property/renting/ending-a-tenancy",
-          "officialUrlLabel": "Fair Trading - Procedimiento Oficial de Final de Alquiler",
-          "officialUrlLabelEn": "Fair Trading - Ending a Tenancy Official Guide"
+          "officialUrl": "https://www.nsw.gov.au/housing-and-construction/renting-a-place-to-live/ending-a-residential-tenancy",
+          "officialUrlLabel": "NSW Government - Finalización de Alquiler y Devolución del Bond",
+          "officialUrlLabelEn": "NSW Government - Ending a Residential Tenancy Official Guide"
         },
         {
           "number": 5,
@@ -1439,9 +1439,9 @@
           "descriptionEn": "Leaving vehicle sales to the final week forces fire-sales at airports, forfeiting $2,000-$5,000 AUD. Get your Roadworthy Certificate (RWC/Pink Slip) 3 weeks early. Complete the Notice of Disposal / Rego transfer online immediately upon sale so the buyer's traffic fines do not trace back to your name.",
           "tip": "Consejo: Conserva una foto del permiso de conducir del comprador y el comprobante de transferencia bancaria inmediata (PayID).",
           "tipEn": "Tip: Keep a photo of the buyer's driver license and a signed receipt of sale.",
-          "officialUrl": "https://www.service.nsw.gov.au/transaction/submit-notice-disposal-vehicle",
+          "officialUrl": "https://www.service.nsw.gov.au/transaction/submit-a-notice-of-disposal-for-a-vehicle",
           "officialUrlLabel": "Service NSW - Notificación Oficial de Venta de Vehículo (Rego)",
-          "officialUrlLabelEn": "Service NSW - Official Notice of Disposal of Vehicle"
+          "officialUrlLabelEn": "Service NSW - Official Notice of Disposal of a Vehicle"
         },
         {
           "number": 6,
@@ -1451,9 +1451,9 @@
           "descriptionEn": "Major Australian banks pocket 3-5% hidden exchange rate margins on international SWIFT transfers, bleeding $300-$750 AUD on a $15,000 transfer. Use Wise with the real mid-market exchange rate. Do not shut your Australian account until your DASP and ATO tax refund have fully cleared. Close it via mobile app once empty.",
           "tip": "Consejo: Pasa tu número de teléfono australiano a una eSIM prepago mínima ($10-$15/año) para seguir recibiendo códigos SMS de verificación bancaria.",
           "tipEn": "Tip: Convert your Aussie SIM to an ultra-cheap yearly eSIM to continue receiving bank SMS OTPs overseas.",
-          "officialUrl": "https://wise.com/",
-          "officialUrlLabel": "Wise - Transferencia de Ahorros con Tipo de Cambio Real",
-          "officialUrlLabelEn": "Wise - Savings Repatriation with Mid-Market Rate"
+          "officialUrl": "https://wise.com/au/compare/",
+          "officialUrlLabel": "Wise - Comparador de Tipos de Cambio Reales",
+          "officialUrlLabelEn": "Wise - Real Mid-Market Exchange Rate Comparator"
         },
         {
           "number": 7,
@@ -1560,7 +1560,7 @@
           "descriptionEn": "Across all Australian states, requirements depend on the language of your physical licence:\n• Licences already printed in English (UK, Ireland, USA, English Canada, Singapore, Malta, Hong Kong, PNG, English India): NO IDP or translation required; drive directly with your valid physical card.\n• All other 462 & 417 countries (Latin America, Europe & Asia): You must carry your original physical licence accompanied at all times by a 1949 Convention International Driving Permit (IDP) OR an official NAATI-accredited English translation.",
           "tip": "Consejo Vital: Ni el Permiso Internacional (IDP) ni la traducción NAATI sustituyen a tu carnet original. Debes llevar siempre AMBOS documentos contigo al volante.",
           "tipEn": "Critical Tip: Neither the IDP booklet nor the NAATI translation replaces your plastic card. Always carry BOTH documents when driving.",
-          "officialUrl": "https://www.austroads.com.au/drivers-and-vehicles/overseas-drivers/visiting-drivers",
+          "officialUrl": "https://austroads.com.au/drivers-and-vehicles/overseas-drivers",
           "officialUrlLabel": "Austroads - Normativa Oficial para Conductores Extranjeros",
           "officialUrlLabelEn": "Austroads - Official Visiting Overseas Drivers Rules"
         },
@@ -1584,9 +1584,9 @@
           "descriptionEn": "Official issuing bodies for European Subclass 462 countries:\n• 🇪🇸 Spain: DGT Online Portal (sede.dgt.gob.es, €10.51 fee).\n• 🇵🇹 Portugal: IMT (imt-ip.pt) or Automóvel Club de Portugal (ACP).\n• 🇦🇹 Austria & 🇨🇭 Switzerland: ÖAMTC / ARBÖ in Austria; Cantonal Strassenverkehrsamt or TCS in Switzerland.\n• 🇵🇱 Poland, 🇨🇿 Czechia, 🇸🇰 Slovakia & 🇭🇺 Hungary: Starostwo Powiatowe (PL), Obecní úřad (CZ), Police Dept (SK), Kormányablak (HU).\n• 🇬🇷 Greece, 🇱🇺 Luxembourg, 🇸🇮 Slovenia, 🇸🇲 San Marino & 🇹🇷 Türkiye: ELPA (GR), ACL (LU), AMZS (SI), Ufficio Registro (SM), TTOK (TR).",
           "tip": "Importante en Europa: Muchos países europeos emiten dos modelos (Ginebra 1949 de 1 año y Viena 1968 de 3 años). Pide SIEMPRE el modelo del Convenio de Ginebra de 1949, que es el reconocido por Australia.",
           "tipEn": "Important in Europe: Many European authorities issue two models (1949 Geneva and 1968 Vienna). ALWAYS request the 1949 Geneva Convention IDP for Australia.",
-          "officialUrl": "https://europa.eu/youreurope/citizens/travel/driving-abroad/driving-licence-and-insurance/index_es.htm",
-          "officialUrlLabel": "Unión Europea - Directorio Oficial de Autoridades de Tráfico por País",
-          "officialUrlLabelEn": "European Union - Official National Driving Authorities Directory"
+          "officialUrl": "https://sede.dgt.gob.es/es/permisos-de-conducir/permiso-internacional/",
+          "officialUrlLabel": "DGT España - Solicitud Oficial del Permiso Internacional de Conducir",
+          "officialUrlLabelEn": "DGT Spain - Official International Driving Permit Application"
         },
         {
           "number": 4,
@@ -1620,9 +1620,9 @@
           "descriptionEn": "An IDP can only be obtained in your home country and expires after 12 months. If you already landed in Australia without one, if your 1-year IDP expired during your 2nd/3rd year visa, or if your country does not issue 1949 IDPs, you can order a 100% online official English translation from a NAATI-certified translator in any language.",
           "tip": "Nota para Sídney (NSW): Si vas a canjear tu carnet extranjero por la licencia de NSW en Service NSW, exigen específicamente la traducción gubernamental de Multicultural NSW.",
           "tipEn": "NSW Note: If converting your overseas licence at Service NSW, they specifically require a Multicultural NSW government translation.",
-          "officialUrl": "https://www.naati.com.au/online-directory/",
-          "officialUrlLabel": "NAATI - Buscador Oficial de Traductores por Idioma",
-          "officialUrlLabelEn": "NAATI - Official Accredited Translators Directory by Language"
+          "officialUrl": "https://directory.naati.com.au/",
+          "officialUrlLabel": "NAATI - Buscador Oficial de Traductores Certificados",
+          "officialUrlLabelEn": "NAATI - Official Certified Translators Directory"
         }
       ],
       "comparisons": [
@@ -1686,7 +1686,7 @@
           ],
           "verdict": "La opción más versátil si ya estás en Australia, si te quedas un 2º/3er año, o si vas a sacar el carnet australiano.",
           "verdictEn": "The most versatile choice if you are already in Australia, staying a 2nd/3rd year, or converting to an Aussie licence.",
-          "officialUrl": "https://www.naati.com.au/online-directory/",
+          "officialUrl": "https://directory.naati.com.au/",
           "officialUrlLabel": "NAATI - Directorio Oficial de Traductores Certificados",
           "officialUrlLabelEn": "NAATI - Official Certified Translators Directory"
         },
@@ -1715,9 +1715,9 @@
           ],
           "verdict": "Elige esta opción únicamente si vives en Sídney o NSW y vas a convertir tu permiso extranjero al carnet de NSW.",
           "verdictEn": "Choose this option specifically if you live in Sydney/NSW and plan to convert your overseas licence at Service NSW.",
-          "officialUrl": "https://multicultural.nsw.gov.au/language-services/document-translation/",
-          "officialUrlLabel": "Multicultural NSW - Portal Oficial de Traducción de Documentos",
-          "officialUrlLabelEn": "Multicultural NSW - Official Document Translation Portal"
+          "officialUrl": "https://www.service.nsw.gov.au/transaction/apply-for-document-translation-services",
+          "officialUrlLabel": "Service NSW / Multicultural NSW - Servicio Oficial de Traducción",
+          "officialUrlLabelEn": "Service NSW / Multicultural NSW - Official Document Translation Services"
         }
       ]
     },
@@ -1736,9 +1736,9 @@
           "descriptionEn": "Getting an Australian driver licence gives you two huge advantages: 1) It serves as Australia's #1 primary photo ID (100 Points of ID), letting you leave your passport safely locked away when going to bars, clubs, or taking domestic flights; 2) Legal road compliance: states like Victoria (after 6 months) and NSW/QLD require converting overseas licences after an initial period.",
           "tip": "Consejo: Además, tener licencia australiana reduce hasta un 35% el precio del seguro de tu coche o campervan y facilita transferir la Rego online.",
           "tipEn": "Tip: Holding an Australian licence cuts car/campervan insurance premiums by up to 35% and unlocks instant online Rego transfers.",
-          "officialUrl": "https://www.austroads.com.au/drivers-and-vehicles/overseas-drivers/applying-for-a-licence",
-          "officialUrlLabel": "Austroads - Normativa Estatal de Conversión de Licencias",
-          "officialUrlLabelEn": "Austroads - Official State Licence Conversion Rules"
+          "officialUrl": "https://austroads.com.au/drivers-and-vehicles/overseas-drivers",
+          "officialUrlLabel": "Austroads - Normativa Oficial de Conducción con Licencia Extranjera",
+          "officialUrlLabelEn": "Austroads - Official Driving with Overseas Licence Rules"
         },
         {
           "number": 2,
@@ -1748,9 +1748,9 @@
           "descriptionEn": "Austroads classifies all 462 & 417 countries into three groups for car licence conversion:\n• Group 1 — Direct Test-Free Exchange (Recognised Countries): Spain, Portugal, Austria, Switzerland, Luxembourg, Greece, USA, Singapore (462); UK, Ireland, Italy, France, Germany, Belgium, Netherlands, Denmark, Sweden, Norway, Finland, Malta, Canada, Japan (417). Direct counter conversion with zero tests.\n• Group 2 — Experienced Driver Category: Poland, Czechia, Hungary, Slovakia, Slovenia (462); South Korea, Taiwan, Hong Kong, Estonia, Cyprus (417).\n• Group 3 — Theory (DKT) & Practical Test Pathway: Argentina, Chile, Uruguay, Peru, Ecuador, Brazil, China, India, Indonesia, Israel, Malaysia, Mongolia, PNG, San Marino, Thailand, Türkiye, Vietnam.",
           "tip": "Alternativa SIN examen para el Grupo 3: Si eres de Latinoamérica o Asia y solo quieres una identificación oficial australiana para no llevar el pasaporte a bares o vuelos, solicita en la misma oficina la 'Photo Card' / 'Proof of Age Card' (+18), que se entrega sin ningún examen.",
           "tipEn": "Test-free ID alternative for Group 3: If you only want an official Australian ID card so you don't carry your passport at night, apply for the state 'Photo Card' / 'Proof of Age Card' (+18) at the same counter with no exams.",
-          "officialUrl": "https://www.nsw.gov.au/driving-boating-and-transport/driver-and-rider-licences/visiting-or-moving-to-nsw/moving-to-nsw-overseas-licence/recognised-countries",
-          "officialUrlLabel": "Transport for NSW / Austroads - Lista Oficial de Países Reconocidos",
-          "officialUrlLabelEn": "Transport for NSW / Austroads - Official Recognised Countries List"
+          "officialUrl": "https://www.nsw.gov.au/driving-boating-and-transport/driver-and-rider-licences/visiting-or-moving-to-nsw/moving-your-overseas-licence/knowledge-and-driving-test-exemptions",
+          "officialUrlLabel": "Transport for NSW - Exenciones Oficiales de Examen por País (Reconocidos A y B)",
+          "officialUrlLabelEn": "Transport for NSW - Official Test Exemptions by Country (Recognised A & B)"
         },
         {
           "number": 3,
@@ -1898,9 +1898,9 @@
           ],
           "verdict": "La mejor jugada maestra si aterrizas en Perth o vas a recorrer la costa oeste en 4WD.",
           "verdictEn": "A masterstroke if landing in Perth or planning a West Coast 4WD road trip.",
-          "officialUrl": "https://www.transport.wa.gov.au/licensing/transferring-your-overseas-licence.asp",
-          "officialUrlLabel": "DoT Western Australia - Transferencia Oficial de Licencia",
-          "officialUrlLabelEn": "DoT Western Australia - Official Overseas Licence Transfer"
+          "officialUrl": "https://www.transport.wa.gov.au/licensing/drivers-licence/visit-move-wa/moving-from-overseas",
+          "officialUrlLabel": "DoT Western Australia - Transferencia Oficial de Licencia Extranjera",
+          "officialUrlLabelEn": "DoT Western Australia - Official Transfer Overseas Driver Licence"
         }
       ]
     }

@@ -229,7 +229,7 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
                   description: isEn
                       ? 'The definitive legal act governing all specified work postcodes and industries for Working Holiday Subclasses 417 & 462.'
                       : 'La ley oficial vinculante que define cada código postal e industria habilitada para los 88 días y 179 días de las subclases 417 y 462.',
-                  url: 'https://www.legislation.gov.au/Details/F2022L00445',
+                  url: 'https://www.legislation.gov.au/F2022L00445/latest/text',
                   urlLabel: 'legislation.gov.au',
                   icon: Icons.gavel_rounded,
                   isHighlighted: initialTopic == 'legislation' || initialTopic == 'regional',
@@ -244,7 +244,7 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
                   description: isEn
                       ? 'Administers free Medicare enrollment for citizens of reciprocal countries (Spain, UK, Italy, Ireland, etc.) during their stay.'
                       : 'Gestiona la inscripción gratuita en la sanidad pública de Australia (Medicare) para ciudadanos de países con convenio (España, Italia, Reino Unido, etc.).',
-                  url: 'https://www.servicesaustralia.gov.au/reciprocal-health-care-agreements',
+                  url: 'https://www.servicesaustralia.gov.au/enrolling-medicare-if-youre-visiting-from-reciprocal-health-care-agreement-country',
                   urlLabel: 'servicesaustralia.gov.au',
                   icon: Icons.medical_services_rounded,
                   isHighlighted: initialTopic == 'medicare' || initialTopic == 'insurance',
@@ -259,7 +259,7 @@ class _OfficialSourcesBottomSheet extends StatelessWidget {
                   description: isEn
                       ? 'Statutory state bodies where rental bonds must be legally lodged. Protects tenants from unfair deductions upon moving out.'
                       : 'Entidades públicas estatales donde es obligatorio por ley depositar las fianzas de alquiler. Protege tu depósito de abusos al dejar el piso.',
-                  url: 'https://www.fairtrading.nsw.gov.au/housing-and-property/renting/rental-bonds-online',
+                  url: 'https://www.nsw.gov.au/housing-and-construction/renting-a-place-to-live/residential-rental-bonds/rental-bonds-online-for-tenants',
                   urlLabel: 'fairtrading.nsw.gov.au',
                   icon: CupertinoIcons.building_2_fill,
                   isHighlighted: initialTopic == 'housing' || initialTopic == 'departure',
