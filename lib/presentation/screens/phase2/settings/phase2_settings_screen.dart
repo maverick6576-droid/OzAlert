@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import '../../../providers/phase2/phase2_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -258,7 +259,7 @@ class Phase2SettingsScreen extends ConsumerWidget {
               style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
             ),
             trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
-            onTap: () => _launchUrl('https://play.google.com/store/apps/details?id=com.ozvisa.alert'),
+            onTap: () => _launchUrl(AppStrings.storeRateUrl(isIOS: defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS)),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
               side: const BorderSide(color: AppColors.cardBorder),
@@ -278,7 +279,7 @@ class Phase2SettingsScreen extends ConsumerWidget {
             ),
             trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
             onTap: () {
-              Share.share(AppStrings.shareAppMessage(lang));
+              Share.share(AppStrings.shareAppMessage(lang, isIOS: defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS));
             },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),

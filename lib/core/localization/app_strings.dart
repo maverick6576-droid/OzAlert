@@ -2412,8 +2412,16 @@ class AppStrings {
     }
   }
 
-  static String shareAppMessage(String? lang) {
-    const playUrl = 'https://play.google.com/store/apps/details?id=com.ozvisa.alert';
+  static String storeRateUrl({required bool isIOS}) {
+    return isIOS
+        ? 'https://apps.apple.com/app/id6800220603?action=write-review'
+        : 'https://play.google.com/store/apps/details?id=com.ozvisa.alert';
+  }
+
+  static String shareAppMessage(String? lang, {bool isIOS = false}) {
+    final playUrl = isIOS
+        ? 'https://apps.apple.com/app/id6800220603'
+        : 'https://play.google.com/store/apps/details?id=com.ozvisa.alert';
     switch (_cleanLang(lang)) {
       case 'es':
         return '¡Échale un ojo a OzAlert! Es una app súper útil para la Working Holiday de Australia (alertas de cupos en tiempo real, generador de CV australiano oficial, trámites de llegada y contador de los 88 días regionales): $playUrl';
