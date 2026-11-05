@@ -4,11 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../providers/locale_provider.dart';
+import '../../../../core/localization/app_strings.dart';
 import 'onboarding_screen.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
 
 class WelcomeScreen extends ConsumerWidget {
-  const WelcomeScreen({super.key});
+  final bool isWalkthroughPreview;
+
+  const WelcomeScreen({
+    super.key,
+    this.isWalkthroughPreview = false,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -110,24 +116,66 @@ class WelcomeScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Chip de bienvenida
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
-                      ),
-                      child: Text(
-                        _getHeroBadge(lang),
-                        style: const TextStyle(
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.primary,
-                          letterSpacing: 0.4,
+                    // Chip de bienvenida + Botón Saltar / Cerrar
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+                            ),
+                            child: Text(
+                              _getHeroBadge(lang),
+                              style: const TextStyle(
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.primary,
+                                letterSpacing: 0.4,
+                              ),
+                            ),
+                          ).animate().fadeIn(duration: 350.ms),
                         ),
-                      ),
-                    ).animate().fadeIn(duration: 350.ms),
+                        const SizedBox(width: 8),
+                        if (!isWalkthroughPreview)
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                CupertinoPageRoute(
+                                  builder: (_) => const OnboardingScreen(),
+                                ),
+                              );
+                            },
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            child: Text(
+                              AppStrings.skipWalkthroughButton(lang),
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          )
+                        else
+                          IconButton(
+                            icon: const Icon(
+                              CupertinoIcons.xmark_circle_fill,
+                              color: AppColors.textSecondary,
+                              size: 22,
+                            ),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            onPressed: () => Navigator.of(context).maybePop(),
+                          ),
+                      ],
+                    ),
 
                     const SizedBox(height: 10),
 
@@ -247,11 +295,15 @@ class WelcomeScreen extends ConsumerWidget {
                     height: 52,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).push(
-                          CupertinoPageRoute(
-                            builder: (_) => const OnboardingScreen(),
-                          ),
-                        );
+                        if (isWalkthroughPreview) {
+                          Navigator.of(context).maybePop();
+                        } else {
+                          Navigator.of(context).push(
+                            CupertinoPageRoute(
+                              builder: (_) => const OnboardingScreen(),
+                            ),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
@@ -267,14 +319,21 @@ class WelcomeScreen extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              l10n.welcomeButton,
+                              isWalkthroughPreview
+                                  ? AppStrings.closeWalkthroughButton(lang)
+                                  : l10n.welcomeButton,
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(width: 8),
-                            const Icon(CupertinoIcons.arrow_right, size: 18),
+                            Icon(
+                              isWalkthroughPreview
+                                  ? CupertinoIcons.checkmark_alt
+                                  : CupertinoIcons.arrow_right,
+                              size: 18,
+                            ),
                           ],
                         ),
                       ),

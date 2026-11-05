@@ -8,8 +8,10 @@ import '../../providers/locale_provider.dart';
 import '../../providers/news_notifications_provider.dart';
 import '../../providers/user_provider.dart';
 import 'package:ozvisa_alert/l10n/app_localizations.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/localization/app_strings.dart';
+import '../onboarding/welcome_screen.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -137,6 +139,102 @@ class SettingsScreen extends ConsumerWidget {
             ),
             trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
             onTap: () => _confirmSwitchToPhase2(context, ref, profile, lang),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: AppColors.cardBorder),
+            ),
+          ),
+          const SizedBox(height: 32),
+          Text(
+            AppStrings.communityAndSupportSection(lang),
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          ListTile(
+            tileColor: AppColors.surface,
+            leading: const Icon(CupertinoIcons.compass_fill, color: AppColors.primary),
+            title: Text(
+              AppStrings.walkthroughTileTitle(lang),
+              style: const TextStyle(color: AppColors.textPrimary),
+            ),
+            subtitle: Text(
+              AppStrings.walkthroughTileSubtitle(lang),
+              style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
+            ),
+            trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
+            onTap: () {
+              Navigator.of(context).push(
+                CupertinoPageRoute(
+                  builder: (_) => const WelcomeScreen(isWalkthroughPreview: true),
+                ),
+              );
+            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: AppColors.cardBorder),
+            ),
+          ),
+          const SizedBox(height: 8),
+          ListTile(
+            tileColor: AppColors.surface,
+            leading: const Icon(CupertinoIcons.star_fill, color: Color(0xFFD97706)),
+            title: Text(
+              AppStrings.rateAppTileTitle(lang),
+              style: const TextStyle(color: AppColors.textPrimary),
+            ),
+            subtitle: Text(
+              AppStrings.rateAppTileSubtitle(lang),
+              style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
+            ),
+            trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
+            onTap: () => _launchUrl('https://play.google.com/store/apps/details?id=com.ozvisa.alert'),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: AppColors.cardBorder),
+            ),
+          ),
+          const SizedBox(height: 8),
+          ListTile(
+            tileColor: AppColors.surface,
+            leading: const Icon(CupertinoIcons.share_up, color: AppColors.secondary),
+            title: Text(
+              AppStrings.shareAppTileTitle(lang),
+              style: const TextStyle(color: AppColors.textPrimary),
+            ),
+            subtitle: Text(
+              AppStrings.shareAppTileSubtitle(lang),
+              style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
+            ),
+            trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
+            onTap: () {
+              Share.share(AppStrings.shareAppMessage(lang));
+            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: AppColors.cardBorder),
+            ),
+          ),
+          const SizedBox(height: 8),
+          ListTile(
+            tileColor: AppColors.surface,
+            leading: const Icon(CupertinoIcons.bubble_left_bubble_right_fill, color: Color(0xFF2563EB)),
+            title: Text(
+              AppStrings.sendFeedbackTileTitle(lang),
+              style: const TextStyle(color: AppColors.textPrimary),
+            ),
+            subtitle: Text(
+              AppStrings.sendFeedbackTileSubtitle(lang),
+              style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
+            ),
+            trailing: const Icon(CupertinoIcons.chevron_forward, color: AppColors.textSecondary, size: 20),
+            onTap: () {
+              final subject = Uri.encodeComponent(AppStrings.feedbackEmailSubject(lang));
+              _launchUrl('mailto:maverick6576@gmail.com?subject=$subject');
+            },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
               side: const BorderSide(color: AppColors.cardBorder),

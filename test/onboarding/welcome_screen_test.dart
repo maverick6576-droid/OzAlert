@@ -134,5 +134,28 @@ void main() {
         expect(tester.takeException(), isNull, reason: 'Failed with overflow for locale: ${loc.languageCode}');
       }
     });
+
+    testWidgets('Walkthrough preview mode shows close button and returns cleanly', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(390, 844));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+          ],
+          child: const MaterialApp(
+            locale: Locale('es'),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: WelcomeScreen(isWalkthroughPreview: true),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('Entendido, volver a la app'), findsOneWidget);
+    });
   });
 }

@@ -2331,4 +2331,156 @@ class AppStrings {
       default: return '👆 Tap to explore';
     }
   }
+
+  // ===========================================================================
+  // COMMUNITY, SUPPORT, WALKTHROUGH & VIRAL SHARING (TESTERS FEEDBACK)
+  // ===========================================================================
+  static String communityAndSupportSection(String? lang) {
+    switch (_cleanLang(lang)) {
+      case 'es': return 'Comunidad, Ayuda y Soporte';
+      case 'fr': return 'Communauté, Aide et Support';
+      case 'it': return 'Community, Aiuto e Supporto';
+      case 'zh': return '社区、帮助与支持';
+      case 'en':
+      default: return 'Community, Help & Support';
+    }
+  }
+
+  static String walkthroughTileTitle(String? lang) {
+    switch (_cleanLang(lang)) {
+      case 'es': return '¿Cómo funciona OzAlert? (Tutorial)';
+      case 'fr': return 'Comment fonctionne OzAlert ? (Tutoriel)';
+      case 'it': return 'Come funziona OzAlert? (Tutorial)';
+      case 'zh': return 'OzAlert 使用指南（功能导览）';
+      case 'en':
+      default: return 'How OzAlert Works (Walkthrough)';
+    }
+  }
+
+  static String walkthroughTileSubtitle(String? lang) {
+    switch (_cleanLang(lang)) {
+      case 'es': return 'Recorrido interactivo por las herramientas clave de la app';
+      case 'fr': return 'Présentation interactive des fonctionnalités clés';
+      case 'it': return 'Panoramica interattiva delle funzionalità principali';
+      case 'zh': return '快速了解应用核心功能与使用流程';
+      case 'en':
+      default: return 'Interactive guide through key features and tools';
+    }
+  }
+
+  static String rateAppTileTitle(String? lang) {
+    switch (_cleanLang(lang)) {
+      case 'es': return 'Valorar la aplicación';
+      case 'fr': return 'Évaluer l\'application';
+      case 'it': return 'Valuta l\'applicazione';
+      case 'zh': return '为应用评分';
+      case 'en':
+      default: return 'Rate Your App';
+    }
+  }
+
+  static String rateAppTileSubtitle(String? lang) {
+    switch (_cleanLang(lang)) {
+      case 'es': return 'Tu reseña en la tienda nos ayuda a llegar a más viajeros';
+      case 'fr': return 'Votre avis nous aide à accompagner plus de voyageurs';
+      case 'it': return 'La tua recensione ci aiuta a raggiungere più viaggiatori';
+      case 'zh': return '您的好评能帮助更多赴澳旅行者发现我们';
+      case 'en':
+      default: return 'Your store review helps us support more travelers';
+    }
+  }
+
+  static String shareAppTileTitle(String? lang) {
+    switch (_cleanLang(lang)) {
+      case 'es': return 'Compartir OzAlert con amigos';
+      case 'fr': return 'Partager OzAlert avec des amis';
+      case 'it': return 'Condividi OzAlert con gli amici';
+      case 'zh': return '分享 OzAlert 给朋友';
+      case 'en':
+      default: return 'Share App with Friends';
+    }
+  }
+
+  static String shareAppTileSubtitle(String? lang) {
+    switch (_cleanLang(lang)) {
+      case 'es': return 'Envía la app por WhatsApp, redes sociales o correo';
+      case 'fr': return 'Envoyer via WhatsApp, réseaux sociaux ou e-mail';
+      case 'it': return 'Invia tramite WhatsApp, social media o email';
+      case 'zh': return '通过微信、WhatsApp、社交媒体或邮件分享';
+      case 'en':
+      default: return 'Send via WhatsApp, social media, or email';
+    }
+  }
+
+  static String shareAppMessage(String? lang) {
+    const playUrl = 'https://play.google.com/store/apps/details?id=com.ozvisa.alert';
+    switch (_cleanLang(lang)) {
+      case 'es':
+        return '¡Échale un ojo a OzAlert! Es una app súper útil para la Working Holiday de Australia (alertas de cupos en tiempo real, generador de CV australiano oficial, trámites de llegada y contador de los 88 días regionales): $playUrl';
+      case 'fr':
+        return 'Découvre OzAlert ! L\'application indispensable pour le PVT Australie (alertes quotas en direct, générateur de CV australien, démarches d\'arrivée et suivi des 88 jours) : $playUrl';
+      case 'it':
+        return 'Dai un\'occhiata a OzAlert! L\'app completa per il Working Holiday Australia (avvisi quote in tempo reale, generatore CV australiano, guida all\'arrivo e calcolo degli 88 giorni): $playUrl';
+      case 'zh':
+        return '推荐一款澳洲打工度假神器 OzAlert！支持签证名额实时提醒、澳洲标准简历生成、落地办事指南与二签三签88天计算：$playUrl';
+      case 'en':
+      default:
+        return 'Check out OzAlert! The all-in-one companion for the Australian Working Holiday Visa (real-time quota radar, ATS Aussie Resume builder, arrival checklist & 88-day regional tracker): $playUrl';
+    }
+  }
+
+  static String sendFeedbackTileTitle(String? lang) {
+    switch (_cleanLang(lang)) {
+      case 'es': return 'Enviar sugerencias o comentarios';
+      case 'fr': return 'Envoyer des suggestions ou commentaires';
+      case 'it': return 'Invia suggerimenti o feedback';
+      case 'zh': return '发送反馈与建议';
+      case 'en':
+      default: return 'Send Feedback & Suggestions';
+    }
+  }
+
+  static String sendFeedbackTileSubtitle(String? lang) {
+    switch (_cleanLang(lang)) {
+      case 'es': return 'Cuéntanos cómo podemos mejorar tu experiencia';
+      case 'fr': return 'Dites-nous comment améliorer votre expérience';
+      case 'it': return 'Raccontaci come possiamo migliorare la tua esperienza';
+      case 'zh': return '告诉我们您希望新增的功能或改进建议';
+      case 'en':
+      default: return 'Let us know how we can improve your experience';
+    }
+  }
+
+  static String feedbackEmailSubject(String? lang) {
+    switch (_cleanLang(lang)) {
+      case 'es': return 'Sugerencia / Feedback - OzAlert App';
+      case 'fr': return 'Suggestion / Avis - Application OzAlert';
+      case 'it': return 'Suggerimento / Feedback - App OzAlert';
+      case 'zh': return '用户反馈与建议 - OzAlert';
+      case 'en':
+      default: return 'User Feedback / Suggestion - OzAlert App';
+    }
+  }
+
+  static String skipWalkthroughButton(String? lang) {
+    switch (_cleanLang(lang)) {
+      case 'es': return 'Saltar';
+      case 'fr': return 'Passer';
+      case 'it': return 'Salta';
+      case 'zh': return '跳过';
+      case 'en':
+      default: return 'Skip';
+    }
+  }
+
+  static String closeWalkthroughButton(String? lang) {
+    switch (_cleanLang(lang)) {
+      case 'es': return 'Entendido, volver a la app';
+      case 'fr': return 'Compris, retour à l\'application';
+      case 'it': return 'Capito, torna all\'app';
+      case 'zh': return '明白了，返回应用';
+      case 'en':
+      default: return 'Got it, back to app';
+    }
+  }
 }
